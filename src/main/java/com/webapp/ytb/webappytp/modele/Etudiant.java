@@ -35,8 +35,10 @@ public class Etudiant {
     @NotBlank(message = "Le champ 'mot de passe' est obligatoire.")
     private String mdp;
 
-    @Column(length = 50)
+    @Column
+    @Lob
     private byte[] photo;
+
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "etudiant_id")

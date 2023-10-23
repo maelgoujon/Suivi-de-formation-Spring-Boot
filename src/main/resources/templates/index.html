@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Téléverser une image</title>
+</head>
+<body>
+    <h1>Téléverser une image</h1>
+    <form action="http://127.0.0.1:8080/upload-photo/25" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".jpg, .jpeg, .png">
+        <input type="submit" value="Téléverser">
+    </form>
+</body>
+</html>
