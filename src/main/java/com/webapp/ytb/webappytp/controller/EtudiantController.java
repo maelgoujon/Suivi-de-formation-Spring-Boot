@@ -12,35 +12,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webapp.ytb.webappytp.modele.Etudiant;
-import com.webapp.ytb.webappytp.service.ProduitService;
+import com.webapp.ytb.webappytp.service.EtudiantService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/produit")
+@RequestMapping("/etu")
 @AllArgsConstructor
-public class ProduitController {
-    private final ProduitService produitService;
+public class EtudiantController {
+    private final EtudiantService etudiantService;
 
 
     @PostMapping("/create")
-    public Etudiant create(@Valid @RequestBody Etudiant produit) {
-        return produitService.creer(produit);
+    public Etudiant create(@Valid @RequestBody Etudiant etudiant) {
+        return etudiantService.creer(etudiant);
     }
 
     @GetMapping("/read")
     public List<Etudiant> read(){
-        return produitService.lire();
+        return etudiantService.lire();
     }
 
     @PutMapping("/update/{id}")
-    public Etudiant update(@PathVariable Long id, @RequestBody Etudiant produit){
-        return produitService.modifier(id, produit);
+    public Etudiant update(@PathVariable Long id, @RequestBody Etudiant etudiant){
+        return etudiantService.modifier(id, etudiant);
     }
 
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable Long id){
-        return produitService.supprimer(id);
+        return etudiantService.supprimer(id);
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.webapp.ytb.webappytp.modele.Etudiant;
 
-public interface ProduitService {
+public interface EtudiantService {
     Etudiant creer(Etudiant produit);
 
     List<Etudiant> lire();
