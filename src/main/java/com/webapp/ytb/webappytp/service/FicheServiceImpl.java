@@ -4,9 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.webapp.ytb.webappytp.modele.Etudiant;
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
-import com.webapp.ytb.webappytp.repository.EtudiantRepository;
 import com.webapp.ytb.webappytp.repository.FicheRepository;
 
 import lombok.AllArgsConstructor;
@@ -30,7 +28,6 @@ public class FicheServiceImpl implements FicheService {
     public FicheIntervention modifier(Long id, FicheIntervention fiche) {
         return ficheRepository.findById(id)
             .map(existingFiche -> {
-                // Update the fields with values from the provided 'fiche'
                 existingFiche.setNumero(fiche.getNumero());
                 existingFiche.setNomDemandeur(fiche.getNomDemandeur());
                 existingFiche.setDateDemande(fiche.getDateDemande());
