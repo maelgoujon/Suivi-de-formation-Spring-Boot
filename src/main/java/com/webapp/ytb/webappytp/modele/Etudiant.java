@@ -36,7 +36,7 @@ public class Etudiant {
     private String mdp;
 
     @Column(length = 50)
-    private String photo;
+    private byte[] photo;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "etudiant_id")
