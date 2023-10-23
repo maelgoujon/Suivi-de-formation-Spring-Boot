@@ -1,16 +1,12 @@
 package com.webapp.ytb.webappytp.modele;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-
-
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,7 +22,6 @@ public class Etudiant {
     @NotBlank(message = "Le champ 'nom' est obligatoire.")
     private String nom;
 
-
     @Column(length = 50)
     @NotBlank(message = "Le champ 'prenom' est obligatoire.")
     private String prenom;
@@ -41,4 +36,8 @@ public class Etudiant {
 
     @Column(length = 50)
     private String photo;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "etudiant_id")
+    private List<FicheIntervention> fiches;
 }
