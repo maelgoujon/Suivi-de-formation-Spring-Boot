@@ -1,7 +1,6 @@
 package com.webapp.ytb.webappytp.controller;
 
 import java.util.List;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,9 +15,11 @@ import com.webapp.ytb.webappytp.service.EtudiantService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 
 @RestController
 @RequestMapping("/etu")
+@Validated
 @AllArgsConstructor
 public class EtudiantController {
     private final EtudiantService etudiantService;
