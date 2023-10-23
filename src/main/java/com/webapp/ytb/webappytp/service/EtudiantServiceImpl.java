@@ -16,8 +16,8 @@ public class EtudiantServiceImpl implements EtudiantService{
     private final EtudiantRepository etudiantRepository; 
 
     @Override
-    public Etudiant creer(Etudiant produit) {
-        return etudiantRepository.save(produit);
+    public Etudiant creer(Etudiant etudiant) {
+        return etudiantRepository.save(etudiant);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class EtudiantServiceImpl implements EtudiantService{
     @Override
     public String supprimer(Long id) {
         etudiantRepository.deleteById(id);
-        return "Produit supprimé";
+        return "Etudiant supprimé";
     }
     
 }
