@@ -39,8 +39,4 @@ public class Etudiant {
     @Lob
     private byte[] photo;
 
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "etudiant_id")
-    private List<FicheIntervention> fiches;
 }

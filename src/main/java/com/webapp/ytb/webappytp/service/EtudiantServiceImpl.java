@@ -43,4 +43,10 @@ public class EtudiantServiceImpl implements EtudiantService{
         etudiantRepository.deleteById(id);
         return "Etudiant supprimé";
     }
+
+    @Override
+    public Etudiant findById(Long id) {
+        return etudiantRepository.findById(id).orElse(null);
+    }
+
 }

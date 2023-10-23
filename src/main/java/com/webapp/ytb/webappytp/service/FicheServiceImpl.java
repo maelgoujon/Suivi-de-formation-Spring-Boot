@@ -15,8 +15,8 @@ public class FicheServiceImpl implements FicheService {
     private final FicheRepository ficheRepository; 
 
     @Override
-    public FicheIntervention creer(FicheIntervention etudiant) {
-        return ficheRepository.save(etudiant);
+    public FicheIntervention creer(FicheIntervention fiche) {
+        return ficheRepository.save(fiche);
     }
 
     @Override
