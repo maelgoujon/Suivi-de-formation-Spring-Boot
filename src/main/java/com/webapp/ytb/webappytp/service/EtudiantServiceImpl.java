@@ -43,5 +43,4 @@ public class EtudiantServiceImpl implements EtudiantService{
         etudiantRepository.deleteById(id);
         return "Etudiant supprimé";
     }
-    
 }

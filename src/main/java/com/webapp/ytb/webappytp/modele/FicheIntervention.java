@@ -7,19 +7,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Table(name = "FicheIntervention")
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@Valid
 public class FicheIntervention {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,12 +33,15 @@ public class FicheIntervention {
     private String nomDemandeur;
 
     @Column
+    @NotBlank(message = "Le champ 'dateDemande' ne peut pas être vide")
     private Date dateDemande;
 
     @Column
+    @NotBlank(message = "Le champ 'dateIntervention' ne peut pas être vide")
     private Date dateIntervention;
 
     @Column
+    @NotBlank(message = "Le champ 'dateCreation' ne peut pas être vide")
     private Date dateCreation;
 
     @Column(length = 50)
@@ -73,19 +76,5 @@ public class FicheIntervention {
     @NotBlank(message = "Le champ 'etatFiche' ne peut pas être vide")
     private String etatFiche;
 
-    @PrePersist
-    public void validate() {
-        if (nomDemandeur == null || nomDemandeur.trim().isEmpty() ||
-            dureeIntervention == null || dureeIntervention.trim().isEmpty() ||
-            localisation == null || localisation.trim().isEmpty() ||
-            descriptionDemande == null || descriptionDemande.trim().isEmpty() ||
-            degreUrgence == null || degreUrgence.trim().isEmpty() ||
-            typeIntervention == null || typeIntervention.trim().isEmpty() ||
-            natureIntervention == null || natureIntervention.trim().isEmpty() ||
-            couleurIntervention == null || couleurIntervention.trim().isEmpty() ||
-            etatFiche == null || etatFiche.trim().isEmpty()) {
-            throw new ConstraintViolationException("Un ou plusieurs champs ne peuvent pas être vides.", null);
-        }
-    }
 }
 
