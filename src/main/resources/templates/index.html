@@ -1,13 +1,337 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Téléverser une image</title>
+    <title>Fiche Intervention</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <h1>Téléverser une image</h1>
-    <form action="http://127.0.0.1:8080/upload-photo/25" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".jpg, .jpeg, .png">
-        <input type="submit" value="Téléverser">
-    </form>
+
+    <h1 th:text="${something}"/>
+
+<body class="colonne centre">
+    <main class="colonne">
+        <div class="titre border">FICHE D'INTERVENTION N°01</div>
+        <form>
+
+            <div class="espaceHor"></div>
+            <fieldset>
+                <legend>Intervenant</legend>
+                <div>
+                    <div class="titre">Nom de l'intervenant</div>
+                    <div> <input></div>
+                    <div class="titre">Prénom de l'intervenant</div>
+                    <div> <input></div>
+                </div>
+            </fieldset>
+            <div class="espaceHor"></div>
+            <fieldset>
+                <legend>Demande</legend>
+                <div>
+                    <div class="titre">Nom du demandeur</div>
+                    <div> <input disabled value="Responsable de maintenance"></div>  
+                </div>
+                <div class="espaceHor"></div>
+                <div>
+                    <div class="titre">Date de la demande</div>
+                    <div> <input disabled value="Date du jour"></div>
+                    <div class="titre">Localisation</div>
+                    <div> <input disabled value="Espace Lingerie"></div>
+                </div>
+                <div class="espaceHor"></div>
+                <div class="colonnePrint">
+                    <div class="titre demi">Description de la demande</div>
+                    <div> <textarea disabled rows="10">
+Format vierge Plomberie
+                        </textarea>
+                    </div>
+                </div>
+                <div class="espaceHor"></div>
+                <div>
+                    <div class="titre demi">Degré d'urgence</div>
+                    <div> <input disabled value="format vieger"></div>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="espaceHor"></div>
+            <fieldset>
+                <legend>Intervention</legend>
+
+                <div class="espaceHor"></div>
+                <div>
+                    <div class="titre">Date d'intervention</div>
+                    <div>
+                        <input type="date">
+
+                    </div>                    
+                    <div class="titre">Durée de l'opération</div>
+                    <div> <select>
+                            <option>-- Choisir une durée --</option>
+							<option>00h15</option>
+							<option>00h30</option>
+							<option>00h45</option>
+							<option>01h00</option>
+							<option>01h15</option>
+                            <option>01h30</option>
+							<option>01h45</option>
+                            <option>02h00</option>
+							<option>02h15</option>
+							<option>02h30</option>
+							<option>02h45</option>
+							<option>03h00</option>
+							<option>03h15</option>
+                            <option>03h30</option>
+							<option>03h45</option>
+                            <option>04h00</option>
+						</div>
+                <div class="espaceHor"></div>
+                <div>
+                    <div class="colonne listeCheckbox">
+                        <fieldset class=" colonne">
+                            <legend>Action</legend></div>
+                    		<div>
+                                <div class="demi">
+                                    <input type="checkbox">
+                            </div>
+								<div class="droite"> <label> </label>
+                                </div>                       
+							</div>
+                    		<div>
+  
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="colonne listeCheckbox">
+                        <fieldset class=" colonne">
+                            <legend>Type de Maintenance</legend>
+                            <div>
+                                <div class="demi">
+                                    <input type="checkbox">
+                                </div>
+                                <div class="droite"> <label>améliorative</label></div>
+                            </div>
+                            <div>
+                                <div class="demi">
+                                    <input type="checkbox">
+                                </div>
+                                <div class="droite"> <label>préventive</label>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="demi">
+                                    <input type="checkbox">
+                                </div>
+                                <div class="droite"> <label>corrective</label>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="colonne listeCheckbox">
+                        <fieldset class=" colonne">
+                            <legend>Nature de l'intervention</legend>
+                            <div>
+                                <div class="demi">
+                                    <input type="checkbox">
+                                </div>
+                                <div class="droite"> <label>Aménagement</label></div>
+                            </div>
+                            <div>
+                                <div class="demi">
+                                    <input type="checkbox">
+                                </div>
+                                <div class="droite"> <label>Finitions</label>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="demi">
+                                    <input type="checkbox">
+                                </div>
+                                <div class="droite"> <label>Installation sanitaire</label>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="demi">
+                                    <input type="checkbox">
+                                </div>
+                                <div class="droite"> <label>Installation électrique</label>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="espaceHor"></div> 
+                </div>
+                <div class="espaceHor"></div>
+
+                <div>
+                    <div class="colonnePrint">
+                        <div class="titre demi">Travaux réalisés</div>
+                        <div>
+                            <textarea rows="10"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="espaceHor"></div>
+
+                <div>
+                    <div class="colonnePrint">
+                        <div class="titre demi">Travaux non réalisés</div>
+                        <div>
+                            <textarea rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="noPrint "></div>
+                    <div class="check">
+                        <input type="checkbox">
+                    </div>
+                    <div class="droite"> <label>Nécessite une nouvelle intervention</label>
+                    </div>
+                </div>
+                <div class="espaceHor"></div>
+                <div>
+                    <div class="titre demi">Matériaux Utilisés</div>
+                    <div class="noPrint"></div>
+                    <div>
+                    </div>
+                </div>
+                <div class="espaceHor"></div>
+                <div>
+                    <div class="selectADupliquer">
+                        <select>
+                            <option>-- Choisir une valeur --</option>
+                            <option>Bonde à grille pour lave-mains</option>
+                            <option>Bouchon laiton à visser F 1/2</option>
+                            <option>Chevilles à expansion avec patte à vis</option>
+                            <option>Chevilles à frapper</option>
+                            <option>Chevilles autoforeuses - Fixation plaque de plâtre</option>
+                            <option>Chiffons</option>
+                            <option>Colle acrylique de fixation pour plinthe</option>
+                            <option>Colle PVC</option>
+                            <option>Collier PVC Ø 40</option>
+                            <option>Colliers PVC Ø 32</option>
+                            <option>Colliers PVC  Ø 100</option>
+                            <option>Colliers type Atlas double Ø12</option>
+                            <option>Colliers type Atlas Simple Ø12</option>
+                            <option>Coude cuivre 90° à souder FF Ø 12</option>
+                            <option>Coude PVC 87°30° FF Ø 100</option>
+                            <option>Coude PVC 87°30° FF Ø 32</option>
+                            <option>Coude PVC 87°30° FF Ø 40</option>                   
+							<option>Faïence mur 20 x 20</option>
+                            <option>Mortier colle poudre</option>
+                            <option>Joint poudre carrelage</option>
+                            <option>Ecrou laiton à collet battu 12x17 Ø 12</option>
+                            <option>Joints d'étanchéité suivant montages</option>
+                            <option>Kit robinet d'arrêt WC équerre + flexible + joint</option>
+                            <option>Lave-mains</option>
+                            <option>Lot de 2 chevilles clips pour fixation WC 6x70</option>
+                            <option>Lot de 2 fixations pour lave-mains parois creuse + cheville</option>
+                            <option>Lot de 2 fixations pour lave-mains parois pleine + cheville</option>
+                            <option>Manchon cuivre à souder FF Ø 12</option>
+                            <option>Manchon de dilatation PVC H Ø 100</option>
+                            <option>Manchon mâle 243 CGU Ø 12 - M 12x17</option>
+                            <option>Manchon mâle 243 CGU Ø 12 - M 15x21</option>
+                            <option>Manchon PVC Ø 100</option>
+                            <option>Manchon PVC Ø 32</option>
+                            <option>Manchon PVC Ø 40</option>
+                            <option>Mélangeur pour lave-mains + Fléxibles de raccordement</option>
+                            <option>Pack WC à poser sortie horizontale</option>
+                            <option>Panneau bois (OSB ou aggloméré)</option>
+                            <option>Papier de verre grain 120</option>
+                            <option>Papier de verre grain 80</option>
+                            <option>Pates à vis</option>
+                            <option>Pipe coudée WC 90° 110 mm</option>
+                            <option>Pipe droite WC 110 mm</option>
+                            <option>Planche de coffrage</option>
+                            <option>Réduction PVC Ø 40/32</option>
+                            <option>Robinet de puisage de lave-linge + platine de fixation</option>
+                            <option>Robinet simple pour lave-mains + fléxible de raccordement</option>
+                            <option>Rosaces coniques H19</option>
+                            <option>Siphon lavabo/lave-mains à visser sortie Ø 32</option>
+                            <option>Système de vidage PVC pour machine à laver</option>
+                            <option>Tampon de réduction simple PVC Ø 100/40</option>
+                            <option>Tampon de visite PVC avec bouchon M/F Ø 100</option>
+                            <option>Tampon de visite PVC avec bouchon M/F Ø 32</option>
+                            <option>Té égal cuivre à souder FFF Ø 12</option>
+                            <option>Té pied de biche 87°30 FF PVC Ø 100</option>
+                            <option>Té pied de biche 87°30 FF PVC Ø 32</option>
+                            <option>Té pied de biche 87°30 FF PVC Ø 40</option>
+                            <option>Tube cuivre Ø 12</option>
+                            <option>Tube PVC Ø 100</option>
+                            <option>Tube PVC Ø 32</option>
+                            <option>Tube PVC Ø 40</option>
+                            <option>Vanne d'arrêt MF 1/4 de tour - 12x17</option>
+                            <option>Verrou à bouton - cylindre 40 mm</option>
+                            <option>Vis à bois 30 mm</option>
+                            <option>Vis TRPF</option>
+                            <option>Vis TTPC 25</option>
+                            <option>Vis TTPC 35</option>
+                        </select>
+                    </div>
+                    <div class="demi"></div>
+                    <div class="selectADupliquer">
+                    </div>
+                </div>
+                <div class="espaceHor"></div>
+                <div>
+                    <div class="selectADupliquer">
+
+                    </div>
+                    <div class="demi"></div>
+                    <div class="selectADupliquer">
+                    </div>
+                </div>
+                <div class="espaceHor"></div>
+                <div>
+                    <div class="selectADupliquer">
+                    </div>
+                    <div class="demi"></div>
+                    <div class="selectADupliquer">
+                    </div>
+                </div>
+                <div class="espaceHor"></div>
+                <div>
+                    <div class="selectADupliquer">
+                    </div>
+                    <div class="demi"></div>
+                    <div class="selectADupliquer">
+                    </div>
+                </div>
+                <div class="espaceHor"></div>
+                <div>
+                    <div class="selectADupliquer">
+                    </div>
+                    <div class="demi"></div>
+                    <div class="selectADupliquer">
+                    </div>
+                </div>
+            </fieldset>
+            <div class="espaceHor"></div>
+            <div class="espaceHor"></div>
+
+            <div class="centre noPrint">Click sur imprimer quand vous avez tout terminé</div>
+            <div class="noPrint">
+                <div></div>
+                <button>Imprimer</button>
+                <div></div>
+            </div>
+        </form>
+    </main>
 </body>
+<script>
+    bouton = document.getElementsByTagName("button")[0];
+    bouton.addEventListener("click", imprimer);
+
+    function imprimer(e) {
+        e.preventDefault();
+        window.print();
+    }
+    /* Dupliquer les select */
+    lesSelect = document.getElementsByClassName("selectADupliquer") ;
+    select = lesSelect[0].childNodes[1];
+    for (let i = 1; i < lesSelect.length; i++) {
+          lesSelect[i].appendChild(select.cloneNode(true));
+    }
+</script>
+
 </html>
