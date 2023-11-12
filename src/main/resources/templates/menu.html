@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Menu</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .header {
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .logout-button {
+            float: right;
+        }
+
+        .menu-label {
+            font-size: 24px;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .content{
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <form th:action="@{/logout}" method="post" class="logout-button">
+            <input type="submit" value="Se Déconnecter" />
+        </form>
+        <h1 class="menu-label">Menu</h1>
+        
+    </div>
+
+    <div class="content">
+    <h1>
+        Utilisateur connecté:
+        <span th:text="${username}"></span>
+        <br>
+        Rôle de l'utilisateur:
+        <span th:text="${role}"></span>
+    </h1>
+
+    <div class="button-container">
+        <a th:href="@{/fiche}">
+            <button>Fiche</button>
+        </a>
+
+        <th:block th:if="${role == 'ROLE_ADMIN'}">
+            <a th:href="@{/admin}">
+                <button>Admin</button>
+            </a>
+        </th:block>
+
+    </div>
+</div>
+</body>
+</html>

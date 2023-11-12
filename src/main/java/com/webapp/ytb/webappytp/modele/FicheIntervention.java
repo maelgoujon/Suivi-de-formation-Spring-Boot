@@ -80,12 +80,12 @@ public class FicheIntervention {
     private String etatFiche;
 
     @ManyToOne
-    @JoinColumn(name = "etudiant_id")
-    private Etudiant etudiant;
+    @JoinColumn(name = "utilisateur_id")
+    private Utilisateur utilisateur;
 
 
-    public FicheIntervention(Etudiant etudiant) {
-        this.etudiant = etudiant;
+    public FicheIntervention(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
     }
     
 

@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.webapp.ytb.webappytp.modele.Etudiant;
+import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
-import com.webapp.ytb.webappytp.service.EtudiantService;
+import com.webapp.ytb.webappytp.service.UtilisateurService;
 import com.webapp.ytb.webappytp.service.FicheService;
 
 import jakarta.validation.Valid;
@@ -30,13 +30,13 @@ public class FicheController {
 
 
     @Autowired
-    private EtudiantService etudiantService;
+    private UtilisateurService utilisateurService;
 
-    @PostMapping("/create/{etudiantId}")
-    public FicheIntervention create(@Valid @RequestBody FicheIntervention fiche, @PathVariable Long etudiantId) {
-        Etudiant etudiant = etudiantService.findById(etudiantId);
-        fiche.setEtudiant(etudiant);
-        if (etudiant != null) {
+    @PostMapping("/create/{utilisateurId}")
+    public FicheIntervention create(@Valid @RequestBody FicheIntervention fiche, @PathVariable Long utilisateurId) {
+        Utilisateur utilisateur = utilisateurService.findById(utilisateurId);
+        fiche.setUtilisateur(utilisateur);
+        if (utilisateur != null) {
             return ficheService.creer(fiche);
         } else {
             throw new RuntimeException("Étudiant non trouvé");

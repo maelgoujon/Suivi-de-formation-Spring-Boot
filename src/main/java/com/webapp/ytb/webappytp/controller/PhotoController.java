@@ -3,7 +3,6 @@ package com.webapp.ytb.webappytp.controller;
 import java.io.IOException;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,26 +12,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.webapp.ytb.webappytp.modele.Etudiant;
-import com.webapp.ytb.webappytp.repository.EtudiantRepository;
+import com.webapp.ytb.webappytp.modele.Utilisateur;
+import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
 
 @Controller
 public class PhotoController {
-    private final EtudiantRepository etudiantRepository;
+    private final UtilisateurRepository utilisateurRepository;
 
-    @Autowired
-    public PhotoController(EtudiantRepository etudiantRepository) {
-        this.etudiantRepository = etudiantRepository;
+
+    public PhotoController(UtilisateurRepository utilisateurRepository) {
+        this.utilisateurRepository = utilisateurRepository;
     }
 
-    @PostMapping("/upload-photo/{etudiantId}")
-    public String uploadPhoto(@PathVariable Long etudiantId, @RequestParam("file") MultipartFile file) {
+    @PostMapping("/upload-photo/{utilisateurId}")
+    public String uploadPhoto(@PathVariable Long utilisateurId, @RequestParam("file") MultipartFile file) {
         try {
-            Optional<Etudiant> optionalEtudiant = etudiantRepository.findById(etudiantId);
-            if (optionalEtudiant.isPresent()) {
-                Etudiant etudiant = optionalEtudiant.get();
-                etudiant.setPhoto(file.getBytes());
-                etudiantRepository.save(etudiant);
+            Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(utilisateurId);
+            if (optionalUtilisateur.isPresent()) {
+                Utilisateur utilisateur = optionalUtilisateur.get();
+                utilisateur.setPhoto(file.getBytes());
+                utilisateurRepository.save(utilisateur);
             }   
         } catch (IOException e) {
             System.out.println("Erreur dans l envoie de la photo");
@@ -40,14 +39,14 @@ public class PhotoController {
         return "redirect:/etu/read";
     }
 
-    @GetMapping("/photo/{etudiantId}")
-    public ResponseEntity<byte[]> getPhoto(@PathVariable Long etudiantId) {
-        Optional<Etudiant> optionalEtudiant = etudiantRepository.findById(etudiantId);
-        if (optionalEtudiant.isPresent()) {
-            Etudiant etudiant = optionalEtudiant.get();
+    @GetMapping("/photo/{utilisateurId}")
+    public ResponseEntity<byte[]> getPhoto(@PathVariable Long utilisateurId) {
+        Optional<Utilisateur> optionalUtilisateur = utilisateurRepository.findById(utilisateurId);
+        if (optionalUtilisateur.isPresent()) {
+            Utilisateur utilisateur = optionalUtilisateur.get();
             return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
-                .body(etudiant.getPhoto());
+                .body(utilisateur.getPhoto());
         }
         return ResponseEntity.notFound().build();
     }
