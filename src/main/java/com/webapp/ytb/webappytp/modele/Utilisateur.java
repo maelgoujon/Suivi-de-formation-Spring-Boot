@@ -1,11 +1,18 @@
 package com.webapp.ytb.webappytp.modele;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 @Entity
@@ -14,6 +21,7 @@ import jakarta.validation.constraints.NotBlank;
 @Setter
 @NoArgsConstructor
 @Valid
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Utilisateur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,5 +50,9 @@ public class Utilisateur {
     @Enumerated(EnumType.STRING)
     private UserRole role; // Champ pour indiquer le rôle de l'étudiant (ADMIN, SUPERADMIN, USER)
 
+
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<FicheIntervention> ficheInterventions;
 
 }

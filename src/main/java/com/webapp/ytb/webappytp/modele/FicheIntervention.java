@@ -1,7 +1,14 @@
 package com.webapp.ytb.webappytp.modele;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -79,11 +87,14 @@ public class FicheIntervention {
     @JoinColumn(name = "utilisateur_id")
     private Utilisateur utilisateur;
 
+    @OneToMany(mappedBy = "ficheIntervention", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<ElementFiche> elements;
 
     public FicheIntervention(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
+        this.elements = new ArrayList<>();
     }
-    
+
 
 }
-
