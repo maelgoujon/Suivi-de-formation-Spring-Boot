@@ -1,45 +1,36 @@
 package com.webapp.ytb.webappytp.controller;
-
 import java.util.List;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.stereotype.Controller;  // Import the correct Controller annotation
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.service.UtilisateurService;
 import com.webapp.ytb.webappytp.service.FicheService;
-
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 
-@RestController
+@Controller  // Use @Controller instead of @RestController
 @RequestMapping("/fiche")
 @Validated
 @AllArgsConstructor
 public class FicheController {
     private final FicheService ficheService;
 
-
     @Autowired
     private UtilisateurService utilisateurService;
 
     @PostMapping("/create/{utilisateurId}")
-    public FicheIntervention create(@Valid @RequestBody FicheIntervention fiche, @PathVariable Long utilisateurId) {
+    public String create(@Valid @ModelAttribute("fiche") FicheIntervention fiche, @PathVariable Long utilisateurId) {
         Utilisateur utilisateur = utilisateurService.findById(utilisateurId);
         fiche.setUtilisateur(utilisateur);
         if (utilisateur != null) {
-            return ficheService.creer(fiche);
+            ficheService.creer(fiche);
+            return "redirect:/fiche/create";  // Redirect to the create form again or any other page
         } else {
-            throw new RuntimeException("Étudiant non trouvé");
+            return "redirect:/accueil";
         }
     }
 
@@ -56,5 +47,13 @@ public class FicheController {
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable Long id){
         return ficheService.supprimer(id);
+    }
+
+    @GetMapping("/create")
+    public String showCreateInterventionForm(Model model) {
+        List<Utilisateur> users = utilisateurService.lire();
+        model.addAttribute("fiche", new FicheIntervention());
+        model.addAttribute("users", users);
+        return "creer_intervention";
     }
 }

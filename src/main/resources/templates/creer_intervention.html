@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Intervention</title>
+</head>
+<body>
+
+<h2>Create New Intervention</h2>
+
+<form th:action="@{/fiche/create}" th:object="${fiche}" method="post">
+    <!-- Add your fields here -->
+    <label for="nomDemandeur">Nom Demandeur:</label>
+    <input type="text" id="nomDemandeur" name="nomDemandeur" th:field="*{nomDemandeur}" required>
+
+    <label for="dateDemande">Date Demande:</label>
+    <input type="date" id="dateDemande" name="dateDemande" th:field="*{dateDemande}" required>
+
+    <!-- Add other fields -->
+
+    <label for="utilisateur">Select User:</label>
+    <select id="utilisateur" name="utilisateur.id" th:field="*{utilisateur.id}" required>
+        <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.nom} + ' ' + ${user.prenom}"></option>
+    </select>
+
+    <button type="submit">Submit</button>
+</form>
+
+</body>
+</html>

@@ -2,7 +2,6 @@ package com.webapp.ytb.webappytp.modele;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -54,5 +53,11 @@ public class Utilisateur {
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<FicheIntervention> ficheInterventions;
+
+    @Column(length = 2000)
+    private String description;
+
+    @Column
+    private Integer niveau;
 
 }

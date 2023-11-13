@@ -11,11 +11,9 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "accueil";
+        return "index";
     }
     
-
-
     @GetMapping("/accueil")
     public String redirectToAccueil() {
         return "accueil";
@@ -30,6 +28,7 @@ public class HomeController {
     public String ajout_apprenti() {
         return "ajout_apprenti";
     }
+
 
 
     @GetMapping("/fiche")
