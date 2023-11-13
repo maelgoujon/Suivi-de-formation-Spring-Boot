@@ -39,7 +39,6 @@ public class FicheServiceImpl implements FicheService {
                 existingFiche.setDegreUrgence(fiche.getDegreUrgence());
                 existingFiche.setTypeIntervention(fiche.getTypeIntervention());
                 existingFiche.setNatureIntervention(fiche.getNatureIntervention());
-                existingFiche.setCouleurIntervention(fiche.getCouleurIntervention());
                 existingFiche.setEtatFiche(fiche.getEtatFiche());
     
                 return ficheRepository.save(existingFiche);

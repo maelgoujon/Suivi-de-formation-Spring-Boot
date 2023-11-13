@@ -72,10 +72,6 @@ public class FicheIntervention {
     private String natureIntervention;
 
     @Column(length = 50)
-    @NotBlank(message = "Le champ 'couleurIntervention' ne peut pas être vide")
-    private String couleurIntervention;
-
-    @Column(length = 50)
     @NotBlank(message = "Le champ 'etatFiche' ne peut pas être vide")
     private String etatFiche;
 
