@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
-import com.webapp.ytb.webappytp.service.FicheService;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
 
@@ -53,7 +52,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "index";
+        return " ";
     }
     
     @GetMapping("/accueil")
@@ -66,15 +65,10 @@ public class HomeController {
         return "select_fiche";
     }
 
-
-    
-
-    @GetMapping("/fiche")
-    public String fiche(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        String username = userDetails.getUsername();
-        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
-        model.addAttribute("username", username);
-        model.addAttribute("role", role);
+    @GetMapping("/fiche/{numero}")
+    public String fiche(@PathVariable Long numero, Model model) {
+        FicheIntervention ficheIntervention = ficheServ.lire(numero);
+        model.addAttribute("ficheIntervention", ficheIntervention);
         return "index";
     }
 

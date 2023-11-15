@@ -6,10 +6,11 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -71,16 +72,27 @@ public class FicheIntervention {
     private String degreUrgence;
 
     @Column(length = 50)
+    @Enumerated(EnumType.STRING)
     @NotBlank(message = "Le champ 'typeIntervention' ne peut pas être vide")
-    private String typeIntervention;
+    private TypeIntervention typeIntervention;
 
     @Column(length = 50)
+    @Enumerated(EnumType.STRING)
     @NotBlank(message = "Le champ 'natureIntervention' ne peut pas être vide")
-    private String natureIntervention;
+    private NatureIntervention natureIntervention;
 
     @Column(length = 50)
     @NotBlank(message = "Le champ 'etatFiche' ne peut pas être vide")
     private String etatFiche;
+
+    @Column(length = 250)
+    private String travauxRealises;;
+
+    @Column(length = 250)
+    private String travauxNonRealises;
+
+    @Column
+    private boolean nouvelleIntervention;
 
     @ManyToOne
     @JoinColumn(name = "utilisateur_id")
@@ -94,6 +106,5 @@ public class FicheIntervention {
         this.utilisateur = utilisateur;
         this.elements = new ArrayList<>();
     }
-
 
 }

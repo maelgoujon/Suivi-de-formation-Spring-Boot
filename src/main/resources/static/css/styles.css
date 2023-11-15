@@ -16,6 +16,12 @@
         justify-content: center;
     }
 
+    .test{
+        background-color: #b3b3b3;
+        color: rgb(0, 0, 0);
+    }
+
+    
     .colonne,
     form {
         flex-direction: column;
