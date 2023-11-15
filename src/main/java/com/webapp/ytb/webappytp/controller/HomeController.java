@@ -5,9 +5,42 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.webapp.ytb.webappytp.modele.UserRole;
+import com.webapp.ytb.webappytp.modele.Utilisateur;
+import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
 
 @Controller
 public class HomeController {
+    
+    UtilisateurServiceImpl userServ;
+    public HomeController(UtilisateurServiceImpl userServ) {
+        this.userServ = userServ;
+    }
+
+
+
+
+    //Ajouter un apprenti
+    @GetMapping("/ajout_apprenti")
+    public String ajout_apprenti(Model model) {
+        
+        model.addAttribute("apprenti", new Utilisateur());
+        return "ajout_apprenti";
+    }
+
+    @PostMapping("/ajouter_apprenti")
+    public String ajouter_apprenti(@ModelAttribute Utilisateur user) {
+        user.setRole(UserRole.USER);
+        userServ.creer(user);
+        return "accueil_admin";
+    }
+
+
+
+
 
     @GetMapping("/")
     public String home() {
@@ -23,13 +56,9 @@ public class HomeController {
     public String select_fiche() {
         return "select_fiche";
     }
+
+
     
-    @GetMapping("/ajout_apprenti")
-    public String ajout_apprenti() {
-        return "ajout_apprenti";
-    }
-
-
 
     @GetMapping("/fiche")
     public String fiche(Model model, @AuthenticationPrincipal UserDetails userDetails) {

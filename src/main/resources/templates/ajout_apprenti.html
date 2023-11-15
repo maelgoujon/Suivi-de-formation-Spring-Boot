@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Apprenti</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajout Apprenti</title>
     <style>
-      body {
+    body {
         margin: 0;
         padding: 0;
         font-family: Arial, sans-serif;
@@ -90,122 +89,93 @@
         margin-top: 10px;
       }
     </style>
-  </head>
-  <body>
+</head>
+<body>
+
     <div class="bandeau">
-      <a th:href="@{/accueil_admin}">
-        <img src="/images/accueil.png" alt="Accueil" style="float: left" />
-      </a>
-      <div class="bandeau centered">
-        <img src="/images/logo.png" alt="Votre Image" />
-        <h1 style="margin-left: 10px">Admin</h1>
+        <a th:href="@{/accueil_admin}">
+          <img src="/images/accueil.png" alt="Accueil" style="float: left" />
+        </a>
+        <div class="bandeau centered">
+          <img src="/images/logo.png" alt="Votre Image" />
+          <h1 style="margin-left: 10px">Admin</h1>
+        </div>
+        <a
+          th:href="@{https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing}"
+        >
+          <img
+            src="/images/aide.png"
+            alt="aide"
+            style="cursor: pointer; margin-left: auto"
+          />
+        </a>
       </div>
-      <a
-        th:href="@{https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing}"
-      >
-        <img
-          src="/images/aide.png"
-          alt="aide"
-          style="cursor: pointer; margin-left: auto"
-        />
-      </a>
-    </div>
 
-    <form
-      th:action="@{/utilisateur/enregistrer_utilisateur}"
-      th:object="${utilisateur}"
-      class="apprenti-form"
-      enctype="multipart/form-data"
-      method="POST"
-    >
-      <label for="photo">Photo de profil :</label>
-      <input type="file" id="photo" name="photo" />
-      <br />
-      <div id="preview"></div>
-      <!-- Prévisualisation de l'image -->
-      <br />
-      <label for="nom">Nom :</label>
-      <input type="text" id="nom" name="nom" th:field="*{nom}" />
-      <br />
-      <label for="prenom">Prénom :</label>
-      <input type="text" id="prenom" name="prenom" th:field="*{prenom}" />
-      <br />
-      <label for="date_naissance">Date de naissance :</label>
-      <input
-        type="date"
-        id="date_naissance"
-        name="date_naissance"
-        th:field="*{date_naissance}"
-      />
-      <br />
-      <label for="mot_de_passe">Mot de passe :</label>
-      <input
-        type="password"
-        id="mot_de_passe"
-        name="mot_de_passe"
-        th:field="*{mot_de_passe}"
-      />
-      <br />
-      <label for="confirmer_mot_de_passe">Confirmer le mot de passe :</label>
-      <input
-        type="password"
-        id="confirmer_mot_de_passe"
-        name="confirmer_mot_de_passe"
-        th:field="*{confirmer_mot_de_passe}"
-      />
-      <br />
-      <label for="description_profil"
-        >Description du profil de l'apprenti (difficultés etc...) :</label
-      >
-      <textarea
-        id="description_profil"
-        name="description_profil"
-        rows="4"
-        cols="50"
-        th:field="*{description_profil}"
-      ></textarea>
-      <br />
-      <label for="niveau_moyen"
-        >Niveau moyen de ses fiches d'intervention :</label
-      >
-      <select id="niveau_moyen" name="niveau_moyen" th:field="*{niveau_moyen}">
-        <option value="1">Niveau 1</option>
-        <option value="2">Niveau 2</option>
-        <option value="3">Niveau 3</option>
-      </select>
-      <br />
-      <label for="role">Rôle de ce nouvel utilisateur :</label>
-      <select id="role" name="role" th:field="*{role}">
-        <option value="1">Apprenti</option>
-        <option value="2">Admin</option>
-        <option value="3">Super Admin</option>
-      </select>
-      <br />
+    <form th:action="@{/ajouter_apprenti}" th:object="${apprenti}" method="post">
+        <div class="form-row">
 
-      <input type="submit" class="annuler-button" value="Créer le profil" />
-      <a th:href="@{/accueil_admin}" class="annuler-button">Annuler</a>
+            <div class="col-md-6 form-group">
+                <label >Photo de profil :</label>
+                <input type="file" class="form-control" th:field="*{photo}" id="photoInput">
+                <br />
+                <div id="preview"></div>
+                <!-- Prévisualisation de l'image -->
+                <br />
+            </div>
+            <div class="col-md-6 form-group">
+                <label>Nom</label>
+                <input type="text" class="form-control" th:field="*{nom}">
+            </div>
+            <div class="col-md-6 form-group">
+                <label>Prenom</label>
+                <input type="text" class="form-control" th:field="*{prenom}">
+            </div>
+            <div class="col-md-6 form-group">
+                <label>Login</label>
+                <input type="text" class="form-control" th:field="*{login}">
+            </div>
+            <div class="col-md-6 form-group">
+                <label>Mot de passe</label>
+                <input type="text" class="form-control" th:field="*{mdp}">
+            </div>
+            <div class="col-md-6 form-group">
+                <label>Niveau</label>
+                <select class="form-control" th:field="*{niveau}">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+            <div class="col-md-12 form-group">
+                <label>Description</label>
+                <textarea class="form-control" th:field="*{description}" rows="3" maxlength="300"></textarea>
+            </div>
+        </div>
+        
+        <!-- Ajoutez le bouton de soumission ici -->
+        <button type="submit" class="btn btn-primary">Ajouter apprenti</button>
     </form>
-
-    <div id="error-message" style="color: red"></div>
-
+    
     <script>
-      const photoInput = document.getElementById("photo");
-      const preview = document.getElementById("preview");
-
-      photoInput.addEventListener("change", function () {
-        const file = photoInput.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            const img = document.createElement("img");
-            img.src = e.target.result;
-            img.style.maxWidth = "400px"; // Ajustez la taille de la prévisualisation selon vos besoins
-            preview.innerHTML = "";
-            preview.appendChild(img);
-          };
-          reader.readAsDataURL(file);
-        }
-      });
+        //JavaScript pour la prévisualisation
+        document.getElementById('photoInput').addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('preview');
+                    preview.innerHTML = ""; // Supprimer le contenu précédent
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '100%';
+                    img.style.height = 'auto';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
     </script>
-  </body>
+
+</body>
 </html>

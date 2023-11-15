@@ -12,4 +12,8 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long>{
     @Query("SELECT e FROM Utilisateur e WHERE e.login = :login")
     Utilisateur findUserByLogin(@Param("login") String login);
 
+
+    @Query("SELECT MAX(u.id) FROM Utilisateur u")
+    Long findMaxId();
+
 }
