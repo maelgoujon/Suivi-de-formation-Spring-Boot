@@ -6,22 +6,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
+import com.webapp.ytb.webappytp.service.FicheService;
+import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
 
 @Controller
 public class HomeController {
     
     UtilisateurServiceImpl userServ;
-    public HomeController(UtilisateurServiceImpl userServ) {
+    FicheServiceImpl ficheServ;
+    public HomeController(UtilisateurServiceImpl userServ, FicheServiceImpl ficheServ) {
         this.userServ = userServ;
+        this.ficheServ = ficheServ;
     }
-
-
-
 
     //Ajouter un apprenti
     @GetMapping("/ajout_apprenti")
@@ -40,6 +43,12 @@ public class HomeController {
 
 
 
+    @GetMapping("/ficheIntervention/{numero}")
+    public String ficheIntervention(@PathVariable Long numero, Model model) {
+        FicheIntervention ficheIntervention = ficheServ.lire(numero);
+        model.addAttribute("ficheIntervention", ficheIntervention);
+        return "ficheIntervention";
+    }
 
 
     @GetMapping("/")

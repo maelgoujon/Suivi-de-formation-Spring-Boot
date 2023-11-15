@@ -20,8 +20,14 @@ public class FicheServiceImpl implements FicheService {
     }
 
     @Override
-    public List<FicheIntervention> lire() {
+    public List<FicheIntervention> lireTout() {
         return ficheRepository.findAll();
+    }
+
+    @Override
+    public FicheIntervention lire(Long numero) {
+        return ficheRepository.findByNumero(numero)
+            .orElseThrow(() -> new RuntimeException("Fiche non trouvée"));
     }
 
     @Override

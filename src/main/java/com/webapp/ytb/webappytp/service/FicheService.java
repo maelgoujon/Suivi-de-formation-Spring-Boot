@@ -8,7 +8,8 @@ import com.webapp.ytb.webappytp.modele.FicheIntervention;
 public interface FicheService {
     FicheIntervention creer(FicheIntervention ficheIntervention);
 
-    List<FicheIntervention> lire();
+    List<FicheIntervention> lireTout();
+    FicheIntervention lire(Long id);
 
     FicheIntervention modifier(Long id, FicheIntervention ficheIntervention);
 

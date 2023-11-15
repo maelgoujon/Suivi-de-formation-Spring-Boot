@@ -34,9 +34,9 @@ public class FicheController {
         }
     }
 
-    @GetMapping("/read")
-    public List<FicheIntervention> read(){
-        return ficheService.lire();
+    @GetMapping("/read/{id}")
+    public FicheIntervention read(@PathVariable Long id){
+        return ficheService.lire(id);
     }
 
     @PutMapping("/update/{id}")
