@@ -52,7 +52,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return " ";
+        return "accueil";
     }
     
     @GetMapping("/accueil")
