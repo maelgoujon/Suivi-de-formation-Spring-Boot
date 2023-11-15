@@ -131,6 +131,11 @@
         align-items: center;
         justify-content: center;
       }
+
+      .profils {
+        display: flex;
+        transition: transform 1s ease; /* Ajoutez une transition de 0.3 secondes avec une fonction de facilité */
+      }
     </style>
   </head>
   <body>
@@ -201,8 +206,8 @@
           alt="Précédent"
           style="max-width: 30px; margin-right: 10px"
         />
-        <img class "fleche" id="next" src="/images/fleche_droite.png" alt="Suivant"
-        style="max-width: 30px; margin-left: 10px;">
+        <img class "fleche" id="next" src="/images/fleche_droite.png"
+        alt="Suivant" style="max-width: 30px; margin-left: 10px;">
       </div>
     </div>
     <!-- Ajout de l'image cliquable et du texte "Ajouter un apprenti" -->
@@ -283,6 +288,28 @@
         if (selectedProfile) {
           window.location.href = "profil_apprenti";
         }
+      });
+
+      let touchStartX = 0;
+
+      carousel.addEventListener("touchstart", (event) => {
+        touchStartX = event.touches[0].clientX;
+      });
+
+      carousel.addEventListener("touchmove", (event) => {
+        const touchCurrentX = event.touches[0].clientX;
+        const swipeDistance = touchStartX - touchCurrentX;
+
+        if (swipeDistance > 10) {
+          moveCarousel("next");
+        } else if (swipeDistance < -10) {
+          moveCarousel("prev");
+        }
+      });
+
+      carousel.addEventListener("touchend", () => {
+        // Réinitialiser la valeur de départ du toucher
+        touchStartX = 0;
       });
     </script>
   </body>
