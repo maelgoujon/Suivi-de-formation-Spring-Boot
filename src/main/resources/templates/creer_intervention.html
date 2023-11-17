@@ -9,7 +9,7 @@
 
 <h2>Create New Intervention</h2>
 
-<form th:action="@{/fiche/create}" th:object="${fiche}" method="post">
+<form th:action="@{/ajouter_fiche}" th:object="${fiche}" method="post" id="ficheForm" class="fiche-form">
     <!-- Add your fields here -->
     <label for="nomDemandeur">Nom Demandeur:</label>
     <input type="text" id="nomDemandeur" name="nomDemandeur" th:field="*{nomDemandeur}" required>

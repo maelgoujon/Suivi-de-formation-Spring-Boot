@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 
-@Controller  // Use @Controller instead of @RestController
+@Controller
 @RequestMapping("/fiche")
 @Validated
 @AllArgsConstructor
@@ -49,7 +49,7 @@ public class FicheController {
         return ficheService.supprimer(id);
     }
 
-    @GetMapping("/create")
+    @GetMapping("/creer_intervention")
     public String showCreateInterventionForm(Model model) {
         List<Utilisateur> users = utilisateurService.lire();
         model.addAttribute("fiche", new FicheIntervention());

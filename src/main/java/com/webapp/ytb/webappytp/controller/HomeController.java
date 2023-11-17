@@ -28,11 +28,9 @@ public class HomeController {
     //Ajouter un apprenti
     @GetMapping("/ajout_apprenti")
     public String ajout_apprenti(Model model) {
-        
         model.addAttribute("apprenti", new Utilisateur());
         return "ajout_apprenti";
     }
-
     @PostMapping("/ajouter_apprenti")
     public String ajouter_apprenti(@ModelAttribute Utilisateur user) {
         user.setRole(UserRole.USER);
@@ -40,38 +38,27 @@ public class HomeController {
         return "accueil_admin";
     }
 
-
-
-    @GetMapping("/ficheIntervention/{numero}")
-    public String ficheIntervention(@PathVariable Long numero, Model model) {
-        FicheIntervention ficheIntervention = ficheServ.lire(numero);
-        model.addAttribute("ficheIntervention", ficheIntervention);
-        return "ficheIntervention";
+    //Ajouter une fiche
+    @GetMapping("/ajout_fiche")
+    public String ajout_fiche(Model model) {
+        model.addAttribute("apprenti", new Utilisateur());
+        return "ajout_fiche";
+    }
+    @PostMapping("/ajouter_fiche")
+    public String ajouter_fiche(@ModelAttribute FicheIntervention fiche) {
+        ficheServ.creer(fiche);
+        return "accueil";
     }
 
-
+    //Accueils
     @GetMapping("/")
     public String home() {
         return "accueil";
     }
-    
     @GetMapping("/accueil")
     public String redirectToAccueil() {
         return "accueil";
     }
-
-    @GetMapping("/select_fiche")
-    public String select_fiche() {
-        return "select_fiche";
-    }
-
-    @GetMapping("/fiche/{numero}")
-    public String fiche(@PathVariable Long numero, Model model) {
-        FicheIntervention ficheIntervention = ficheServ.lire(numero);
-        model.addAttribute("ficheIntervention", ficheIntervention);
-        return "index";
-    }
-
     @GetMapping("/accueil_admin")
     public String admin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
@@ -79,6 +66,27 @@ public class HomeController {
             return "accueil_admin";
         }
         return "redirect:/accueil";
+    }
+
+
+    @GetMapping("/select_fiche")
+    public String select_fiche() {
+        return "select_fiche";
+    }
+
+    //Afficher la fiche no
+    @GetMapping("/fiche/{numero}")
+    public String fiche(@PathVariable Long numero, Model model) {
+        FicheIntervention ficheIntervention = ficheServ.lire(numero);
+        model.addAttribute("ficheIntervention", ficheIntervention);
+        return "index";
+    }
+    //test pour afficher une fiche sans html
+    @GetMapping("/ficheIntervention/{numero}")
+    public String ficheIntervention(@PathVariable Long numero, Model model) {
+        FicheIntervention ficheIntervention = ficheServ.lire(numero);
+        model.addAttribute("ficheIntervention", ficheIntervention);
+        return "ficheIntervention";
     }
 
     @GetMapping("/menu")
