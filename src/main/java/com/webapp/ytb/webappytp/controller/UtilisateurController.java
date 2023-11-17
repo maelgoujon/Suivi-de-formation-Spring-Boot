@@ -15,6 +15,7 @@ import com.webapp.ytb.webappytp.service.UtilisateurService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+
 import org.springframework.validation.annotation.Validated;
 
 @RestController
@@ -23,6 +24,7 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 public class UtilisateurController {
     private final UtilisateurService utilisateurService;
+
 
 
     @PostMapping("/create")
@@ -44,5 +46,8 @@ public class UtilisateurController {
     public String delete(@PathVariable Long id){
         return utilisateurService.supprimer(id);
     }
+
+    
+
 
 }

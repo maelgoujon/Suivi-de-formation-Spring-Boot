@@ -1,172 +1,159 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Fiche Intervention</title>
     <link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css" />
 </head>
+
 <body>
-    <h1>
-        Utilisateur connecté : <span th:text="${username}"></span>
-    </h1>
-<body class="colonne centre">
-    <main class="colonne">
-        <div class="titre border">FICHE D'INTERVENTION N°01</div>
-        <form>
 
-            <div class="espaceHor"></div>
-            <fieldset>
-                <legend>Intervenant</legend>
-                <div>
-                    <div class="titre">Nom de l'intervenant</div>
-                    <div> <input></div>
-                    <div class="titre">Prénom de l'intervenant</div>
-                    <div> <input></div>
-                </div>
-            </fieldset>
-            <div class="espaceHor"></div>
-            <fieldset>
-                <legend>Demande</legend>
-                <div>
-                    <div class="titre">Nom du demandeur</div>
-                    <div> <input disabled value="Responsable de maintenance"></div>  
-                </div>
-                <div class="espaceHor"></div>
-                <div>
-                    <div class="titre">Date de la demande</div>
-                    <div> <input disabled value="Date du jour"></div>
-                    <div class="titre">Localisation</div>
-                    <div> <input disabled value="Espace Lingerie"></div>
-                </div>
-                <div class="espaceHor"></div>
-                <div class="colonnePrint">
-                    <div class="titre demi">Description de la demande</div>
-                    <div> <textarea disabled rows="10">
-Format vierge Plomberie
-                        </textarea>
-                    </div>
-                </div>
-                <div class="espaceHor"></div>
-                <div>
-                    <div class="titre demi">Degré d'urgence</div>
-                    <div> <input disabled value="format vieger"></div>
-                    </div>
-                </div>
-            </fieldset>
-            <div class="espaceHor"></div>
-            <fieldset>
-                <legend>Intervention</legend>
+    <body class="colonne centre">
+        <main class="colonne">
+            <div class="titre border">FICHE D'INTERVENTION N°01</div>
+            <form>
 
                 <div class="espaceHor"></div>
-                <div>
-                    <div class="titre">Date d'intervention</div>
+                <fieldset>
+                    <legend>Intervenant</legend>
                     <div>
-                        <input type="date">
-
-                    </div>                    
-                    <div class="titre">Durée de l'opération</div>
-                    <div> <select>
-                            <option>-- Choisir une durée --</option>
-							<option>00h15</option>
-							<option>00h30</option>
-							<option>00h45</option>
-							<option>01h00</option>
-							<option>01h15</option>
-                            <option>01h30</option>
-							<option>01h45</option>
-                            <option>02h00</option>
-							<option>02h15</option>
-							<option>02h30</option>
-							<option>02h45</option>
-							<option>03h00</option>
-							<option>03h15</option>
-                            <option>03h30</option>
-							<option>03h45</option>
-                            <option>04h00</option>
-						</div>
+                        <div class="titre">Nom de l'intervenant</div>
+                        <div class="test"> <span th:text="${ficheIntervention.utilisateur.nom}"></span></div>
+                        <div class="titre">Prénom de l'intervenant</div>
+                        <div class="test"> <span th:text="${ficheIntervention.utilisateur.prenom}"></span></div>
+                    </div>
+                </fieldset>
                 <div class="espaceHor"></div>
-                <div>
-                    <div class="colonne listeCheckbox">
-                        <fieldset class=" colonne">
-                            <legend>Action</legend></div>
-                    		<div>
-                                <div class="demi">
-                                    <input type="checkbox">
-                            </div>
-								<div class="droite"> <label> </label>
-                                </div>                       
-							</div>
-                    		<div>
-  
-                            </div>
-                        </fieldset>
+                <fieldset>
+                    <legend>Demande</legend>
+                    <div>
+                        <div class="titre">Nom du demandeur</div>
+                        <div class="test"> <span th:text="${ficheIntervention.nomDemandeur}"></span></div>
                     </div>
-                    <div class="colonne listeCheckbox">
-                        <fieldset class=" colonne">
-                            <legend>Type de Maintenance</legend>
-                            <div>
-                                <div class="demi">
-                                    <input type="checkbox">
-                                </div>
-                                <div class="droite"> <label>améliorative</label></div>
-                            </div>
-                            <div>
-                                <div class="demi">
-                                    <input type="checkbox">
-                                </div>
-                                <div class="droite"> <label>préventive</label>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="demi">
-                                    <input type="checkbox">
-                                </div>
-                                <div class="droite"> <label>corrective</label>
-                                </div>
-                            </div>
-                        </fieldset>
+                    <div class="espaceHor"></div>
+                    <div>
+                        <div class="titre">Date de la demande</div>
+                        <div class="test"> <span th:text="${ficheIntervention.dateDemande}"></span></div>
+                        <div class="titre">Localisation</div>
+                        <div class="test"> <span th:text="${ficheIntervention.localisation}"></span></div>
                     </div>
-                    <div class="colonne listeCheckbox">
-                        <fieldset class=" colonne">
-                            <legend>Nature de l'intervention</legend>
-                            <div>
-                                <div class="demi">
-                                    <input type="checkbox">
-                                </div>
-                                <div class="droite"> <label>Aménagement</label></div>
-                            </div>
-                            <div>
-                                <div class="demi">
-                                    <input type="checkbox">
-                                </div>
-                                <div class="droite"> <label>Finitions</label>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="demi">
-                                    <input type="checkbox">
-                                </div>
-                                <div class="droite"> <label>Installation sanitaire</label>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="demi">
-                                    <input type="checkbox">
-                                </div>
-                                <div class="droite"> <label>Installation électrique</label>
-                                </div>
-                            </div>
-                        </fieldset>
+                    <div class="espaceHor"></div>
+                    <div class="colonnePrint">
+                        <div class="titre demi">Description de la demande</div>
+                        <div class="test"> <span disabled rows="10" th:text="${ficheIntervention.descriptionDemande}">
+                        </span>
+                        </div>
                     </div>
+                    <div class="espaceHor"></div>
+                    <div>
+                        <div class="titre demi">Degré d'urgence</div>
+                        <div class="test">
+                            <span th:text="${ficheIntervention.degreUrgence}"></span>
+                        </div>
+                    </div>
+                    </div>
+                </fieldset>
+                <div class="espaceHor"></div>
+                <fieldset>
+                    <legend>Intervention</legend>
+
+                    <div class="espaceHor"></div>
+                    <div>
+                        <div class="titre">Date d'intervention</div>
+                        <div class="test">
+                            <span th:text="${ficheIntervention.dateIntervention}"></span>
+
+                        </div>
+                        <div class="titre">Durée de l'opération</div>
+                        <div class="test"> <span th:text="${ficheIntervention.dureeIntervention}"></span>
+                        </div>
+
+
+
+
+                </fieldset>
                 </div>
-                <div class="espaceHor"></div> 
+                <div class="colonne listeCheckbox">
+                    <fieldset class=" colonne">
+                        <legend>Type de Maintenance</legend>
+                        <div>
+                            <div class="demi">
+                                <input type="checkbox"
+                                    th:checked="${#strings.equalsIgnoreCase(ficheIntervention.typeIntervention, 'améliorative')}"
+                                    th:value="améliorative" name="typeIntervention">
+
+                            </div>
+                            <div class="droite"> <label>améliorative</label></div>
+                        </div>
+                        <div>
+                            <div class="demi">
+                                <input type="checkbox"
+                                    th:checked="${#strings.equalsIgnoreCase(ficheIntervention.typeIntervention, 'préventive')}"
+                                    th:value="préventive" name="typeIntervention">
+                            </div>
+                            <div class="droite"> <label>préventive</label></div>
+                        </div>
+                        <div>
+                            <div class="demi">
+                                <input type="checkbox"
+                                    th:checked="${#strings.equalsIgnoreCase(ficheIntervention.typeIntervention, 'corrective')}"
+                                    th:value="corrective" name="typeIntervention">
+                            </div>
+                            <div class="droite"> <label>corrective</label></div>
+                        </div>
+
+
+
+                    </fieldset>
+                </div>
+                <div class="colonne listeCheckbox">
+                    <fieldset class="colonne">
+                        <legend>Nature de l'intervention</legend>
+                        <div>
+                            <div class="demi">
+                                <input type="checkbox"
+                                    th:checked="${#strings.equalsIgnoreCase(ficheIntervention.natureIntervention, 'AMENAGEMENT')}"
+                                    th:value="AMENAGEMENT" name="natureIntervention">
+                            </div>
+                            <div class="droite"> <label>Aménagement</label></div>
+                        </div>
+                        <div>
+                            <div class="demi">
+                                <input type="checkbox"
+                                th:checked="${#strings.equalsIgnoreCase(ficheIntervention.natureIntervention, 'FINITIONS')}"
+                                    th:value="FINITIONS" name="natureIntervention">
+                            </div>
+                            <div class="droite"> <label>Finitions</label></div>
+                        </div>
+                        <div>
+                            <div class="demi">
+                                <input type="checkbox"
+                                th:checked="${#strings.equalsIgnoreCase(ficheIntervention.natureIntervention, 'INSTALLATION_SANITAIRE')}"
+                                    th:value="INSTALLATION_SANITAIRE" name="natureIntervention">
+                            </div>
+                            <div class="droite"> <label>Installation sanitaire</label></div>
+                        </div>
+                        <div>
+                            <div class="demi">
+                                <input type="checkbox"
+                                th:checked="${#strings.equalsIgnoreCase(ficheIntervention.natureIntervention, 'INSTALLATION_ELECTRIQUE')}"
+                                    th:value="INSTALLATION_ELECTRIQUE" name="natureIntervention">
+                            </div>
+                            <div class="droite"> <label>Installation électrique</label></div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                </div>
+                <div class="espaceHor"></div>
                 </div>
                 <div class="espaceHor"></div>
 
                 <div>
                     <div class="colonnePrint">
                         <div class="titre demi">Travaux réalisés</div>
-                        <div>
-                            <textarea rows="10"></textarea>
+                        <div class="test">
+                            <span th:text="${ficheIntervention.travauxRealises}"></span>
                         </div>
                     </div>
                 </div>
@@ -175,15 +162,16 @@ Format vierge Plomberie
                 <div>
                     <div class="colonnePrint">
                         <div class="titre demi">Travaux non réalisés</div>
-                        <div>
-                            <textarea rows="5"></textarea>
+                        <div class="test">
+                            <span th:text="${ficheIntervention.travauxNonRealises}"></span>
                         </div>
                     </div>
                 </div>
+                <br>
                 <div>
                     <div class="noPrint "></div>
                     <div class="check">
-                        <input type="checkbox">
+                        <input type="checkbox" th:checked="${ficheIntervention.nouvelleIntervention}" />
                     </div>
                     <div class="droite"> <label>Nécessite une nouvelle intervention</label>
                     </div>
@@ -216,8 +204,8 @@ Format vierge Plomberie
                             <option>Coude cuivre 90° à souder FF Ø 12</option>
                             <option>Coude PVC 87°30° FF Ø 100</option>
                             <option>Coude PVC 87°30° FF Ø 32</option>
-                            <option>Coude PVC 87°30° FF Ø 40</option>                   
-							<option>Faïence mur 20 x 20</option>
+                            <option>Coude PVC 87°30° FF Ø 40</option>
+                            <option>Faïence mur 20 x 20</option>
                             <option>Mortier colle poudre</option>
                             <option>Joint poudre carrelage</option>
                             <option>Ecrou laiton à collet battu 12x17 Ø 12</option>
@@ -305,33 +293,33 @@ Format vierge Plomberie
                     <div class="selectADupliquer">
                     </div>
                 </div>
-            </fieldset>
-            <div class="espaceHor"></div>
-            <div class="espaceHor"></div>
+                </fieldset>
+                <div class="espaceHor"></div>
+                <div class="espaceHor"></div>
 
-            <div class="centre noPrint">Click sur imprimer quand vous avez tout terminé</div>
-            <div class="noPrint">
-                <div></div>
-                <button>Imprimer</button>
-                <div></div>
-            </div>
-        </form>
-    </main>
-</body>
-<script>
-    bouton = document.getElementsByTagName("button")[0];
-    bouton.addEventListener("click", imprimer);
+                <div class="centre noPrint">Click sur imprimer quand vous avez tout terminé</div>
+                <div class="noPrint">
+                    <div></div>
+                    <button>Imprimer</button>
+                    <div></div>
+                </div>
+            </form>
+        </main>
+    </body>
+    <script>
+        bouton = document.getElementsByTagName("button")[0];
+        bouton.addEventListener("click", imprimer);
 
-    function imprimer(e) {
-        e.preventDefault();
-        window.print();
-    }
-    /* Dupliquer les select */
-    lesSelect = document.getElementsByClassName("selectADupliquer") ;
-    select = lesSelect[0].childNodes[1];
-    for (let i = 1; i < lesSelect.length; i++) {
-          lesSelect[i].appendChild(select.cloneNode(true));
-    }
-</script>
+        function imprimer(e) {
+            e.preventDefault();
+            window.print();
+        }
+        /* Dupliquer les select */
+        lesSelect = document.getElementsByClassName("selectADupliquer");
+        select = lesSelect[0].childNodes[1];
+        for (let i = 1; i < lesSelect.length; i++) {
+            lesSelect[i].appendChild(select.cloneNode(true));
+        }
+    </script>
 
 </html>

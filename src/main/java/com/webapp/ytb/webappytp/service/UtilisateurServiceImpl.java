@@ -19,7 +19,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
     public Utilisateur creer(Utilisateur utilisateur) {
         return utilisateurRepository.save(utilisateur);
     }
-
+    
     @Override
     public List<Utilisateur> lire() {
         return utilisateurRepository.findAll();
@@ -49,5 +49,6 @@ public class UtilisateurServiceImpl implements UtilisateurService{
     public Utilisateur findById(Long id) {
         return utilisateurRepository.findById(id).orElse(null);
     }
+
 
 }
