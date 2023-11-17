@@ -123,7 +123,7 @@
             <img src="/images/accueil.png" alt="Accueil" style="float: left;">
         </a>
         <div class="bandeau centered">
-            <a class="logo-and-admin" href="accueil_admin">
+            <a class="logo-and-admin" href="login_admin">
                 <img src="/images/logo.png" alt="Votre Image">
                 <h1>Admin</h1>
             </a>
@@ -164,6 +164,23 @@
                 <p class="nom">Nom 6 <img src="/images/son.png" alt="Lire le nom" onclick="lireTexte('Nom 6')" style="width: 20px;"></p>
                 <p class="prenom">Prénom 6 <img src="/images/son.png" alt="Lire le prénom" onclick="lireTexte('Prénom 6')" style="width: 20px;"></p>
             </div>
+            <div class="profil">
+            <img src="/images/icone_profil.png" alt="Autre">
+            <form class="login" th:action="@{/login}" method="post">
+                <label class="login-title"><b>Nom d'utilisateur :</b></label><br/>
+                <input type="text" placeholder="Nom d'utilisateur" required id="username"  name="username"><br/>  
+                <label class="login-title"><b>Mot de passe :</b></label><br/>
+                <input type="password" placeholder="Mot de passe" required id="password" name="password"><br/>
+                <a class="mdp-oublié" href="mdp_oublie">
+                    <p>Mot de passe oublié?</p>
+                </a>
+                <input type="reset" value="Annuler">
+                <input type="submit" value="Connexion">
+                
+            </form>
+            
+        </div>
+        
         </div>
         
         <div class="button-container">
@@ -184,7 +201,7 @@
 
         let currentPosition = 0;
         const itemWidth = 33.33;
-        const itemsInView = 3;
+        const itemsInView = 2;
         const maxPosition = -itemWidth * (6 - itemsInView);
 
         let selectedProfile = null;

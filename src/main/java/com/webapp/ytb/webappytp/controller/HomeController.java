@@ -67,6 +67,10 @@ public class HomeController {
         }
         return "redirect:/accueil";
     }
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
 
 
     @GetMapping("/select_fiche")
