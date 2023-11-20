@@ -85,20 +85,4 @@ public class HomeController {
         model.addAttribute("ficheIntervention", ficheIntervention);
         return "fiche_complete";
     }
-    //test pour afficher une fiche sans html
-    @GetMapping("/ficheIntervention/{numero}")
-    public String ficheIntervention(@PathVariable Long numero, Model model) {
-        FicheIntervention ficheIntervention = ficheServ.lire(numero);
-        model.addAttribute("ficheIntervention", ficheIntervention);
-        return "ficheIntervention";
-    }
-
-    @GetMapping("/menu")
-    public String menu(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        String username = userDetails.getUsername();
-        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
-        model.addAttribute("username", username);
-        model.addAttribute("role", role);
-        return "menu";
-    }
 }
