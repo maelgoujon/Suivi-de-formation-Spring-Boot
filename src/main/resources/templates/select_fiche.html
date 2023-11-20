@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
   <html>
     <head>
       <meta charset="UTF-8" />
@@ -79,6 +79,7 @@
           margin: 10px;
           width: 125px;
           height: 175px;
+          cursor: pointer;
         }
 
         .fInter.static {
@@ -100,6 +101,7 @@
           box-shadow: none;
         }
         #add {
+          display: none;
           background-color: none;
           border-radius: 10px;
           color: black;
@@ -134,8 +136,8 @@
         </div>
 
         <div class="fInters">
-          <div class="fInter">
-            <p class="name">
+          <div class="fInter" th:classappend="${selectedPaper == 'Plomberie' ? 'fInter selected' : ''}" th:onclick="selectPaper('Plomberie')">
+            <p class="name" th:href="@{/index(sujet='Plomberie')}">
               Plomberie<img
                 src="/images/son.png"
                 alt="Lire le nom"
@@ -144,8 +146,8 @@
               />
             </p>
           </div>
-          <div class="fInter">
-            <p class="name">
+          <div class="fInter" th:classappend="${selectedPaper == 'Finition' ? 'fInter selected' : ''}" th:onclick="selectPaper('Finition')">
+            <p class="name" th:href="@{/index(sujet='Finition')}">
               Finition<img
                 src="/images/son.png"
                 alt="Lire le nom"
@@ -154,8 +156,8 @@
               />
             </p>
           </div>
-          <div class="fInter">
-            <p class="name">
+          <div class="fInter" th:classappend="${selectedPaper == 'Serruerie' ? 'fInter selected' : ''}" th:onclick="selectPaper('Serruerie')">
+            <p class="name" th:href="@{/index(sujet='Serruerie')}">
               Serruerie<img
                 src="/images/son.png"
                 alt="Lire le nom"
@@ -165,19 +167,19 @@
             </p>
           </div>
           <div class="fInter">
-            <div class="static">
-              <p class="name">
+            <div class="static" th:classappend="${selectedPaper == 'Aménagement' ? 'fInter selected' : ''}" th:onclick="selectPaper('Aménagement')">
+              <p class="name" th:href="@{/index(sujet='Aménagement')}">
                 Aménagement<img
                   src="/images/son.png"
                   alt="Lire le nom"
                   onclick="lireTexte('Aménagement')"
                   style="width: 20px; margin: 5px"
-                />
+                >
               </p>
             </div>
           </div>
-          <div class="fInter">
-            <p class="name">
+          <div class="fInter" th:classappend="${selectedPaper == 'Electricité' ? 'fInter selected' : ''}" th:onclick="selectPaper('Electricité')">
+            <p class="name" th:href="@{/index(sujet='Electricité')}">
               Électricité<img
                 src="/images/son.png"
                 alt="Lire le nom"
@@ -187,7 +189,7 @@
             </p>
           </div>
         </div>
-        <div class="buttonADD">
+        <div class="buttonADD" th:if="${selectedPaper != null}">
           <a id="add" href="/fiche/creer_intervention"><img src="/images/logo_plus.png" class="image" /></a>
         </div>
       </div>
@@ -197,26 +199,26 @@
 
       let selectedPaper = null;
 
-      function selectPaper(paper) {
-        if (selectedPaper === paper) {
-          deselectPaper();
-        } else {
-          if (selectedPaper) {
-            selectedPaper.classList.remove("selected");
-          }
-          paper.classList.add("selected");
-          selectedPaper = paper;
-          connectButton.style.display = "block";
+      function selectPaper(sujet) {
+            if (selectedPaper === sujet) {
+                deselectPaper();
+            } else {
+                if (selectedPaper) {
+                    document.getElementById(selectedPaper).classList.remove("selected");
+                }
+                document.getElementById(sujet).classList.add("selected");
+                selectedPaper = sujet;
+                document.getElementById('add').style.display = "block";
+            }
         }
-      }
 
-      function deselectPaper() {
-        if (selectedPaper) {
-          selectedPaper.classList.remove("selected");
-          selectedPaper = null;
-          connectButton.style.display = "none";
+        function deselectPaper() {
+            if (selectedPaper) {
+                document.getElementById(selectedPaper).classList.remove("selected");
+                selectedPaper = null;
+                document.getElementById('add').style.display = "none";
+            }
         }
-      }
 
       addButton.addEventListener("click", () => {
         if (selectedPaper) {
