@@ -48,6 +48,7 @@ label {
 
 .max-width-select {
     margin-right: 10px; /* Ajustez la marge selon vos besoins */
+    background-color: rgb(179, 179, 179) ;
 }
 
 .ligneSelectMateriaux {
