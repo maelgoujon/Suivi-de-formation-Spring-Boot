@@ -102,9 +102,14 @@ public class FicheIntervention {
     @JsonManagedReference
     private List<ElementFiche> elements;
 
+    @Column(name = "materiaux")
+    private List<String> materiauxOptions;
+
+
     public FicheIntervention(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
         this.elements = new ArrayList<>();
+        this.materiauxOptions = new ArrayList<>();
     }
 
 }

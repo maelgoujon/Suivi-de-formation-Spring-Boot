@@ -83,7 +83,7 @@ public class HomeController {
     public String fiche(@PathVariable Long numero, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(numero);
         model.addAttribute("ficheIntervention", ficheIntervention);
-        return "index";
+        return "fiche_complete";
     }
     //test pour afficher une fiche sans html
     @GetMapping("/ficheIntervention/{numero}")
