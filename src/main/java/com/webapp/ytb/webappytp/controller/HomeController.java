@@ -67,9 +67,16 @@ public class HomeController {
         }
         return "redirect:/accueil";
     }
+
+    //connection
     @GetMapping("/login")
     public String login() {
         return "login";
+    }
+    //deconnection
+    @GetMapping("/logout")
+    public String logout() {
+        return "logout";
     }
 
 

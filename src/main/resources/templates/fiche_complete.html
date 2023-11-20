@@ -177,42 +177,24 @@
                     </div>
                 </div>
                 <div class="espaceHor"></div>
-                <div>
-                    <div class="titre demi">Matériaux Utilisés</div>
-                    <div class="noPrint"></div>
-                    <div>
-                    </div>
-                </div>
+                <!-- Matériaux Utilisés -->
+                <div class="titre demi">Matériaux Utilisés</div>
+                <div class="noPrint"></div>
                 <div class="espaceHor"></div>
-                <div>
-                    <div class="titre demi">Matériaux Utilisés</div>
-                    <div class="noPrint"></div>
-    
-                    <!-- Ajouter une div pour chaque matériau -->
-                    <div th:each="materiel : ${ficheIntervention.materiauxOptions}">
-                        <div class="demi">
-                            <select>
+                <div class="ligneSelectMateriaux">
+                    <!-- Ajouter une div pour chaque ligne de matériaux -->
+                    <div th:each="ligneMateriaux : ${ficheIntervention.materiauxOptions}" class="ligneMateriaux">
+                        <!-- Ajouter une div pour chaque paire de matériau dans la ligne -->
+                        <div th:each="materiel : ${ligneMateriaux}" class="max-width-container">
+                            <select class="max-width-select">
+                                <!-- Utiliser th:each pour parcourir les options de matériau -->
                                 <option th:each="m : ${materiel}" th:value="${m}" th:text="${m}"></option>
                             </select>
                         </div>
                     </div>
-                    <div th:each="materiel : ${ficheIntervention.materiauxOptions}">
-                        <div class="demi">
-                            <select>
-                                <option th:each="m : ${materiel}" th:value="${m}" th:text="${m}"></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div th:each="materiel : ${ficheIntervention.materiauxOptions}">
-                        <div class="demi">
-                            <select>
-                                <option th:each="m : ${materiel}" th:value="${m}" th:text="${m}"></option>
-                            </select>
-                        </div>
-                    </div>
-    
-    
                 </div>
+
+
 
                 </div>
                 </fieldset>
