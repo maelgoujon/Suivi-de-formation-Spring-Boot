@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Fiche Intervention</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+    <body class="colonne centre">
+        <main class="colonne">
+            <div class="titre border">FICHE D'INTERVENTION N°01</div>
+            <form th:action="@{/ajouter_fiche}" th:object="${fiche}" method="post" id="ficheForm" class="fiche-form">
+
+                <div class="espaceHor"></div>
+
+                <fieldset>
+                    <legend>Intervenant</legend>
+                    <div>
+                        <div class="titre">Nom de l'intervenant</div>
+                        <div class="test">
+                            <select id="utilisateur" name="utilisateur.id" th:field="*{utilisateur.id}" required>
+                                <option th:each="user : ${users}" th:value="${user.id}"
+                                    th:text="${user.nom} + ' ' + ${user.prenom}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="espaceHor"></div>
+                <fieldset>
+                    <legend>Demande</legend>
+                    <div>
+                        <div class="titre">Nom du demandeur</div>
+                        <div class="test">
+                            <input type="text" id="nomDemandeur" name="nomDemandeur" th:field="*{nomDemandeur}"
+                                required>
+                        </div>
+                    </div>
+                    <div class="espaceHor"></div>
+                    <div>
+                        <div class="titre">Date de la demande</div>
+                        <div class="test">
+                            <input type="date" id="dateDemande" name="dateDemande" th:field="*{dateDemande}" required>
+                        </div>
+                        <div class="titre">Localisation</div>
+                        <div class="test">
+                            <input type="text" id="localisation" name="localisation" th:field="*{localisation}"
+                                required>
+                        </div>
+                    </div>
+                    <div class="espaceHor"></div>
+                    <div class="colonnePrint">
+                        <div class="titre demi">Description de la demande</div>
+                        <div class="test">
+                            <input type="text" id="descriptionDemande" name="descriptionDemande"
+                                th:field="*{descriptionDemande}" required>
+                        </div>
+                    </div>
+                    <div class="espaceHor"></div>
+                    <div>
+                        <div class="titre demi">Degré d'urgence</div>
+                        <div class="test">
+                            <input type="text" id="degreUrgence" name="degreUrgence" th:field="*{degreUrgence}"
+                                required>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="espaceHor"></div>
+                <fieldset>
+                    <legend>Intervention</legend>
+
+                    <div class="espaceHor"></div>
+                    <div>
+                        <div class="titre">Date d'intervention</div>
+                        <div class="test">
+                            <input type="date" id="dateIntervention" name="dateIntervention"
+                                th:field="*{dateIntervention}" required>
+                        </div>
+                        <div class="titre">Durée de l'opération</div>
+                        <input type="text" id="dureeIntervention" name="dureeIntervention"
+                            th:field="*{dureeIntervention}" required>
+                    </div>
+                </fieldset>
+                </div>
+                <div class="colonne listeCheckbox">
+                    <fieldset class=" colonne">
+                        <legend>Type de Maintenance</legend>
+                        <div>
+                            <div class="demi">
+                                <select id="typeIntervention" name="typeIntervention" th:field="*{typeIntervention}"
+                                    required>
+                                    <option
+                                        th:each="type : ${T(com.webapp.ytb.webappytp.modele.TypeIntervention).values()}"
+                                        th:value="${type}" th:text="${#strings.capitalize(type.name())}"></option>
+                                </select>
+
+                            </div>
+                            <div class="droite"> <label>améliorative</label></div>
+                        </div>
+
+
+
+
+                    </fieldset>
+                </div>
+                <div class="colonne listeCheckbox">
+                    <fieldset class="colonne">
+                        <legend>Nature de l'intervention</legend>
+                        <div>
+                            <div class="demi">
+                                <select id="natureIntervention" name="natureIntervention"
+                                    th:field="*{natureIntervention}" required>
+                                    <option
+                                        th:each="nature : ${T(com.webapp.ytb.webappytp.modele.NatureIntervention).values()}"
+                                        th:value="${nature}" th:text="${#strings.capitalize(nature.name())}"></option>
+                                </select>
+                            </div>
+                            <div class="droite"> <label>Aménagement</label></div>
+                        </div>
+
+                    </fieldset>
+                </div>
+
+                </div>
+                <div class="espaceHor"></div>
+                </div>
+                <div class="espaceHor"></div>
+
+                <div>
+                    <div class="colonnePrint">
+                        <div class="titre demi">Travaux réalisés</div>
+                        <div class="test">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="espaceHor"></div>
+
+                <div>
+                    <div class="colonnePrint">
+                        <div class="titre demi">Travaux non réalisés</div>
+                        <div class="test">
+
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div>
+                    <div class="noPrint "></div>
+                    <div class="check">
+
+                    </div>
+                    <div class="droite"> <label>Nécessite une nouvelle intervention</label>
+                    </div>
+                </div>
+                <div class="espaceHor"></div>
+                <!-- Matériaux Utilisés -->
+                <div class="titre demi">Matériaux Utilisés</div>
+                <div class="noPrint"></div>
+                <div class="espaceHor"></div>
+                <div class="ligneSelectMateriaux">
+                    <!-- Ajouter une div pour chaque ligne de matériaux -->
+
+                </div>
+
+
+
+                </div>
+                </fieldset>
+                <div class="espaceHor"></div>
+                <div class="espaceHor"></div>
+                <!-- Add this checkbox to your form -->
+                <div>
+                    <div class="noPrint"></div>
+                    <div class="check">
+                        <!-- Add a checkbox with name "etatFicheFinie" and bind it to the "fiche.etatFicheFinie" property -->
+                        <input type="checkbox" name="etatFicheFinie" th:checked="${fiche.etatFicheFinie}" />
+                    </div>
+                    <div class="droite"> <label>État de la fiche</label></div>
+                </div>
+                
+                
+
+
+                <div class="centre noPrint">Click sur imprimer quand vous avez tout terminé</div>
+                <div class="noPrint">
+                    <div></div>
+                    <button>Imprimer</button>
+                    <div></div>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </main>
+    </body>
+    <script>
+        bouton = document.getElementsByTagName("button")[0];
+        bouton.addEventListener("click", imprimer);
+
+        function imprimer(e) {
+            e.preventDefault();
+            window.print();
+        }
+
+        /* Dupliquer les select */
+        lesSelect = document.getElementsByClassName("selectADupliquer");
+        select = lesSelect[0].childNodes[1];
+        for (let i = 1; i < lesSelect.length; i++) {
+            lesSelect[i].appendChild(select.cloneNode(true));
+        }
+    </script>
+
+
+</html>

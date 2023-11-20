@@ -3,6 +3,7 @@ package com.webapp.ytb.webappytp.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.repository.FicheRepository;
@@ -23,10 +24,10 @@ public class FicheServiceImpl implements FicheService {
     public List<FicheIntervention> lireTout() {
         return ficheRepository.findAll();
     }
-
     @Override
-    public FicheIntervention lire(Long numero) {
-        return ficheRepository.findByNumero(numero)
+    @Transactional
+    public FicheIntervention lire(Long id) {
+        return ficheRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Fiche non trouvée"));
     }
 
@@ -34,7 +35,6 @@ public class FicheServiceImpl implements FicheService {
     public FicheIntervention modifier(Long id, FicheIntervention fiche) {
         return ficheRepository.findById(id)
             .map(existingFiche -> {
-                existingFiche.setNumero(fiche.getNumero());
                 existingFiche.setNomDemandeur(fiche.getNomDemandeur());
                 existingFiche.setDateDemande(fiche.getDateDemande());
                 existingFiche.setDateIntervention(fiche.getDateIntervention());
@@ -45,7 +45,6 @@ public class FicheServiceImpl implements FicheService {
                 existingFiche.setDegreUrgence(fiche.getDegreUrgence());
                 existingFiche.setTypeIntervention(fiche.getTypeIntervention());
                 existingFiche.setNatureIntervention(fiche.getNatureIntervention());
-                existingFiche.setEtatFiche(fiche.getEtatFiche());
                 existingFiche.setTravauxRealises(fiche.getTravauxRealises());
                 existingFiche.setTravauxNonRealises(fiche.getTravauxNonRealises());;
     
