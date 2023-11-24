@@ -33,7 +33,7 @@ public class FicheController {
             return "redirect:/accueil";
         }
     }
-
+        
     @GetMapping("/read/{id}")
     public FicheIntervention read(@PathVariable Long id){
         return ficheService.lire(id);

@@ -102,4 +102,12 @@ public class HomeController {
         model.addAttribute("ficheIntervention", ficheIntervention);
         return "fiche_complete";
     }
+
+    @GetMapping("/suivi_progression")
+    public String suivi_progression() {
+        return "suivi_progression";
+    }
+
+
+    
 }
