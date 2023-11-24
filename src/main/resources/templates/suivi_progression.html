@@ -1,52 +1,152 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Suivi de Progression</title>
-  <style>
-    /* Votre style CSS ici */
-    .container {
-      /* Style de votre conteneur */
-    }
-    .evaluation {
-      /* Style pour les évaluations */
-    }
-    .graphique {
-      /* Style pour le tableau de bord graphique (optionnel) */
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Suivi de Progression</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .top-bar {
+            background-color: #bbdefb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .container {
+            width: 80%;
+            max-width: 1000px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        .progression, .evaluations {
+            margin-bottom: 20px;
+        }
+        h2, h3 {
+            color: #333;
+        }
+        .evaluations button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .audio-player {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .controls {
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
-  <div class="top-bar">
-    <!-- Elements de la barre de navigation -->
-  </div>
-  
-  <div class="container">
-    <h2>Suivi de Progression</h2>
+    <div class="top-bar">
+        <!-- Elements de la barre de navigation -->
+    </div>
+
+    <div class="top-bar">
+        <!-- Elements de la barre de navigation -->
+    </div>
+
+    <div class="container">
+        <h2>Suivi de Progression</h2>
+
+        <!-- Audio Player 1 -->
+        <div class="audio-player" id="player1">
+            <h3>Évaluation 1</h3>
+            <audio src="/images/test.mp3"></audio>
+            <div class="controls">
+                <button onclick="togglePlayPause('player1')">Play</button>
+                <progress value="0" max="100"></progress>
+                <span class="current-time">00:00</span> / <span class="total-time">00:00</span>
+            </div>
+        </div>
+
+        <!-- Audio Player 2 -->
+        <div class="audio-player" id="player2">
+            <h3>Évaluation 2</h3>
+            <audio src="/images/test.mp3"></audio>
+            <div class="controls">
+                <button onclick="togglePlayPause('player2')">Play</button>
+                <progress value="0" max="100"></progress>
+                <span class="current-time">00:00</span> / <span class="total-time">00:00</span>
+            </div>
+        </div>
+
     
-    <!-- Suivi de progression (Détails et tableau de bord graphique optionnel) -->
-    <div class="progression">
-      <h3>Progression dans le cours</h3>
-      <!-- Détails de la progression -->
-      <!-- Optionnel : Tableau de bord graphique -->
-    </div>
+        <script>
+                function togglePlayPause(playerId) {
+            var player = document.getElementById(playerId);
+            var audio = player.querySelector('audio');
+            var button = player.querySelector('button');
 
-    <!-- Évaluations audio de l'enseignant -->
-    <div class="evaluations">
-      <h3>Évaluations de l'enseignant</h3>
-      <button onclick="ecouterEvaluation()">Écouter l'évaluation</button>
-      <audio id="evaluationAudio" src="path_to_audio_file.mp3" hidden></audio>
-    </div>
-  </div>
+            if (audio.paused || audio.ended) {
+                audio.play();
+                button.textContent = 'Pause';
+            } else {
+                audio.pause();
+                button.textContent = 'Play';
+            }
+        }
 
-  <script>
-    function ecouterEvaluation() {
-      var audio = document.getElementById("evaluationAudio");
-      audio.hidden = false;
-      audio.play();
+        function initializePlayer(playerId) {
+        var player = document.getElementById(playerId);
+        var audio = player.querySelector('audio');
+        var progress = player.querySelector('progress');
+        var currentTimeDisplay = player.querySelector('.current-time');
+        var totalTimeDisplay = player.querySelector('.total-time');
+
+        // Événement déclenché lorsque les métadonnées de l'audio sont chargées
+        audio.addEventListener('loadedmetadata', function() {
+            console.log(audio.duration); // Log pour débogage
+            totalTimeDisplay.textContent = formatTime(audio.duration);
+        });
+
+        // Événement déclenché à chaque mise à jour du temps de lecture de l'audio
+        audio.addEventListener('timeupdate', function() {
+            var value = (audio.currentTime / audio.duration) * 100;
+            progress.value = value;
+            currentTimeDisplay.textContent = formatTime(audio.currentTime);
+        });
     }
-  </script>
+
+        function formatTime(seconds) {
+            var minutes = Math.floor(seconds / 60);
+            minutes = (minutes >= 10) ? minutes : "0" + minutes;
+            seconds = Math.floor(seconds % 60);
+            seconds = (seconds >= 10) ? seconds : "0" + seconds;
+            return minutes + ":" + seconds;
+        }
+
+        // Initialisez chaque lecteur audio au chargement de la page.
+        window.onload = function() {
+            initializePlayer('player1');
+            initializePlayer('player2');
+            // Ajoutez d'autres initialisePlayer pour chaque lecteur audio que vous avez.
+        }
+
+
+        </script>
 </body>
 </html>
