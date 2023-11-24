@@ -59,6 +59,10 @@ public class HomeController {
     public String redirectToAccueil() {
         return "accueil";
     }
+    @GetMapping("/mdp_oublie")
+    public String redirectToMotDePasseOublie() {
+        return "mdp_oublie";
+    }
     @GetMapping("/accueil_admin")
     public String admin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
