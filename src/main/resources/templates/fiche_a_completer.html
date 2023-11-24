@@ -78,8 +78,10 @@
                                 th:field="*{dateIntervention}" required>
                         </div>
                         <div class="titre">Durée de l'opération</div>
-                        <input type="text" id="dureeIntervention" name="dureeIntervention"
-                            th:field="*{dureeIntervention}" required>
+                        <div class="test">
+                            <input type="text" id="dureeIntervention" name="dureeIntervention"
+                                th:field="*{dureeIntervention}" required>
+                        </div>
                     </div>
                 </fieldset>
                 </div>
@@ -96,7 +98,6 @@
                                 </select>
 
                             </div>
-                            <div class="droite"> <label>améliorative</label></div>
                         </div>
 
 
@@ -116,7 +117,6 @@
                                         th:value="${nature}" th:text="${#strings.capitalize(nature.name())}"></option>
                                 </select>
                             </div>
-                            <div class="droite"> <label>Aménagement</label></div>
                         </div>
 
                     </fieldset>
@@ -131,7 +131,8 @@
                     <div class="colonnePrint">
                         <div class="titre demi">Travaux réalisés</div>
                         <div class="test">
-
+                            <input type="text" id="travauxRealises" name="travauxRealises" th:field="*{travauxRealises}"
+                                required>
                         </div>
                     </div>
                 </div>
@@ -141,7 +142,8 @@
                     <div class="colonnePrint">
                         <div class="titre demi">Travaux non réalisés</div>
                         <div class="test">
-
+                            <input type="text" id="travauxNonRealises" name="travauxNonRealises"
+                                th:field="*{travauxNonRealises}" required>
                         </div>
                     </div>
                 </div>
@@ -149,25 +151,79 @@
                 <div>
                     <div class="noPrint "></div>
                     <div class="check">
-
+                        <!-- Add a checkbox with name "etatFicheFinie" and bind it to the "fiche.etatFicheFinie" property -->
+                        <input type="checkbox" name="nouvelleIntervention" th:checked="${fiche.nouvelleIntervention}" />
                     </div>
                     <div class="droite"> <label>Nécessite une nouvelle intervention</label>
                     </div>
                 </div>
                 <div class="espaceHor"></div>
                 <!-- Matériaux Utilisés -->
-                <div class="titre demi">Matériaux Utilisés</div>
-                <div class="noPrint"></div>
-                <div class="espaceHor"></div>
-                <div class="ligneSelectMateriaux">
-                    <!-- Ajouter une div pour chaque ligne de matériaux -->
+                <legend>Matériaux Utilisés</legend>
+                <div>
+                    <div class="demi selectADupliquer">
+                        <select id="materiauxUtilises1" name="materiauxUtilises" class="materiauxUtilises"
+                            th:field="*{materiauxOptions}" required>
+                            <option value="" disabled selected>Sélectionnez les matériaux</option>
+                            <option th:each="materiau : ${T(com.webapp.ytb.webappytp.modele.MateriauxListe).values()}"
+                                th:value="${materiau}" th:text="${materiau.optionName}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div class="demi selectADupliquer">
+                        <select id="materiauxUtilises2" name="materiauxUtilises" class="materiauxUtilises"
+                            th:field="*{materiauxOptions}" required>
+                            <option value="" disabled selected>Sélectionnez les matériaux</option>
+                            <option th:each="materiau : ${T(com.webapp.ytb.webappytp.modele.MateriauxListe).values()}"
+                                th:value="${materiau}" th:text="${materiau.optionName}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div class="demi selectADupliquer">
+                        <select id="materiauxUtilises3" name="materiauxUtilises" class="materiauxUtilises"
+                            th:field="*{materiauxOptions}" required>
+                            <option value="" disabled selected>Sélectionnez les matériaux</option>
+                            <option th:each="materiau : ${T(com.webapp.ytb.webappytp.modele.MateriauxListe).values()}"
+                                th:value="${materiau}" th:text="${materiau.optionName}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div class="demi selectADupliquer">
+                        <select id="materiauxUtilises4" name="materiauxUtilises" class="materiauxUtilises"
+                            th:field="*{materiauxOptions}" required>
+                            <option value="" disabled selected>Sélectionnez les matériaux</option>
+                            <option th:each="materiau : ${T(com.webapp.ytb.webappytp.modele.MateriauxListe).values()}"
+                                th:value="${materiau}" th:text="${materiau.optionName}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div class="demi selectADupliquer">
+                        <select id="materiauxUtilises5" name="materiauxUtilises" class="materiauxUtilises"
+                            th:field="*{materiauxOptions}" required>
+                            <option value="" disabled selected>Sélectionnez les matériaux</option>
+                            <option th:each="materiau : ${T(com.webapp.ytb.webappytp.modele.MateriauxListe).values()}"
+                                th:value="${materiau}" th:text="${materiau.optionName}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div class="demi selectADupliquer">
+                        <select id="materiauxUtilises6" name="materiauxUtilises" class="materiauxUtilises"
+                            th:field="*{materiauxOptions}" required>
+                            <option value="" disabled selected>Sélectionnez les matériaux</option>
+                            <option th:each="materiau : ${T(com.webapp.ytb.webappytp.modele.MateriauxListe).values()}"
+                                th:value="${materiau}" th:text="${materiau.optionName}"></option>
+                        </select>
+                    </div>
+                </div>
+                <button type="button" onclick="ajouterMateriaux()">Ajouter Matériaux</button>
+
 
                 </div>
-
-
-
-                </div>
-                </fieldset>
                 <div class="espaceHor"></div>
                 <div class="espaceHor"></div>
                 <!-- Add this checkbox to your form -->
@@ -179,8 +235,8 @@
                     </div>
                     <div class="droite"> <label>État de la fiche</label></div>
                 </div>
-                
-                
+
+
 
 
                 <div class="centre noPrint">Click sur imprimer quand vous avez tout terminé</div>
@@ -202,13 +258,23 @@
             window.print();
         }
 
-        /* Dupliquer les select */
-        lesSelect = document.getElementsByClassName("selectADupliquer");
-        select = lesSelect[0].childNodes[1];
-        for (let i = 1; i < lesSelect.length; i++) {
-            lesSelect[i].appendChild(select.cloneNode(true));
-        }
-    </script>
+        function ajouterMateriaux() {
+            // Vérifiez le nombre actuel de sélecteurs de matériaux
+            var nombreSelects = document.querySelectorAll('.selectADupliquer select').length;
 
+            // Ajoutez un nouveau sélecteur uniquement s'il y a moins de six sélecteurs
+            if (nombreSelects < 6) {
+                // Récupérez les valeurs sélectionnées dans chaque select
+                var nouveauSelectId = "materiauxUtilises" + (nombreSelects + 1);
+                var selectADupliquer = document.querySelector('.selectADupliquer');
+                var nouveauSelect = selectADupliquer.querySelector('select').cloneNode(true);
+                nouveauSelect.id = nouveauSelectId;
+
+                // Ajoutez le nouveau sélecteur
+                selectADupliquer.appendChild(nouveauSelect);
+            }
+        }
+
+    </script>
 
 </html>
