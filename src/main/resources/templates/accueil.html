@@ -255,6 +255,9 @@
                                         <button class="annuler" onclick="annulerSelection(event)">Annuler<img src="/images/return.png" alt="retourne profil" style="width: 20px;" onclick="annulerSelection(event)"></button>
                                         
                                     </div>
+                                    <a class="mdp-oublié" href="mdp_oublie">
+                                        <p>Mot de passe oublié?</p>
+                                    </a>
                                 </div>
                                 
             
@@ -298,9 +301,12 @@
                                     <div class="dot" data-index="9"></div>
                                 </div>
                                 <div class="button-container">
-                                    <button class="annuler" onclick="annulerSelection(event)">Anleqebsbr<img src="/images/return.png" alt="retourne profil" style="width: 20px;" onclick="annulerSelection(event)"></button>
+                                    <button class="annuler" onclick="annulerSelection(event)">Annuler<img src="/images/return.png" alt="retourne profil" style="width: 20px;" onclick="annulerSelection(event)"></button>
                                     
                                 </div>
+                                <a class="mdp-oublié" href="mdp_oublie">
+                                    <p>Mot de passe oublié?</p>
+                                </a>
                             </div>
                         </fieldset>
     
@@ -348,6 +354,9 @@
                                     <button class="annuler" onclick="annulerSelection(event)">Annuler<img src="/images/return.png" alt="retourne profil" style="width: 20px;" onclick="annulerSelection(event)"></button>
                                     
                                 </div>
+                                <a class="mdp-oublié" href="mdp_oublie">
+                                    <p>Mot de passe oublié?</p>
+                                </a>
                             </div>
                         </fieldset>
     
@@ -390,6 +399,9 @@
                                     <button class="annuler" onclick="annulerSelection(event)">Annuler<img src="/images/return.png" alt="retourne profil" style="width: 20px;" onclick="annulerSelection(event)"></button>
                                     
                                 </div>
+                                <a class="mdp-oublié" href="mdp_oublie">
+                                    <p>Mot de passe oublié?</p>
+                                </a>
                             </div>
                         </fieldset>
     
@@ -433,6 +445,9 @@
                                     <button class="annuler" onclick="annulerSelection(event)">Annuler<img src="/images/return.png" alt="retourne profil" style="width: 20px;" onclick="annulerSelection(event)"></button>
                                     
                                 </div>
+                                <a class="mdp-oublié" href="mdp_oublie">
+                                    <p>Mot de passe oublié?</p>
+                                </a>
                             </div>
                         </fieldset>
     
@@ -477,7 +492,9 @@
                                     <button class="annuler" onclick="annulerSelection(event)">Annu<img src="/images/return.png" alt="retourne profil" style="width: 20px;" onclick="annulerSelection(event)"></button>
                                    
                                 </div>
-                                
+                                <a class="mdp-oublié" href="mdp_oublie">
+                                        <p>Mot de passe oublié?</p>
+                                    </a>
                             </div>
                         </fieldset>
     
@@ -516,6 +533,7 @@
         
         <div class="button-container">
             <button id="connecter" style="display: none;">Se connecter</button>
+            
         </div>
 
         <div class="navigation">
@@ -660,13 +678,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;  // Sortir de la fonction si 4 ronds sont déjà sélectionnés
             }
 
-            dot.classList.toggle("active");
             const index = dot.getAttribute("data-index");
 
-            if (dot.classList.contains("active")) {
+            if (!dot.classList.contains("active")) {
+                // Cocher le rond
+                dot.classList.add("active");
                 selectedDots.push(index);
             } else {
-                selectedDots = selectedDots.filter(item => item !== index);
+                // Désactiver le décochage
+                dot.classList.add("active");
             }
 
             // Votre logique ici pour traiter la séquence sélectionnée
@@ -676,9 +696,6 @@ document.addEventListener("DOMContentLoaded", function () {
             if (selectedDots.length === 4) {
                 // Afficher le bouton "connexion"
                 document.getElementById('connecter').style.display = 'block';
-            } else {
-                // Masquer le bouton "connexion" si moins de 4 ronds sont sélectionnés
-                document.getElementById('connecter').style.display = 'none';
             }
         });
     });
