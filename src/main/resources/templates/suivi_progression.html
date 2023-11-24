@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suivi de Progression</title>
+  <style>
+    /* Votre style CSS ici */
+    .container {
+      /* Style de votre conteneur */
+    }
+    .evaluation {
+      /* Style pour les évaluations */
+    }
+    .graphique {
+      /* Style pour le tableau de bord graphique (optionnel) */
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <!-- Elements de la barre de navigation -->
+  </div>
+  
+  <div class="container">
+    <h2>Suivi de Progression</h2>
+    
+    <!-- Suivi de progression (Détails et tableau de bord graphique optionnel) -->
+    <div class="progression">
+      <h3>Progression dans le cours</h3>
+      <!-- Détails de la progression -->
+      <!-- Optionnel : Tableau de bord graphique -->
+    </div>
+
+    <!-- Évaluations audio de l'enseignant -->
+    <div class="evaluations">
+      <h3>Évaluations de l'enseignant</h3>
+      <button onclick="ecouterEvaluation()">Écouter l'évaluation</button>
+      <audio id="evaluationAudio" src="path_to_audio_file.mp3" hidden></audio>
+    </div>
+  </div>
+
+  <script>
+    function ecouterEvaluation() {
+      var audio = document.getElementById("evaluationAudio");
+      audio.hidden = false;
+      audio.play();
+    }
+  </script>
+</body>
+</html>
