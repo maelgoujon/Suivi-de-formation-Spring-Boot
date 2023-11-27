@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mot de passe oublié</title>
+	
+	</head>
+<body>
+
+
+	<p>Demander de l'aide à un formateur <img src="son.png" alt="Lire le nom" onclick="lireTexte('Demander de laide à un formateur')" style="width: 20px;"></p>
+	
+	<script>
+
+		function lireTexte(texte) {
+					const syntheseVocale = window.speechSynthesis;
+					const message = new SpeechSynthesisUtterance(texte);
+					syntheseVocale.speak(message);
+		}
+	</script>
+	
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

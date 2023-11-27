@@ -1,6 +1,6 @@
 package com.webapp.ytb.webappytp.modele;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +36,6 @@ public class FicheIntervention {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
-    private int numero;
 
     @Column(length = 50)
     @NotBlank(message = "Le champ 'nomDemandeur' ne peut pas être vide")
@@ -45,15 +43,15 @@ public class FicheIntervention {
 
     @Column
     @NotNull(message = "Le champ 'dateDemande' ne peut pas être vide")
-    private Date dateDemande;
+    private LocalDate dateDemande;
 
     @Column
     @NotNull(message = "Le champ 'dateIntervention' ne peut pas être vide")
-    private Date dateIntervention;
+    private LocalDate dateIntervention;
 
     @Column
     @NotNull(message = "Le champ 'dateCreation' ne peut pas être vide")
-    private Date dateCreation;
+    private LocalDate dateCreation;
 
     @Column(length = 50)
     @NotBlank(message = "Le champ 'dureeIntervention' ne peut pas être vide")
@@ -73,17 +71,17 @@ public class FicheIntervention {
 
     @Column(length = 50)
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = "Le champ 'typeIntervention' ne peut pas être vide")
+    @NotNull(message = "Le champ 'typeIntervention' ne peut pas être vide")
     private TypeIntervention typeIntervention;
 
     @Column(length = 50)
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = "Le champ 'natureIntervention' ne peut pas être vide")
+    @NotNull(message = "Le champ 'natureIntervention' ne peut pas être vide")
     private NatureIntervention natureIntervention;
 
     @Column(length = 50)
-    @NotBlank(message = "Le champ 'etatFiche' ne peut pas être vide")
-    private String etatFiche;
+    @NotNull(message = "Le champ 'etatFiche' ne peut pas être vide")
+    private boolean etatFicheFinie;
 
     @Column(length = 250)
     private String travauxRealises;;
@@ -102,9 +100,13 @@ public class FicheIntervention {
     @JsonManagedReference
     private List<ElementFiche> elements;
 
+    @Column(name = "materiaux")
+    private List<String> materiauxOptions;
+
     public FicheIntervention(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
         this.elements = new ArrayList<>();
+        this.materiauxOptions = new ArrayList<>();
     }
 
 }

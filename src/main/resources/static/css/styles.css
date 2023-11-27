@@ -1,147 +1,169 @@
+body {
+    background-color: #425775;
+}
 
-    body {
-        background-color: #425775;
+div,
+header,
+footer,
+body,
+main,
+nav,
+section,
+form {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
+
+.test {
+    padding: 3px;
+    color: rgb(0, 0, 0);
+}
+
+.colonne,
+form {
+    flex-direction: column;
+}
+
+legend,
+.titre,
+label {
+    color: wheat;
+}
+
+.listeCheckbox {
+    justify-content: start;
+}
+
+.centre {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+
+.max-width-container {
+    display: flex;
+}
+
+.max-width-select {
+    margin-right: 10px; /* Ajustez la marge selon vos besoins */
+    background-color: rgb(179, 179, 179) ;
+}
+
+.ligneSelectMateriaux {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.ligneMateriaux {
+    flex: 0 0 48%; /* Two items per line with a little space in between */
+    margin-bottom: 1em; /* Adjust margin as needed */
+    display: flex;
+}
+
+
+
+
+.espaceHor {
+    flex: none;
+    height: 1.5em;
+}
+
+main {
+    width: 75vw;
+}
+
+.border,
+fieldset {
+    border: 3px solid #87BB34;
+    padding: 2em;
+    height: 100%;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+}
+
+.demi {
+    flex: 0.5;
+}
+
+.check {
+    flex: 0.1;
+}
+
+.droite {
+    justify-content: start;
+}
+
+@media screen and (max-width: 1400px) {
+    main {
+        width: 90%;
     }
 
-    div,
-    header,
-    footer,
-    body,
-    main,
-    nav,
-    section,
-    form {
-        display: flex;
-        flex: 1;
-        justify-content: center;
-    }
-
-    .test{
-        background-color: #b3b3b3;
-        color: rgb(0, 0, 0);
-    }
-
-    
-    .colonne,
-    form {
+    .colonnePrint {
         flex-direction: column;
     }
 
-    legend,
-    .titre,
-    label {
-        color: wheat;
-    }
-
-    .listeCheckbox {
-        justify-content: start;
-    }
-
-    .centre {
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-    }
-
     .espaceHor {
-        flex: none;
-        height: 1.5em;
+        height: 1em;
     }
 
-    main {
-        width: 75vw;
-    }
-
-    .border,
     fieldset {
-        border: 3px solid #87BB34;
-        padding: 2em;
-        height: 100%;
-    }
-
-    input,
-    select,
-    textarea {
-        width: 100%;
+        padding: 0.1em 0;
     }
 
     .demi {
-        flex: 0.5;
+        flex: 0.25;
     }
 
-    .check {
-        flex: 0.1;
+    .border {
+        padding: 0.8em;
     }
 
-    .droite {
-        justify-content: start;
+    div,
+    input,
+    select {
+        font-size: 1em;
+    }
+}
+
+@media print {
+    main {
+        width: 100%;
     }
 
-    @media screen and (max-width: 1400px) {
-        main {
-            width: 90%;
-        }
-
-        .colonnePrint {
-            flex-direction: column;
-        }
-
-        .espaceHor {
-            height: 1em;
-        }
-
-        fieldset {
-            padding: 0.1em 0;
-        }
-
-        .demi {
-            flex: 0.25;
-        }
-
-        .border {
-            padding: 0.8em;
-        }
-
-        div,
-        input,
-        select {
-            font-size: 1em;
-        }
+    .colonnePrint {
+        flex-direction: column;
     }
 
-    @media print {
-        main {
-            width: 100%;
-        }
-
-        .colonnePrint {
-            flex-direction: column;
-        }
-
-        .espaceHor {
-            height: 0.5em;
-        }
-
-        fieldset {
-            padding: 0.1em 0;
-        }
-
-        .noPrint {
-            display: none;
-        }
-
-        .demi {
-            flex: 0.25;
-        }
-
-        .border {
-            padding: 0.1em;
-        }
-
-        div,
-        input,
-        select {
-            font-size: 0.8em;
-        }
-
+    .espaceHor {
+        height: 0.5em;
     }
+
+    fieldset {
+        padding: 0.1em 0;
+    }
+
+    .noPrint {
+        display: none;
+    }
+
+    .demi {
+        flex: 0.25;
+    }
+
+    .border {
+        padding: 0.1em;
+    }
+
+    div,
+    input,
+    select {
+        font-size: 0.8em;
+    }
+}
