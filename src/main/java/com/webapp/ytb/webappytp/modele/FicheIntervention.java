@@ -15,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -102,6 +103,10 @@ public class FicheIntervention {
 
     @Column(name = "materiaux")
     private List<String> materiauxOptions;
+
+    @Lob
+    @Column(nullable = true) // Permet à la colonne "photo" d'être nulle
+    private byte[] evaluation;
 
     public FicheIntervention(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;

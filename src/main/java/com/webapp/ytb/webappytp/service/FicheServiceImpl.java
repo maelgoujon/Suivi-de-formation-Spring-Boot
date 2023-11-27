@@ -46,7 +46,8 @@ public class FicheServiceImpl implements FicheService {
                 existingFiche.setTypeIntervention(fiche.getTypeIntervention());
                 existingFiche.setNatureIntervention(fiche.getNatureIntervention());
                 existingFiche.setTravauxRealises(fiche.getTravauxRealises());
-                existingFiche.setTravauxNonRealises(fiche.getTravauxNonRealises());;
+                existingFiche.setTravauxNonRealises(fiche.getTravauxNonRealises());
+                existingFiche.setEvaluation(fiche.getEvaluation());;
     
                 return ficheRepository.save(existingFiche);
             })

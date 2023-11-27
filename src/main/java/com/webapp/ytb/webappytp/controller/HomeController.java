@@ -111,5 +111,10 @@ public class HomeController {
     @GetMapping("/presentation")
     public String presentation() {
         return "presentation";
-    }   
+    } 
+    
+    @GetMapping("/record")
+    public String record() {
+        return "record";
+    }  
 }
