@@ -107,4 +107,9 @@ public class HomeController {
     public String suivi_progression() {
         return "suivi_progression";
     }
+
+    @GetMapping("/listbuttons")
+    public String listbuttons() {
+        return "listbuttons";
+    }   
 }
