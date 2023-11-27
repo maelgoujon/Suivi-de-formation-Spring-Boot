@@ -3,6 +3,8 @@ package com.webapp.ytb.webappytp.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 
 public interface FicheService {
@@ -14,5 +16,7 @@ public interface FicheService {
     FicheIntervention modifier(Long id, FicheIntervention ficheIntervention);
 
     String supprimer(Long id);
+
+    public void enregistrerAudio(Long id, MultipartFile fichierAudio) throws Exception;
 }
 

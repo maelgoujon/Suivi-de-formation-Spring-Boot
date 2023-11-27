@@ -1,9 +1,11 @@
 package com.webapp.ytb.webappytp.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.repository.FicheRepository;
@@ -59,5 +61,27 @@ public class FicheServiceImpl implements FicheService {
     public String supprimer(Long id) {
         ficheRepository.deleteById(id);
         return "Fiche supprimée";
+    }
+
+
+    @Transactional
+    @Override
+    public void enregistrerAudio(Long id, MultipartFile fichierAudio) throws Exception {
+        // Récupérer la fiche d'intervention par son ID
+        FicheIntervention ficheIntervention = ficheRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Fiche non trouvée"));
+            
+
+        try {
+            // Enregistrez le fichier audio dans le champ "evaluation" de l'entité
+            ficheIntervention.setEvaluation(fichierAudio.getBytes());
+
+            // Enregistrez les modifications dans la base de données
+            ficheRepository.save(ficheIntervention);
+
+        } catch (IOException e) {
+            // Gérer les erreurs d'entrée/sortie
+            throw new Exception("Erreur lors de la manipulation du fichier audio.", e);
+        }
     }
 }

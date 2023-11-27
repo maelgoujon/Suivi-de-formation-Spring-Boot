@@ -1,79 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enregistreur Audio MP3</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uploader un Audio</title>
 </head>
 <body>
-  <h1>Enregistreur Audio MP3</h1>
-  <button id="startRecording">Commencer l'enregistrement</button>
-  <button id="stopRecording" disabled>Arrêter l'enregistrement</button>
-  <audio id="audioPlayer" controls></audio>
+    <h1>Uploader un Audio</h1>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const startRecordingButton = document.getElementById('startRecording');
-      const stopRecordingButton = document.getElementById('stopRecording');
-      const audioPlayer = document.getElementById('audioPlayer');
-      let mediaRecorder;
-      let chunks = [];
-
-      // Vérifier la prise en charge de l'API MediaRecorder
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ audio: true })
-          .then((stream) => {
-            // Créer un MediaRecorder avec le flux audio
-            mediaRecorder = new MediaRecorder(stream);
-
-            // Événement lorsqu'une partie de l'enregistrement est disponible
-            mediaRecorder.ondataavailable = (event) => {
-              if (event.data.size > 0) {
-                chunks.push(event.data);
-              }
-            };
-
-            // Événement lorsque l'enregistrement est terminé
-            mediaRecorder.onstop = () => {
-              // Créer un objet Blob à partir des parties enregistrées
-              const blob = new Blob(chunks, { type: 'audio/mp3' });
-              chunks = [];
-
-              // Créer un objet URL pour le Blob
-              const audioURL = URL.createObjectURL(blob);
-
-              // Mettre à jour le lecteur audio avec l'enregistrement
-              audioPlayer.src = audioURL;
-              audioPlayer.controls = true;
-
-              // Activer le bouton de démarrage et désactiver le bouton d'arrêt
-              startRecordingButton.disabled = false;
-              stopRecordingButton.disabled = true;
-            };
-
-            // Ajouter un gestionnaire d'événements pour le bouton de démarrage
-            startRecordingButton.addEventListener('click', () => {
-              // Commencer l'enregistrement
-              mediaRecorder.start();
-
-              // Désactiver le bouton de démarrage et activer le bouton d'arrêt
-              startRecordingButton.disabled = true;
-              stopRecordingButton.disabled = false;
-            });
-
-            // Ajouter un gestionnaire d'événements pour le bouton d'arrêt
-            stopRecordingButton.addEventListener('click', () => {
-              // Arrêter l'enregistrement
-              mediaRecorder.stop();
-            });
-          })
-          .catch((error) => {
-            console.error('Erreur lors de l\'accès au microphone:', error);
-          });
-      } else {
-        console.error('L\'API MediaRecorder n\'est pas prise en charge dans ce navigateur.');
-      }
-    });
-  </script>
+    <form th:action="@{/fiche/enregistrerAudio}" method="post" enctype="multipart/form-data">
+        <label for="ficheId">ID de la Fiche:</label>
+        <input type="text" id="ficheId" name="ficheId" th:required="true">
+        <br>
+        <label for="audioFile">Fichier Audio:</label>
+        <input type="file" id="audioFile" name="audioFile" accept="audio/*" th:required="true">
+        <br>
+        <button type="submit">Uploader l'Audio</button>
+    </form>
 </body>
 </html>
