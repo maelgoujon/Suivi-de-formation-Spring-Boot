@@ -35,7 +35,7 @@ public class SecurityConfig {
     )
     .formLogin(formLogin ->
         formLogin
-            .loginPage("/login")
+            .loginPage("/accueil")
             .defaultSuccessUrl("/accueil_admin") // Redirection par défaut après connexion
             .permitAll()
     )

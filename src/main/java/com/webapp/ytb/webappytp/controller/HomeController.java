@@ -117,4 +117,10 @@ public class HomeController {
     public String record() {
         return "record";
     }  
+
+    @GetMapping("/bc")
+    public String bc() {
+        return "backup_accueil";
+    } 
+
 }
