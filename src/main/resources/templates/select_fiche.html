@@ -138,7 +138,7 @@
           <img class="image2" src="/images/assignment_icon.png" />
         </div>
 
-        <div class="fInters">
+        <div class="fInters" id="Inters ">
           <div class="fInter" th:classappend="${selectedPaper == 'Plomberie' ? 'fInter selected' : ''}" th:onclick="selectPaper('Plomberie')">
             <p class="name" th:href="@{/index(sujet='Plomberie')}">
               Plomberie<img
@@ -193,46 +193,58 @@
           </div>
         </div>
         <div class="buttonADD" th:if="${selectedPaper != null}">
-          <a id="add" href="/fiche/creer_intervention"><img src="/images/logo_plus.png" class="image" /></a>
+          <button id="add">Se connecter</button>
+          <!--<a id="add" href="/fiche/creer_intervention"><img src="/images/logo_plus.png" class="image" /></a>-->
         </div>
       </div>
     </body>
     <script>
+      const Inters = document.getElementById('Inters');
       const addButton = document.getElementById("add");
 
       let selectedPaper = null;
 
-      function selectPaper(sujet) {
-            if (selectedPaper === sujet) {
-                deselectPaper();
-            } else {
-                if (selectedPaper) {
-                    document.getElementById(selectedPaper).classList.remove("selected");
-                }
-                document.getElementById(sujet).classList.add("selected");
-                selectedPaper = sujet;
-                document.getElementById('add').style.display = "block";
-            }
-        }
-
-        function deselectPaper() {
-            if (selectedPaper) {
-                document.getElementById(selectedPaper).classList.remove("selected");
-                selectedPaper = null;
-                document.getElementById('add').style.display = "none";
-            }
-        }
-
-      addButton.addEventListener("click", () => {
+    function selectPaper(sujet) {
+      if (selectedPaper === sujet) {
+        deselectPaper();
+      } else {
         if (selectedPaper) {
-          //window.location.href = 'page_de_connexion.html';
+            Inters.querySelector(`[th:onclick*="${selectedPaper}"]`).classList.remove('selected');
         }
-      });
-      function lireTexte(texte) {
-        const syntheseVocale = window.speechSynthesis;
-        const message = new SpeechSynthesisUtterance(texte);
-        syntheseVocale.speak(message);
+        const paper = Inters.querySelector(`[th:onclick*="${sujet}"]`);
+        paper.classList.add('selected');
+        selectedPaper = sujet;
+        addButton.style.display = 'block';
       }
+    }
+
+    function deselectPaper() {
+      if (selectedPaper) {
+        Inters.querySelector(`[th:onclick*="${selectedPaper}"]`).classList.remove('selected');
+        selectedPaper = null;
+        addButton.style.display = 'none';
+      }
+    }
+
+    Inters.addEventListener('click', (event) => {
+      const paper = event.target.closest('.fInter');
+      if (paper) {
+        selectPaper(paper);
+      }
+    });
+
+    addButton.addEventListener("click", () => {
+      if (selectedPaper) {
+        window.location.href = 'index.html';
+      }
+    });
+
+    function lireTexte(texte) {
+      const syntheseVocale = window.speechSynthesis;
+      const message = new SpeechSynthesisUtterance(texte);
+      syntheseVocale.speak(message);
+    }
+
     </script>
   </html>
 </html>
