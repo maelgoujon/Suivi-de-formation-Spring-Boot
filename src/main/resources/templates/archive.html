@@ -58,6 +58,23 @@
           font-size: 20px;
           margin-bottom: 40px;
         }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2; 
+            cursor: pointer;
+        }
       </style>
     </head>
 
@@ -75,10 +92,10 @@
         <div class="container">
             <div class="title">
               <h4>
-                Archiver les anciens apprentis<img
+                Archive des anciens apprentis<img
                   src="/images/son.png"
                   alt="Lire le nom"
-                  onclick="lireTexte('Choisir une fiche d intervention')"
+                  onclick="lireTexte('Archiver les anciens apprentis')"
                   style="width: 20px; margin: 5px"
                 />
               </h4>
@@ -86,7 +103,71 @@
             </div>
         
             <div>
-
+                <table id="archiveTable">
+                    <thead>
+                    <tr>
+                        <th onclick="sortTable(0)" >Archivé le (Date)</th>
+                        <th onclick="sortTable(1)" >Nom de l'apprenti</th>
+                        <th onclick="sortTable(2)" >Sujet</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Utiliser Thymeleaf pour itérer sur les données -->
+                    <tr th:each="fiche : ${fichesArchives}">
+                        <!-- Utiliser Thymeleaf pour formater la date -->
+                        <td th:text="${#dates.format(fiche.dateArchivage, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td th:text="${fiche.nomApprenti}"></td>
+                        <td th:text="${fiche.sujet}"></td>
+                    </tr>
+                    <tr>
+                      <td>01/02/2023</td>
+                      <td>Dupont</td>
+                      <td>Finition</td>
+                    </tr>
+                    <tr>
+                      <td>01/11/2026</td>
+                      <td>Doe</td>
+                      <td>Installation</td>
+                    </tr>
+                    <tr>
+                      <td>01/01/2025</td>
+                      <td>Smith</td>
+                      <td>Plomberie</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </body>
+    <script>
+      function sortTable(columnIndex) {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("archiveTable");
+        switching = true;
+        while (switching) {
+          switching = false;
+          rows = table.rows;
+          for (i = 1; i < rows.length - 1; i++) {
+            shouldSwitch = false;
+            x = rows[i].getElementsByTagName("td")[columnIndex];
+            y = rows[i + 1].getElementsByTagName("td")[columnIndex];
+            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+              shouldSwitch = true;
+              break;
+            }
+          }
+          if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+          }
+        }
+      }
+
+      function lireTexte(texte) {
+      const syntheseVocale = window.speechSynthesis;
+      const message = new SpeechSynthesisUtterance(texte);
+      syntheseVocale.speak(message);
+    }
+    </script>
+  </html>
+</html>
