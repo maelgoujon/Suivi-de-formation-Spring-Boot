@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.UserRole;
@@ -78,11 +79,8 @@ public class HomeController {
         return "redirect:/accueil";
     }
 
-    // connection
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
+
+
 
     // deconnection
     @GetMapping("/logout")
@@ -111,16 +109,16 @@ public class HomeController {
     @GetMapping("/presentation")
     public String presentation() {
         return "presentation";
-    } 
-    
+    }
+
     @GetMapping("/record")
     public String record() {
         return "record";
-    }  
+    }
 
     @GetMapping("/bc")
     public String bc() {
         return "backup_accueil";
-    } 
+    }
 
 }
