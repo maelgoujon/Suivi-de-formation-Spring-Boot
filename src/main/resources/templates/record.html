@@ -1,21 +1,86 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uploader un Audio</title>
+    <title>Enregistreur et Uploader Audio</title>
+    <style>
+        .button {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>Uploader un Audio</h1>
+    <h1>Enregistreur et Uploader Audio</h1>
 
-    <form th:action="@{/fiche/enregistrerAudio}" method="post" enctype="multipart/form-data">
+    <div>
+        <button id="startRecording" class="button">Commencer l'enregistrement</button>
+        <button id="stopRecording" class="button" disabled>Arrêter l'enregistrement</button>
+        <audio id="audioPlayer" controls style="display:none;"></audio>
+    </div>
+
+    <form id="uploadForm" th:action="@{/fiche/enregistrerAudio}" method="post" enctype="multipart/form-data">
         <label for="ficheId">ID de la Fiche:</label>
-        <input type="text" id="ficheId" name="ficheId" th:required="true">
+        <input type="text" id="ficheId" name="ficheId" required>
         <br>
-        <label for="audioFile">Fichier Audio:</label>
-        <input type="file" id="audioFile" name="audioFile" accept="audio/*" th:required="true">
-        <br>
-        <button type="submit">Uploader l'Audio</button>
+        <input type="hidden" id="audioData" name="audioData">
+        <button type="submit" class="button">Uploader l'Audio</button>
     </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const startRecordingButton = document.getElementById('startRecording');
+            const stopRecordingButton = document.getElementById('stopRecording');
+            const audioPlayer = document.getElementById('audioPlayer');
+            let mediaRecorder;
+            let chunks = [];
+
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then((stream) => {
+                        mediaRecorder = new MediaRecorder(stream);
+
+                        mediaRecorder.ondataavailable = (event) => {
+                            if (event.data.size > 0) chunks.push(event.data);
+                        };
+
+                        mediaRecorder.onstop = () => {
+                            const audioBlob = new Blob(chunks, { type: 'audio/mp3' });
+                            chunks = [];
+
+                            const audioURL = URL.createObjectURL(audioBlob);
+                            audioPlayer.src = audioURL;
+                            audioPlayer.style.display = 'block';
+
+                            const audioDataField = document.getElementById('audioFile');
+                            audioDataField.value = audioURL;
+
+                            startRecordingButton.disabled = false;
+                            stopRecordingButton.disabled = true;
+                        };
+
+                        startRecordingButton.addEventListener('click', () => {
+                            mediaRecorder.start();
+                            startRecordingButton.disabled = true;
+                            stopRecordingButton.disabled = false;
+                        });
+
+                        stopRecordingButton.addEventListener('click', () => {
+                            mediaRecorder.stop();
+                        });
+                    })
+                    .catch((error) => {
+                        console.error('Erreur lors de l\'accès au microphone:', error);
+                    });
+            } else {
+                console.error('L\'API MediaRecorder n\'est pas prise en charge dans ce navigateur.');
+            }
+        });
+    </script>
 </body>
 </html>

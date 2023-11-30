@@ -121,4 +121,13 @@ public class HomeController {
         return "backup_accueil";
     }
 
+    @GetMapping("/mdp_oublie")
+    public String mdp_oublie() {
+        return "mdp_oublie";
+    }
+    
+    @GetMapping("/recordaffichage")
+    public String recordaffichage() {
+        return "recordaffichage";
+    }
 }

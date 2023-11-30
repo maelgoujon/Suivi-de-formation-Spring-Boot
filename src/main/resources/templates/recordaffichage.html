@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Écouter l'Évaluation</title>
+</head>
+<body>
+    <h1>Écouter l'Évaluation</h1>
+
+    <audio controls>
+        <source th:src="@{'/fiche/evaluation/' + ${ficheId}}" type="audio/mp3">
+        Votre navigateur ne prend pas en charge l'élément audio.
+    </audio>
+    
+    <p><a th:href="@{'/record'}">Retour à la page d'enregistrement</a></p>
+</body>
+</html>
