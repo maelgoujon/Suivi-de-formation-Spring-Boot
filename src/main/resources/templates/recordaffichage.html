@@ -2,16 +2,25 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Écouter l'Évaluation</title>
+    <title>Écouter l'Audio Enregistré</title>
 </head>
 <body>
-    <h1>Écouter l'Évaluation</h1>
+    <h1>Écouter l'Audio Enregistré</h1>
 
-    <audio controls>
-        <source th:src="@{'/fiche/evaluation/' + ${ficheId}}" type="audio/mp3">
-        Votre navigateur ne prend pas en charge l'élément audio.
-    </audio>
-    
-    <p><a th:href="@{'/record'}">Retour à la page d'enregistrement</a></p>
+    <audio id="audioPlayer" controls></audio>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const ficheId = 1; // ID de la fiche d'intervention pour laquelle vous voulez récupérer l'audio
+
+            // Construire l'URL pour récupérer l'audio
+            const audioUrl = `/fiche/evaluation/${ficheId}`;
+
+            // Définir la source et charger l'audio
+            audioPlayer.src = audioUrl;
+            audioPlayer.load();
+        });
+    </script>
 </body>
 </html>
