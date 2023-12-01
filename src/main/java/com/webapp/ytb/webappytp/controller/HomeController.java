@@ -1,7 +1,11 @@
 package com.webapp.ytb.webappytp.controller;
 
+import java.net.http.HttpHeaders;
 import java.time.LocalDate;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -10,10 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
+import com.webapp.ytb.webappytp.repository.FicheRepository;
+import com.webapp.ytb.webappytp.service.FicheService;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
 
@@ -78,11 +85,8 @@ public class HomeController {
         return "redirect:/accueil";
     }
 
-    // connection
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
+
+
 
     // deconnection
     @GetMapping("/logout")
@@ -102,7 +106,7 @@ public class HomeController {
         model.addAttribute("ficheIntervention", ficheIntervention);
         return "fiche_complete";
     }
-
+    
     @GetMapping("/suivi_progression")
     public String suivi_progression() {
         return "suivi_progression";
@@ -111,10 +115,47 @@ public class HomeController {
     @GetMapping("/presentation")
     public String presentation() {
         return "presentation";
-    } 
-    
+    }
+
     @GetMapping("/record")
     public String record() {
         return "record";
-    }  
+    }
+
+    @GetMapping("/bc")
+    public String bc() {
+        return "backup_accueil";
+    }
+
+    @GetMapping("/mdp_oublie")
+    public String mdp_oublie() {
+        return "mdp_oublie";
+    }
+    
+    @GetMapping("/recordaffichage")
+    public String recordaffichage() {
+        return "recordaffichage";
+    }
+
+    @GetMapping("/fiche/evaluation/{id}")
+        public ResponseEntity<byte[]> getAudioEvaluation(@PathVariable Long id) {
+            try {
+                FicheIntervention fiche = ficheServ.lire(id);
+
+                if (fiche == null || fiche.getEvaluation() == null) {
+                    return ResponseEntity.notFound().build();
+                }
+
+                byte[] audioData = fiche.getEvaluation();
+
+                return ResponseEntity.ok()
+                                    .contentType(MediaType.parseMediaType("audio/mp3"))
+                                    .body(audioData);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+
+
+
 }

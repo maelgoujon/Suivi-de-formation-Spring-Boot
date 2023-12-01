@@ -29,8 +29,10 @@
         }
 
         .logo-and-admin {
-            display: flex; /* Afficher les éléments en ligne */
-            align-items: center; /* Aligner verticalement au centre */
+            display: flex;
+            /* Afficher les éléments en ligne */
+            align-items: center;
+            /* Aligner verticalement au centre */
         }
 
         .bandeau img {
@@ -53,7 +55,8 @@
             text-align: center;
             padding: 20px;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-            overflow: hidden; /* Masque les éléments au-delà du conteneur */
+            overflow: hidden;
+            /* Masque les éléments au-delà du conteneur */
         }
 
         .titre {
@@ -63,7 +66,8 @@
 
         .profils {
             display: flex;
-            transition: transform 0.3s; /* Animation de transition fluide */
+            transition: transform 0.3s;
+            /* Animation de transition fluide */
         }
 
         .profil {
@@ -76,7 +80,7 @@
             position: relative;
         }
 
-        
+
 
         .profil img {
             max-width: 100px;
@@ -91,35 +95,36 @@
             font-style: italic;
         }
 
-        .navigation {
-            margin-top: px;
-        }
+        
 
-        .fleche {
-            cursor: pointer;
-        }
+        
 
         .button-container {
             display: flex;
             justify-content: center;
-            margin-top: 10px; 
+            margin-top: 10px;
         }
+
         #connecter {
             background-color: #72bb53;
             border-radius: 10px;
-            color: black; 
-            border: none; 
+            color: black;
+            border: none;
             padding: 10px 20px;
             cursor: pointer;
 
         }
+
         .profil {
-        position: relative;
-        cursor: pointer;
-        perspective: 1000px; /* Définit la perspective pour le retournement */
-        transform-style: preserve-3d; /* Indique que les enfants doivent être rendus en 3D */
-        transition: transform 0.6s; /* Ajoute une transition au transform pour une animation fluide */
-    }
+            position: relative;
+            cursor: pointer;
+            perspective: 1000px;
+            /* Définit la perspective pour le retournement */
+            transform-style: preserve-3d;
+            /* Indique que les enfants doivent être rendus en 3D */
+            transition: transform 0.6s;
+            /* Ajoute une transition au transform pour une animation fluide */
+        }
 
         .profil.flip {
             transform: rotateY(180deg);
@@ -133,7 +138,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            backface-visibility: hidden; /* Empêche le clignotement pendant l'animation */
+            backface-visibility: hidden;
+            /* Empêche le clignotement pendant l'animation */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -143,65 +149,87 @@
         .profil .dos p {
             margin: 0;
         }
+
         .profil.flip .front {
-             visibility: hidden;
-             
+            visibility: hidden;
+
         }
+
         .pattern-lock {
-        display: flex;
-        justify-content: space-between;
-        width: 200px; /* Ajustez la largeur selon vos besoins */
-        margin: 20px auto; /* Ajustez la marge selon vos besoins */
-    }
+            display: flex;
+            justify-content: space-between;
+            width: 200px;
+            /* Ajustez la largeur selon vos besoins */
+            margin: 20px auto;
+            /* Ajustez la marge selon vos besoins */
+        }
 
-    .pattern-lock-dot {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: #fff;
-    cursor: pointer;
-    }
+        .pattern-lock-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #fff;
+            cursor: pointer;
+        }
 
-    .unlock-container {
-    width: 300px;
-    text-align: center;
-    border: none;
-    }
+        .unlock-container {
+            width: 300px;
+            text-align: center;
+            border: none;
+        }
 
-    .pattern {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px; /* Ajoutez la marge souhaitée entre les points */
-    margin: 0 60px;/* Pour rapprocher les ronds sur les côtés */
-    align-items: center;
-    }
-    .dot {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        border: 2px solid #72bb53;
-        background-color: #fff;
-        cursor: pointer;
-        transition: background-color 0.3s;  
-    }
-    .dot.active {
-        background-color: #72bb53;
-    }
-    fieldset {
-        
-        border-width: 0px;
-        
-    }
-    .button-container{
-        display: grid;
-    }
-    .annuler{
-        display: flex;
-        align-items: center;
-    }
+        .pattern {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            /* Ajoutez la marge souhaitée entre les points */
+            margin: 0 60px;
+            /* Pour rapprocher les ronds sur les côtés */
+            align-items: center;
+        }
 
-    
+        .dot {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid #72bb53;
+            background-color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
+        .dot.active {
+            background-color: #72bb53;
+        }
+
+        fieldset {
+
+            border-width: 0px;
+
+        }
+
+        .button-container {
+            display: grid;
+        }
+
+        .annuler {
+            display: flex;
+            align-items: center;
+        }
+
+        .carousel {
+            display: block;
+            width: 100%;
+            height: 40vh;
+            /* Ajustez la hauteur maximale en pourcentage de la hauteur de l'écran */
+            background: white;
+            overflow-x: scroll;
+            padding: 10px;
+            margin: 0;
+            white-space: nowrap;
+            border-top: 2px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -215,6 +243,7 @@
     </div>
     <div class="conteneur">
         <div class="titre">Sélectionner un profil<img src="/images/son.png" alt="Lire le nom" onclick="lireTexte('Sélectionner un profil')" style="width: 20px; margin: 5px;"></div>
+        <div class="carousel">
         <div class="profils" id="carousel">
             <!--Profil 1 -->
             <div class="profil" onclick="flipProfile(this)">
@@ -530,23 +559,17 @@
         </div>
         
         </div>
-        
+        </div>
         <div class="button-container">
             <button id="connecter" style="display: none;">Se connecter</button>
             
         </div>
 
-        <div class="navigation">
-            <img class="fleche" id="prev" src="/images/fleche_gauche.png" alt="Précédent" style="max-width: 30px; margin-right: 10px;">
-            <img class="fleche" id="next" src="/images/fleche_droite.png" alt="Suivant" style="max-width: 30px; margin-left: 10px;">
-        </div>        
-                
+         
     </div>
     <script>
         let flippedProfiles = [];
         const carousel = document.getElementById('carousel');
-        const prevButton = document.getElementById('prev');
-        const nextButton = document.getElementById('next');
         const connectButton = document.getElementById('connecter');
 
         let currentPosition = 0;
@@ -556,30 +579,7 @@
 
         let selectedProfile = null;
 
-        function moveCarousel(direction) {
-            if (direction === 'next' && currentPosition > maxPosition) {
-                currentPosition -= itemWidth;
-            } else if (direction === 'prev' && currentPosition < 0) {
-                currentPosition += itemWidth;
-            }
-
-            carousel.style.transform = `translateX(${currentPosition}%)`;
-
-            if (selectedProfile) {
-                deselectProfile();
-            }
-        }
-
         
-
-        prevButton.addEventListener('click', () => {
-            moveCarousel('prev');
-        });
-
-        nextButton.addEventListener('click', () => {
-            moveCarousel('next');
-        });
-
         carousel.addEventListener('click', (event) => {
             const profile = event.target.closest('.profil');
             if (profile) {
