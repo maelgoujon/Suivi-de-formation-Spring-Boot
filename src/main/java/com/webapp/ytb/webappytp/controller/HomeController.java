@@ -89,9 +89,9 @@ public class HomeController {
 
 
     // deconnection
-    @GetMapping("/logout")
-    public String logout() {
-        return "logout";
+    @GetMapping("/log_out")
+    public String log_out() {
+        return "log_out";
     }
 
     @GetMapping("/select_fiche")

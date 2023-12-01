@@ -37,9 +37,11 @@
         <a href="/accueil_admin" class="button">Accueil Admin</a>
     </div>
     <div class="button-container">
-        <a href="/logout" class="button">Logout</a>
-        <div>Commentaire : Faut le modifier je crois qu'il ne fonctionne pas. </div>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Déconnexion</button>
+        </form>
     </div>
+    
     <div class="button-container">
         <a href="/select_fiche" class="button">Sélectionner Fiche</a>
     </div>
