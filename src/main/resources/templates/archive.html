@@ -108,34 +108,40 @@
                     <tr>
                         <th onclick="sortTable(0)" >Archivé le (Date)</th>
                         <th onclick="sortTable(1)" >Nom de l'apprenti</th>
-                        <th onclick="sortTable(2)" >Sujet</th>
                     </tr>
                     </thead>
                     <tbody>
                     <!-- Utiliser Thymeleaf pour itérer sur les données -->
-                    <tr th:each="fiche : ${fichesArchives}">
+                    <tr th:each="archive : ${archives}">
                         <!-- Utiliser Thymeleaf pour formater la date -->
-                        <td th:text="${#dates.format(fiche.dateArchivage, 'dd/MM/yyyy HH:mm')}"></td>
-                        <td th:text="${fiche.nomApprenti}"></td>
-                        <td th:text="${fiche.sujet}"></td>
+                        <td th:text="${#dates.format(archive.dateArchivage, 'dd/MM/yyyy')}"></td>
+                        <td th:text="${archive.nomApprenti}"></td>
                     </tr>
+                    <!-- Exemples de syntaxe -->
                     <tr>
                       <td>01/02/2023</td>
                       <td>Dupont</td>
-                      <td>Finition</td>
                     </tr>
                     <tr>
-                      <td>01/11/2026</td>
+                      <td>01/11/2023</td>
                       <td>Doe</td>
-                      <td>Installation</td>
                     </tr>
                     <tr>
-                      <td>01/01/2025</td>
+                      <td>01/01/2023</td>
                       <td>Smith</td>
-                      <td>Plomberie</td>
                     </tr>
                     </tbody>
                 </table>
+
+                <p> </p>
+
+                <label for="searchInput">Rechercher : </label>
+                <input
+                  type="text"
+                  id="searchInput"
+                  onkeyup="searchTable()"
+                />
+
             </div>
         </div>
     </body>
@@ -159,6 +165,28 @@
           if (shouldSwitch) {
             rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
             switching = true;
+          }
+        }
+      }
+
+      function searchTable() {
+        var input, filter, table, tr, td, i, j, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("archiveTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+          for (j = 0; j < tr[i].getElementsByTagName("td").length; j++) {
+            td = tr[i].getElementsByTagName("td")[j];
+            if (td) {
+              txtValue = td.textContent || td.innerText;
+              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+                break;
+              } else {
+                tr[i].style.display = "none";
+              }
+            }
           }
         }
       }
