@@ -2,7 +2,6 @@ package com.webapp.ytb.webappytp.modele;
 
 import java.util.List;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,6 @@ import jakarta.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 
 @Entity
 @Table(name = "Utilisateur")
@@ -44,20 +42,18 @@ public class Utilisateur {
     @NotBlank(message = "Le champ 'mot de passe' est obligatoire.")
     private String mdp;
 
-    @Lob
-    @Column(nullable = true) // Permet à la colonne "photo" d'être nulle
-    private byte[] photo;
+    @Column(columnDefinition = "text", nullable = true)
+    private String photoBase64;
+
+    @Column(nullable = true)
+    private String nomPhoto;
 
     @Enumerated(EnumType.STRING)
-    private UserRole role; // Champ pour indiquer le rôle de l'étudiant (ADMIN, SUPERADMIN, USER)
-
+    private UserRole role; // (ADMIN, SUPERADMIN, USER)
 
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<FicheIntervention> ficheInterventions;
-
-    @Column(length = 2000)
-    private String description;
 
     @Min(0)
     @Max(3)

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails Utilisateur</title>
+</head>
+<body>
+    <h2>Détails de l'utilisateur</h2>
+
+    <div>
+        <p><strong>ID:</strong> <span th:text="${utilisateur.id}"></span></p>
+        <p><strong>Nom:</strong> <span th:text="${utilisateur.nom}"></span></p>
+        <p><strong>Prénom:</strong> <span th:text="${utilisateur.prenom}"></span></p>
+        <p><strong>Login:</strong> <span th:text="${utilisateur.login}"></span></p>
+        <p><strong>Photo:</strong></p>
+        <img th:src="${utilisateur.photoBase64}" alt="Photo de l'utilisateur" style="max-width: 200px; max-height: 200px;">
+
+        <br>
+        <a th:href="@{/utilisateur/nouveau}">Ajout utilisateur</a>
+    </div>
+</body>
+</html>
