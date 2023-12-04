@@ -45,9 +45,6 @@ public class Utilisateur {
     @Column(columnDefinition = "text", nullable = true)
     private String photoBase64;
 
-    @Column(nullable = true)
-    private String nomPhoto;
-
     @Enumerated(EnumType.STRING)
     private UserRole role; // (ADMIN, SUPERADMIN, USER)
 
