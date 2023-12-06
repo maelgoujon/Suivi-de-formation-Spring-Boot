@@ -59,8 +59,14 @@ public class UtilisateurController {
     @GetMapping("/read")
     @ResponseBody
     public List<Utilisateur> readUtilisateurs() {
-        return utilisateurService.lire();
+        List<Utilisateur> utilisateurs = utilisateurService.lire();
+        // Ajouter des logs pour débogage
+        System.out.println("Nombre d'utilisateurs dans la liste : " + utilisateurs.size());
+        return utilisateurs;
     }
+
+
+    
 
     @GetMapping("/details/{id}")
     public String afficherDetailsUtilisateur(@PathVariable Long id, Model model) {
@@ -68,6 +74,14 @@ public class UtilisateurController {
         model.addAttribute("utilisateur", utilisateur);
         return "detailsUtilisateur";
     }
+
+    @GetMapping("/profils")
+    public String afficherProfils(Model model) {
+        List<Utilisateur> profils = utilisateurService.lire();
+        model.addAttribute("profils", profils);
+        return "accueil";
+    }
+
 
     @GetMapping("/modifier/{id}")
     public String afficherFormulaireModificationUtilisateur(@PathVariable Long id, Model model) {

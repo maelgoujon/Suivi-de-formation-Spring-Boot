@@ -39,17 +39,17 @@
       }
 
       .conteneur {
-        width: 80%;
-        max-width: 800px;
-        margin: 100px auto;
-        background-color: white;
-        border: 1px solid black;
-        text-align: center;
-        padding: 20px;
-        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-        overflow: hidden; /* Masque les éléments au-delà du conteneur */
+        width: 100%; 
+        max-width: 1000px; /* Ajustez la largeur maximum selon vos besoins */ 
+        margin: 100px auto; 
+        background-color: white; 
+        border: 1px solid black; 
+        text-align: center; 
+        padding: 20px; 
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); 
+        overflow: hidden; /* Masque les éléments au-delà du conteneur */ 
+        height: 5000px; /* Ajustez la hauteur selon vos besoins */ 
       }
-
       .titre {
         font-size: 20px;
         margin-bottom: 20px;
@@ -84,6 +84,19 @@
         align-items: center;
         justify-content: center;
         margin-top: 20px;
+        height: 100px; /* Ajustez la hauteur selon vos besoins */
+        position: relative;
+      }
+
+      .ajouter button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: none;
+      }
+
+      .ajouter.selected button {
+        display: block;
       }
 
       .ajouter img {
@@ -103,13 +116,9 @@
         font-style: italic;
       }
 
-      .navigation {
-        margin-top: 20px;
-      }
+      
 
-      .fleche {
-        cursor: pointer;
-      }
+      
 
       .button-container {
         display: flex;
@@ -136,16 +145,28 @@
         display: flex;
         transition: transform 1s ease; /* Ajoutez une transition de 0.3 secondes avec une fonction de facilité */
       }
+      .carousel {
+            display: block;
+            width: 100%;
+            height: 35vh;
+            /* Ajustez la hauteur maximale en pourcentage de la hauteur de l'écran */
+            background: white;
+            overflow-x: scroll;
+            padding: 10px;
+            margin: 0;
+            white-space: nowrap;
+            border-top: 2px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
     </style>
   </head>
   <body>
     <div class="bandeau">
-      <a href="accueil">
-        <img src="/images/accueil.png" alt="Accueil" style="float: left" />
-      </a>
+      
       <div class="bandeau centered">
-        <img src="/images/logo.png" alt="Votre Image" />
-        <h1 style="margin-left: 10px">Admin</h1>
+        <a href="accueil">
+        <img src="/images/accueil.png" alt="Accueil" style="float: left" />
+        </a>
       </div>
       <a
         href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
@@ -159,72 +180,38 @@
     </div>
 
     <div class="conteneur">
-      <div class="profils" id="carousel">
-        <div class="profil">
-          <img src="/images/icone_profil.png" alt="Profil 1" />
-          <p class="nom">Nom 1</p>
-          <p class="prenom">Prénom 1</p>
+      <div class="carousel">
+        <div class="profils" id="carousel">
+           <!-- Iteration sur chaque utilisateur -->
+           <div th:each="utilisateur : ${utilisateurs}" class="profil"
+           th:onclick="'flipProfile(this, ' + ${utilisateur.id} + ')'" th:data-id="${utilisateur.id}">
+            <img src="/images/icone_profil.png" alt="Profil 1" />
+            <p class="nom" th:text="${utilisateur.nom}">Nom de l'utilisateur</p>
+            <p class="prenom" th:text="${utilisateur.prenom}">Prénom de l'utilisateur</p>
+          </div>  
         </div>
-        <div class="profil">
-          <img src="/images/icone_profil.png" alt="Profil 2" />
-          <p class="nom">Nom 2</p>
-          <p class="prenom">Prénom 2</p>
-        </div>
-        <div class="profil">
-          <img src="/images/icone_profil.png" alt="Profil 3" />
-          <p class="nom">Nom 3</p>
-          <p class="prenom">Prénom 3</p>
-        </div>
-        <div class="profil">
-          <img src="/images/icone_profil.png" alt="Profil 4" />
-          <p class="nom">Nom 4</p>
-          <p class="prenom">Prénom 4</p>
-        </div>
-        <div class="profil">
-          <img src="/images/icone_profil.png" alt="Profil 5" />
-          <p class="nom">Nom 5</p>
-          <p class="prenom">Prénom 5</p>
-        </div>
-        <div class="profil">
-          <img src="/images/icone_profil.png" alt="Profil 6" />
-          <p class="nom">Nom 6</p>
-          <p class="prenom">Prénom 6</p>
-        </div>
+        
       </div>
-
       <div class="button-container">
-        <button id="profil_apprenti" style="display: none">
-          Voir son profil
-        </button>
+          <button id="profil_apprenti" style="display: none">
+            Voir son profil
+          </button>
+        </div>
+      <!-- Ajout de l'image cliquable et du texte "Ajouter un apprenti" -->
+      <div class="ajouter">
+        
+        <a href="utilisateur/nouveau">
+          <img
+            src="/images/logo_plus.png"
+            alt="Ajouter un apprenti"
+            style="cursor: pointer"
+          />
+        </a>
+        <p>Ajouter un apprenti</p>
       </div>
-
-      <div class="navigation">
-        <img
-          class="fleche"
-          id="prev"
-          src="/images/fleche_gauche.png"
-          alt="Précédent"
-          style="max-width: 30px; margin-right: 10px"
-        />
-        <img class ="fleche" id="next" src="/images/fleche_droite.png"
-        alt="Suivant" style="max-width: 30px; margin-left: 10px;">
-      </div>
-    </div>
-    <!-- Ajout de l'image cliquable et du texte "Ajouter un apprenti" -->
-    <div class="ajouter">
-      <a href="utilisateur/nouveau">
-        <img
-          src="/images/logo_plus.png"
-          alt="Ajouter un apprenti"
-          style="cursor: pointer"
-        />
-      </a>
-      <p>Ajouter un apprenti</p>
     </div>
     <script>
       const carousel = document.getElementById("carousel");
-      const prevButton = document.getElementById("prev");
-      const nextButton = document.getElementById("next");
       const connectButton = document.getElementById("profil_apprenti");
 
       let currentPosition = 0;
@@ -234,19 +221,7 @@
 
       let selectedProfile = null;
 
-      function moveCarousel(direction) {
-        if (direction === "next" && currentPosition > maxPosition) {
-          currentPosition -= itemWidth;
-        } else if (direction === "prev" && currentPosition < 0) {
-          currentPosition += itemWidth;
-        }
-
-        carousel.style.transform = `translateX(${currentPosition}%)`;
-
-        if (selectedProfile) {
-          deselectProfile();
-        }
-      }
+      
 
       function selectProfile(profile) {
         if (selectedProfile === profile) {
@@ -269,13 +244,7 @@
         }
       }
 
-      prevButton.addEventListener("click", () => {
-        moveCarousel("prev");
-      });
-
-      nextButton.addEventListener("click", () => {
-        moveCarousel("next");
-      });
+      
 
       carousel.addEventListener("click", (event) => {
         const profile = event.target.closest(".profil");
@@ -296,16 +265,7 @@
         touchStartX = event.touches[0].clientX;
       });
 
-      carousel.addEventListener("touchmove", (event) => {
-        const touchCurrentX = event.touches[0].clientX;
-        const swipeDistance = touchStartX - touchCurrentX;
-
-        if (swipeDistance > 10) {
-          moveCarousel("next");
-        } else if (swipeDistance < -10) {
-          moveCarousel("prev");
-        }
-      });
+      
 
       carousel.addEventListener("touchend", () => {
         // Réinitialiser la valeur de départ du toucher
