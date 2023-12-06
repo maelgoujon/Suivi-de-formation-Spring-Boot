@@ -116,10 +116,11 @@
                         <legend>Nature de l'intervention</legend>
                         <div>
                             <div class="demi">
-                                <select th:id="'natureIntervention' + ${i}" name="natureIntervention" class="natureIntervention" th:field="*{natureIntervention}">
+                                <select th:id="'natureIntervention' + ${i}" name="natureIntervention" class="natureIntervention" th:field="*{natureIntervention.natureType}">
                                     <option th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.NatureIntervention.NatureType).values()}"
                                             th:value="${nature}" th:text="${#strings.capitalize(nature.name())}"></option>
                                 </select>
+                                
                             </div>
                         </div>
                     </fieldset>

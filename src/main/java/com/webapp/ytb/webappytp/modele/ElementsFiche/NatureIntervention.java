@@ -25,14 +25,13 @@ public class NatureIntervention {
         }
     }
 
-    private NatureType NatureType;
+    private NatureType natureType;
 
-    public NatureType getMaintenanceType() {
-        return NatureType;
+    public NatureType getNatureType() {
+        return natureType;
     }
 
-    public void setMaintenanceType(NatureType NatureType) {
-        this.NatureType = NatureType;
+    public void setNatureType(NatureType natureType) {
+        this.natureType = natureType;
     }
-
 }
