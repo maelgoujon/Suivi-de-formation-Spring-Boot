@@ -1,5 +1,10 @@
-package com.webapp.ytb.webappytp.modele;
-public enum MateriauxListe {
+package com.webapp.ytb.webappytp.modele.ElementsFiche;
+import jakarta.persistence.Embeddable;
+import lombok.Getter;
+
+@Embeddable
+@Getter
+public enum MateriauxPlomberieListe {
     BONDE_GRILLE("Bonde à grille pour lave-mains"),
     BOUCHON_LAITON("Bouchon laiton à visser F 1/2"),
     CHEVILLES_EXPANSION("Chevilles à expansion avec patte à vis"),
@@ -69,7 +74,7 @@ public enum MateriauxListe {
 
     private final String optionName;
 
-    MateriauxListe(String optionName) {
+    MateriauxPlomberieListe(String optionName) {
         this.optionName = optionName;
     }
 

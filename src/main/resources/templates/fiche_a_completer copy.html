@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="fr" xml:lang="fr">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title>Fiche Intervention</title>
@@ -20,7 +20,7 @@
                     <div>
                         <div class="titre">Nom de l'intervenant</div>
                         <div class="test">
-                            <select id="utilisateur" name="utilisateur.id" th:field="*{utilisateur.id}">
+                            <select id="utilisateur" name="utilisateur.id" th:field="*{utilisateur.id}" required>
                                 <option th:each="user : ${users}" th:value="${user.id}"
                                     th:text="${user.nom} + ' ' + ${user.prenom}"></option>
                             </select>
@@ -33,37 +33,34 @@
                     <div>
                         <div class="titre">Nom du demandeur</div>
                         <div class="test">
-                            <input type="text" id="nomDemandeur" name="nomDemandeur" th:field="*{demande.nomDemandeur}">
+                            <input type="text" id="nomDemandeur" name="nomDemandeur" th:field="*{demande.nomDemandeur}"
+                                required>
                         </div>
                     </div>
                     <div class="espaceHor"></div>
                     <div>
                         <div class="titre">Date de la demande</div>
-                        <div class="test">
-                            <input type="date" placeholder="dd-mm-yyyy" id="dateDemande" name="dateDemande"
-                                th:field="*{demande.dateDemande}">
-                        </div>
-
-
-
-
+                        <input type="date" id="dateDemande" name="dateDemande" th:field="*{demande.dateDemande}" th:format="'dd/MM/yyyy'" pattern="\d{2}/\d{2}/\d{4}" required>
                         <div class="titre">Localisation</div>
                         <div class="test">
-                            <input type="text" id="localisation" name="localisation" th:field="*{demande.localisation}">
+                            <input type="text" id="localisation" name="localisation" th:field="*{demande.localisation}"
+                                required>
                         </div>
                     </div>
                     <div class="espaceHor"></div>
                     <div class="colonnePrint">
                         <div class="titre demi">Description de la demande</div>
                         <div class="test">
-                            <input type="text" id="description" name="description" th:field="*{demande.description}">
+                            <input type="text" id="description" name="description" th:field="*{demande.description}"
+                                required>
                         </div>
                     </div>
                     <div class="espaceHor"></div>
                     <div>
                         <div class="titre demi">Degré d'urgence</div>
                         <div class="test">
-                            <input type="text" id="degreUrgence" name="degreUrgence" th:field="*{demande.degreUrgence}">
+                            <input type="text" id="degreUrgence" name="degreUrgence" th:field="*{demande.degreUrgence}"
+                                required>
                         </div>
                     </div>
                 </fieldset>
@@ -73,19 +70,15 @@
 
                     <div class="espaceHor"></div>
                     <div>
-
                         <div class="titre">Date d'intervention</div>
-
-
                         <div class="test">
-                            <span th:if="${fiche.intervention != null}" th:text="${#temporals.format(fiche.intervention.dateIntervention, 'dd/MM/yyyy')}"></span>
+                            <input type="text" id="dateIntervention" name="dateIntervention"
+                                th:field="*{intervention.dateIntervention}" required>
                         </div>
-                        
-
                         <div class="titre">Durée de l'opération</div>
                         <div class="test">
                             <input type="text" id="dureeIntervention" name="dureeIntervention"
-                                th:field="*{intervention.dureeIntervention}">
+                                th:field="*{intervention.dureeIntervention}" required>
                         </div>
                     </div>
                 </fieldset>
@@ -93,40 +86,43 @@
                 <div class="colonne listeCheckbox">
                     <fieldset class=" colonne">
                         <legend>Type de Maintenance</legend>
-
+                        <!--
                         <div>
                             <div class="demi">
-                                <select id="MaintenanceType" name="MaintenanceType"
-                                    th:field="*{maintenance.maintenanceType}">
+                                <select id="MaintenanceType" name="MaintenanceType" th:field="*{maintenanceType}"
+                                    required>
                                     <option
                                         th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance.MaintenanceType).values()}"
                                         th:value="${type}" th:text="${#strings.capitalize(type.name())}"></option>
                                 </select>
-
                             </div>
                         </div>
+-->
 
 
 
 
                     </fieldset>
                 </div>
+                <!--
                 <div class="colonne listeCheckbox">
                     <fieldset class="colonne">
                         <legend>Nature de l'intervention</legend>
                         <div>
                             <div class="demi">
-                                <select th:id="'natureIntervention' + ${i}" name="natureIntervention" class="natureIntervention" th:field="*{natureIntervention}">
-                                    <option th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.NatureIntervention.NatureType).values()}"
-                                            th:value="${nature}" th:text="${#strings.capitalize(nature.name())}"></option>
+                                <select id="natureIntervention" name="natureIntervention"
+                                    th:field="*{natureIntervention}" required>
+                                    <option
+                                        th:each="nature : ${T(com.webapp.ytb.webappytp.modele.NatureIntervention).values()}"
+                                        th:value="${nature}" th:text="${#strings.capitalize(nature.name())}"></option>
                                 </select>
                             </div>
                         </div>
+
                     </fieldset>
                 </div>
-                
 
-
+            -->
                 </div>
                 <div class="espaceHor"></div>
                 </div>
@@ -136,8 +132,8 @@
                     <div class="colonnePrint">
                         <div class="titre demi">Travaux réalisés</div>
                         <div class="test">
-                            <input type="text" id="travauxRealises" name="travauxRealises"
-                                th:field="*{travauxRealises}">
+                            <input type="text" id="travauxRealises" name="travauxRealises" th:field="*{travauxRealises}"
+                                required>
                         </div>
                     </div>
                 </div>
@@ -148,7 +144,7 @@
                         <div class="titre demi">Travaux non réalisés</div>
                         <div class="test">
                             <input type="text" id="travauxNonRealises" name="travauxNonRealises"
-                                th:field="*{travauxNonRealises}">
+                                th:field="*{travauxNonRealises}" required>
                         </div>
                     </div>
                 </div>
@@ -169,16 +165,17 @@
                 <legend>Matériaux Utilisés</legend>
 
                 <!-- Utilisez une boucle pour générer dynamiquement les champs de sélection des matériaux -->
-
+                <!--
                 <div th:each="i : ${#numbers.sequence(1, 6)}" class="demi selectADupliquer">
                     <select th:id="'materiauxUtilises' + ${i}" name="materiauxUtilises" class="materiauxUtilises"
-                        th:field="*{materiauxOptions}">
-                        <option
-                            th:each="materiau : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxElectriciteListe).values()}"
+                        th:field="*{materiauxOptions}" required>
+                        <option value="" disabled selected>Sélectionnez les matériaux</option>
+                        <option th:each="materiau : ${T(com.webapp.ytb.webappytp.modele.MateriauxListe).values()}"
                             th:value="${materiau}" th:text="${materiau.optionName}"></option>
                     </select>
                 </div>
 
+            -->
                 </div>
                 <div class="espaceHor"></div>
                 <div class="espaceHor"></div>
@@ -214,6 +211,8 @@
             window.print();
         }
 
+
+
         document.addEventListener('DOMContentLoaded', function () {
             const dateDemandeInput = document.getElementById('dateDemande');
 
@@ -231,23 +230,6 @@
             });
         });
 
-        // Add this script to format all date inputs when the page is loaded
-        document.addEventListener('DOMContentLoaded', function () {
-            const dateInputs = document.querySelectorAll('input[type="date"]');
-            dateInputs.forEach(function (input) {
-                input.value = formatDate(input.value);
-            });
-        });
-
-        // Function to format date as dd/MM/yyyy
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const day = date.getDate().toString().padStart(2, '0');
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const year = date.getFullYear();
-            return `${day}/${month}/${year}`;
-        }
     </script>
-
 
 </html>

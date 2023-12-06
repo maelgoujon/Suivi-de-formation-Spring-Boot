@@ -37,16 +37,10 @@ public class FicheServiceImpl implements FicheService {
     public FicheIntervention modifier(Long id, FicheIntervention fiche) {
         return ficheRepository.findById(id)
             .map(existingFiche -> {
-                existingFiche.setNomDemandeur(fiche.getNomDemandeur());
-                existingFiche.setDateDemande(fiche.getDateDemande());
-                existingFiche.setDateIntervention(fiche.getDateIntervention());
-                existingFiche.setDateCreation(fiche.getDateCreation());
-                existingFiche.setDureeIntervention(fiche.getDureeIntervention());
-                existingFiche.setLocalisation(fiche.getLocalisation());
-                existingFiche.setDescriptionDemande(fiche.getDescriptionDemande());
-                existingFiche.setDegreUrgence(fiche.getDegreUrgence());
-                existingFiche.setTypeIntervention(fiche.getTypeIntervention());
-                existingFiche.setNatureIntervention(fiche.getNatureIntervention());
+                existingFiche.setDemande(fiche.getDemande());
+                existingFiche.setIntervention(fiche.getIntervention());
+                existingFiche.setMaintenance(fiche.getMaintenance());
+                existingFiche.setEtatFicheFinie(fiche.isEtatFicheFinie());
                 existingFiche.setTravauxRealises(fiche.getTravauxRealises());
                 existingFiche.setTravauxNonRealises(fiche.getTravauxNonRealises());
                 existingFiche.setEvaluation(fiche.getEvaluation());;

@@ -50,7 +50,7 @@ public class HomeController {
 
     @PostMapping("/ajouter_fiche")
     public String ajouter_fiche(@ModelAttribute FicheIntervention fiche) {
-        fiche.setDateCreation(LocalDate.now()); // Set the dateCreation to the current date
+        //fiche.setDateCreation(LocalDate.now()); // Set the dateCreation to the current date
         ficheServ.creer(fiche);
         return "accueil";
     }
