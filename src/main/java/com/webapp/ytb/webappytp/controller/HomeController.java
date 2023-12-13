@@ -150,8 +150,10 @@ public class HomeController {
         return "mdp_oublie";
     }
 
-    @GetMapping("/recordaffichage")
-    public String recordaffichage() {
+    @GetMapping("/recordaffichage/{ficheId}")
+    public String record(@PathVariable Long ficheId, Model model) {
+        FicheIntervention ficheIntervention = ficheServ.lire(ficheId);
+        model.addAttribute("ficheIntervention", ficheIntervention);
         return "recordaffichage";
     }
 
