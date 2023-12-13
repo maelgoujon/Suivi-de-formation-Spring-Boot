@@ -1,10 +1,12 @@
 body {
     background-color: #2b2d42;
+    font-family: 'Roboto', sans-serif;
 }
 
 /* Sélecteur pour tous les boutons radio dans le formulaire */
 input[type="radio"] {
     width: 10%;
+    font-family: 'Roboto', sans-serif;
 }
 
 .submit {
@@ -17,6 +19,7 @@ input[type="radio"] {
     font-size: 1.2em;
     font-weight: bold;
     cursor: pointer;
+    font-family: 'Roboto', sans-serif;
 }
 
 div,
@@ -30,11 +33,13 @@ form {
     display: flex;
     flex: 1;
     justify-content: center;
+    font-family: 'Roboto', sans-serif;
 }
 
 .test {
     padding: 3px;
     color: rgb(255, 255, 255);
+    font-family: 'Roboto', sans-serif;
 }
 
 .colonne,

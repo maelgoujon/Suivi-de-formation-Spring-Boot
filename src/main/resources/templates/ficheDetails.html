@@ -44,11 +44,13 @@
 
                     <div class="espaceHor"></div>
                     <div>
+
                         <div class="titre">Date de la demande</div>
                         <div class="test">
-                            <input type="text" id="newDateDemande" name="newDateDemande"
-                                th:value="${#temporals.format(ficheIntervention.dateDemande, 'dd/MM/yyyy')}" />
+                            <input type="date" id="newDateDemande" name="newDateDemande"
+                                th:value="${#temporals.format(ficheIntervention.dateDemande, 'yyyy-MM-dd')}" />
                         </div>
+
 
                         <div class="titre">Localisation</div>
                         <div class="test">
@@ -101,17 +103,20 @@
                         <div
                             th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance.MaintenanceType).values()}">
                             <div class="demi">
-                                <input type="radio" id="${type}" name="maintenanceType" th:value="${type}"
-                                    th:checked="${ficheIntervention.maintenance.maintenanceType.ordinal() eq type.ordinal()}" />
-                                <label th:for="${type}" th:text="${#strings.capitalize(type.name())}"></label>
+                                <div class="titre">
+                                    <input type="radio" id="${type}" name="maintenanceType" th:value="${type}"
+                                        th:checked="${ficheIntervention.maintenance.maintenanceType.ordinal() eq type.ordinal()}" />
+                                </div>
+                                <div class="test">
+                                    <label th:for="${type}"
+                                        th:text="${#strings.capitalize(type.name().toLowerCase().replace('_', ' '))}"></label>
+                                </div>
                             </div>
                         </div>
-
                         <!-- Hidden input field to hold the selected maintenance type -->
                         <input type="hidden" name="newMaintenanceType"
                             th:value="${ficheIntervention.maintenance.maintenanceType}" id="selectedMaintenanceType">
                     </fieldset>
-
 
 
 
@@ -121,14 +126,21 @@
                         <div
                             th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.NatureIntervention.NatureType).values()}">
                             <div class="demi">
-                                <input type="radio" id="${nature}" name="natureIntervention" th:value="${nature}"
-                                    th:checked="${ficheIntervention.natureIntervention.natureType.name() eq nature.name()}" />
-                                <label th:for="${nature}" th:text="${#strings.capitalize(nature.name())}"></label>
+                                <div class="titre">
+                                    <input type="radio" id="${nature}" name="natureIntervention" th:value="${nature}"
+                                        th:checked="${ficheIntervention.natureIntervention.natureType.name() eq nature.name()}" />
+                                </div>
+                                <div class="test">
+                                    <label th:for="${nature}"
+                                        th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
+                                </div>
                             </div>
                         </div>
                         <input type="hidden" name="newNatureType"
                             th:value="${ficheIntervention.natureIntervention.natureType}" id="selectedNatureType">
                     </fieldset>
+
+
 
 
 
@@ -160,8 +172,8 @@
                     </div>
                 </fieldset>
 
-                
-                
+
+
 
                 <div class="espaceHor"></div>
 
@@ -179,44 +191,44 @@
 
                 <fieldset class="colonne">
                     <legend>Matériaux utilisés</legend>
-                <div class="noPrint"></div>
-                <div class="espaceHor"></div>
-                <div class="ligneSelectMateriaux">
-                    <div th:each="i : ${#numbers.sequence(1, 6)}" class="ligneMateriaux">
-                        <div class="max-width-container">
-                            <select th:id="'materiauxUtilises' + ${i}" name="materiauxUtilises" class="max-width-select"
-                                th:field="*{materiauxOptions[__${i-1}__]}"
-                                onchange="updateMateriauField(this, 'selectedMateriau1')">
-                                <option
-                                    th:each="materiau : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxElectriciteListe).values()}"
-                                    th:value="${materiau}" th:text="${materiau.optionName}"
-                                    th:selected="${ficheIntervention.materiauxOptions[__${i-1}__] == materiau}">
-                                </option>
-                            </select>
+                    <div class="noPrint"></div>
+                    <div class="espaceHor"></div>
+                    <div class="ligneSelectMateriaux">
+                        <div th:each="i : ${#numbers.sequence(1, 6)}" class="ligneMateriaux">
+                            <div class="max-width-container">
+                                <select th:id="'materiauxUtilises' + ${i}" name="materiauxUtilises"
+                                    class="max-width-select" th:field="*{materiauxOptions[__${i-1}__]}"
+                                    onchange="updateMateriauField(this, 'selectedMateriau1')">
+                                    <option
+                                        th:each="materiau : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxElectriciteListe).values()}"
+                                        th:value="${materiau}" th:text="${materiau.optionName}"
+                                        th:selected="${ficheIntervention.materiauxOptions[__${i-1}__] == materiau}">
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <input type="hidden" name="newMateriau0" id="selectedMateriau0"
-                    th:value="${ficheIntervention.materiauxOptions[0]}">
-                <input type="hidden" name="newMateriau1" id="selectedMateriau1"
-                    th:value="${ficheIntervention.materiauxOptions[1]}">
-                <input type="hidden" name="newMateriau2" id="selectedMateriau2"
-                    th:value="${ficheIntervention.materiauxOptions[2]}">
-                <input type="hidden" name="newMateriau3" id="selectedMateriau3"
-                    th:value="${ficheIntervention.materiauxOptions[3]}">
-                <input type="hidden" name="newMateriau4" id="selectedMateriau4"
-                    th:value="${ficheIntervention.materiauxOptions[4]}">
-                <input type="hidden" name="newMateriau5" id="selectedMateriau5"
-                    th:value="${ficheIntervention.materiauxOptions[5]}">
-
+                    <input type="hidden" name="newMateriau0" id="selectedMateriau0"
+                        th:value="${ficheIntervention.materiauxOptions[0]}">
+                    <input type="hidden" name="newMateriau1" id="selectedMateriau1"
+                        th:value="${ficheIntervention.materiauxOptions[1]}">
+                    <input type="hidden" name="newMateriau2" id="selectedMateriau2"
+                        th:value="${ficheIntervention.materiauxOptions[2]}">
+                    <input type="hidden" name="newMateriau3" id="selectedMateriau3"
+                        th:value="${ficheIntervention.materiauxOptions[3]}">
+                    <input type="hidden" name="newMateriau4" id="selectedMateriau4"
+                        th:value="${ficheIntervention.materiauxOptions[4]}">
+                    <input type="hidden" name="newMateriau5" id="selectedMateriau5"
+                        th:value="${ficheIntervention.materiauxOptions[5]}">
 
 
 
 
 
 
-                </div>
+
+                    </div>
                 </fieldset>
                 <div class="espaceHor"></div>
                 <div class="espaceHor"></div>
