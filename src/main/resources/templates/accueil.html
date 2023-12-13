@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico">
@@ -95,9 +96,9 @@
             font-style: italic;
         }
 
-        
 
-        
+
+
 
         .button-container {
             display: flex;
@@ -232,40 +233,46 @@
         }
     </style>
 </head>
+
 <body>
     <div class="bandeau">
         <a href="accueil">
             <img src="/images/accueil.png" alt="Accueil" style="float: left;">
         </a>
-        
     </div>
 
-    </div>
     <div class="conteneur">
-        <div class="titre">Sélectionner un profil<img src="/images/son.png" alt="Lire le nom" onclick="lireTexte('Sélectionner un profil')" style="width: 20px; margin: 5px;"></div>
+        <div class="titre">Sélectionner un profil</div>
         <div class="carousel">
-        <div class="profils" id="carousel">
-            <!--Profil 1 -->
-            <div class="profil" onclick="flipProfile(this)">
-                <div class="front">
-                    <img src="/images/icone_profil.png" alt="Profil 1">
-                    <p class="nom">Nom 1 <img src="/images/son.png" alt="Lire le nom" onclick="lireTexte('Nom 1')" style="width: 20px;"></p>
-                    <p class="prenom">Prénom 1 <img src="/images/son.png" alt="Lire le prénom" onclick="lireTexte('Prénom 1')" style="width: 20px;"></p>
-                </div>
-                <div class="dos">
-                    <form th:action="@{/login}" th:object="${monFormulaire}" method="post">
-                        <fieldset>
-                            <!-- Thymeleaf + Spring Security error display -->
-                            <div th:if="${param.error}" class="alert alert-danger">
-                                Mot de passe invalide.
-                            </div>
-            
-                            <div th:if="${param.logout}" class="alert alert-success">
-                                Vous avez été déconnecté.
-                            </div>
-            
-                            
-            
+            <div class="profils" id="carousel">
+                <!-- Iteration sur chaque utilisateur -->
+                <div th:each="utilisateur : ${utilisateurs}" class="profil"
+                    th:onclick="'flipProfile(this, ' + ${utilisateur.id} + ')'" th:data-id="${utilisateur.id}">
+                    <div class="front">
+                        <img th:src="@{/images/icone_profil.png}" alt="Photo de profil"
+                            onerror="this.src='/images/default.png';">
+                        <p class="nom" th:text="${utilisateur.nom}">Nom de l'utilisateur</p>
+                        <p class="prenom" th:text="${utilisateur.prenom}">Prénom de l'utilisateur</p>
+                    </div>
+                    <div class="dos">
+                        <form th:action="@{/login}" th:object="${monFormulaire}" method="post">
+
+
+                            <input type="hidden" required id="username" name="username" class="hiddenLoginField"
+                                th:value="${utilisateur.login}"><br />
+
+                            <input type="hidden" class="hiddenPasswordField" name="password">
+
+                            <fieldset>
+                                <!-- Thymeleaf + Spring Security error display -->
+                                <div th:if="${param.error}" class="alert alert-danger">
+                                    Mot de passe invalide.
+                                </div>
+
+                                <div th:if="${param.logout}" class="alert alert-success">
+                                    Vous avez été déconnecté.
+                                </div>
+
                                 <!-- Intégration du modèle de déverrouillage -->
                                 <div class="unlock-container">
                                     <div class="pattern" id="pattern">
@@ -281,429 +288,243 @@
                                         <div class="dot" data-index="9"></div>
                                     </div>
                                     <div class="button-container">
-                                        <button class="annuler" onclick="annulerSelection(event)">Annuler<img src="/images/return.png" alt="retourne profil" style="width: 20px;" onclick="annulerSelection(event)"></button>
-                                        
+                                        <button class="annuler" onclick="annulerSelection(event)">Annuler<img
+                                                src="/images/return.png" alt="retourne profil" style="width: 20px;"
+                                                onclick="annulerSelection(event)"></button>
                                     </div>
                                     <a class="mdp-oublié" href="mdp_oublie">
                                         <p>Mot de passe oublié?</p>
                                     </a>
                                 </div>
-                                
-            
-                            </form>
-                            
-                        </fieldset>
-                    </form>
-                </div>
-                
-            </div>
-            <!--Profil 2 -->
-            <div class="profil" onclick="flipProfile(this)">
-                <div class="front">
-                    <img src="/images/icone_profil.png" alt="Profil 1">
-                    <p class="nom">Nom 2 <img src="/images/son.png" alt="Lire le nom" onclick="lireTexte('Nom 2')" style="width: 20px;"></p>
-                    <p class="prenom">Prénom 2 <img src="/images/son.png" alt="Lire le prénom" onclick="lireTexte('Prénom 2')" style="width: 20px;"></p>
-                </div>
-                <div class="dos">
-                    <form class="connexion" th:action="@{/login}" method="post">
-                        <fieldset>
-                            <!-- Thymeleaf + Spring Security error display -->
-                            <div th:if="${param.error}" class="alert alert-danger">
-                                Mot de passe invalide.
-                            </div>
-            
-                            <div th:if="${param.logout}" class="alert alert-success">
-                                Vous avez été déconnecté.
-                            </div>
-                            <!-- Intégration du modèle de déverrouillage -->
-                            <div class="unlock-container">
-                                <div class="pattern" id="pattern">
-                                    <!-- 9 points du modèle -->
-                                    <div class="dot" data-index="1"></div>
-                                    <div class="dot" data-index="2"></div>
-                                    <div class="dot" data-index="3"></div>
-                                    <div class="dot" data-index="4"></div>
-                                    <div class="dot" data-index="5"></div>
-                                    <div class="dot" data-index="6"></div>
-                                    <div class="dot" data-index="7"></div>
-                                    <div class="dot" data-index="8"></div>
-                                    <div class="dot" data-index="9"></div>
-                                </div>
                                 <div class="button-container">
-                                    <button class="annuler" onclick="annulerSelection(event)">Annuler<img src="/images/return.png" alt="retourne profil" style="width: 20px;" onclick="annulerSelection(event)"></button>
-                                    
+                                    <button type="submit" id="connecter" style="display: none;">Se connecter</button>
                                 </div>
-                                <a class="mdp-oublié" href="mdp_oublie">
-                                    <p>Mot de passe oublié?</p>
-                                </a>
-                            </div>
-                        </fieldset>
-    
-                    </form>
-
-                </div>
-                    
-                
-
-                
-            </div>
-            <!--Profil 3 -->
-            <div class="profil" onclick="flipProfile(this)">
-                <div class="front">
-                    <img src="/images/icone_profil.png" alt="Profil 1">
-                    <p class="nom">Nom 3 <img src="/images/son.png" alt="Lire le nom" onclick="lireTexte('Nom 3')" style="width: 20px;"></p>
-                    <p class="prenom">Prénom 3 <img src="/images/son.png" alt="Lire le prénom" onclick="lireTexte('Prénom 3')" style="width: 20px;"></p>
-                </div>
-                <div class="dos">
-                    <form class="connexion" th:action="@{/login}" method="post">
-                        <fieldset>
-                            <!-- Thymeleaf + Spring Security error display -->
-                            <div th:if="${param.error}" class="alert alert-danger">
-                                Mot de passe invalide.
-                            </div>
-            
-                            <div th:if="${param.logout}" class="alert alert-success">
-                                Vous avez été déconnecté.
-                            </div>
-                            <!-- Intégration du modèle de déverrouillage -->
-                            <div class="unlock-container">
-                                <div class="pattern" id="pattern">
-                                    <!-- 9 points du modèle -->
-                                    <div class="dot" data-index="1"></div>
-                                    <div class="dot" data-index="2"></div>
-                                    <div class="dot" data-index="3"></div>
-                                    <div class="dot" data-index="4"></div>
-                                    <div class="dot" data-index="5"></div>
-                                    <div class="dot" data-index="6"></div>
-                                    <div class="dot" data-index="7"></div>
-                                    <div class="dot" data-index="8"></div>
-                                    <div class="dot" data-index="9"></div>
-                                </div>
-                                <div class="button-container">
-                                    <button class="annuler" onclick="annulerSelection(event)">Annuler<img src="/images/return.png" alt="retourne profil" style="width: 20px;" onclick="annulerSelection(event)"></button>
-                                    
-                                </div>
-                                <a class="mdp-oublié" href="mdp_oublie">
-                                    <p>Mot de passe oublié?</p>
-                                </a>
-                            </div>
-                        </fieldset>
-    
-                    </form>
-                </div>
-            </div>
-            <!--Profil 4 -->
-            <div class="profil" onclick="flipProfile(this)">
-                <div class="front">    
-                    <img src="/images/icone_profil.png" alt="Profil 1">
-                    <p class="nom">Nom 4 <img src="/images/son.png" alt="Lire le nom" onclick="lireTexte('Nom 4')" style="width: 20px;"></p>
-                    <p class="prenom">Prénom 4 <img src="/images/son.png" alt="Lire le prénom" onclick="lireTexte('Prénom 4')" style="width: 20px;"></p>
-                </div>
-                <div class="dos">
-                    <form class="connexion" th:action="@{/login}" method="post">
-                        <fieldset>
-                            <!-- Thymeleaf + Spring Security error display -->
-                            <div th:if="${param.error}" class="alert alert-danger">
-                                Mot de passe invalide.
-                            </div>
-            
-                            <div th:if="${param.logout}" class="alert alert-success">
-                                Vous avez été déconnecté.
-                            </div>
-                            <!-- Intégration du modèle de déverrouillage -->
-                            <div class="unlock-container">
-                                <div class="pattern" id="pattern">
-                                    <!-- 9 points du modèle -->
-                                    <div class="dot" data-index="1"></div>
-                                    <div class="dot" data-index="2"></div>
-                                    <div class="dot" data-index="3"></div>
-                                    <div class="dot" data-index="4"></div>
-                                    <div class="dot" data-index="5"></div>
-                                    <div class="dot" data-index="6"></div>
-                                    <div class="dot" data-index="7"></div>
-                                    <div class="dot" data-index="8"></div>
-                                    <div class="dot" data-index="9"></div>
-                                </div>
-                                <div class="button-container">
-                                    <button class="annuler" onclick="annulerSelection(event)">Annuler<img src="/images/return.png" alt="retourne profil" style="width: 20px;" onclick="annulerSelection(event)"></button>
-                                    
-                                </div>
-                                <a class="mdp-oublié" href="mdp_oublie">
-                                    <p>Mot de passe oublié?</p>
-                                </a>
-                            </div>
-                        </fieldset>
-    
-                    </form>
-
-                </div>
-            </div>
-            <!--Profil 5 -->
-            <div class="profil" onclick="flipProfile(this)">
-                <div class="front">
-                    <img src="/images/icone_profil.png" alt="Profil 1">
-                    <p class="nom">Nom 5 <img src="/images/son.png" alt="Lire le nom" onclick="lireTexte('Nom 5')" style="width: 20px;"></p>
-                    <p class="prenom">Prénom 5 <img src="/images/son.png" alt="Lire le prénom" onclick="lireTexte('Prénom 5')" style="width: 20px;"></p>    
-                </div>
-                <div class="dos">
-                    <form class="connexion" th:action="@{/login}" method="post">
-                        <fieldset>
-                            <!-- Thymeleaf + Spring Security error display -->
-                            <div th:if="${param.error}" class="alert alert-danger">
-                                Mot de passe invalide.
-                            </div>
-            
-                            <div th:if="${param.logout}" class="alert alert-success">
-                                Vous avez été déconnecté.
-                            </div>
-                            <!-- Intégration du modèle de déverrouillage -->
-                            <div class="unlock-container">
-                                <div class="pattern" id="pattern">
-                                    <!-- 9 points du modèle -->
-                                    <div class="dot" data-index="1"></div>
-                                    <div class="dot" data-index="2"></div>
-                                    <div class="dot" data-index="3"></div>
-                                    <div class="dot" data-index="4"></div>
-                                    <div class="dot" data-index="5"></div>
-                                    <div class="dot" data-index="6"></div>
-                                    <div class="dot" data-index="7"></div>
-                                    <div class="dot" data-index="8"></div>
-                                    <div class="dot" data-index="9"></div>
-                                </div>
-                                <div class="button-container">
-                                    <button class="annuler" onclick="annulerSelection(event)">Annuler<img src="/images/return.png" alt="retourne profil" style="width: 20px;" onclick="annulerSelection(event)"></button>
-                                    
-                                </div>
-                                <a class="mdp-oublié" href="mdp_oublie">
-                                    <p>Mot de passe oublié?</p>
-                                </a>
-                            </div>
-                        </fieldset>
-    
-                    </form>
-
-                </div>
-            </div>
-            <!--Profil 6 -->
-            <div class="profil" onclick="flipProfile(this)">
-                <div class="front">
-                    <img src="/images/icone_profil.png" alt="Profil 1">
-                    <p class="nom">Nom 6 <img src="/images/son.png" alt="Lire le nom" onclick="lireTexte('Nom 6')" style="width: 20px;"></p>
-                    <p class="prenom">Prénom 6 <img src="/images/son.png" alt="Lire le prénom" onclick="lireTexte('Prénom 6')" style="width: 20px;"></p>
-                </div>
-                <div class="dos">
-                    <form class="connexion" th:action="@{/login}" method="post">
-                        <fieldset>
-                            <!-- Thymeleaf + Spring Security error display -->
-                            <div th:if="${param.error}" class="alert alert-danger">
-                                Mot de passe invalide.
-                            </div>
-            
-                            <div th:if="${param.logout}" class="alert alert-success">
-                                Vous avez été déconnecté.
-                            </div>
-                            <!-- Intégration du modèle de déverrouillage -->
-                            <div class="unlock-container">
-                                <div class="pattern" id="pattern">
-                                    <!-- 9 points du modèle -->
-                                    <div class="dot" data-index="1"></div>
-                                    <div class="dot" data-index="2"></div>
-                                    <div class="dot" data-index="3"></div>
-                                    <div class="dot" data-index="4"></div>
-                                    <div class="dot" data-index="5"></div>
-                                    <div class="dot" data-index="6"></div>
-                                    <div class="dot" data-index="7"></div>
-                                    <div class="dot" data-index="8"></div>
-                                    <div class="dot" data-index="9"></div>
-                                </div>
-                                
-                                <div class="button-container">
-                                    <button class="annuler" onclick="annulerSelection(event)">Annu<img src="/images/return.png" alt="retourne profil" style="width: 20px;" onclick="annulerSelection(event)"></button>
-                                   
-                                </div>
-                                <a class="mdp-oublié" href="mdp_oublie">
-                                        <p>Mot de passe oublié?</p>
-                                    </a>
-                            </div>
-                        </fieldset>
-    
-                    </form>
-                            
-                </div>
-            </div>
-             <!--Connexion admin-->
-            <div class="profil">
-            <img src="/images/icone_profil.png" alt="Autre">
-            <form th:action="@{/login}" th:object="${monFormulaire}" method="post">
-                <fieldset>
-                    <!-- Thymeleaf + Spring Security error display -->
-                    <div th:if="${error}" class="alert alert-danger">
-                        Mot de passe invalide.
+                            </fieldset>
+                        </form>
                     </div>
-                    
-                    <div th:if="${param.logout}" class="alert alert-success">
-                        Vous avez été déconnecté.
-                    </div>
-                <label class="login-title"><b>Nom d'utilisateur :</b></label><br/>
-                <input type="text" placeholder="Nom d'utilisateur" required id="username"  name="username"><br/>  
-                <label class="login-title"><b>Mot de passe :</b></label><br/>
-                <input type="password" placeholder="Mot de passe" required id="password" name="password"><br/>
-                <a class="mdp-oublié" href="mdp_oublie">
-                    <p>Mot de passe oublié?</p>
-                </a>
-                <input type="reset" value="Annuler">
-                <input type="submit" value="Connexion">
-                </fieldset>
-            </form>
-            
-        </div>
-        
-        </div>
-        </div>
-        <div class="button-container">
-            <button id="connecter" style="display: none;">Se connecter</button>
-            
+                </div>
+                <div class="profil">
+                    <img src="/images/icone_profil.png" alt="Autre">
+                    <form th:action="@{/login}" th:object="${monFormulaire}" method="post">
+                        <fieldset>
+                            <!-- Thymeleaf + Spring Security error display -->
+                            <div th:if="${error}" class="alert alert-danger">
+                                Mot de passe invalide.
+                            </div>
+
+                            <div th:if="${param.logout}" class="alert alert-success">
+                                Vous avez été déconnecté.
+                            </div>
+                            <label class="login-title"><b>Nom d'utilisateur :</b></label><br />
+                            <input type="text" placeholder="Nom d'utilisateur" required id="username"
+                                name="username"><br />
+                            <label class="login-title"><b>Mot de passe :</b></label><br />
+                            <input type="password" placeholder="Mot de passe" required id="password"
+                                name="password"><br />
+                            <a class="mdp-oublié" href="mdp_oublie">
+                                <p>Mot de passe oublié?</p>
+                            </a>
+                            <input type="reset" value="Annuler">
+                            <input type="submit" value="Connexion">
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
         </div>
 
-         
-    </div>
-    <script>
-        let flippedProfiles = [];
-        const carousel = document.getElementById('carousel');
-        const connectButton = document.getElementById('connecter');
+        <script>
+            let flippedProfiles = [];
+            const carousel = document.getElementById('carousel');
+            const connectButton = document.getElementById('connecter');
 
-        let currentPosition = 0;
-        const itemWidth = 33.33;
-        const itemsInView = 2;
-        const maxPosition = -itemWidth * (6 - itemsInView);
+            let currentPosition = 0;
+            const itemWidth = 33.33;
+            const itemsInView = 2;
+            const maxPosition = -itemWidth * (6 - itemsInView);
 
-        let selectedProfile = null;
+            let selectedProfile = null;
+            let selectedUserId = null;
 
-        
-        carousel.addEventListener('click', (event) => {
-            const profile = event.target.closest('.profil');
-            if (profile) {
-                selectProfile(profile);
+
+            carousel.addEventListener('click', (event) => {
+                const profile = event.target.closest('.profil');
+                if (profile) {
+                    selectProfile(profile);
+                }
+            });
+
+            connectButton.addEventListener('click', () => {
+                if (selectedProfile) {
+                    window.location.href = 'presentation';
+                }
+            });
+
+            function lireTexte(texte) {
+                const syntheseVocale = window.speechSynthesis;
+                const message = new SpeechSynthesisUtterance(texte);
+                syntheseVocale.speak(message);
             }
-        });
-
-        connectButton.addEventListener('click', () => {
-            if (selectedProfile) {
-                window.location.href = 'select_fiche';
-            }
-        });
-
-        function lireTexte(texte) {
-            const syntheseVocale = window.speechSynthesis;
-            const message = new SpeechSynthesisUtterance(texte);
-            syntheseVocale.speak(message);
-        }
-        function flipProfile(profile) {
-            if (!profile.classList.contains('flipped')) {
-                profile.classList.add('flip', 'flipped');
-                if (!flippedProfiles.includes(profile)) {
-                    flippedProfiles.push(profile);
+            function flipProfile(profile) {
+                if (!profile.classList.contains('flipped')) {
+                    profile.classList.add('flip', 'flipped');
+                    if (!flippedProfiles.includes(profile)) {
+                        flippedProfiles.push(profile);
+                    }
                 }
             }
-        }
-        function selectProfile(profile) {
-        if (selectedProfile === profile || profile.classList.contains('flipped')) {
-            deselectProfile();
-        } else {
-            if (selectedProfile) {
-                selectedProfile.classList.remove('selected');
-            }
-            profile.classList.add('selected');
-            selectedProfile = profile;
-            connectButton.style.display = 'block';
-        }
-        
-        const otherProfiles = document.querySelectorAll('.profil');
-        otherProfiles.forEach((otherProfile) => {
-            if (otherProfile !== profile && !otherProfile.classList.contains('flipped')) {
-                otherProfile.removeEventListener('click', flipProfile);
-            }
-        });
-    }
+            function selectProfile(profile, userId) {
+                selectedProfile = profile
+                if (selectedProfile === profile || profile.classList.contains('flipped')) {
+                    deselectProfile();
+                } else {
+                    if (selectedProfile) {
+                        selectedProfile.classList.remove('selected');
+                    }
+                    profile.classList.add('selected');
+                    selectedProfile = profile;
+                    selectedUserId = selectedUserId;
+                    connectButton.style.display = 'block';
+                }
 
-    function annulerSelection(event) {
-    // Désélectionner tous les ronds
-    const dots = document.querySelectorAll(".dot");
-    dots.forEach(dot => {
-        dot.classList.remove("active");
-    });
-
-    // Masquer le bouton "connexion"
-    document.getElementById('connecter').style.display = 'none';
-
-    // Retirer la classe "flipped" du profil actuellement sélectionné
-    if (selectedProfile && selectedProfile.classList.contains('flipped')) {
-        selectedProfile.classList.remove('flipped');
-    }
-
-    // Empêcher le rechargement de la page
-    event.preventDefault();
-}
-
-function annulerSelection(event) {
-    // Réinitialiser le tableau des ronds sélectionnés
-    selectedDots = [];
-
-    // Désélectionner tous les ronds
-    const dots = document.querySelectorAll(".dot");
-    dots.forEach(dot => {
-        dot.classList.remove("active");
-    });
-
-    // Masquer le bouton "connexion"
-    document.getElementById('connecter').style.display = 'none';
-
-    // Retirer la classe "flipped" du profil actuellement sélectionné
-    if (selectedProfile && selectedProfile.classList.contains('flipped')) {
-        selectedProfile.classList.remove('flipped');
-    }
-}
-
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    const pattern = document.getElementById("pattern");
-    const dots = document.querySelectorAll(".dot");
-    let selectedDots = [];
-
-    dots.forEach(dot => {
-        dot.addEventListener("click", () => {
-            // Vérifier si l'utilisateur a déjà sélectionné 4 ronds
-            if (selectedDots.length === 4) {
-                return;  // Sortir de la fonction si 4 ronds sont déjà sélectionnés
+                const otherProfiles = document.querySelectorAll('.profil');
+                otherProfiles.forEach((otherProfile) => {
+                    if (otherProfile !== profile && !otherProfile.classList.contains('flipped')) {
+                        otherProfile.removeEventListener('click', flipProfile);
+                    }
+                });
             }
 
-            const index = dot.getAttribute("data-index");
-
-            if (!dot.classList.contains("active")) {
-                // Cocher le rond
-                dot.classList.add("active");
-                selectedDots.push(index);
-            } else {
-                // Désactiver le décochage
-                dot.classList.add("active");
+            function deselectProfile() {
+                if (selectedProfile) {
+                    selectedProfile.classList.remove('selected');
+                    selectedProfile.classList.remove('flipped');
+                    selectedProfile = null;
+                }
             }
 
-            // Votre logique ici pour traiter la séquence sélectionnée
-            console.log("Séquence actuelle : " + selectedDots.join("->"));
 
-            // Vérifier si l'utilisateur a coché 4 ronds
-            if (selectedDots.length === 4) {
-                // Afficher le bouton "connexion"
-                document.getElementById('connecter').style.display = 'block';
+            function annulerSelection(event) {
+                // Réinitialiser le tableau des ronds sélectionnés
+                selectedDots = [];
+
+                // Désélectionner tous les ronds
+                const dots = document.querySelectorAll(".dot");
+                dots.forEach(dot => {
+                    dot.classList.remove("active");
+                });
+
+                // Masquer le bouton "connexion"
+                document.getElementById('connecter').style.display = 'none';
+
+                // Retirer la classe "flipped" du profil actuellement sélectionné
+                if (selectedProfile && selectedProfile.classList.contains('flipped')) {
+                    selectedProfile.classList.remove('flipped');
+                }
             }
-        });
-    });
-});
 
 
 
-    </script>
-    
+            document.addEventListener("DOMContentLoaded", function () {
+                const dots = document.querySelectorAll(".dot");
+                let selectedDots = [];
+                let selectedProfile = null;
+                let selectedUserId = null;
+
+                // Gestionnaire de clic pour les points du modèle de verrouillage
+                dots.forEach(dot => {
+                    dot.addEventListener("click", function () {
+                        const index = dot.getAttribute("data-index");
+                        if (selectedDots.length < 4 || dot.classList.contains("active")) {
+                            toggleDot(dot, index);
+                        }
+
+                        console.log("Séquence actuelle : " + selectedDots.join("->"));
+
+                        if (selectedDots.length === 4) {
+                            let generatedPassword = selectedDots.join("");
+                            console.log("Mot de passe généré : " + generatedPassword);
+                            updatePassword(generatedPassword);
+                        }
+                    });
+                });
+
+                // Toggle the state of a dot
+                function toggleDot(dot, index) {
+                    if (dot.classList.contains("active")) {
+                        dot.classList.remove("active");
+                        selectedDots.splice(selectedDots.indexOf(index), 1);
+                    } else {
+                        dot.classList.add("active");
+                        selectedDots.push(index);
+                    }
+                }
+
+                // Sélection d'un profil
+                const profils = document.querySelectorAll(".profil");
+                profils.forEach(profil => {
+                    profil.addEventListener("click", function () {
+                        if (selectedProfile !== this) {
+                            selectedProfile = this;
+                            selectedUserId = this.getAttribute('data-id');
+                            console.log("Profil sélectionné avec ID : " + selectedUserId);
+                            resetDots();
+                        }
+                    });
+                });
+
+                function resetDots() {
+                    selectedDots = [];
+                    dots.forEach(dot => dot.classList.remove('active'));
+                    console.log("Points réinitialisés.");
+                }
+
+                function updatePassword(password) {
+                    if (selectedProfile) {
+                        let hiddenPasswordField = selectedProfile.querySelector('.hiddenPasswordField');
+                        if (hiddenPasswordField) {
+                            hiddenPasswordField.value = password;
+                            console.log("Mot de passe mis à jour pour le profil " + selectedUserId);
+                            showConnectButton();
+                        } else {
+                            console.error("Champ caché non trouvé dans le profil sélectionné.");
+                        }
+                    }
+                }
+
+                function showConnectButton() {
+                    if (selectedProfile) {
+                        // Récupérez le formulaire
+                        const form = selectedProfile.querySelector('form');
+                        if (form) {
+                            // Créez un objet FormData pour récupérer les données du formulaire
+                            const formData = new FormData(form);
+
+                            // Convertissez l'objet FormData en une chaîne de caractères lisible
+                            const formObject = {};
+                            formData.forEach(function (value, key) {
+                                formObject[key] = value;
+                            });
+                            const formDataString = JSON.stringify(formObject, null, 2);
+
+                            // Affichez les données du formulaire dans une alerte
+                            alert("Données du formulaire :\n" + formDataString);
+
+                            // Affichez ensuite le bouton "Se connecter"
+                            const connectButton = selectedProfile.querySelector('#connecter');
+                            if (connectButton) {
+                                connectButton.style.display = 'block';
+                                connectButton.addEventListener('click', function () {
+                                    form.submit(); // Soumettre le formulaire
+                                });
+                            }
+                        }
+                    }
+                }
+
+            });
+
+
+        </script>
 </body>
+
 </html>

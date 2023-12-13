@@ -50,5 +50,16 @@ public class UtilisateurServiceImpl implements UtilisateurService{
         return utilisateurRepository.findById(id).orElse(null);
     }
 
+    @Override
+    public void modifierMotDePasse(Long id, String nouveauMotDePasse) {
+        Utilisateur utilisateur = utilisateurRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'ID : " + id));
+
+        // Mettez à jour le mot de passe de l'utilisateur
+        utilisateur.setMdp(nouveauMotDePasse);
+
+        // Enregistrez les modifications dans la base de données
+        utilisateurRepository.save(utilisateur);
+    }
 
 }

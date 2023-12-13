@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta charset="UTF-8" />
+      <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Modifier Apprenti</title>
+      <style>
+        body {
+          margin: 0;
+          padding: 0;
+          font-family: Arial, sans-serif;
+          background-color: #f0f0f0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          min-height: 100vh;
+      }
+
+            .bandeau {
+                background-color: #bbdefb;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 80px;
+                border-bottom: 1px solid black;
+            }
+
+            .bandeau img {
+                max-width: 60px;
+                height: auto;
+            }
+
+            .bandeau h1 {
+                color: black;
+                margin: 0;
+            }
+
+            .apprenti-form {
+                width: 80%;
+                max-width: 400px;
+                margin: 20px auto;
+                background-color: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .apprenti-form label {
+                display: block;
+                margin-top: 10px;
+            }
+
+            .apprenti-form input,
+            .apprenti-form select,
+            .apprenti-form textarea {
+                width: 100%;
+                padding: 10px;
+                margin-top: 5px;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            .apprenti-form textarea {
+                resize: none;
+            }
+
+            .apprenti-form input[type="submit"] {
+                background-color: #4caf50;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-top: 10px;
+            }
+
+            .apprenti-form input[type="submit"]:hover {
+                background-color: #45a049;
+            }
+
+            .apprenti-form input[type="button"] {
+                background-color: #e70f0f;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-top: 10px;
+            }
+
+            /* Style pour les messages d'erreur */
+            #errorMessages {
+                color: red;
+                margin-top: 10px;
+            }
+
+            .preview-image {
+                max-width: 100%;
+                height: auto;
+                margin-top: 10px;
+            }
+            #mdp {
+              background-color: #72bb53;
+              border-radius: 10px;
+              color: black;
+              border: none;
+              padding: 10px 20px;
+              cursor: pointer;
+            }
+
+            .boutonmdp{
+              position: left;
+            }
+          
+        </style>
+        
+    </head>
+
+<body>
+
+  <div class="bandeau">
+    <a href="/log_out">
+      <img src="/images/porte.png" alt="logout" style="float: left" />
+    </a>
+    <a href="/archive">
+        <img src="/images/archive.png" alt="archive" style="margin-left: 10px" />
+    </a>
+
+    <div class="bandeau centered">
+        <a href="/accueil_admin">
+            <img src="/images/accueil.png" alt="accueil"/>
+        </a>
+    </div>
+    <a
+      href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
+    >
+      <img
+        src="/images/aide.png"
+        alt="aide"
+        style="cursor: pointer; margin-right: 10px"
+      />
+    </a>
+  </div>
+
+
+
+    <h2>Modifier un utilisateur</h2>
+
+    <!-- Afficher un message de succès si l'utilisateur a été modifier avec succès -->
+    <div th:if="${success}">
+        <p style="color: green;">Utilisateur modifié avec succès!</p>
+    </div>
+    <!-- Formulaire de modif d'utilisateur -->
+    <form class="formulaire" th:action="@{/utilisateur/modifier/{id}(id=${utilisateur.id})}" th:object="${utilisateur}" method="post">
+      <!-- ... autres champs du formulaire ... -->
+        <div class="form-row">
+            <div class="col-md-6 form-group">
+                <label for="nom">Nom:</label>
+                <input type="text" id="nom" name="nom" th:field="*{nom}" required>
+            </div>
+
+            <div class="col-md-6 form-group">
+                <label for="prenom">Prénom:</label>
+                <input type="text" id="prenom" name="prenom" th:field="*{prenom}" required>
+            </div>
+
+            <div class="col-md-6 form-group">
+                <label for="login">Login:</label>
+                <input type="text" id="login" name="login" th:field="*{login}" required>
+            </div>
+
+            
+            <input type="hidden" id="motdepasse" name="motdepasse" th:value="${utilisateur.mdp}"    th:field="*{mdp}" required>
+            
+
+            <div class="col-md-6 form-group">
+                <label for="photo">Sélectionner une photo:</label>
+                <input type="file" id="photo" name="photo" onchange="encodeImageToBase64()" accept="image/*">
+            </div>
+
+            <div class="col-md-6 form-group">
+                <input hidden="true" type="text" id="photoBase64" name="photoBase64" th:field="*{photoBase64}">
+            </div>
+            
+            <div class="col-md-6 form-group">
+            <label for="role">Role:</label>
+            <select id="role" name="role" th:field="*{role}" required>
+                <option value="ADMIN">Admin</option>
+                <option value="SUPERADMIN">Super Admin</option>
+                <option value="USER">User</option>
+            </select>
+        </div>
+            <div class="col-md-6 form-group">
+            <label for="niveau">Niveau:</label>
+            <select class="form-control" th:field="*{niveau}" id="niveau">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+        </div>
+          <button type="submit">Modifier Utilisateur</button>
+      </div>
+    </form>
+    <div class="boutonmdp">
+      <button id="mdp" th:attr="data-userid=${utilisateur.id}">Modifier Mot de passe</button>
+    </div>
+    
+    <script>
+      function encodeImageToBase64() {
+        var input = document.getElementById('photo'); // Change 'photo' to the actual ID of your file input
+        var file = input.files[0];
+
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var base64Image = e.target.result;
+                document.getElementById('photoBase64').value = base64Image;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    const mdpButton = document.getElementById("mdp");
+    mdpButton.addEventListener("click", () => {
+      const userId = document.getElementById("mdp").getAttribute("data-userid");
+
+
+        // Utilisez la syntaxe @{/} pour construire l'URL avec Thymeleaf
+        window.location.href = "/mdpmodif/" + userId;
+
+    });
+    
+    
+  </script>
+</body>
+
+</html>

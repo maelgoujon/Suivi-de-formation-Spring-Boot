@@ -84,7 +84,7 @@
         align-items: center;
         justify-content: center;
         margin-top: 20px;
-        height: 100px; /* Ajustez la hauteur selon vos besoins */
+        height: auto; /* Ajustez la hauteur selon vos besoins */
         position: relative;
       }
 
@@ -162,10 +162,13 @@
   </head>
   <body>
     <div class="bandeau">
+      <a href="log_out">
+        <img src="/images/porte.png" alt="logout" style="float: left" />
+      </a>
       
       <div class="bandeau centered">
-        <a href="accueil">
-        <img src="/images/accueil.png" alt="Accueil" style="float: left" />
+        <a href="archive">
+          <img src="/images/archive.png" alt="archive" style="margin-left: 10px" />
         </a>
       </div>
       <a
@@ -183,19 +186,16 @@
       <div class="carousel">
         <div class="profils" id="carousel">
            <!-- Iteration sur chaque utilisateur -->
-           <div th:each="utilisateur : ${utilisateurs}" class="profil"
-           th:onclick="'flipProfile(this, ' + ${utilisateur.id} + ')'" th:data-id="${utilisateur.id}">
+           <div th:each="utilisateur : ${utilisateurs}" class="profil" th:data-id="${utilisateur.id}">
             <img src="/images/icone_profil.png" alt="Profil 1" />
             <p class="nom" th:text="${utilisateur.nom}">Nom de l'utilisateur</p>
             <p class="prenom" th:text="${utilisateur.prenom}">Prénom de l'utilisateur</p>
-          </div>  
+          </div>
         </div>
         
       </div>
       <div class="button-container">
-          <button id="profil_apprenti" style="display: none">
-            Voir son profil
-          </button>
+          
         </div>
       <!-- Ajout de l'image cliquable et du texte "Ajouter un apprenti" -->
       <div class="ajouter">
@@ -207,6 +207,9 @@
             style="cursor: pointer"
           />
         </a>
+        <button id="profil_apprenti" style="display: none">
+          Voir son profil
+        </button>
         <p>Ajouter un apprenti</p>
       </div>
     </div>
@@ -254,9 +257,13 @@
       });
 
       connectButton.addEventListener("click", () => {
-        if (selectedProfile) {
-          window.location.href = "profil_apprenti";
-        }
+          if (selectedProfile) {
+              // Récupérez l'id du profil sélectionné
+              const userId = selectedProfile.getAttribute("data-id");
+
+              // Redirigez vers la page "profil_apprenti" avec l'id selectionné
+              window.location.href = "profil_apprenti/" + userId;
+          }
       });
 
       let touchStartX = 0;

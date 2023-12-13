@@ -16,6 +16,8 @@ public interface UtilisateurService {
 
     public Utilisateur findById(Long id);
 
+    // Ajoutez cette méthode pour modifier le mot de passe
+    void modifierMotDePasse(Long id, String nouveauMotDePasse);
 
     
 }

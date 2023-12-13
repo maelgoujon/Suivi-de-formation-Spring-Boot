@@ -28,7 +28,7 @@ import com.webapp.ytb.webappytp.repository.FicheRepository;
 import com.webapp.ytb.webappytp.service.FicheService;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
-
+import com.webapp.ytb.webappytp.service.UtilisateurService;
 @Controller
 public class HomeController {
 
@@ -58,12 +58,16 @@ public class HomeController {
 
     // Accueils
     @GetMapping("/")
-    public String home() {
+    public String home(Model model) {
+        List<Utilisateur> utilisateurs = userServ.lire();
+        model.addAttribute("utilisateurs", utilisateurs);
         return "accueil";
     }
 
     @GetMapping("/accueil")
-    public String redirectToAccueil() {
+    public String redirectToAccueil(Model model) {
+        List<Utilisateur> utilisateurs = userServ.lire();
+        model.addAttribute("utilisateurs", utilisateurs);
         return "accueil";
     }
 
@@ -78,11 +82,35 @@ public class HomeController {
         return "redirect:/accueil";
     }
 
+    @GetMapping("/profil_apprenti/{id}")
+    public String redirectToprofil(@PathVariable Long id, Model model) {
+        Utilisateur utilisateur = userServ.findById(id);
+        model.addAttribute("utilisateur", utilisateur);
+
+        // Retournez le nom de la vue (profil_apprenti)
+        return "profil_apprenti";
+    }
+
+    @GetMapping("/modif/{id}")
+    public String modif(@PathVariable Long id, Model model) {
+        Utilisateur utilisateur = userServ.findById(id);
+        model.addAttribute("utilisateur", utilisateur);
+        return "modif";
+    }
+
+    @GetMapping("/mdpmodif/{id}")
+    public String mdpmodif(@PathVariable Long id, Model model) {
+        Utilisateur utilisateur = userServ.findById(id);
+        model.addAttribute("utilisateur", utilisateur);
+        return "mdpmodif";
+    }
+    
     // deconnection
     @GetMapping("/log_out")
     public String log_out() {
         return "log_out";
     }
+    
 
     @GetMapping("/select_fiche")
     public String select_fiche() {
