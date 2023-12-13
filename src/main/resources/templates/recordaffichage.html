@@ -9,18 +9,18 @@
 
     <audio id="audioPlayer" controls></audio>
 
-    <script>
-        window.addEventListener('DOMContentLoaded', (event) => {
-            const audioPlayer = document.getElementById('audioPlayer');
-            const ficheId = 1; // ID de la fiche d'intervention pour laquelle vous voulez récupérer l'audio
+    <!-- Utilisez Thymeleaf pour obtenir l'ID de la fiche d'intervention depuis le modèle -->
+    <script th:inline="javascript">
+        /* Récupérez l'ID de la fiche d'intervention depuis le modèle */
+        var ficheId = /*[[${ficheIntervention.id}]]*/ '';
 
-            // Construire l'URL pour récupérer l'audio
-            const audioUrl = `/fiche/evaluation/${ficheId}`;
+        // Construire l'URL pour récupérer l'audio en utilisant l'ID de la fiche
+        var audioUrl = `/fiche/evaluation/${ficheId}`;
 
-            // Définir la source et charger l'audio
-            audioPlayer.src = audioUrl;
-            audioPlayer.load();
-        });
+        // Définir la source et charger l'audio
+        var audioPlayer = document.getElementById('audioPlayer');
+        audioPlayer.src = audioUrl;
+        audioPlayer.load();
     </script>
 </body>
 </html>
