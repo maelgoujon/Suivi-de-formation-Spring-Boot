@@ -1,5 +1,22 @@
 body {
-    background-color: #425775;
+    background-color: #2b2d42;
+}
+
+/* Sélecteur pour tous les boutons radio dans le formulaire */
+input[type="radio"] {
+    width: 10%;
+}
+
+.submit {
+    width: 100%;
+    background-color: #ff7474;
+    color: #2b2d42;
+    border: none;
+    border-radius: 12px;
+    padding: 1em;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 div,
@@ -17,7 +34,7 @@ form {
 
 .test {
     padding: 3px;
-    color: rgb(255, 0, 0);
+    color: rgb(255, 255, 255);
 }
 
 .colonne,
@@ -28,7 +45,7 @@ form {
 legend,
 .titre,
 label {
-    color: wheat;
+    color: #ff7474;
 }
 
 .listeCheckbox {
@@ -48,7 +65,7 @@ label {
 
 .max-width-select {
     margin-right: 10px; /* Ajustez la marge selon vos besoins */
-    background-color: rgb(179, 179, 179) ;
+    
 }
 
 .ligneSelectMateriaux {
@@ -77,7 +94,8 @@ main {
 
 .border,
 fieldset {
-    border: 3px solid #87BB34;
+    border-radius: 12px;
+    border: 3px solid #a3cef1;
     padding: 2em;
     height: 100%;
 }
@@ -114,11 +132,11 @@ textarea {
     }
 
     fieldset {
-        padding: 0.1em 0;
+       /* padding: 0.1em 0;*/
     }
 
     .demi {
-        flex: 0.25;
+        flex: 0.3;
     }
 
     .border {

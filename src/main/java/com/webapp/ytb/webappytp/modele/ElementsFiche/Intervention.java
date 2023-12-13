@@ -1,6 +1,6 @@
 package com.webapp.ytb.webappytp.modele.ElementsFiche;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -15,7 +15,7 @@ public class Intervention {
 
     @Column
     //@NotBlank(message = "Le champ 'DateIntervention' est obligatoire.")
-    private Date DateIntervention;
+    private LocalDate DateIntervention;
 
     @Column
     //@NotBlank(message = "Le champ 'DureeIntervention' est obligatoire.")

@@ -106,13 +106,14 @@ public class FicheIntervention {
         return demande.getDegreUrgence();
     }
 
-    public Date getDateIntervention() {
+    public LocalDate getDateIntervention() {
         return intervention.getDateIntervention();
     }
 
     public int getDureeIntervention() {
         return intervention.getDureeIntervention();
     }
+
 
 
 

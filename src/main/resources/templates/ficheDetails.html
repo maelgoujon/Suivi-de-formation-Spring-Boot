@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Fiche Intervention</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css" />
+</head>
+
+
+<body>
+
+    <body class="colonne centre">
+        <main class="colonne">
+            <div class="titre border">FICHE D'INTERVENTION N°<span th:text="${ficheIntervention.id}"></span></div>
+            <form method="post" th:action="@{/updateFiche/{id}(id=${ficheIntervention.id})}"
+                th:object="${ficheIntervention}">
+                <input type="hidden" th:name="${'id'}" th:value="${ficheIntervention.id}" />
+
+                <div class="espaceHor"></div>
+                <fieldset>
+                    <legend>Intervenant</legend>
+                    <div>
+                        <div class="titre">Nom de l'intervenant</div>
+                        <div class="test"> <span th:text="${ficheIntervention.utilisateur.nom}"></span></div>
+                        <div class="titre">Prénom de l'intervenant</div>
+                        <div class="test"> <span th:text="${ficheIntervention.utilisateur.prenom}"></span></div>
+                    </div>
+                </fieldset>
+                <div class="espaceHor"></div>
+                <fieldset>
+                    <legend>Demande</legend>
+                    <div>
+                        <div class="titre">Nom du demandeur</div>
+                        <div class="test">
+                            <input type="text" id="newNomDemandeur" name="newNomDemandeur"
+                                th:value="${ficheIntervention.nomDemandeur}" />
+                        </div>
+                        <div class="titre">Degré d'urgence</div>
+                        <div class="test">
+                            <input type="text" id="newDegreUrgence" name="newDegreUrgence"
+                                th:value="${ficheIntervention.degreUrgence}" />
+                        </div>
+                    </div>
+
+                    <div class="espaceHor"></div>
+                    <div>
+                        <div class="titre">Date de la demande</div>
+                        <div class="test">
+                            <input type="text" id="newDateDemande" name="newDateDemande"
+                                th:value="${#temporals.format(ficheIntervention.dateDemande, 'dd/MM/yyyy')}" />
+                        </div>
+
+                        <div class="titre">Localisation</div>
+                        <div class="test">
+                            <input type="text" id="newLocalisation" name="newLocalisation"
+                                th:value="${ficheIntervention.localisation}" />
+                        </div>
+
+                    </div>
+                    <div class="espaceHor"></div>
+                    <div class="colonnePrint">
+                        <div class="titre demi">Description de la demande</div>
+
+                        <div class="test">
+                            <input type="text" id="newDescription" name="newDescription"
+                                th:value="${ficheIntervention.demande.Description}" />
+                        </div>
+
+                    </div>
+                </fieldset>
+
+
+                <div class="espaceHor"></div>
+                <fieldset>
+                    <legend>Intervention</legend>
+
+                    <div class="espaceHor"></div>
+                    <div>
+                        <div class="titre">Date d'intervention</div>
+
+                        <div class="test">
+                            <input type="text" id="newDateIntervention" name="newDateIntervention"
+                                th:value="${#temporals.format(ficheIntervention.dateIntervention, 'dd/MM/yyyy')}" />
+                        </div>
+                        <div class="titre">Durée de l'opération</div>
+                        <div class="test">
+                            <input type="text" id="newDureeIntervention" name="newDureeIntervention"
+                                th:value="${ficheIntervention.dureeIntervention}" />
+                        </div>
+                </fieldset>
+                </div>
+
+
+
+                </fieldset>
+                </div>
+                <div class="colonne listeCheckbox">
+                    <!-- Type de Maintenance -->
+                    <fieldset class="colonne">
+                        <legend>Type de Maintenance</legend>
+                        <div
+                            th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance.MaintenanceType).values()}">
+                            <div class="demi">
+                                <input type="radio" id="${type}" name="maintenanceType" th:value="${type}"
+                                    th:checked="${ficheIntervention.maintenance.maintenanceType.ordinal() eq type.ordinal()}" />
+                                <label th:for="${type}" th:text="${#strings.capitalize(type.name())}"></label>
+                            </div>
+                        </div>
+
+                        <!-- Hidden input field to hold the selected maintenance type -->
+                        <input type="hidden" name="newMaintenanceType"
+                            th:value="${ficheIntervention.maintenance.maintenanceType}" id="selectedMaintenanceType">
+                    </fieldset>
+
+
+
+
+                    <!-- Nature de l'intervention -->
+                    <fieldset class="colonne">
+                        <legend>Nature de l'intervention</legend>
+                        <div
+                            th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.NatureIntervention.NatureType).values()}">
+                            <div class="demi">
+                                <input type="radio" id="${nature}" name="natureIntervention" th:value="${nature}"
+                                    th:checked="${ficheIntervention.natureIntervention.natureType.name() eq nature.name()}" />
+                                <label th:for="${nature}" th:text="${#strings.capitalize(nature.name())}"></label>
+                            </div>
+                        </div>
+                        <input type="hidden" name="newNatureType"
+                            th:value="${ficheIntervention.natureIntervention.natureType}" id="selectedNatureType">
+                    </fieldset>
+
+
+
+                </div>
+
+
+                </fieldset>
+                </div>
+
+                </div>
+                <div class="espaceHor"></div>
+                </div>
+                <div class="espaceHor"></div>
+
+                <fieldset class="colonne">
+                    <legend>Travaux réalisés</legend>
+                    <div class="test">
+                        <input type="text" id="newTravauxRealises" name="newTravauxRealises"
+                            th:value="${ficheIntervention.travauxRealises}" />
+                    </div>
+                </fieldset>
+
+
+                <fieldset class="colonne">
+                    <legend>Travaux non réalisés</legend>
+                    <div class="test">
+                        <input type="text" id="newTravauxNonRealises" name="newTravauxNonRealises"
+                            th:value="${ficheIntervention.travauxNonRealises}" />
+                    </div>
+                </fieldset>
+
+                
+                
+
+                <div class="espaceHor"></div>
+
+
+                <div class="titre demi">
+                    <div class="check">
+                        <input type="checkbox" name="newNouvelleIntervention"
+                            th:checked="${ficheIntervention.nouvelleIntervention}" />
+                    </div>
+                    <div class="droite"> <label>Nécessite une nouvelle intervention</label>
+                    </div>
+                </div>
+                <div class="espaceHor"></div>
+                <!-- Matériaux Utilisés -->
+
+                <fieldset class="colonne">
+                    <legend>Matériaux utilisés</legend>
+                <div class="noPrint"></div>
+                <div class="espaceHor"></div>
+                <div class="ligneSelectMateriaux">
+                    <div th:each="i : ${#numbers.sequence(1, 6)}" class="ligneMateriaux">
+                        <div class="max-width-container">
+                            <select th:id="'materiauxUtilises' + ${i}" name="materiauxUtilises" class="max-width-select"
+                                th:field="*{materiauxOptions[__${i-1}__]}"
+                                onchange="updateMateriauField(this, 'selectedMateriau1')">
+                                <option
+                                    th:each="materiau : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxElectriciteListe).values()}"
+                                    th:value="${materiau}" th:text="${materiau.optionName}"
+                                    th:selected="${ficheIntervention.materiauxOptions[__${i-1}__] == materiau}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" name="newMateriau0" id="selectedMateriau0"
+                    th:value="${ficheIntervention.materiauxOptions[0]}">
+                <input type="hidden" name="newMateriau1" id="selectedMateriau1"
+                    th:value="${ficheIntervention.materiauxOptions[1]}">
+                <input type="hidden" name="newMateriau2" id="selectedMateriau2"
+                    th:value="${ficheIntervention.materiauxOptions[2]}">
+                <input type="hidden" name="newMateriau3" id="selectedMateriau3"
+                    th:value="${ficheIntervention.materiauxOptions[3]}">
+                <input type="hidden" name="newMateriau4" id="selectedMateriau4"
+                    th:value="${ficheIntervention.materiauxOptions[4]}">
+                <input type="hidden" name="newMateriau5" id="selectedMateriau5"
+                    th:value="${ficheIntervention.materiauxOptions[5]}">
+
+
+
+
+
+
+
+                </div>
+                </fieldset>
+                <div class="espaceHor"></div>
+                <div class="espaceHor"></div>
+
+                <input class="submit" type="submit" value="Terminer" />
+            </form>
+        </main>
+
+
+
+
+
+        <script th:inline="javascript">
+            /* <![CDATA[ */
+            function updateMateriauField(selectElement, textFieldId) {
+                var selectedValue = selectElement.value;
+                var index = selectElement.id.replace('materiauxUtilises', '') - 1;
+                document.getElementById('selectedMateriau' + index).value = selectedValue;
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                var selectElements = document.querySelectorAll('select[name="materiauxUtilises"]');
+
+                selectElements.forEach(function (select) {
+                    select.addEventListener('change', function () {
+                        updateMateriauField(select, 'selectedMateriau' + select.id.replace('materiauxUtilises', ''));
+                    });
+                });
+            });
+            /* ]]> */
+        </script>
+
+        <script th:inline="javascript">
+            /* <![CDATA[ */
+            document.addEventListener('DOMContentLoaded', function () {
+                var natureRadioButtons = document.querySelectorAll('input[name="natureIntervention"]');
+                var natureHiddenInput = document.getElementById('selectedNatureType');
+
+                natureRadioButtons.forEach(function (radioButton) {
+                    radioButton.addEventListener('change', function () {
+                        if (this.checked) {
+                            natureHiddenInput.value = this.value;
+                        }
+                    });
+                });
+            });
+            /* ]]> */
+        </script>
+
+        <script th:inline="javascript">
+            /* <![CDATA[ */
+            document.addEventListener('DOMContentLoaded', function () {
+                var radioButtons = document.querySelectorAll('input[name="maintenanceType"]');
+                var hiddenInput = document.getElementById('selectedMaintenanceType');
+
+                radioButtons.forEach(function (radioButton) {
+                    radioButton.addEventListener('change', function () {
+                        if (this.checked) {
+                            hiddenInput.value = this.value;
+                        }
+                    });
+                });
+            });
+            /* ]]> */
+        </script>
+
+    </body>
+
+</html>
