@@ -84,8 +84,8 @@
                         <div class="titre">Date d'intervention</div>
 
                         <div class="test">
-                            <input type="text" id="newDateIntervention" name="newDateIntervention"
-                                th:value="${#temporals.format(ficheIntervention.dateIntervention, 'dd/MM/yyyy')}" />
+                            <input type="date" id="newDateIntervention" name="newDateIntervention"
+                                th:value="${#temporals.format(ficheIntervention.dateIntervention, 'yyyy-MM-dd')}" />
                         </div>
                         <div class="titre">Durée de l'opération</div>
                         <div class="test">
