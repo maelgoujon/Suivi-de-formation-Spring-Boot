@@ -64,15 +64,18 @@
                         <div class="titre demi">Description de la demande</div>
 
                         <div class="test">
-                            <input type="text" id="newDescription" name="newDescription"
-                                th:value="${ficheIntervention.demande.Description}" />
+                            <!-- textarea de 10 lignes-->
+                            <textarea rows="10" id="newDescription" name="newDescription" onkeydown="handleDescriptionKeyDown(event)"
+                                      th:text="${ficheIntervention.demande.Description}"></textarea>
                         </div>
+                        
+                        
 
                     </div>
                 </fieldset>
 
 
-                <div class="espaceHor"></div>
+                    <div class="espaceHor"></div>
                 <fieldset>
                     <legend>Intervention</legend>
 
@@ -93,6 +96,7 @@
                 </div>
 
 
+                <div class="espaceHor"></div>
 
                 </fieldset>
                 </div>
@@ -146,7 +150,6 @@
                 </div>
                 <div class="espaceHor"></div>
                 </div>
-                <div class="espaceHor"></div>
 
                 <fieldset class="colonne">
                     <legend>Travaux réalisés</legend>
