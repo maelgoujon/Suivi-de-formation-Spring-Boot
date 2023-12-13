@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil apprenti</title>
+
+    <style>
+        body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        height: 100vh;
+      }
+
+      .bandeau {
+        background-color: #bbdefb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 80px;
+        border-bottom: 1px solid black;
+      }
+
+      .bandeau img {
+        max-width: 60px;
+        height: auto;
+      }
+
+      .bandeau h1 {
+        color: black;
+        margin: 0;
+      }
+      .modifier {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+        height: 100px; /* Ajustez la hauteur selon vos besoins */
+        position: relative;
+      }
+
+      .modifier button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: none;
+      }
+
+      .modifier.selected button {
+        display: block;
+      }
+
+      .modifier img {
+        max-width: 80px;
+        height: auto;
+        
+      }
+
+      .modifier p {
+        
+        margin-right: 10px ;
+      }
+    </style>
+</head>
+<body>
+    <div class="bandeau">
+        <a href="/log_out">
+          <img src="/images/porte.png" alt="logout" style="float: left" />
+        </a>
+        <a href="/archive">
+            <img src="/images/archive.png" alt="archive" style="margin-left: 10px" />
+        </a>
+
+        <div class="bandeau centered">
+            <a href="/accueil_admin">
+                <img src="/images/accueil.png" alt="accueil"/>
+            </a>
+        </div>
+        <a
+          href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
+        >
+          <img
+            src="/images/aide.png"
+            alt="aide"
+            style="cursor: pointer; margin-right: 10px"
+          />
+        </a>
+      </div>
+    <h2>Profil de : <span th:text="${utilisateur.nom}"></span> <span th:text="${utilisateur.prenom}"></span></h2>
+    <p><strong>Login:</strong> <span th:text="${utilisateur.login}"></span></p>
+    <p><strong>Photo:</strong></p>
+    <img th:src="${utilisateur.photoBase64}" alt="Photo de l'utilisateur" style="max-width: 200px; max-height: 200px;">
+    
+    <div class="modifier">
+        
+        <a th:href="@{'/modif/' + ${utilisateur.id}}">
+          <img
+            src="/images/modif.png"
+            alt="Modifier un apprenti"
+            style="cursor: pointer"
+          />
+        </a>
+        <p>Modifier profil apprenti</p>
+
+        <a href="utilisateur/supprimer">
+            <img
+              src="/images/archive.png"
+              alt="Modifier un apprenti"
+              style="height: 60px;"
+            />
+          </a>
+          <p style=" margin-left: 13px">Archiver le profil</p>
+    </div>
+
+</body>
+</html>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.service.UtilisateurService;
@@ -82,22 +83,50 @@ public class UtilisateurController {
         return "accueil";
     }
 
+    
 
     @GetMapping("/modifier/{id}")
     public String afficherFormulaireModificationUtilisateur(@PathVariable Long id, Model model) {
         Utilisateur utilisateur = utilisateurService.findById(id);
         model.addAttribute("utilisateur", utilisateur);
-        return "modifierUtilisateur";
+        return "modif";
     }
 
     // ToDo: Fix the update method
     @PostMapping("/modifier/{id}")
-    public String modifierUtilisateur(@PathVariable Long id, @ModelAttribute @Valid Utilisateur utilisateur,
-            Model model) {
+    public String modifierUtilisateur(@PathVariable Long id, @ModelAttribute Utilisateur utilisateur,
+            RedirectAttributes redirectAttributes) {
         utilisateurService.modifier(id, utilisateur);
-        model.addAttribute("success", true);
+        redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/utilisateur/modifier/" + id;
     }
+
+    @PostMapping("/modifmdp/{id}")
+    public String modifierMotDePasse(@PathVariable Long id, @ModelAttribute Utilisateur utilisateur,
+            RedirectAttributes redirectAttributes) {
+        try {
+            // Vous pouvez maintenant utiliser utilisateur.getMdp() pour obtenir le mot de passe sélectionné
+            utilisateurService.modifierMotDePasse(id, utilisateur.getMdp());
+            redirectAttributes.addFlashAttribute("success", true);
+            return "redirect:/utilisateur/modifmdp/" + id + "?success=true";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("success", false);
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/utilisateur/modifmdp/" + id + "?error=true";
+        }
+    }
+
+
+
+    @GetMapping("/modifmdp/{id}")
+    public String afficherFormulaireModificationMotDePasse(@PathVariable Long id, Model model) {
+        Utilisateur utilisateur = utilisateurService.findById(id);
+        model.addAttribute("utilisateur", utilisateur);
+        return "mdpmodif";
+    }
+
+    
+
 
     // ToDo: Fix the delete method
     @DeleteMapping("/supprimer/{id}")
@@ -105,6 +134,12 @@ public class UtilisateurController {
         utilisateurService.supprimer(id);
         model.addAttribute("success", true);
         return "redirect:/utilisateur/nouveau";
+    }
+    @GetMapping("/tousLesUtilisateurs")
+    public String afficherTousLesUtilisateurs(Model model) {
+        List<Utilisateur> utilisateurs = utilisateurService.lire();
+        model.addAttribute("utilisateurs", utilisateurs);
+        return "tousLesUtilisateurs"; // Assurez-vous que le fichier tousLesUtilisateurs.html existe
     }
 
 }
