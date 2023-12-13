@@ -97,13 +97,12 @@
                 </fieldset>
                 </div>
                 <div class="colonne listeCheckbox">
-                    <!-- Type de Maintenance -->
-                    <fieldset class="colonne">
-                        <legend>Type de Maintenance</legend>
-                        <div
-                            th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance.MaintenanceType).values()}">
-                            <div class="demi">
-                                <div class="titre">
+                    <div class="colonne1">
+                        <!-- Type de Maintenance -->
+                        <fieldset class="colonne1_gauche">
+                            <legend>Type de Maintenance</legend>
+                            <div th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance.MaintenanceType).values()}" class="demi">
+                                <div class="demi">
                                     <input type="radio" id="${type}" name="maintenanceType" th:value="${type}"
                                         th:checked="${ficheIntervention.maintenance.maintenanceType.ordinal() eq type.ordinal()}" />
                                 </div>
@@ -112,33 +111,27 @@
                                         th:text="${#strings.capitalize(type.name().toLowerCase().replace('_', ' '))}"></label>
                                 </div>
                             </div>
-                        </div>
-                        <!-- Hidden input field to hold the selected maintenance type -->
-                        <input type="hidden" name="newMaintenanceType"
-                            th:value="${ficheIntervention.maintenance.maintenanceType}" id="selectedMaintenanceType">
-                    </fieldset>
-
-
-
-                    <!-- Nature de l'intervention -->
-                    <fieldset class="colonne">
-                        <legend>Nature de l'intervention</legend>
-                        <div
-                            th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.NatureIntervention.NatureType).values()}">
-                            <div class="demi">
-                                <div class="titre">
+                            <!-- Hidden input field to hold the selected maintenance type -->
+                            <input type="hidden" name="newMaintenanceType" th:value="${ficheIntervention.maintenance.maintenanceType}" id="selectedMaintenanceType">
+                        </fieldset>
+                    
+                        <!-- Nature de l'intervention -->
+                        <fieldset class="colonne1_droite">
+                            <legend>Nature de l'intervention</legend>
+                            <div th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.NatureIntervention.NatureType).values()}" class="demi">
+                                <div class="demi">
                                     <input type="radio" id="${nature}" name="natureIntervention" th:value="${nature}"
                                         th:checked="${ficheIntervention.natureIntervention.natureType.name() eq nature.name()}" />
                                 </div>
                                 <div class="test">
-                                    <label th:for="${nature}"
+                                    <label class="shrink" th:for="${nature}"
                                         th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
                                 </div>
                             </div>
-                        </div>
-                        <input type="hidden" name="newNatureType"
-                            th:value="${ficheIntervention.natureIntervention.natureType}" id="selectedNatureType">
-                    </fieldset>
+                            <input type="hidden" name="newNatureType" th:value="${ficheIntervention.natureIntervention.natureType}" id="selectedNatureType">
+                        </fieldset>
+                    </div>
+                 
 
 
 

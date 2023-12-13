@@ -5,8 +5,13 @@ body {
 
 /* Sélecteur pour tous les boutons radio dans le formulaire */
 input[type="radio"] {
-    width: 10%;
+    max-width: 30%;
+    width: 30%;
     font-family: 'Roboto', sans-serif;
+}
+
+.shrink {
+    flex-shrink: 0;
 }
 
 .submit {
@@ -47,6 +52,17 @@ form {
     flex-direction: column;
 }
 
+.colonne1 {
+    flex-direction: row;
+}
+
+.colonne1_droite {
+    height: auto;
+}
+.colonne1_gauche {
+    height: auto;
+}
+
 legend,
 .titre,
 label {
@@ -69,8 +85,9 @@ label {
 }
 
 .max-width-select {
-    margin-right: 10px; /* Ajustez la marge selon vos besoins */
-    
+    margin-right: 10px;
+    /* Ajustez la marge selon vos besoins */
+
 }
 
 .ligneSelectMateriaux {
@@ -80,8 +97,10 @@ label {
 }
 
 .ligneMateriaux {
-    flex: 0 0 48%; /* Two items per line with a little space in between */
-    margin-bottom: 1em; /* Adjust margin as needed */
+    flex: 0 0 48%;
+    /* Two items per line with a little space in between */
+    margin-bottom: 1em;
+    /* Adjust margin as needed */
     display: flex;
 }
 
@@ -137,7 +156,7 @@ textarea {
     }
 
     fieldset {
-       /* padding: 0.1em 0;*/
+        /* padding: 0.1em 0;*/
     }
 
     .demi {
