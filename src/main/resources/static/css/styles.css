@@ -110,6 +110,9 @@ label {
     filter: invert(1);
 }
 
+.prerempli{
+    background-color: #3e3e3e;
+}
 .espaceHor {
     flex: none;
     height: 1.5em;

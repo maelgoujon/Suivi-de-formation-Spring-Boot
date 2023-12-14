@@ -27,7 +27,7 @@
                     </div>
                 </fieldset>
                 <div class="espaceHor"></div>
-                <fieldset>
+                <fieldset class="prerempli">
                     <legend>Demande</legend>
                     <div>
                         <div class="titre">Nom du demandeur</div>
@@ -219,7 +219,9 @@
                 <!-- Matériaux Utilisés -->
 
                 <fieldset class="colonne">
-                    <legend>Matériaux utilisés</legend>
+                    <legend th:if="${ficheIntervention.NiveauMateriauxUtilises == 1}">Matériaux utilisés</legend>
+                    <legend th:unless="${ficheIntervention.NiveauMateriauxUtilises == 1}"><img class="logo"
+                            src="/images/materiaux.png" alt="Fait" /></legend>
                     <div class="noPrint"></div>
                     <div class="espaceHor"></div>
                     <div class="ligneSelectMateriaux">

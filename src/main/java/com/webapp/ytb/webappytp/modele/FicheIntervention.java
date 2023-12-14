@@ -80,6 +80,9 @@ public class FicheIntervention {
     @Column
     private int NiveauTravauxRealises;
 
+    @Column
+    private int NiveauMateriauxUtilises;
+
 
     //getters
     public String getNomDemandeur() {
