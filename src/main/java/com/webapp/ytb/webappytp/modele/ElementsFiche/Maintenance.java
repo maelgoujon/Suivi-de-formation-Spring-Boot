@@ -1,5 +1,6 @@
 package com.webapp.ytb.webappytp.modele.ElementsFiche;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,4 +35,8 @@ public class Maintenance {
     public void setMaintenanceType(MaintenanceType maintenanceType) {
         this.maintenanceType = maintenanceType;
     }
+
+    
+    @Column
+    private int NiveauMaintenanceType;
 }

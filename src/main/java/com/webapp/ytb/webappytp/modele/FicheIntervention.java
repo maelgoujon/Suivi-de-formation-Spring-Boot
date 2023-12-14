@@ -2,32 +2,24 @@ package com.webapp.ytb.webappytp.modele;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.NatureIntervention;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -114,6 +106,33 @@ public class FicheIntervention {
         return intervention.getDureeIntervention();
     }
 
+    public int getNiveauDateIntervention() {
+        return intervention.getNiveauDateIntervention();
+    }
+    
+    public int getNiveauDureeIntervention() {
+        return intervention.getNiveauDureeIntervention();
+    }
+
+    public String getCouleurIconeDuree() {
+        return intervention.getCouleurIconeDuree();
+    }
+
+    public Maintenance.MaintenanceType getMaintenanceType() {
+        return maintenance.getMaintenanceType();
+    }
+
+    public int getNiveauMaintenanceType() {
+        return maintenance.getNiveauMaintenanceType();
+    }
+
+    public NatureIntervention.NatureType getNatureType() {
+        return natureIntervention.getNatureType();
+    }
+
+    public int getNiveauNatureIntervention() {
+        return natureIntervention.getNiveauNatureIntervention();
+    }
 
 
 

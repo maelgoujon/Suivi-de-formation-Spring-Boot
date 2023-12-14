@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +17,17 @@ public class Intervention {
     private LocalDate DateIntervention;
 
     @Column
+    private int NiveauDateIntervention;
+
+    @Column
     //@NotBlank(message = "Le champ 'DureeIntervention' est obligatoire.")
     private int DureeIntervention;
+
+    @Column
+    private int NiveauDureeIntervention;
+
+    @Column
+    private String couleurIconeDuree;
+
+
 }

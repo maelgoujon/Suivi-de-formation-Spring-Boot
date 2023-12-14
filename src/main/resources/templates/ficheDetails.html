@@ -65,29 +65,41 @@
 
                         <div class="test">
                             <!-- textarea de 10 lignes-->
-                            <textarea rows="10" id="newDescription" name="newDescription" onkeydown="handleDescriptionKeyDown(event)"
-                                      th:text="${ficheIntervention.demande.Description}"></textarea>
+                            <textarea rows="10" id="newDescription" name="newDescription"
+                                onkeydown="handleDescriptionKeyDown(event)"
+                                th:text="${ficheIntervention.demande.Description}"></textarea>
                         </div>
-                        
-                        
+
+
 
                     </div>
                 </fieldset>
 
 
-                    <div class="espaceHor"></div>
+                <div class="espaceHor"></div>
                 <fieldset>
                     <legend>Intervention</legend>
 
                     <div class="espaceHor"></div>
                     <div>
-                        <div class="titre">Date d'intervention</div>
-
+                        <div class="titre" th:if="${ficheIntervention.niveauDateIntervention == 1}">Date d'intervention
+                        </div>
+                        <div th:unless="${ficheIntervention.niveauDateIntervention == 1}">
+                            <img class="logo" src="/images/calendar.png" alt="Calendrier" />
+                        </div>
                         <div class="test">
                             <input type="date" id="newDateIntervention" name="newDateIntervention"
                                 th:value="${#temporals.format(ficheIntervention.dateIntervention, 'yyyy-MM-dd')}" />
                         </div>
-                        <div class="titre">Durée de l'opération</div>
+
+                        <div class="titre" th:if="${ficheIntervention.niveauDureeIntervention == 1}">Durée de
+                            l'opération</div>
+                        <div th:unless="${ficheIntervention.niveauDureeIntervention == 1}">
+                            <img class="logo" src="/images/clock.png" alt="Horloge" />
+                        </div>
+
+
+
                         <div class="test">
                             <input type="text" id="newDureeIntervention" name="newDureeIntervention"
                                 th:value="${ficheIntervention.dureeIntervention}" />
@@ -105,37 +117,58 @@
                         <!-- Type de Maintenance -->
                         <fieldset class="colonne1_gauche">
                             <legend>Type de Maintenance</legend>
-                            <div th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance.MaintenanceType).values()}" class="demi">
+                            <div th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance.MaintenanceType).values()}"
+                                class="demi">
                                 <div class="demi">
                                     <input type="radio" id="${type}" name="maintenanceType" th:value="${type}"
                                         th:checked="${ficheIntervention.maintenance.maintenanceType.ordinal() eq type.ordinal()}" />
                                 </div>
-                                <div class="test">
+                                <div class="test" th:if="${ficheIntervention.NiveauMaintenanceType == 1}">
                                     <label th:for="${type}"
                                         th:text="${#strings.capitalize(type.name().toLowerCase().replace('_', ' '))}"></label>
                                 </div>
+                                <div th:unless="${ficheIntervention.NiveauMaintenanceType == 1}">
+                                    <img class="logo" th:src="${'/images/' + type.name().toLowerCase() + '.png'}"
+                                        th:alt="${'/images/' + type.name().toLowerCase() + '.png'}" />
+                                </div>
                             </div>
+
+
                             <!-- Hidden input field to hold the selected maintenance type -->
-                            <input type="hidden" name="newMaintenanceType" th:value="${ficheIntervention.maintenance.maintenanceType}" id="selectedMaintenanceType">
+                            <input type="hidden" name="newMaintenanceType"
+                                th:value="${ficheIntervention.maintenance.maintenanceType}"
+                                id="selectedMaintenanceType">
                         </fieldset>
-                    
+
                         <!-- Nature de l'intervention -->
                         <fieldset class="colonne1_droite">
                             <legend>Nature de l'intervention</legend>
-                            <div th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.NatureIntervention.NatureType).values()}" class="demi">
+                            <div th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.NatureIntervention.NatureType).values()}"
+                                class="demi">
                                 <div class="demi">
                                     <input type="radio" id="${nature}" name="natureIntervention" th:value="${nature}"
                                         th:checked="${ficheIntervention.natureIntervention.natureType.name() eq nature.name()}" />
                                 </div>
-                                <div class="test">
-                                    <label class="shrink" th:for="${nature}"
-                                        th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
+
+
+
+
+                                <div class="test" th:if="${ficheIntervention.NiveauNatureIntervention == 1}">
+                                    <label th:for="${nature}" th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
                                 </div>
+                                <div th:unless="${ficheIntervention.NiveauNatureIntervention == 1}">
+                                    <img class="logo" th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
+                                        th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
+                                </div>
+                                
+
+
                             </div>
-                            <input type="hidden" name="newNatureType" th:value="${ficheIntervention.natureIntervention.natureType}" id="selectedNatureType">
+                            <input type="hidden" name="newNatureType"
+                                th:value="${ficheIntervention.natureIntervention.natureType}" id="selectedNatureType">
                         </fieldset>
                     </div>
-                 
+
 
 
 

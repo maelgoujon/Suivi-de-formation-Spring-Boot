@@ -1,5 +1,6 @@
 package com.webapp.ytb.webappytp.modele.ElementsFiche;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,4 +35,8 @@ public class NatureIntervention {
     public void setNatureType(NatureType natureType) {
         this.natureType = natureType;
     }
+
+    
+    @Column
+    private int NiveauNatureIntervention;
 }
