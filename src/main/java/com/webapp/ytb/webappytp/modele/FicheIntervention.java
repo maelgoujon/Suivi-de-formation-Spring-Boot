@@ -76,6 +76,10 @@ public class FicheIntervention {
     @Embedded
     private NatureIntervention natureIntervention;
 
+    //Niveaux
+    @Column
+    private int NiveauTravauxRealises;
+
 
     //getters
     public String getNomDemandeur() {

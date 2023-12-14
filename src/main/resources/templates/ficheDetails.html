@@ -149,20 +149,14 @@
                                     <input type="radio" id="${nature}" name="natureIntervention" th:value="${nature}"
                                         th:checked="${ficheIntervention.natureIntervention.natureType.name() eq nature.name()}" />
                                 </div>
-
-
-
-
                                 <div class="test" th:if="${ficheIntervention.NiveauNatureIntervention == 1}">
-                                    <label th:for="${nature}" th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
+                                    <label th:for="${nature}"
+                                        th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
                                 </div>
                                 <div th:unless="${ficheIntervention.NiveauNatureIntervention == 1}">
                                     <img class="logo" th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
                                         th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
                                 </div>
-                                
-
-
                             </div>
                             <input type="hidden" name="newNatureType"
                                 th:value="${ficheIntervention.natureIntervention.natureType}" id="selectedNatureType">
@@ -185,7 +179,11 @@
                 </div>
 
                 <fieldset class="colonne">
-                    <legend>Travaux réalisés</legend>
+                    <legend th:if="${ficheIntervention.NiveauTravauxRealises == 1}">Travaux réalisés</legend>
+                    <legend th:unless="${ficheIntervention.NiveauTravauxRealises == 1}"><img class="logo"
+                            src="/images/check.png" alt="Fait" /></legend>
+
+
                     <div class="test">
                         <input type="text" id="newTravauxRealises" name="newTravauxRealises"
                             th:value="${ficheIntervention.travauxRealises}" />
@@ -194,7 +192,9 @@
 
 
                 <fieldset class="colonne">
-                    <legend>Travaux non réalisés</legend>
+                    <legend th:if="${ficheIntervention.NiveauTravauxRealises == 1}">Travaux non réalisés</legend>
+                    <legend th:unless="${ficheIntervention.NiveauTravauxRealises == 1}"><img class="logo"
+                            src="/images/notchecked.png" alt="Fait" /></legend>
                     <div class="test">
                         <input type="text" id="newTravauxNonRealises" name="newTravauxNonRealises"
                             th:value="${ficheIntervention.travauxNonRealises}" />
