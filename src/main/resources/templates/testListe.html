@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Images Gallery</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #F5F5F5;
+        }
+
+        .imageListe {
+            max-width: 100px;
+            min-width: 100px;
+        }
+
+        .images-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .img-card {
+            display: inline-block;
+            max-width: 250px;
+            height: auto;
+            cursor: pointer;
+            transition: all 200ms ease-in;
+            margin: 5px;
+            box-sizing: border-box;
+        }
+
+        #selected-image-label {
+            margin-top: auto;
+            font-weight: bold;
+            position: absolute;
+            bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="images-selector">
+        <div th:each="image : ${imageList}">
+            <input type="radio" th:id="${'radio_' + image}" th:name="imageGroup" th:value="${image}">
+            <label class="img-card">
+                <img class="imageListe" th:src="${image}" alt="Image">
+            </label>
+        </div>
+    </div>
+
+    <div id="selected-image-label"></div>
+
+    <script>
+        const imageSelector = document.querySelector('.images-selector');
+        const selectedImageLabel = document.getElementById('selected-image-label');
+
+        imageSelector.addEventListener('change', (event) => {
+            if (event.target.type === 'radio') {
+                const imageName = event.target.value;
+                selectedImageLabel.textContent = `Selected Image: ${imageName}`;
+            }
+        });
+    </script>
+</body>
+
+</html>

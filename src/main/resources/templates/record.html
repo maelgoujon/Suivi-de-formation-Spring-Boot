@@ -27,8 +27,8 @@
     </div>
 
     <form id="uploadForm" th:action="@{/fiche/enregistrerAudio}" method="post" enctype="multipart/form-data">
-        <label for="ficheId">ID de la Fiche:</label>
-        <input type="text" id="ficheId" name="ficheId" required>
+        <!-- Utilisez Thymeleaf pour obtenir l'ID de la fiche d'intervention depuis le modèle -->
+        <input type="hidden" th:value="${ficheIntervention.id}" name="ficheId">
         <br>
         <button type="submit" class="button">Uploader l'Audio</button>
     </form>
