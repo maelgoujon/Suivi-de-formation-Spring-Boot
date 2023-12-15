@@ -151,6 +151,10 @@ public class HomeController {
     public String mdp_oublie() {
         return "mdp_oublie";
     }
+    @GetMapping("/mdp_oublieformateur")
+    public String mdp_oublieformateur() {
+        return "mdp_oublieformateur";
+    }
 
     @GetMapping("/recordaffichage/{ficheId}")
     public String recordaffichage(@PathVariable Long ficheId, Model model) {

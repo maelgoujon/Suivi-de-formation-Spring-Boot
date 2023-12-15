@@ -13,10 +13,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             height: 100vh;
         }
-
         #page {
             text-align: center;
         }
@@ -27,56 +26,40 @@
             cursor: pointer;
         }
 
-        header {
-            background-color: #bbdefb;
-            padding: 10px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-        }
-
         .bandeau {
+            background-color: #bbdefb;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             width: 100%;
-            height: 45px;
+            height: 80px;
+            border-bottom: 1px solid black;
         }
 
-        .bandeau p {
-            color: black;
-            margin: 0;
-        }
+        
 
         .bandeau img {
-            max-width: 44px;
+            max-width: 60px;
             height: auto;
             margin-right: 20px;
         }
 
-        .logo-and-admin {
-            display: flex;
-            align-items: right;
-            max-width: 50%;
+        .bandeau h1 {
+            color: black;
+            margin: 0;
         }
+
+        
     </style>
 </head>
 <body>
 
 <!-- Barre de navigation -->
-<header>
-    <div class="bandeau">
-        <a class="maison" href="accueil">
-            <img class="logo" src="/images/home.png">
-        </a>
-
-        <a class="logo-and-admin" href="login_admin.html">
-            <img src="/images/icone_profil.png">
-            <p>Admin</p>
-        </a>
-    </div>
-</header>
+<div class="bandeau">
+    <a href="accueil">
+        <img src="/images/accueil.png" alt="Accueil" style="float: left;">
+    </a>
+</div>
 <!-- Fin barre de nav -->
 
 <!-- Contenu de la page -->
