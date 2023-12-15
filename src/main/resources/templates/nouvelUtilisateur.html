@@ -151,6 +151,8 @@
     <div th:if="${param.success}">
         <p style="color: green;">Utilisateur créé avec succès!</p>
     </div>
+    
+    
     <!-- Formulaire de création d'utilisateur -->
     <form th:action="@{/utilisateur/creer}" th:object="${utilisateur}" method="post">
 

@@ -120,12 +120,16 @@
             style="cursor: pointer; margin-right: 10px"
           />
         </a>
-      </div>
+    </div>
 
     <h2>Rentrer un nouveau modèle </h2>
     <!-- Afficher un message de succès si le mdp à été modifié avec succès -->
     <div th:if="${success}">
         <p style="color: green;">Mot de passe modifié avec succès!</p>
+    </div>
+    <!-- Afficher un message d'erreur si le mdp n'a pas été modifié avec succès -->
+    <div th:if="${error}">
+        <p style="color: red;">Erreur lors de la modification du mot de passe!</p>
     </div>
     <form class="formulaire" th:action="@{/utilisateur/modifmdp/{id}(id=${utilisateur.id})}" th:object="${utilisateur}" method="post">
         <!-- ... autres champs ... -->
