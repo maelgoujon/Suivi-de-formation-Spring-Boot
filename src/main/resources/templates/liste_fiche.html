@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tableau interactif</title>
+  <!-- Ajout des liens vers les fichiers CSS de Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+    }
+
+    .bandeau {
+      background-color: #bbdefb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 80px;
+      border-bottom: 1px solid black;
+    }
+
+    .logo-and-admin {
+      display: flex;
+      align-items: center;
+    }
+
+    .bandeau img {
+      max-width: 60px;
+      height: auto;
+      margin-right: 20px;
+    }
+
+    .bandeau h1 {
+      color: black;
+      margin: 0;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    th,
+    td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+      position: relative;
+    }
+
+    th {
+      cursor: pointer;
+    }
+
+    .conteneur {
+      width: 80%;
+      max-width: 800px;
+      margin: 100px auto;
+      background-color: white;
+      border: 1px solid black;
+      text-align: center;
+      padding: 20px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .titre {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .profils {
+      display: flex;
+      transition: transform 0.3s;
+    }
+
+    .profil {
+      border: 1px solid black;
+      padding: 10px;
+      margin: 10px;
+      flex: 0 0 calc(30% - 20px);
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .profil.selected {
+      border: 5px solid #72bb53;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .profil img {
+      max-width: 100px;
+      height: auto;
+    }
+
+    .nom {
+      font-weight: bold;
+    }
+
+    .prenom {
+      font-style: italic;
+    }
+
+    .navigation {
+      margin-top: 20px;
+    }
+
+    .fleche {
+      cursor: pointer;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    #connecter {
+      background-color: #72bb53;
+      border-radius: 10px;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    .search-container {
+      margin-top: 20px;
+    }
+
+    #searchInput {
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .checkbox-container {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .checkbox-container label {
+      margin-right: 20px;
+      margin-bottom: 10px;
+    }
+
+    #resultMessage {
+      margin-top: 10px;
+      color: red;
+    }
+
+    th img {
+      max-width: 12px;
+      height: auto;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 8px;
+    }
+
+    th[data-sort-order="desc"] img {
+      transform: translateY(-50%) rotate(180deg);
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Tableau d'interventions</h2>
+
+  <h4>Sélectionner les colonnes que vous souhaiter voir sur le tableau :</h4>
+
+  <div class="checkbox-container">
+    <!-- Colonnes par défaut -->
+    <label>
+      <input type="checkbox" checked="checked" id="chkNomDemandeur" onclick="toggleColumn('NomDemandeur')" />
+      Nom Demandeur
+    </label>
+    <label>
+      <input type="checkbox" checked="checked" id="chkDateDemande" onclick="toggleColumn('DateDemande')" />
+      Date Demande
+    </label>
+    <label>
+      <input type="checkbox" checked="checked" id="chkDateIntervention" onclick="toggleColumn('DateIntervention')" />
+      Date Intervention
+    </label>
+    <label>
+      <input type="checkbox" checked="checked" id="chkDateCreation" onclick="toggleColumn('DateCreation')" />
+      Date Création
+    </label>
+    <label>
+      <input type="checkbox" checked="checked" id="chkDegreUrgence" onclick="toggleColumn('DegreUrgence')" />
+      Degré Urgence
+    </label>
+    <label>
+      <input type="checkbox" checked="checked" id="chkTypeIntervention" onclick="toggleColumn('TypeIntervention')" />
+      Type Intervention
+    </label>
+    <label>
+      <input type="checkbox" checked="checked" id="chkNatureIntervention"
+        onclick="toggleColumn('NatureIntervention')" />
+      Nature Intervention
+    </label>
+    <label>
+      <input type="checkbox" checked="checked" id="chkEtatFicheFinie" onclick="toggleColumn('EtatFicheFinie')" />
+      État Fiche Finie
+    </label>
+    <label>
+      <input type="checkbox" checked="checked" id="chkNouvelleIntervention"
+        onclick="toggleColumn('NouvelleIntervention')" />
+      Nouvelle Intervention
+    </label>
+    <label>
+      <input type="checkbox" checked="checked" id="chkFiche" onclick="toggleColumn('Fiche')" />
+      Fiche
+    </label>
+    <label>
+      <input type="checkbox" checked="checked" id="chkEvaluation" onclick="toggleColumn('Evaluation')" />
+      Evaluation
+    </label>
+
+    <!-- Colonnes ajoutées avec checkbox non sélectionnée par défaut -->
+    <label>
+      <input type="checkbox" id="chkDureeIntervention" onclick="toggleColumn('DureeIntervention')" />
+      Durée Intervention
+    </label>
+    <label>
+      <input type="checkbox" id="chkLocalisation" onclick="toggleColumn('Localisation')" />
+      Localisation
+    </label>
+    <label>
+      <input type="checkbox" id="chkDescriptionDemande" onclick="toggleColumn('DescriptionDemande')" />
+      Description Demande
+    </label>
+    <label>
+      <input type="checkbox" id="chkTravauxRealises" onclick="toggleColumn('TravauxRealises')" />
+      Travaux Réalisés
+    </label>
+    <label>
+      <input type="checkbox" id="chkTravauxNonRealises" onclick="toggleColumn('TravauxNonRealises')" />
+      Travaux Non Réalisés
+    </label>
+  </div>
+
+  <div class="search-container">
+    <label for="columnSelect">Choisir la colonne dans laquelle vous souhaitez effectuer la
+      recherche:</label>
+    <select id="columnSelect">
+      <option value="all">Toutes</option>
+      <option value="NomDemandeur">Nom Demandeur</option>
+      <option value="DateIntervention">Date Intervention</option>
+      <option value="DateCreation">Date Création</option>
+      <option value="DegreUrgence">Degré d'urgence</option>
+      <option value="TypeIntervention">Type d'intervention</option>
+      <option value="NatureIntervention">Nature Intervention</option>
+      <option value="EtatFicheFinie">Etat fiche finie</option>
+      <option value="NouvelleIntervention">Nouvelle Intervention</option>
+      <option value="DureeIntervention">Duree Intervention</option>
+      <option value="Localisation">Localisation</option>
+      <option value="DescriptionDemande">Description Demande</option>
+      <option value="TravauxRealises">Travaux Realises</option>
+      <option value="TravauxNonRealises">Travaux Non Realises</option>
+    </select>
+  </div>
+
+  <label for="searchInput">Rechercher :</label>
+  <input type="text" id="searchInput" onkeyup="searchTable()" />
+  <div id="resultMessage"></div>
+
+  <div id="resultMessage"></div>
+
+  <table id="interventionsTable" border="1">
+    <thead>
+      <tr>
+        <th id="thNomDemandeur">Nom Demandeur</th>
+        <th id="thDateDemande">Date Demande</th>
+        <th id="thDateIntervention">Date Intervention</th>
+        <th id="thDateCreation">Date Création</th>
+        <th id="thDegreUrgence">Degré Urgence</th>
+        <th id="thTypeIntervention">Type Intervention</th>
+        <th id="thNatureIntervention">Nature Intervention</th>
+        <th id="thEtatFicheFinie">État Fiche Finie</th>
+        <th id="thNouvelleIntervention">Nouvelle Intervention</th>
+        <th id="thDureeIntervention" style="display: none">
+          Durée Intervention
+        </th>
+        <th id="thLocalisation" style="display: none">Localisation</th>
+        <th id="thDescriptionDemande" style="display: none">
+          Description Demande
+        </th>
+        <th id="thTravauxRealises" style="display: none">Travaux Réalisés</th>
+        <th id="thTravauxNonRealises" style="display: none">
+          Travaux Non Réalisés
+        </th>
+        <th id="thFiche">Voir fiche</th>
+        <th id="thEvaluation">Evaluation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Loop through the list of fiches and display each one -->
+      <tr th:each="fiche : ${fiches}">
+        <td id="tdNomDemandeur" th:text="${fiche.nomDemandeur}"></td>
+        <td id="tdDateDemande" th:text="${fiche.dateDemande}"></td>
+        <td id="tdDateIntervention" th:text="${fiche.DateIntervention}"></td>
+        <td id="tdDateCreation" th:text="${fiche.dateCreation}"></td>
+        <td id="tdDegreUrgence" th:text="${fiche.DegreUrgence}"></td>
+        <td id="tdTypeIntervention" th:text="${fiche.maintenanceType}"></td>
+        <td id="tdNatureIntervention" th:text="${fiche.NatureType}"></td>
+        <td id="tdEtatFicheFinie" th:text="${fiche.etatFicheFinie ? 'Oui' : 'Non'}"></td>
+        <td id="tdNouvelleIntervention" th:text="${fiche.nouvelleIntervention ? 'Oui' : 'Non'}"></td>
+        <td id="tdDureeIntervention" style="display: none" th:text="${fiche.dureeIntervention}"></td>
+        <td id="tdLocalisation" style="display: none" th:text="${fiche.localisation}"></td>
+        <td id="tdDescriptionDemande" style="display: none" th:text="${fiche.description}"></td>
+        <td id="tdTravauxRealises" style="display: none" th:text="${fiche.travauxRealises}"></td>
+        <td id="tdTravauxNonRealises" style="display: none" th:text="${fiche.travauxNonRealises}"></td>
+        <td id="tdFiche">
+          <a th:href="@{/fiche/{id}(id=${fiche.id})}">Voir détails</a>
+        </td>
+        <td id="tdEvaluation">
+          <a th:href="@{/record/{id}(id=${fiche.id})}">Laisser une évaluation</a>
+          <a th:href="@{/recordaffichage/{id}(id=${fiche.id})}">Ecouter l'évaluation</a>
+        </td>
+
+
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    function toggleColumn(columnName) {
+      var checkbox = document.getElementById("chk" + columnName);
+      var th = document.getElementById("th" + columnName);
+      var tds = document.querySelectorAll("#td" + columnName);
+
+      if (!checkbox.checked) {
+        th.style.display = "none";
+        tds.forEach(function (td) {
+          td.style.display = "none";
+        });
+      } else {
+        th.style.display = "";
+        tds.forEach(function (td) {
+          td.style.display = "";
+        });
+      }
+
+      // Mettre à jour les options du select
+      updateColumnSelectOptions();
+    }
+
+    function searchTable() {
+      var input, filters, table, tr, td, i, j, txtValue, selectedColumn;
+      input = document.getElementById("searchInput");
+      filters = input.value.toUpperCase().split(" ");
+
+      table = document.getElementById("interventionsTable");
+      tr = table.getElementsByTagName("tr");
+
+      selectedColumn = document.getElementById("columnSelect").value;
+
+      var resultMessage = document.getElementById("resultMessage");
+      var anyResultFound = false;
+
+      for (i = 1; i < tr.length; i++) {
+        var display = "none";
+        var anyKeywordFound = false;
+
+        if (selectedColumn === "all") {
+          // Parcourir toutes les colonnes sauf la dernière deux (voir note ci-dessous)
+          for (j = 0; j < tr[i].cells.length - 2; j++) {
+            td = tr[i].cells[j];
+
+            // Vérifier si la colonne est visible
+            if (getComputedStyle(td).display !== "none") {
+              txtValue = td.textContent || td.innerText;
+
+              // Vérifier si le mot-clé est présent dans la cellule
+              if (txtValue.toUpperCase().indexOf(filters[0]) > -1) {
+                anyKeywordFound = true;
+                break;
+              }
+            }
+          }
+        } else {
+          // Recherche par colonne spécifique
+          td = tr[i].querySelector("#td" + selectedColumn);
+
+          if (td && getComputedStyle(td).display !== "none") {
+            txtValue = td.textContent || td.innerText;
+
+            // Vérifier si le mot-clé est présent dans la cellule
+            if (txtValue.toUpperCase().indexOf(filters[0]) > -1) {
+              anyKeywordFound = true;
+            }
+          }
+        }
+
+        // Si au moins un mot-clé est trouvé dans la ligne, afficher la ligne
+        if (anyKeywordFound) {
+          display = "";
+          anyResultFound = true;
+        }
+
+        tr[i].style.display = display;
+      }
+
+      // Afficher le message si aucun résultat n'est trouvé
+      if (!anyResultFound) {
+        resultMessage.textContent =
+          "Aucun résultat, veuillez entrer de nouveaux mots clés";
+      } else {
+        resultMessage.textContent = "";
+      }
+    }
+
+    function sortTableByDate() {
+      var table, rows, switching, i, x, y, shouldSwitch;
+      table = document.getElementById("interventionsTable");
+      switching = true;
+
+      while (switching) {
+        switching = false;
+        rows = table.rows;
+
+        for (i = 1; i < rows.length - 1; i++) {
+          shouldSwitch = false;
+
+          x = new Date(
+            parseDate(rows[i].getElementsByTagName("td")[2].textContent)
+          );
+          y = new Date(
+            parseDate(rows[i + 1].getElementsByTagName("td")[2].textContent)
+          );
+
+          if (x < y) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+        }
+      }
+    }
+
+    function parseDate(dateString) {
+      var dateParts = dateString.split("/");
+      return dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
+    }
+
+    function updateColumnSelectOptions() {
+      var select = document.getElementById("columnSelect");
+      var checkboxes = document.querySelectorAll(
+        '.checkbox-container input[type="checkbox"]'
+      );
+
+      // Réinitialiser les options du select
+      select.innerHTML = '<option value="all">Toutes</option>';
+
+      // Ajouter les options pour les colonnes visibles, sauf "Voir Fiche" et "Evaluation"
+      checkboxes.forEach(function (checkbox) {
+        var columnName = checkbox.id.replace("chk", "");
+        var th = document.getElementById("th" + columnName);
+
+        if (
+          checkbox.checked &&
+          th &&
+          columnName !== "Fiche" &&
+          columnName !== "Evaluation"
+        ) {
+          var option = document.createElement("option");
+          option.value = columnName;
+          option.text = th.innerText || th.textContent;
+          select.add(option);
+        }
+      });
+    }
+
+    // Tri automatique par la colonne de la date au chargement de la page
+    window.onload = function () {
+      sortTableByDate();
+      updateColumnSelectOptions();
+    };
+  </script>
+</body>
+
+</html>

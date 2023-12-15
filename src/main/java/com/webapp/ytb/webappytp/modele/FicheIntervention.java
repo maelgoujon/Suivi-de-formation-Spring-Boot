@@ -4,23 +4,22 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.NatureIntervention;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,48 +36,18 @@ public class FicheIntervention {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Embedded
+    private Demande demande;
 
-    @Column(length = 50)
-    @NotBlank(message = "Le champ 'nomDemandeur' ne peut pas être vide")
-    private String nomDemandeur;
-
-    @Column
-    @NotNull(message = "Le champ 'dateDemande' ne peut pas être vide")
-    private LocalDate dateDemande;
+    @Embedded
+    private Intervention intervention;
 
     @Column
-    @NotNull(message = "Le champ 'dateIntervention' ne peut pas être vide")
-    private LocalDate dateIntervention;
-
-    @Column
-    @NotNull(message = "Le champ 'dateCreation' ne peut pas être vide")
+    //@NotNull(message = "Le champ 'dateCreation' ne peut pas être vide")
     private LocalDate dateCreation;
 
-    @Column(length = 50)
-    @NotBlank(message = "Le champ 'dureeIntervention' ne peut pas être vide")
-    private String dureeIntervention;
-
-    @Column(length = 50)
-    @NotBlank(message = "Le champ 'localisation' ne peut pas être vide")
-    private String localisation;
-
-    @Column(length = 250)
-    @NotBlank(message = "Le champ 'descriptionDemande' ne peut pas être vide")
-    private String descriptionDemande;
-
-    @Column(length = 50)
-    @NotBlank(message = "Le champ 'degreUrgence' ne peut pas être vide")
-    private String degreUrgence;
-
-    @Column(length = 50)
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "Le champ 'typeIntervention' ne peut pas être vide")
-    private TypeIntervention typeIntervention;
-
-    @Column(length = 50)
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "Le champ 'natureIntervention' ne peut pas être vide")
-    private NatureIntervention natureIntervention;
+    @Embedded
+    private Maintenance maintenance;
 
     @Column(length = 50)
     @NotNull(message = "Le champ 'etatFiche' ne peut pas être vide")
@@ -97,21 +66,91 @@ public class FicheIntervention {
     @JoinColumn(name = "utilisateur_id")
     private Utilisateur utilisateur;
 
-    @OneToMany(mappedBy = "ficheIntervention", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<ElementFiche> elements;
-
     @Column(name = "materiaux")
     private List<String> materiauxOptions;
 
     @Lob
-    @Column(nullable = true) // Permet à la colonne "photo" d'être nulle
+    @Column(nullable = true)
     private byte[] evaluation;
+
+    @Embedded
+    private NatureIntervention natureIntervention;
+
+    //Niveaux
+    @Column
+    private int NiveauTravauxRealises;
+
+    @Column
+    private int NiveauMateriauxUtilises;
+
+
+    //getters
+    public String getNomDemandeur() {
+        return demande.getNomDemandeur();
+    }
+
+    public LocalDate getDateDemande() {
+        return demande.getDateDemande();
+    }
+
+    public String getLocalisation() {
+        return demande.getLocalisation();
+    }
+
+    public String getDescription() {
+        return demande.getDescription();
+    }
+
+    public int getDegreUrgence() {
+        return demande.getDegreUrgence();
+    }
+
+    public LocalDate getDateIntervention() {
+        return intervention.getDateIntervention();
+    }
+
+    public int getDureeIntervention() {
+        return intervention.getDureeIntervention();
+    }
+
+    public int getNiveauDateIntervention() {
+        return intervention.getNiveauDateIntervention();
+    }
+    
+    public int getNiveauDureeIntervention() {
+        return intervention.getNiveauDureeIntervention();
+    }
+
+    public String getCouleurIconeDuree() {
+        return intervention.getCouleurIconeDuree();
+    }
+
+    public Maintenance.MaintenanceType getMaintenanceType() {
+        return maintenance.getMaintenanceType();
+    }
+
+    public int getNiveauMaintenanceType() {
+        return maintenance.getNiveauMaintenanceType();
+    }
+
+    public NatureIntervention.NatureType getNatureType() {
+        return natureIntervention.getNatureType();
+    }
+
+    public int getNiveauNatureIntervention() {
+        return natureIntervention.getNiveauNatureIntervention();
+    }
+
+
+
 
     public FicheIntervention(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
-        this.elements = new ArrayList<>();
         this.materiauxOptions = new ArrayList<>();
+        this.demande = new Demande();
+        this.intervention = new Intervention();
+        this.maintenance = new Maintenance();
     }
+    
 
 }
