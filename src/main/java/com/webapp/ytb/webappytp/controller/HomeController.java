@@ -29,6 +29,7 @@ import com.webapp.ytb.webappytp.service.FicheService;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurService;
+
 @Controller
 public class HomeController {
 
@@ -104,13 +105,12 @@ public class HomeController {
         model.addAttribute("utilisateur", utilisateur);
         return "mdpmodif";
     }
-    
+
     // deconnection
     @GetMapping("/log_out")
     public String log_out() {
         return "log_out";
     }
-    
 
     @GetMapping("/select_fiche")
     public String select_fiche() {
@@ -135,8 +135,10 @@ public class HomeController {
         return "presentation";
     }
 
-    @GetMapping("/record")
-    public String record() {
+    @GetMapping("/record/{ficheId}")
+    public String record(@PathVariable Long ficheId, Model model) {
+        FicheIntervention ficheIntervention = ficheServ.lire(ficheId);
+        model.addAttribute("ficheIntervention", ficheIntervention);
         return "record";
     }
 
@@ -151,7 +153,7 @@ public class HomeController {
     }
 
     @GetMapping("/recordaffichage/{ficheId}")
-    public String record(@PathVariable Long ficheId, Model model) {
+    public String recordaffichage(@PathVariable Long ficheId, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(ficheId);
         model.addAttribute("ficheIntervention", ficheIntervention);
         return "recordaffichage";
