@@ -1,6 +1,10 @@
 package com.webapp.ytb.webappytp.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
@@ -18,7 +22,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
@@ -42,7 +51,7 @@ public class HomeController {
     public String ajout_fiche(Model model) {
         FicheIntervention fiche = new FicheIntervention();
         model.addAttribute("fiche", fiche);
-        model.addAttribute("users", userServ.lire()); // Replace with your actual service method
+        model.addAttribute("users", userServ.lire());
         return "fiche_a_completer";
     }
 
@@ -275,4 +284,39 @@ public class HomeController {
         return "liste_fiche";
     }
 
+
+    @RequestMapping("/uploadForm")
+    public String uploadForm() {
+        return "upload";
+    }
+
+    @PostMapping("/upload")
+    @ResponseBody
+    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) {
+        try {
+            if (!file.isEmpty()) {
+                // Obtenez le répertoire de travail de l'application
+                String uploadDir = System.getProperty("user.dir") + "/images/";
+                System.out.println("Upload directory: " + uploadDir);
+
+                // Ajoutez un séparateur de fichier et le nom du fichier
+                String fileName = file.getOriginalFilename();
+                String filePath = uploadDir + File.separator + fileName;
+                File dest = new File(filePath);
+
+                // Enregistrez le fichier
+                file.transferTo(dest);
+                System.out.println("File saved successfully");
+
+                return ResponseEntity.ok("File uploaded successfully!");
+            } else {
+                System.out.println("No file selected to upload.");
+                return ResponseEntity.badRequest().body("No file selected to upload.");
+            }
+        } catch (IOException e) {
+            System.out.println("Failed to save the file");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error uploading the file: " + e.getMessage());
+        }
+    }
 }

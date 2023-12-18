@@ -10,7 +10,7 @@
 
     <body class="colonne centre">
         <main class="colonne">
-            <div class="titre border">FICHE D'INTERVENTION N°01</div>
+            <div class="titre border">FICHE D'INTERVENTION</div>
             <form th:action="@{/ajouter_fiche}" th:object="${fiche}" method="post" id="ficheForm" class="fiche-form">
 
                 <div class="espaceHor"></div>
@@ -68,152 +68,13 @@
                     </div>
                 </fieldset>
                 <div class="espaceHor"></div>
-                <fieldset>
-                    <legend>Intervention</legend>
 
-                    <div class="espaceHor"></div>
-                    <div>
-
-                        <div class="titre">Date d'intervention</div>
-
-
-                        <div class="test">
-                            <span th:if="${fiche.intervention != null}" th:text="${#temporals.format(fiche.intervention.dateIntervention, 'dd/MM/yyyy')}"></span>
-                        </div>
-                        
-
-                        <div class="titre">Durée de l'opération</div>
-                        <div class="test">
-                            <input type="text" id="dureeIntervention" name="dureeIntervention"
-                                th:field="*{intervention.dureeIntervention}">
-                        </div>
-                    </div>
-                </fieldset>
-                </div>
-                <div class="colonne listeCheckbox">
-                    <fieldset class=" colonne">
-                        <legend>Type de Maintenance</legend>
-
-                        <div>
-                            <div class="demi">
-                                <select id="MaintenanceType" name="MaintenanceType"
-                                    th:field="*{maintenance.maintenanceType}">
-                                    <option
-                                        th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance.MaintenanceType).values()}"
-                                        th:value="${type}" th:text="${#strings.capitalize(type.name())}"></option>
-                                </select>
-
-                            </div>
-                        </div>
-
-
-
-
-                    </fieldset>
-                </div>
-                <div class="colonne listeCheckbox">
-                    <fieldset class="colonne">
-                        <legend>Nature de l'intervention</legend>
-                        <div>
-                            <div class="demi">
-                                <select th:id="'natureIntervention' + ${i}" name="natureIntervention" class="natureIntervention" th:field="*{natureIntervention.natureType}">
-                                    <option th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.NatureIntervention.NatureType).values()}"
-                                            th:value="${nature}" th:text="${#strings.capitalize(nature.name())}"></option>
-                                </select>
-                                
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                
-
-
-                </div>
-                <div class="espaceHor"></div>
-                </div>
-                <div class="espaceHor"></div>
-
-                <div>
-                    <div class="colonnePrint">
-                        <div class="titre demi">Travaux réalisés</div>
-                        <div class="test">
-                            <input type="text" id="travauxRealises" name="travauxRealises"
-                                th:field="*{travauxRealises}">
-                        </div>
-                    </div>
-                </div>
-                <div class="espaceHor"></div>
-
-                <div>
-                    <div class="colonnePrint">
-                        <div class="titre demi">Travaux non réalisés</div>
-                        <div class="test">
-                            <input type="text" id="travauxNonRealises" name="travauxNonRealises"
-                                th:field="*{travauxNonRealises}">
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div>
-                    <div class="noPrint "></div>
-                    <div class="check">
-                        <!-- Add a checkbox with name "etatFicheFinie" and bind it to the "fiche.etatFicheFinie" property -->
-                        <input type="checkbox" name="nouvelleIntervention" th:checked="${fiche.nouvelleIntervention}" />
-                    </div>
-                    <div class="droite"> <label>Nécessite une nouvelle intervention</label>
-                    </div>
-                </div>
-                <div class="espaceHor"></div>
-
-
-                <!-- Matériaux Utilisés -->
-                <legend>Matériaux Utilisés</legend>
-
-                <!-- Utilisez une boucle pour générer dynamiquement les champs de sélection des matériaux -->
-
-                <div th:each="i : ${#numbers.sequence(1, 6)}" class="demi selectADupliquer">
-                    <select th:id="'materiauxUtilises' + ${i}" name="materiauxUtilises" class="materiauxUtilises"
-                        th:field="*{materiauxOptions}">
-                        <option
-                            th:each="materiau : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxElectriciteListe).values()}"
-                            th:value="${materiau}" th:text="${materiau.optionName}"></option>
-                    </select>
-                </div>
-
-                </div>
-                <div class="espaceHor"></div>
-                <div class="espaceHor"></div>
-                <!-- Add this checkbox to your form -->
-                <div>
-                    <div class="noPrint"></div>
-                    <div class="check">
-                        <!-- Add a checkbox with name "etatFicheFinie" and bind it to the "fiche.etatFicheFinie" property -->
-                        <input type="checkbox" name="etatFicheFinie" th:checked="${fiche.etatFicheFinie}" />
-                    </div>
-                    <div class="droite"> <label>État de la fiche</label></div>
-                </div>
-
-
-
-
-                <div class="centre noPrint">Click sur imprimer quand vous avez tout terminé</div>
-                <div class="noPrint">
-                    <div></div>
-                    <button>Imprimer</button>
-                    <div></div>
-                </div>
                 <button type="submit">Submit</button>
             </form>
         </main>
     </body>
     <script>
-        bouton = document.getElementsByTagName("button")[0];
-        bouton.addEventListener("click", imprimer);
-
-        function imprimer(e) {
-            e.preventDefault();
-            window.print();
-        }
+        
 
         document.addEventListener('DOMContentLoaded', function () {
             const dateDemandeInput = document.getElementById('dateDemande');

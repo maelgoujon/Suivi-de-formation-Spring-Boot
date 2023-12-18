@@ -43,7 +43,7 @@ public class FicheIntervention {
     private Intervention intervention;
 
     @Column
-    //@NotNull(message = "Le champ 'dateCreation' ne peut pas être vide")
+    // @NotNull(message = "Le champ 'dateCreation' ne peut pas être vide")
     private LocalDate dateCreation;
 
     @Embedded
@@ -76,15 +76,14 @@ public class FicheIntervention {
     @Embedded
     private NatureIntervention natureIntervention;
 
-    //Niveaux
+    // Niveaux
     @Column
     private int NiveauTravauxRealises;
 
     @Column
     private int NiveauMateriauxUtilises;
 
-
-    //getters
+    // getters
     public String getNomDemandeur() {
         return demande.getNomDemandeur();
     }
@@ -106,7 +105,7 @@ public class FicheIntervention {
     }
 
     public LocalDate getDateIntervention() {
-        return intervention.getDateIntervention();
+        return this.intervention.getDateIntervention();
     }
 
     public int getDureeIntervention() {
@@ -116,7 +115,7 @@ public class FicheIntervention {
     public int getNiveauDateIntervention() {
         return intervention.getNiveauDateIntervention();
     }
-    
+
     public int getNiveauDureeIntervention() {
         return intervention.getNiveauDureeIntervention();
     }
@@ -141,9 +140,6 @@ public class FicheIntervention {
         return natureIntervention.getNiveauNatureIntervention();
     }
 
-
-
-
     public FicheIntervention(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
         this.materiauxOptions = new ArrayList<>();
@@ -151,6 +147,5 @@ public class FicheIntervention {
         this.intervention = new Intervention();
         this.maintenance = new Maintenance();
     }
-    
 
 }

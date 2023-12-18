@@ -10,7 +10,7 @@
 
     <body class="colonne centre">
         <main class="colonne">
-            <div class="titre border">FICHE D'INTERVENTION N°01</div>
+            <div class="titre border">FICHE D'INTERVENTION N°<span th:text="${ficheIntervention.id}"></span></div>
             <form>
 
                 <div class="espaceHor"></div>
@@ -59,27 +59,29 @@
 
 
 
-                
+
                 <div class="espaceHor"></div>
-                <fieldset>
+                <fieldset th:if="${ficheIntervention.intervention != null}">
                     <legend>Intervention</legend>
 
                     <div class="espaceHor"></div>
                     <div>
                         <div class="titre">Date d'intervention</div>
                         <div class="test">
-                            <span th:text="${#temporals.format(ficheIntervention.dateIntervention, 'dd/MM/yyyy')}"></span>
+                            <span
+                                th:text="${#temporals.format(ficheIntervention.dateIntervention, 'dd/MM/yyyy')}"></span>
                         </div>
                         <div class="titre">Durée de l'opération</div>
-                        <div class="test"> <span th:text="${ficheIntervention.dureeIntervention}"></span>
+                        <div class="test" th:if="${ficheIntervention.dureeIntervention != null}">
+
+                            <span th:text="${ficheIntervention.dureeIntervention}"></span>
                         </div>
-
-
-
 
                 </fieldset>
                 </div>
-                <div class="colonne listeCheckbox">
+
+
+                <div class="colonne listeCheckbox" th:if="${ficheIntervention.maintenance != null and ficheIntervention.maintenance.maintenanceType != null}">
                     <!-- Type de Maintenance -->
                     <fieldset class="colonne">
                         <legend>Type de Maintenance</legend>
@@ -87,7 +89,7 @@
                             <div class="demi">
                                 <input type="checkbox"
                                     th:checked="${#strings.equalsIgnoreCase(ficheIntervention.maintenance.maintenanceType, 'ameliorative')}"
-                                    th:value="préventive" name="typeIntervention">
+                                    th:value="ameliorative" name="typeIntervention">
                             </div>
                             <div class="droite"> <label>améliorative</label></div>
                         </div>
@@ -95,7 +97,7 @@
                             <div class="demi">
                                 <input type="checkbox"
                                     th:checked="${#strings.equalsIgnoreCase(ficheIntervention.maintenance.maintenanceType, 'preventive')}"
-                                    th:value="préventive" name="typeIntervention">
+                                    th:value="preventive" name="typeIntervention">
                             </div>
                             <div class="droite"> <label>préventive</label></div>
                         </div>
@@ -103,23 +105,21 @@
                             <div class="demi">
                                 <input type="checkbox"
                                     th:checked="${#strings.equalsIgnoreCase(ficheIntervention.maintenance.maintenanceType, 'corrective')}"
-                                    th:value="préventive" name="typeIntervention">
+                                    th:value="corrective" name="typeIntervention">
                             </div>
                             <div class="droite"> <label>corrective</label></div>
                         </div>
                     </fieldset>
-
-
                 </div>
-                <div class="colonne listeCheckbox">
+                
+                <div class="colonne listeCheckbox" th:if="${ficheIntervention.natureIntervention != null}">
                     <fieldset class="colonne">
                         <legend>Nature de l'intervention</legend>
                         <div>
                             <div class="demi">
-                                <input type="checkbox" 
-                                th:checked="${#strings.equalsIgnoreCase(ficheIntervention.natureIntervention.NatureType, 'AMENAGEMENT')}" 
-                                th:value="AMENAGEMENT" 
-                                name="natureIntervention">
+                                <input type="checkbox"
+                                    th:checked="${#strings.equalsIgnoreCase(ficheIntervention.natureIntervention.NatureType, 'AMENAGEMENT')}"
+                                    th:value="AMENAGEMENT" name="natureIntervention">
                             </div>
                             <div class="droite">
                                 <label>Aménagement</label>
@@ -128,10 +128,9 @@
                         <!-- Add the span to display the current value -->
                         <div>
                             <div class="demi">
-                                <input type="checkbox" 
-                                th:checked="${#strings.equalsIgnoreCase(ficheIntervention.natureIntervention.NatureType, 'FINITIONS')}" 
-                                th:value="FINITIONS" 
-                                name="natureIntervention">
+                                <input type="checkbox"
+                                    th:checked="${#strings.equalsIgnoreCase(ficheIntervention.natureIntervention.NatureType, 'FINITIONS')}"
+                                    th:value="FINITIONS" name="natureIntervention">
                             </div>
                             <div class="droite">
                                 <label>Finitions</label>
@@ -139,10 +138,9 @@
                         </div>
                         <div>
                             <div class="demi">
-                                <input type="checkbox" 
-                                th:checked="${#strings.equalsIgnoreCase(ficheIntervention.natureIntervention.NatureType, 'INSTALLATION_SANITAIRE')}" 
-                                th:value="INSTALLATION_SANITAIRE" 
-                                name="natureIntervention">
+                                <input type="checkbox"
+                                    th:checked="${#strings.equalsIgnoreCase(ficheIntervention.natureIntervention.NatureType, 'INSTALLATION_SANITAIRE')}"
+                                    th:value="INSTALLATION_SANITAIRE" name="natureIntervention">
                             </div>
                             <div class="droite">
                                 <label>Installation sanitaire</label>
@@ -150,10 +148,9 @@
                         </div>
                         <div>
                             <div class="demi">
-                                <input type="checkbox" 
-                                th:checked="${#strings.equalsIgnoreCase(ficheIntervention.natureIntervention.NatureType, 'INSTALLATION_ELECTRIQUE')}" 
-                                th:value="INSTALLATION_ELECTRIQUE" 
-                                name="natureIntervention">
+                                <input type="checkbox"
+                                    th:checked="${#strings.equalsIgnoreCase(ficheIntervention.natureIntervention.NatureType, 'INSTALLATION_ELECTRIQUE')}"
+                                    th:value="INSTALLATION_ELECTRIQUE" name="natureIntervention">
                             </div>
                             <div class="droite">
                                 <label>Installation électrique</label>
@@ -161,34 +158,43 @@
                         </div>
                     </fieldset>
                 </div>
+
+                </fieldset>
+                </div>
+
+                </div>
+                <div class="espaceHor"></div>
+                </div>
+                <div class="espaceHor"></div>
+
+                <fieldset class="colonne" th:if="${ficheIntervention.travauxRealises != null}">
+                    <legend>Travaux réalisés</legend>
+                    <div>
+                        <div class="colonnePrint">
+                            <div class="test">
+                                <span th:text="${ficheIntervention.travauxRealises}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
                 
-                    </fieldset>
-                </div>
-
-                </div>
-                <div class="espaceHor"></div>
-                </div>
                 <div class="espaceHor"></div>
 
-                <div>
-                    <div class="colonnePrint">
-                        <div class="titre demi">Travaux réalisés</div>
-                        <div class="test">
-                            <span th:text="${ficheIntervention.travauxRealises}"></span>
+
+                <fieldset class="colonne" th:if="${ficheIntervention.travauxNonRealises != null}">
+                    <legend>Travaux non réalisés</legend>
+                    <div>
+                        <div class="colonnePrint">
+                            <div class="test">
+                                <span th:text="${ficheIntervention.travauxNonRealises}"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </fieldset>
+
                 <div class="espaceHor"></div>
 
-                <div>
-                    <div class="colonnePrint">
-                        <div class="titre demi">Travaux non réalisés</div>
-                        <div class="test">
-                            <span th:text="${ficheIntervention.travauxNonRealises}"></span>
-                        </div>
-                    </div>
-                </div>
-                <br>
                 <div>
                     <div class="noPrint "></div>
                     <div class="check">
@@ -198,8 +204,11 @@
                     </div>
                 </div>
                 <div class="espaceHor"></div>
+
+
+                <fieldset class="colonne" th:if="${ficheIntervention.travauxRealises != null}">
                 <!-- Matériaux Utilisés -->
-                <div class="titre demi">Matériaux Utilisés</div>
+                <legend>Matériaux Utilisé</legend>
                 <div class="noPrint"></div>
                 <div class="espaceHor"></div>
                 <div class="ligneSelectMateriaux">
@@ -214,7 +223,7 @@
                         </div>
                     </div>
                 </div>
-
+            </fieldset>
 
 
                 </div>
