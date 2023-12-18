@@ -110,9 +110,20 @@
 
       .boutonmdp{
         position: left;
-        padding: 10px 20px;
+        
       }
-          
+       
+      .modif{
+        border: 2px solid #000000; /* Couleur et épaisseur de la bordure */
+        border-radius: 10px;
+        padding: 10px; /* Espace à l'intérieur de la bordure */
+        width: 300px; /* Largeur de la division */
+        margin: 20px; /* Marge autour de la division */
+      }
+      .modif * {
+        margin-bottom: 10px;
+      }
+      
         </style>
         
     </head>
@@ -146,7 +157,7 @@
 
 
     <h2>Modifier un utilisateur</h2>
-
+  <div class="modif">
     <!-- Afficher un message de succès si l'utilisateur a été modifier avec succès -->
     <div th:if="${success}">
         <p style="color: green;">Utilisateur modifié avec succès!</p>
@@ -207,7 +218,7 @@
     <div class="boutonmdp">
       <button id="mdp" th:attr="data-userid=${utilisateur.id}">Modifier Mot de passe</button>
     </div>
-    
+  </div>  
     <script>
       function encodeImageToBase64() {
         var input = document.getElementById('photo'); // Change 'photo' to the actual ID of your file input

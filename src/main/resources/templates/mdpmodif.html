@@ -92,6 +92,10 @@
         button[type="submit"] {
             margin-top: 20px;
         }
+        .hidden {
+            display: none;
+        }
+          
 
         
     </style>
@@ -149,7 +153,7 @@
                 <div class="dot" data-index="9"></div>
             </div>
             <input type="hidden" th:field="*{mdp}" id="motDePasseHidden" />
-            <button type="submit">Modifier le mot de passe</button>
+            <button type="submit" id="modifierMdpBtn" class="hidden">Modifier le mot de passe</button>
             <div id="cancelButton">Annuler la sélection</div>
         </div>
     </form>
@@ -162,15 +166,16 @@
             const dots = document.querySelectorAll('.dot');
             const cancelButton = document.getElementById('cancelButton');
             const motDePasseHidden = document.getElementById('motDePasseHidden');
+            const modifierMdpBtn = document.getElementById('modifierMdpBtn');
+        
             let selectedCount = 0;
         
             dots.forEach(dot => {
                 dot.addEventListener('click', function () {
-                    if (selectedCount < 4) {
-                        this.classList.toggle('active');
-                        selectedCount = document.querySelectorAll('.dot.active').length;
-                        updateHiddenPassword();
-                    }
+                    this.classList.toggle('active');
+                    selectedCount = document.querySelectorAll('.dot.active').length;
+                    updateHiddenPassword();
+                    toggleModifierMdpBtn();
                 });
             });
         
@@ -180,6 +185,7 @@
                 });
                 selectedCount = 0;
                 updateHiddenPassword();
+                toggleModifierMdpBtn();
             });
         
             function updateHiddenPassword() {
@@ -187,7 +193,16 @@
                 const password = Array.from(activeDots).map(dot => dot.getAttribute('data-index')).join('');
                 motDePasseHidden.value = password;
             }
+        
+            function toggleModifierMdpBtn() {
+                if (selectedCount === 4) {
+                    modifierMdpBtn.classList.remove('hidden');
+                } else {
+                    modifierMdpBtn.classList.add('hidden');
+                }
+            }
         });
+        
         
     </script>
 </body>
