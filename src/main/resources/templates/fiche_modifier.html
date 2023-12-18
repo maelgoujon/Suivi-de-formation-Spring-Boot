@@ -121,7 +121,7 @@
                                 class="demi">
                                 <div class="demi">
                                     <input type="radio" id="${type}" name="maintenanceType" th:value="${type}"
-                                        th:checked="${ficheIntervention.maintenance.maintenanceType.ordinal() eq type.ordinal()}" />
+                                        th:checked="${ficheIntervention.maintenance != null and ficheIntervention.maintenance.maintenanceType != null and ficheIntervention.maintenance.maintenanceType.ordinal() eq type.ordinal()}" />
                                 </div>
                                 <div class="test" th:if="${ficheIntervention.NiveauMaintenanceType == 1}">
                                     <label th:for="${type}"
@@ -133,12 +133,12 @@
                                 </div>
                             </div>
 
-
                             <!-- Hidden input field to hold the selected maintenance type -->
                             <input type="hidden" name="newMaintenanceType"
-                                th:value="${ficheIntervention.maintenance.maintenanceType}"
+                                th:value="${ficheIntervention.maintenance != null ? ficheIntervention.maintenance.maintenanceType : null}"
                                 id="selectedMaintenanceType">
                         </fieldset>
+
 
                         <!-- Nature de l'intervention -->
                         <fieldset class="colonne1_droite">
@@ -147,7 +147,7 @@
                                 class="demi">
                                 <div class="demi">
                                     <input type="radio" id="${nature}" name="natureIntervention" th:value="${nature}"
-                                        th:checked="${ficheIntervention.natureIntervention.natureType.name() eq nature.name()}" />
+                                        th:checked="${ficheIntervention.natureIntervention != null and ficheIntervention.natureIntervention.natureType != null and ficheIntervention.natureIntervention.natureType.name() eq nature.name()}" />
                                 </div>
                                 <div class="test" th:if="${ficheIntervention.NiveauNatureIntervention == 1}">
                                     <label th:for="${nature}"
@@ -159,8 +159,10 @@
                                 </div>
                             </div>
                             <input type="hidden" name="newNatureType"
-                                th:value="${ficheIntervention.natureIntervention.natureType}" id="selectedNatureType">
+                                th:value="${ficheIntervention.natureIntervention != null ? ficheIntervention.natureIntervention.natureType : null}"
+                                id="selectedNatureType">
                         </fieldset>
+
                     </div>
 
 
@@ -228,17 +230,19 @@
                         <div th:each="i : ${#numbers.sequence(1, 6)}" class="ligneMateriaux">
                             <div class="max-width-container">
                                 <select th:id="'materiauxUtilises' + ${i}" name="materiauxUtilises"
-                                    class="max-width-select" th:field="*{materiauxOptions[__${i-1}__]}"
-                                    onchange="updateMateriauField(this, 'selectedMateriau1')">
-                                    <option
-                                        th:each="materiau : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxElectriciteListe).values()}"
-                                        th:value="${materiau}" th:text="${materiau.optionName}"
-                                        th:selected="${ficheIntervention.materiauxOptions[__${i-1}__] == materiau}">
+                                        class="max-width-select" th:field="*{materiauxOptions[__${i-1}__]}"
+                                        onchange="updateMateriauField(this, 'selectedMateriau1')">
+                                    <option value="">
+                                    </option>
+                                    <option th:each="materiau : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxElectriciteListe).values()}"
+                                            th:value="${materiau}" th:text="${materiau.optionName}"
+                                            th:selected="${ficheIntervention.materiauxOptions[__${i-1}__] == materiau}">
                                     </option>
                                 </select>
                             </div>
                         </div>
                     </div>
+                    
 
                     <input type="hidden" name="newMateriau0" id="selectedMateriau0"
                         th:value="${ficheIntervention.materiauxOptions[0]}">

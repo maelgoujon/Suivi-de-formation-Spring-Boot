@@ -120,10 +120,6 @@ public class FicheIntervention {
         return intervention.getNiveauDureeIntervention();
     }
 
-    public String getCouleurIconeDuree() {
-        return intervention.getCouleurIconeDuree();
-    }
-
     public Maintenance.MaintenanceType getMaintenanceType() {
         return maintenance.getMaintenanceType();
     }
@@ -145,6 +141,7 @@ public class FicheIntervention {
         this.materiauxOptions = new ArrayList<>();
         this.demande = new Demande();
         this.intervention = new Intervention();
+        this.intervention.setNiveauDureeIntervention(-1);
         this.maintenance = new Maintenance();
     }
 

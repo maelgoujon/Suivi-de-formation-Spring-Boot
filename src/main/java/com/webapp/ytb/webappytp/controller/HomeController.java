@@ -30,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.NatureIntervention;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
@@ -57,6 +58,25 @@ public class HomeController {
 
     @PostMapping("/ajouter_fiche")
     public String ajouter_fiche(@ModelAttribute FicheIntervention fiche, Model model) {
+        // on set les niveaux de la fiche
+        fiche.setNiveauMateriauxUtilises(1);
+        fiche.setNiveauTravauxRealises(1);
+        // on set les niveaux de intervention
+        Intervention intervention = new Intervention();
+        intervention.setNiveauDateIntervention(1);
+        intervention.setNiveauDureeIntervention(1);
+        // on set les niveaux de nature
+        NatureIntervention nature = new NatureIntervention();
+        nature.setNiveauNatureIntervention(1);
+        // on set les niveaux de maintenance
+        Maintenance maintenance = new Maintenance();
+        maintenance.setNiveauMaintenanceType(1);
+
+        // on applique les niveaux
+        fiche.setIntervention(intervention);
+        fiche.setNatureIntervention(nature);
+        fiche.setMaintenance(maintenance);
+
         FicheIntervention createdFiche = ficheServ.creer(fiche);
         model.addAttribute("createdFiche", createdFiche);
         return "redirect:/fiche/" + createdFiche.getId(); // On affiche la fiche créée
@@ -156,6 +176,7 @@ public class HomeController {
     public String mdp_oublie() {
         return "mdp_oublie";
     }
+
     @GetMapping("/mdp_oublieformateur")
     public String mdp_oublieformateur() {
         return "mdp_oublieformateur";
@@ -203,17 +224,17 @@ public class HomeController {
             @RequestParam int newDegreUrgence,
             @RequestParam LocalDate newDateIntervention,
             @RequestParam int newDureeIntervention,
-            @RequestParam Maintenance.MaintenanceType newMaintenanceType,
-            @RequestParam NatureIntervention.NatureType newNatureType,
+            @RequestParam(required = false) Maintenance.MaintenanceType newMaintenanceType,
+            @RequestParam(required = false) NatureIntervention.NatureType newNatureType,
             @RequestParam String newTravauxRealises,
             @RequestParam String newTravauxNonRealises,
             @RequestParam Optional<Boolean> newNouvelleIntervention,
-            @RequestParam String newMateriau0,
-            @RequestParam String newMateriau1,
-            @RequestParam String newMateriau2,
-            @RequestParam String newMateriau3,
-            @RequestParam String newMateriau4,
-            @RequestParam String newMateriau5
+            @RequestParam(required = false) String newMateriau0,
+            @RequestParam(required = false) String newMateriau1,
+            @RequestParam(required = false) String newMateriau2,
+            @RequestParam(required = false) String newMateriau3,
+            @RequestParam(required = false) String newMateriau4,
+            @RequestParam(required = false) String newMateriau5
 
     ) {
 
@@ -227,22 +248,42 @@ public class HomeController {
         ficheIntervention.getDemande().setDegreUrgence(newDegreUrgence);
         ficheIntervention.getIntervention().setDateIntervention(newDateIntervention);
         ficheIntervention.getIntervention().setDureeIntervention(newDureeIntervention);
-        ficheIntervention.getMaintenance().setMaintenanceType(newMaintenanceType);
-        ficheIntervention.getNatureIntervention().setNatureType(newNatureType);
+        if (newMaintenanceType != null) {
+            ficheIntervention.getMaintenance().setMaintenanceType(newMaintenanceType);
+        }
+        if (newNatureType != null) {
+            ficheIntervention.getNatureIntervention().setNatureType(newNatureType);
+        }
         ficheIntervention.setTravauxRealises(newTravauxRealises);
         ficheIntervention.setTravauxNonRealises(newTravauxNonRealises);
         ficheIntervention.setNouvelleIntervention(nouvelleInterventionValue);
 
         ArrayList<String> materiauxOptions = new ArrayList<>();
-        materiauxOptions = (ArrayList<String>) ficheIntervention.getMateriauxOptions();
-        materiauxOptions.set(0, newMateriau0);
-        materiauxOptions.set(1, newMateriau1);
-        materiauxOptions.set(2, newMateriau2);
-        materiauxOptions.set(3, newMateriau3);
-        materiauxOptions.set(4, newMateriau4);
-        materiauxOptions.set(5, newMateriau5);
 
-        ficheIntervention.setMateriauxOptions(materiauxOptions);
+        if (newMateriau0 != null) {
+            materiauxOptions.add(newMateriau0);
+        }
+        if (newMateriau1 != null) {
+            materiauxOptions.add(newMateriau1);
+        }
+        if (newMateriau2 != null) {
+            materiauxOptions.add(newMateriau2);
+        }
+        if (newMateriau3 != null) {
+            materiauxOptions.add(newMateriau3);
+        }
+        if (newMateriau4 != null) {
+            materiauxOptions.add(newMateriau4);
+        }
+        if (newMateriau5 != null) {
+            materiauxOptions.add(newMateriau5);
+        }
+
+        // Now you can safely set values at specific indices if needed
+        if (materiauxOptions.size() > 0) {
+            // Set values at specific indices if needed
+            ficheIntervention.setMateriauxOptions(materiauxOptions);
+        }
 
         ficheServ.modifier(id, ficheIntervention);
         return "redirect:/fiche/" + id;
@@ -257,9 +298,10 @@ public class HomeController {
         // tous les fichiers dans le répertoire qui se terminent par ".png"
         File[] pngFiles = directory.listFiles((dir, name) -> {
             String lowerCaseName = name.toLowerCase();
-            return lowerCaseName.endsWith(".jpg") || lowerCaseName.endsWith(".jpeg") || lowerCaseName.endsWith(".png") || lowerCaseName.endsWith(".gif") || lowerCaseName.endsWith(".bmp");
+            return lowerCaseName.endsWith(".jpg") || lowerCaseName.endsWith(".jpeg") || lowerCaseName.endsWith(".png")
+                    || lowerCaseName.endsWith(".gif") || lowerCaseName.endsWith(".bmp");
         });
-        
+
         if (pngFiles != null) {
             // ajout des noms des fichiers .png avec le préfixe "/images/" à la liste
             Arrays.stream(pngFiles).map(file -> "/images/materiel/general/" + file.getName()).forEach(listeImages::add);
@@ -283,7 +325,6 @@ public class HomeController {
         model.addAttribute("fiches", fiches); // Ajout de la liste des fiches
         return "liste_fiche";
     }
-
 
     @RequestMapping("/uploadForm")
     public String uploadForm() {

@@ -13,21 +13,18 @@ import lombok.Setter;
 public class Intervention {
 
     @Column
-    //@NotBlank(message = "Le champ 'DateIntervention' est obligatoire.")
+    // @NotBlank(message = "Le champ 'DateIntervention' est obligatoire.")
     private LocalDate DateIntervention;
 
     @Column
     private int NiveauDateIntervention;
-
+ 
     @Column
-    //@NotBlank(message = "Le champ 'DureeIntervention' est obligatoire.")
+    // @NotBlank(message = "Le champ 'DureeIntervention' est obligatoire.")
     private int DureeIntervention;
 
     @Column
     private int NiveauDureeIntervention;
-
-    @Column
-    private String couleurIconeDuree;
 
 
 }
