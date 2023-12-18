@@ -42,7 +42,7 @@
         align-items: center;
         margin-top: 20px;
         height: 100px; /* Ajustez la hauteur selon vos besoins */
-        position: relative;
+        justify-content: center
       }
 
       .modifier button {
@@ -66,6 +66,61 @@
         
         margin-right: 10px ;
       }
+      .encadre{
+        border: 2px solid #000000; /* Couleur et épaisseur de la bordure */
+        border-radius: 10px;
+        padding: 10px; /* Espace à l'intérieur de la bordure */
+        width:500px; /* Largeur de la division */
+        margin: 20px; /* Marge autour de la division */
+        text-align: center;
+      }
+      @media screen and (max-width: 1920px) and (max-height: 1200px) {
+        .encadre {
+            width: 80%; /* Ajustez la largeur selon vos besoins pour une meilleure adaptation à la tablette */
+          align-items: center;
+        }
+        h2,
+        p{
+          font-size: 40px;
+        }
+        
+      }
+
+      @media screen and (max-width: 1200px) and (max-height: 1920px) {
+        .encadre {
+            width:70%; /* Ajustez la largeur selon vos besoins pour une meilleure adaptation à la tablette */
+            align-items: center;
+            height: 80%;
+        }
+        h2,
+        p{
+          font-size: 40px;
+        }
+        
+      }
+      @media (min-width: 1200px){
+        .encadre {
+          width: 50%; /* Ajustez la largeur selon vos besoins pour une meilleure adaptation à l'ordinateur */
+          }
+      
+          h2,
+          label,
+          input,
+          select,
+          p {
+              font-size: 20px;
+          }
+      
+          #mdp {
+              font-size: 16px;
+          }
+      
+          .imagemodif img {
+              height: 30px;
+          }
+      }
+      
+      
     </style>
 </head>
 <body>
@@ -93,30 +148,31 @@
         </a>
       </div>
     <h2>Profil de : <span th:text="${utilisateur.nom}"></span> <span th:text="${utilisateur.prenom}"></span></h2>
-    <p><strong>Login:</strong> <span th:text="${utilisateur.login}"></span></p>
-    <p><strong>Photo:</strong></p>
-    <img th:src="${utilisateur.photoBase64}" alt="Photo de l'utilisateur" style="max-width: 200px; max-height: 200px;">
-    
-    <div class="modifier">
-        
-        <a th:href="@{'/modif/' + ${utilisateur.id}}">
-          <img
-            src="/images/modif.png"
-            alt="Modifier un apprenti"
-            style="cursor: pointer"
-          />
-        </a>
-        <p>Modifier profil apprenti</p>
-
-        <a href="utilisateur/supprimer">
+    <div class="encadre">
+      <p><strong>Login:</strong> <span th:text="${utilisateur.login}"></span></p>
+      <p><strong>Photo:</strong></p>
+      <img th:src="${utilisateur.photoBase64}" alt="Photo de l'utilisateur" style="max-width: 200px; max-height: 200px;">
+      
+      <div class="modifier">
+          
+          <a th:href="@{'/modif/' + ${utilisateur.id}}">
             <img
-              src="/images/archive.png"
+              src="/images/modif.png"
               alt="Modifier un apprenti"
-              style="height: 60px;"
+              style="cursor: pointer"
             />
           </a>
-          <p style=" margin-left: 13px">Archiver le profil</p>
-    </div>
+          <p>Modifier profil apprenti</p>
 
+          <a href="utilisateur/supprimer">
+              <img
+                src="/images/archive.png"
+                alt="Modifier un apprenti"
+                style="height: 60px;"
+              />
+            </a>
+            <p style=" margin-left: 13px">Archiver le profil</p>
+      </div>
+    </div>
 </body>
 </html>

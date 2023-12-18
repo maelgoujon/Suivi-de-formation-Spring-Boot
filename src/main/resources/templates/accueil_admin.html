@@ -221,7 +221,7 @@
         <div class="profils" id="carousel">
            <!-- Iteration sur chaque utilisateur -->
            <div th:each="utilisateur : ${utilisateurs}" class="profil" th:data-id="${utilisateur.id}">
-            <img src="/images/icone_profil.png" alt="Profil 1" />
+            <img th:src="${utilisateur.photoBase64}" alt="Photo de l'utilisateur" style="max-width: 100px; max-height: 100px;">
             <p class="nom" th:text="${utilisateur.nom}">Nom de l'utilisateur</p>
             <p class="prenom" th:text="${utilisateur.prenom}">Prénom de l'utilisateur</p>
           </div>
