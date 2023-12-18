@@ -76,12 +76,13 @@
 
                             <span th:text="${ficheIntervention.dureeIntervention}"></span>
                         </div>
-
+                    </div>
                 </fieldset>
-                </div>
 
 
-                <div class="colonne listeCheckbox" th:if="${ficheIntervention.maintenance != null and ficheIntervention.maintenance.maintenanceType != null}">
+
+                <div class="colonne listeCheckbox"
+                    th:if="${ficheIntervention.maintenance != null and ficheIntervention.maintenance.maintenanceType != null}">
                     <!-- Type de Maintenance -->
                     <fieldset class="colonne">
                         <legend>Type de Maintenance</legend>
@@ -111,9 +112,9 @@
                         </div>
                     </fieldset>
                 </div>
-                
-                <div class="colonne listeCheckbox" th:if="${ficheIntervention.natureIntervention != null}">
-                    <fieldset class="colonne">
+
+                <div class="colonne listeCheckbox">
+                    <fieldset class="colonne" th:if="${ficheIntervention.natureIntervention != null}">
                         <legend>Nature de l'intervention</legend>
                         <div>
                             <div class="demi">
@@ -125,7 +126,6 @@
                                 <label>Aménagement</label>
                             </div>
                         </div>
-                        <!-- Add the span to display the current value -->
                         <div>
                             <div class="demi">
                                 <input type="checkbox"
@@ -158,14 +158,11 @@
                         </div>
                     </fieldset>
                 </div>
-
+                <div class="espaceHor"></div>
+                <div class="espaceHor"></div>
                 </fieldset>
-                </div>
 
-                </div>
-                <div class="espaceHor"></div>
-                </div>
-                <div class="espaceHor"></div>
+
 
                 <fieldset class="colonne" th:if="${ficheIntervention.travauxRealises != null}">
                     <legend>Travaux réalisés</legend>
@@ -176,10 +173,11 @@
                             </div>
                         </div>
                     </div>
+                    <div class="espaceHor"></div>
                 </fieldset>
 
-                
-                <div class="espaceHor"></div>
+
+
 
 
                 <fieldset class="colonne" th:if="${ficheIntervention.travauxNonRealises != null}">
@@ -191,9 +189,10 @@
                             </div>
                         </div>
                     </div>
+                    <div class="espaceHor"></div>
                 </fieldset>
 
-                <div class="espaceHor"></div>
+
 
                 <div>
                     <div class="noPrint "></div>
@@ -207,23 +206,20 @@
 
 
                 <fieldset class="colonne" th:if="${ficheIntervention.travauxRealises != null}">
-                <!-- Matériaux Utilisés -->
-                <legend>Matériaux Utilisé</legend>
-                <div class="noPrint"></div>
-                <div class="espaceHor"></div>
-                <div class="ligneSelectMateriaux">
-                    <!-- Ajouter une div pour chaque ligne de matériaux -->
-                    <div th:each="ligneMateriaux : ${ficheIntervention.materiauxOptions}" class="ligneMateriaux">
-                        <!-- Ajouter une div pour chaque paire de matériau dans la ligne -->
-                        <div th:each="materiel : ${ligneMateriaux}" class="max-width-container">
-                            <select class="max-width-select">
-                                <!-- Utiliser th:each pour parcourir les options de matériau -->
-                                <option th:each="m : ${materiel}" th:value="${m}" th:text="${m}"></option>
-                            </select>
+                    <!-- Matériaux Utilisés -->
+                    <legend>Matériaux Utilisé</legend>
+                    <div class="noPrint"></div>
+                    <div class="espaceHor"></div>
+                    <div class="ligneSelectMateriaux">
+                        <div th:each="ligneMateriaux : ${ficheIntervention.materiauxOptions}" class="ligneMateriaux">
+                            <div th:each="materiel : ${ligneMateriaux}" class="max-width-container">
+                                <select class="max-width-select">
+                                    <option th:each="m : ${materiel}" th:value="${m}" th:text="${m}"></option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </fieldset>
+                </fieldset>
 
 
                 </div>

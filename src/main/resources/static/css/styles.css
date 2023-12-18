@@ -1,5 +1,5 @@
 body {
-    background-color: #2b2d42;
+    background-color: #e3e3e3;
     font-family: 'Roboto', sans-serif;
 }
 
@@ -18,8 +18,8 @@ input[type="radio"] {
 
 .submit {
     width: 100%;
-    background-color: #ff7474;
-    color: #2b2d42;
+    background-color: #82de7f;
+    color: #000000;
     border: none;
     border-radius: 12px;
     padding: 1em;
@@ -45,7 +45,7 @@ form {
 
 .test {
     padding: 3px;
-    color: rgb(255, 255, 255);
+    color: rgb(255, 0, 0);
     font-family: 'Roboto', sans-serif;
 }
 
@@ -65,10 +65,16 @@ form {
     height: auto;
 }
 
-legend,
+legend {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #69bafb;
+    font-family: 'Roboto', sans-serif;
+}
+
 .titre,
 label {
-    color: #ff7474;
+    color: #000;
 }
 
 .listeCheckbox {
@@ -100,20 +106,17 @@ label {
 
 .ligneMateriaux {
     flex: 0 0 48%;
-    /* Two items per line with a little space in between */
     margin-bottom: 1em;
-    /* Adjust margin as needed */
     display: flex;
 }
 
 
 .logo{
     height: 2em;
-    filter: invert(1);
 }
 
 .prerempli{
-    background-color: #3e3e3e;
+    background-color: #ffbf91;
 }
 .espaceHor {
     flex: none;
@@ -127,7 +130,7 @@ main {
 .border,
 fieldset {
     border-radius: 12px;
-    border: 3px solid #a3cef1;
+    border: 3px solid #69bafb;
     padding: 1.2em;
     height: 100%;
 }

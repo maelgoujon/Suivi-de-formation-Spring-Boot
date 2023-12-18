@@ -58,25 +58,6 @@ public class HomeController {
 
     @PostMapping("/ajouter_fiche")
     public String ajouter_fiche(@ModelAttribute FicheIntervention fiche, Model model) {
-        // on set les niveaux de la fiche
-        fiche.setNiveauMateriauxUtilises(1);
-        fiche.setNiveauTravauxRealises(1);
-        // on set les niveaux de intervention
-        Intervention intervention = new Intervention();
-        intervention.setNiveauDateIntervention(1);
-        intervention.setNiveauDureeIntervention(1);
-        // on set les niveaux de nature
-        NatureIntervention nature = new NatureIntervention();
-        nature.setNiveauNatureIntervention(1);
-        // on set les niveaux de maintenance
-        Maintenance maintenance = new Maintenance();
-        maintenance.setNiveauMaintenanceType(1);
-
-        // on applique les niveaux
-        fiche.setIntervention(intervention);
-        fiche.setNatureIntervention(nature);
-        fiche.setMaintenance(maintenance);
-
         FicheIntervention createdFiche = ficheServ.creer(fiche);
         model.addAttribute("createdFiche", createdFiche);
         return "redirect:/fiche/" + createdFiche.getId(); // On affiche la fiche créée
