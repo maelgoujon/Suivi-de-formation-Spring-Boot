@@ -37,7 +37,7 @@
                         </div>
                         <div class="titre">Degré d'urgence</div>
                         <div class="test">
-                            <input type="text" id="newDegreUrgence" name="newDegreUrgence"
+                            <input type="number" id="newDegreUrgence" name="newDegreUrgence"
                                 th:value="${ficheIntervention.degreUrgence}" />
                         </div>
                     </div>
@@ -82,23 +82,36 @@
 
                     <div class="espaceHor"></div>
                     <div>
-                        <div class="titre" th:if="${ficheIntervention.niveauDateIntervention == 1}">Date d'intervention
+                        <div th:switch="${ficheIntervention.niveauDateIntervention}">
+                            <div th:case="0">
+                                <img class="logo" src="/images/calendar.png" alt="Calendrier" />
+                            </div>
+                            <div th:case="1">
+                                <div class="titre">Date d'intervention</div>
+                                <img class="logo" src="/images/calendar.png" alt="Calendrier" />
+                            </div>
+                            <div th:case="2">
+                                <div class="titre">Date d'intervention</div>
+                            </div>
                         </div>
-                        <div th:unless="${ficheIntervention.niveauDateIntervention == 1}">
-                            <img class="logo" src="/images/calendar.png" alt="Calendrier" />
-                        </div>
+
                         <div class="test">
                             <input type="date" id="newDateIntervention" name="newDateIntervention"
                                 th:value="${#temporals.format(ficheIntervention.dateIntervention, 'yyyy-MM-dd')}" />
                         </div>
 
-                        <div class="titre" th:if="${ficheIntervention.niveauDureeIntervention == 1}">Durée de
-                            l'opération</div>
-                        <div th:unless="${ficheIntervention.niveauDureeIntervention == 1}">
-                            <img class="logo" src="/images/clock.png" alt="Horloge" />
+                        <div th:switch="${ficheIntervention.niveauDureeIntervention}">
+                            <div th:case="0">
+                                <img class="logo" src="/images/clock.png" alt="Horloge" />
+                            </div>
+                            <div th:case="1">
+                                <div class="titre">Durée de l'opération</div>
+                                <img class="logo" src="/images/clock.png" alt="Horloge" />
+                            </div>
+                            <div th:case="2">
+                                <div class="titre">Durée de l'opération</div>
+                            </div>
                         </div>
-
-
 
                         <div class="test">
                             <input type="text" id="newDureeIntervention" name="newDureeIntervention"
@@ -123,14 +136,27 @@
                                     <input type="radio" id="${type}" name="maintenanceType" th:value="${type}"
                                         th:checked="${ficheIntervention.maintenance != null and ficheIntervention.maintenance.maintenanceType != null and ficheIntervention.maintenance.maintenanceType.ordinal() eq type.ordinal()}" />
                                 </div>
-                                <div class="test" th:if="${ficheIntervention.NiveauMaintenanceType == 1}">
-                                    <label th:for="${type}"
-                                        th:text="${#strings.capitalize(type.name().toLowerCase().replace('_', ' '))}"></label>
+                                <div th:switch="${ficheIntervention.NiveauMaintenanceType}">
+                                    <div th:case="0">
+                                        <img class="logo" th:src="${'/images/' + type.name().toLowerCase() + '.png'}"
+                                            th:alt="${'/images/' + type.name().toLowerCase() + '.png'}" />
+                                    </div>
+                                    <div th:case="1">
+                                        <div class="test">
+                                            <label th:for="${type}"
+                                                th:text="${#strings.capitalize(type.name().toLowerCase().replace('_', ' '))}"></label>
+                                        </div>
+                                        <img class="logo" th:src="${'/images/' + type.name().toLowerCase() + '.png'}"
+                                            th:alt="${'/images/' + type.name().toLowerCase() + '.png'}" />
+                                    </div>
+                                    <div th:case="2">
+                                        <div class="test">
+                                            <label th:for="${type}"
+                                                th:text="${#strings.capitalize(type.name().toLowerCase().replace('_', ' '))}"></label>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div th:unless="${ficheIntervention.NiveauMaintenanceType == 1}">
-                                    <img class="logo" th:src="${'/images/' + type.name().toLowerCase() + '.png'}"
-                                        th:alt="${'/images/' + type.name().toLowerCase() + '.png'}" />
-                                </div>
+
                             </div>
 
                             <!-- Hidden input field to hold the selected maintenance type -->
@@ -149,14 +175,27 @@
                                     <input type="radio" id="${nature}" name="natureIntervention" th:value="${nature}"
                                         th:checked="${ficheIntervention.natureIntervention != null and ficheIntervention.natureIntervention.natureType != null and ficheIntervention.natureIntervention.natureType.name() eq nature.name()}" />
                                 </div>
-                                <div class="test" th:if="${ficheIntervention.NiveauNatureIntervention == 1}">
-                                    <label th:for="${nature}"
-                                        th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
+                                <div th:switch="${ficheIntervention.NiveauNatureIntervention}">
+                                    <div th:case="0">
+                                        <img class="logo" th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
+                                            th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
+                                    </div>
+                                    <div th:case="1">
+                                        <div class="test">
+                                            <label th:for="${nature}"
+                                                th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
+                                        </div>
+                                        <img class="logo" th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
+                                            th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
+                                    </div>
+                                    <div th:case="2">
+                                        <div class="test">
+                                            <label th:for="${nature}"
+                                                th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div th:unless="${ficheIntervention.NiveauNatureIntervention == 1}">
-                                    <img class="logo" th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
-                                        th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
-                                </div>
+
                             </div>
                             <input type="hidden" name="newNatureType"
                                 th:value="${ficheIntervention.natureIntervention != null ? ficheIntervention.natureIntervention.natureType : null}"
@@ -181,10 +220,15 @@
                 </div>
 
                 <fieldset class="colonne">
-                    <legend th:if="${ficheIntervention.NiveauTravauxRealises == 1}">Travaux réalisés</legend>
-                    <legend th:unless="${ficheIntervention.NiveauTravauxRealises == 1}"><img class="logo"
-                            src="/images/check.png" alt="Fait" /></legend>
-
+                    <legend th:switch="${ficheIntervention.NiveauTravauxRealises}">
+                        <img th:case="0" class="logo" src="/images/check.png" alt="Fait" />
+                        <span th:case="1">
+                            <img class="logo" src="/images/check.png" alt="Fait" />
+                            Travaux réalisés
+                        </span>
+                        <span th:case="2">Travaux réalisés</span>
+                    </legend>
+                    
 
                     <div class="test">
                         <input type="text" id="newTravauxRealises" name="newTravauxRealises"
@@ -194,9 +238,16 @@
 
 
                 <fieldset class="colonne">
-                    <legend th:if="${ficheIntervention.NiveauTravauxRealises == 1}">Travaux non réalisés</legend>
-                    <legend th:unless="${ficheIntervention.NiveauTravauxRealises == 1}"><img class="logo"
-                            src="/images/notchecked.png" alt="Fait" /></legend>
+                    <legend th:switch="${ficheIntervention.NiveauTravauxRealises}">
+                        <img th:case="0" class="logo" src="/images/notchecked.png" alt="Non Fait" />
+                        <span th:case="1">
+                            <img class="logo" src="/images/notchecked.png" alt="Non Fait" />
+                            Travaux non réalisés
+                        </span>
+                        <span th:case="2">Travaux non réalisés</span>
+                    </legend>
+
+
                     <div class="test">
                         <input type="text" id="newTravauxNonRealises" name="newTravauxNonRealises"
                             th:value="${ficheIntervention.travauxNonRealises}" />
@@ -221,28 +272,38 @@
                 <!-- Matériaux Utilisés -->
 
                 <fieldset class="colonne">
-                    <legend th:if="${ficheIntervention.NiveauMateriauxUtilises == 1}">Matériaux utilisés</legend>
-                    <legend th:unless="${ficheIntervention.NiveauMateriauxUtilises == 1}"><img class="logo"
-                            src="/images/materiaux.png" alt="Fait" /></legend>
+                    <legend th:switch="${ficheIntervention.NiveauMateriauxUtilises}">
+                        <img th:case="0" class="logo" src="/images/materiaux.png" alt="Matériaux" />
+                        <span th:case="1">
+                            <img class="logo" src="/images/materiaux.png" alt="Matériaux" />
+                            Matériaux utilisés
+                        </span>
+                        <span th:case="2">Matériaux utilisés</span>
+                    </legend>
+
+
+
+
                     <div class="noPrint"></div>
                     <div class="espaceHor"></div>
                     <div class="ligneSelectMateriaux">
                         <div th:each="i : ${#numbers.sequence(1, 6)}" class="ligneMateriaux">
                             <div class="max-width-container">
                                 <select th:id="'materiauxUtilises' + ${i}" name="materiauxUtilises"
-                                        class="max-width-select" th:field="*{materiauxOptions[__${i-1}__]}"
-                                        onchange="updateMateriauField(this, 'selectedMateriau1')">
+                                    class="max-width-select" th:field="*{materiauxOptions[__${i-1}__]}"
+                                    onchange="updateMateriauField(this, 'selectedMateriau1')">
                                     <option value="">
                                     </option>
-                                    <option th:each="materiau : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxElectriciteListe).values()}"
-                                            th:value="${materiau}" th:text="${materiau.optionName}"
-                                            th:selected="${ficheIntervention.materiauxOptions[__${i-1}__] == materiau}">
+                                    <option
+                                        th:each="materiau : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxElectriciteListe).values()}"
+                                        th:value="${materiau}" th:text="${materiau.optionName}"
+                                        th:selected="${ficheIntervention.materiauxOptions[__${i-1}__] == materiau}">
                                     </option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    
+
 
                     <input type="hidden" name="newMateriau0" id="selectedMateriau0"
                         th:value="${ficheIntervention.materiauxOptions[0]}">
