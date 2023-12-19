@@ -18,5 +18,8 @@ public interface FicheService {
     String supprimer(Long id);
 
     public void enregistrerAudio(Long id, MultipartFile fichierAudio) throws Exception;
+
+    public List<FicheIntervention> getFichesByUserId(Long userId);
+
 }
 

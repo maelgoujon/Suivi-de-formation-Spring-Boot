@@ -2,6 +2,7 @@ package com.webapp.ytb.webappytp.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class FicheServiceImpl implements FicheService {
         return ficheRepository.findAll();
     }
     @Override
-    @Transactional
+    @Transactional 
     public FicheIntervention lire(Long id) {
         return ficheRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Fiche non trouvée"));
@@ -78,4 +79,13 @@ public class FicheServiceImpl implements FicheService {
             throw new Exception("Erreur lors de la manipulation du fichier audio.", e);
         }
     }
+
+    @Transactional
+    @Override
+    public List<FicheIntervention> getFichesByUserId(Long userId) {
+    List<FicheIntervention> fiches = ficheRepository.findByUtilisateurId(userId);
+    return fiches.stream()
+                 .filter(fiche -> fiche.getEvaluation() != null && fiche.getEvaluation().length > 0)
+                 .collect(Collectors.toList());
+}
 }

@@ -131,8 +131,13 @@ public class HomeController {
         return "fiche_complete";
     }
 
-    @GetMapping("/suivi_progression")
-    public String suivi_progression() {
+    @GetMapping("/suivi_progression/{userId}")
+    public String suiviProgression(@PathVariable Long userId, Model model) {
+        Utilisateur utilisateur = userServ.findById(userId); // Supposons que lire renvoie l'utilisateur
+        List<FicheIntervention> fiches = ficheServ.getFichesByUserId(userId);
+
+        model.addAttribute("utilisateur", utilisateur);
+        model.addAttribute("fiches", fiches);
         return "suivi_progression";
     }
 
