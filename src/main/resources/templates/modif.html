@@ -292,6 +292,12 @@
                 <option value="3">3</option>
               </select>
         </div>
+        <div class="col-md-6 form-group">
+          <label for="description">Description:</label>
+          <div class="descriptiontext">
+              <textarea id="description" name="description" th:field="*{description}" required></textarea>
+          </div>
+        </div>
 
           <button type="submit">Modifier Utilisateur</button>
       </div>
