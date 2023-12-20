@@ -117,7 +117,11 @@
                 border: none;
                 padding: 10px 20px;
                 cursor: pointer;
-              }
+            }
+            .descriptiontext{
+                display: flex; 
+                align-items: flex-start;
+            }
 
             .encadre{
                 border: 2px solid #000000; /* Couleur et épaisseur de la bordure */
@@ -299,7 +303,7 @@
                     <option value="SUPERADMIN">Super Admin</option>
                     <option value="USER">User</option>
                 </select>
-            </div>
+                </div>
                 <div class="col-md-6 form-group">
                 <label for="niveau">Niveau:</label>
                 <select class="form-control" th:field="*{niveau}" id="niveau">
@@ -308,7 +312,15 @@
                     <option value="2">2</option>
                     <option value="3">3</option>
                 </select>
-            </div>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="description">Description:</label>
+                    <div class="descriptiontext">
+                        <textarea id="description" name="description" th:field="*{description}" required></textarea>
+                        
+                    </div>
+                </div>
+                
                 <button type="submit">Créer Utilisateur</button>
             </div>
         </form>

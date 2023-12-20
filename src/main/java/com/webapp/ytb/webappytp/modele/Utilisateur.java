@@ -42,6 +42,9 @@ public class Utilisateur {
     @NotBlank(message = "Le champ 'mot de passe' est obligatoire.")
     private String mdp;
 
+    @Column(length = 500)
+    private String description;
+
     @Column(columnDefinition = "text", nullable = true)
     private String photoBase64;
 
