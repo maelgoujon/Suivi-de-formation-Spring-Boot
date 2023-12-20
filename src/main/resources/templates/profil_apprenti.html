@@ -32,10 +32,9 @@
           max-width: 60px;
           height: auto;
       }
-  
-      .bandeau h1 {
-          color: black;
-          margin: 0;
+      
+      h1{
+        font-size: 70px;
       }
   
       .modifier {
@@ -73,81 +72,86 @@
           margin: 20px;
           text-align: center;
       }
+      a {
+        text-decoration: none; /* Supprime le soulignement par défaut */
+        color: black; /* Change la couleur du texte en noir */
+      }
   
       @media screen and (max-width: 1920px) and (max-height: 1200px) {
-          .encadre {
-            width: 80%;
-            align-items: center;
-          }
-          h2, p {
-            font-size: 40px;
-          }
-          .modifimg {
-            height: 80px; /* Adjust the height as needed */
-          }
+        .encadre {
+          width: 80%;
+          align-items: center;
+        }
+        h2, p {
+          font-size: 40px;
+        }
+       .modifimg {
+          height: 80px; /* Adjust the height as needed */
+        }
+        .archiveimg{
+          height: 50px;
+        }
       }
   
       @media screen and (max-width: 1200px) and (max-height: 1920px) {
-          .encadre {
-            width: 80%;
-            align-items: center;
-            height: 20%;
-          }
-          h2, p {
-            font-size: 40px;
-          }
-          .modifimg {
-            height: 60px; /* Adjust the height as needed */
-          }
-          .archiveimg{
-            height: 50px;
-          }
+        .encadre {
+          width: 80%;
+          align-items: center;
+          height: 20%;
+        }
+        h2, p {
+          font-size: 40px;
+        }
+        .modifimg {
+          height: 60px; /* Adjust the height as needed */
+        }
+        .archiveimg{
+          height: 50px;
+        }
       }
   
       @media (min-width: 1200px) {
-          .encadre {
-            width: 50%;
-          }
+        .encadre {
+          width: 50%;
+        }
   
-          h2, label, input, select, p {
-            font-size: 20px;
-          }
+        h2, label, input, select, p {
+          font-size: 20px;
+        }
   
-          #mdp {
-            font-size: 16px;
-          }
+        #mdp {
+          font-size: 16px;
+        }
   
-          .bandeau img {
-            height: 40px;
-          }
+        
       }
   
       @media screen and (max-width: 600px) {
-          .encadre {
-            width: 80%;
-            height: 50%;
-          }
-          h2, label, input, select, p {
-            font-size: 10px;
-          }
+        .encadre {
+          width: 80%;
+          height: 50%;
+        }
+        h2, label, input, select, p {
+          font-size: 10px;
+        }
   
-          #mdp {
-            font-size: 10px;
-          }
+        #mdp {
+          font-size: 10px;
+        }
   
-          .modifimg {
-            height: 50px; /* Adjust the height as needed */
-          }
-          .archiveimg{
-            height: 40px; /* Adjust the height as needed */
-          }
-          .bandeau img {
-            height: 20px;
-          }
-          .bandeau{
-            height: 7%;
+        .modifimg {
+          height: 50px; /* Adjust the height as needed */
+        }
+        .archiveimg{
+          height: 40px; /* Adjust the height as needed */
+        }
+        .bandeau img {
+          height: 20px;
+        }
+        .bandeau{
+          height: 7%;
             
-          }
+        }
       }
   </style>
 </head>
@@ -198,8 +202,12 @@
                 alt="Modifier un apprenti"
                 class="archiveimg"
               />
-            </a>
-            <p style=" margin-left: 13px">Archiver le profil</p>
+          </a>
+          <p style=" margin-left: 13px">Archiver le profil</p>
+          <a th:href="@{'/ajout_fiche/' + ${utilisateur.id}}"><h1 >+</h1></a>
+          <a th:href="@{'/ajout_fiche/' + ${utilisateur.id}}"><p >Ajouter une fiche</p></a>
+
+            
       </div>
     </div>
 </body>
