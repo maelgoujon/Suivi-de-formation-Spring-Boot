@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
 
@@ -11,15 +12,15 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class UtilisateurServiceImpl implements UtilisateurService{
+public class UtilisateurServiceImpl implements UtilisateurService {
 
-    private final UtilisateurRepository utilisateurRepository; 
+    private final UtilisateurRepository utilisateurRepository;
 
     @Override
     public Utilisateur creer(Utilisateur utilisateur) {
         return utilisateurRepository.save(utilisateur);
     }
-    
+
     @Override
     public List<Utilisateur> lire() {
         return utilisateurRepository.findAll();
@@ -28,15 +29,15 @@ public class UtilisateurServiceImpl implements UtilisateurService{
     @Override
     public Utilisateur modifier(Long id, Utilisateur utilisateur) {
         return utilisateurRepository.findById(id)
-        .map(p-> {
-            p.setPrenom(utilisateur.getPrenom());
-            p.setNom(utilisateur.getNom());
-            p.setLogin(utilisateur.getLogin());
-            p.setMdp(utilisateur.getMdp());
-            p.setPhotoBase64(utilisateur.getPhotoBase64());
-            p.setRole(utilisateur.getRole());
-            return utilisateurRepository.save(p);
-        }).orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .map(p -> {
+                    p.setPrenom(utilisateur.getPrenom());
+                    p.setNom(utilisateur.getNom());
+                    p.setLogin(utilisateur.getLogin());
+                    p.setMdp(utilisateur.getMdp());
+                    p.setPhotoBase64(utilisateur.getPhotoBase64());
+                    p.setRole(utilisateur.getRole());
+                    return utilisateurRepository.save(p);
+                }).orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
     }
 
     @Override
@@ -62,4 +63,9 @@ public class UtilisateurServiceImpl implements UtilisateurService{
         utilisateurRepository.save(utilisateur);
     }
 
+    @Override
+    public List<Utilisateur> getUtilisateursByRole(String roleStr) {
+        UserRole role = UserRole.valueOf(roleStr); // Convertit la chaîne en énumération
+        return utilisateurRepository.findByRole(role);
+    }
 }

@@ -19,5 +19,5 @@ public interface UtilisateurService {
     // Ajoutez cette méthode pour modifier le mot de passe
     void modifierMotDePasse(Long id, String nouveauMotDePasse);
 
-    
+    public List<Utilisateur> getUtilisateursByRole(String roleStr);
 }
