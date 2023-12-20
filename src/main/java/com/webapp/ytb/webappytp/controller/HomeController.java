@@ -82,7 +82,7 @@ public class HomeController {
     @GetMapping("/accueil_admin")
     public String admin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
-        List<Utilisateur> utilisateurs = userServ.lire();
+        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
         model.addAttribute("utilisateurs", utilisateurs);
         if ("ROLE_ADMIN".equals(role)) {
             return "accueil_admin";
