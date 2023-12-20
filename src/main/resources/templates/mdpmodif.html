@@ -64,7 +64,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 8px;
-            margin: 0 60px;
+        
             align-items: center;
         }
 
@@ -76,6 +76,7 @@
             background-color: #fff;
             cursor: pointer;
             transition: 0.3s;
+            
         }
 
         .dot.active {
@@ -118,7 +119,8 @@
         @media screen and (max-width: 1920px) and (max-height: 1200px) {
             .encadre {
                 align-items: center;
-                width: 25%;
+                width: 19%;
+                
             }
             h2{
                 font-size: 40px;
@@ -126,7 +128,7 @@
             }
             #cancelButton{
               font-size: 25px;
-              margin-left: 100px;
+              
             }
             .dot{
                 width: 80px; /* Ajustez la taille des dots selon vos besoins */
@@ -135,11 +137,11 @@
             }
             .imagemodif img{
                 height: 80px;
-                margin-left: 100px;
+               
             }
             button[type="submit"] {
                 font-size: 20px;
-                margin-left: 100px;
+                
             }
           }
     
@@ -203,7 +205,7 @@
     </div>
 
     <h2>Rentrer un nouveau modèle </h2>
-    <div class="encadre">
+    <div class="encadr">
         <!-- Afficher un message de succès si le mdp à été modifié avec succès -->
         <div th:if="${success}">
             <p style="color: green;">Mot de passe modifié avec succès!</p>
