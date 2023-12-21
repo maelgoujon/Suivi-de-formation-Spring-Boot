@@ -1,317 +1,322 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Accueil Admin</title>
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-        background-color: #f0f0f0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        height: 100vh;
-      }
 
-      .bandeau {
-        background-color: #bbdefb;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 80px;
-        border-bottom: 1px solid black;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accueil Admin</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+    }
 
-      .bandeau img {
-        max-width: 60px;
-        height: auto;
-      }
+    .bandeau {
+      background-color: #bbdefb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 80px;
+      border-bottom: 1px solid black;
+    }
 
-      .bandeau h1 {
-        color: black;
-        margin: 0;
-      }
+    .bandeau img {
+      max-width: 60px;
+      height: auto;
+    }
 
+    .bandeau h1 {
+      color: black;
+      margin: 0;
+    }
+
+    .conteneur {
+      margin-top: 50px;
+      width: 100%;
+      max-width: 1200px;
+      margin-top: 100px;
+      background-color: white;
+      border: 1px solid black;
+      text-align: center;
+      padding: 20px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      height: auto;
+      /* Ajustez la hauteur selon vos besoins */
+    }
+
+    .titre {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .profils {
+      display: flex;
+      transition: transform 0.3s;
+      /* Animation de transition fluide */
+    }
+
+    .profil {
+      border: 1px solid black;
+      padding: 10px;
+      margin: 10px;
+      flex: 0 0 calc(30% - 20px);
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .profil.selected {
+      border: 5px solid #72bb53;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+
+    .ajouter {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+      height: auto;
+      /* Ajustez la hauteur selon vos besoins */
+      position: relative;
+    }
+
+    .ajouter button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: none;
+    }
+
+    .ajouter.selected button {
+      display: block;
+    }
+
+    .ajouter img {
+      max-width: 80px;
+      height: auto;
+    }
+
+    .ajouter p {
+      margin-left: 10px;
+    }
+
+    .nom {
+      font-weight: bold;
+    }
+
+    .prenom {
+      font-style: italic;
+    }
+
+    .profil img {
+      max-height: 10vh;
+    }
+
+
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    #profil_apprenti {
+      background-color: #72bb53;
+      border-radius: 10px;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    .centered {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profils {
+      display: flex;
+      transition: transform 1s ease;
+      /* Ajoutez une transition de 0.3 secondes avec une fonction de facilité */
+    }
+
+    .carousel {
+      display: block;
+      width: 100%;
+      /* Ajustez la hauteur en fonction de vos besoins */
+      height: 30vh;
+      /* Vous pouvez ajuster cette valeur selon vos préférences */
+      background: white;
+      overflow-x: scroll;
+      padding: 10px;
+      margin: 0;
+      border-top: 2px solid rgba(0, 0, 0, 0.1);
+      border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+    }
+
+    @media (min-width: 1600px) {
       .conteneur {
-        margin-top: 50px;
         width: 100%;
-        max-width: 1200px;
-        margin-top: 100px;
-        background-color: white;
-        border: 1px solid black;
-        text-align: center;
-        padding: 20px;
-        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-        overflow: hidden;
-        height: auto; /* Ajustez la hauteur selon vos besoins */
-      }
-      .titre {
-        font-size: 20px;
-        margin-bottom: 20px;
+        max-width: 1500px;
       }
 
-      .profils {
-        display: flex;
-        transition: transform 0.3s; /* Animation de transition fluide */
-      }
-
-      .profil {
-        border: 1px solid black;
-        padding: 10px;
-        margin: 10px;
-        flex: 0 0 calc(30% - 20px);
-        text-align: center;
-        cursor: pointer;
-      }
-
-      .profil.selected {
-        border: 5px solid #72bb53;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-      }
-
-      .profil img {
-        max-width: 100px;
-        height: auto;
-      }
-
-      .ajouter {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 20px;
-        height: auto; /* Ajustez la hauteur selon vos besoins */
-        position: relative;
-      }
-
-      .ajouter button {
-        position: absolute;
-        top: 0;
-        right: 0;
-        display: none;
-      }
-
-      .ajouter.selected button {
-        display: block;
-      }
-
-      .ajouter img {
-        max-width: 80px;
-        height: auto;
-      }
-
-      .ajouter p {
-        margin-left: 10px;
-      }
-
-      .nom {
-        font-weight: bold;
-      }
-
-      .prenom {
-        font-style: italic;
-      }
-
-      
-
-      
-
-      .button-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 10px;
-      }
-
-      #profil_apprenti {
-        background-color: #72bb53;
-        border-radius: 10px;
-        color: black;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-      }
-
-      .centered {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .profils {
-        display: flex;
-        transition: transform 1s ease; /* Ajoutez une transition de 0.3 secondes avec une fonction de facilité */
-      }
       .carousel {
-        display: block;
+        height: 25vh;
+      }
+    }
+
+    @media (max-width: 1200px) {
+      .conteneur {
         width: 100%;
-        /* Ajustez la hauteur en fonction de vos besoins */
-        height: 30vh; /* Vous pouvez ajuster cette valeur selon vos préférences */
-        background: white;
-        overflow-x: scroll;
-        padding: 10px;
-        margin: 0;
-        border-top: 2px solid rgba(0, 0, 0, 0.1);
-        border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        /* Vous pouvez ajuster cette valeur selon vos préférences */
+        height: auto;
       }
-      
-        @media (min-width: 1600px) {
-          .conteneur {
-            width: 100%;
-            max-width: 1200px;
-          }
-        
-          .carousel {
-            height: 20vh;
-          }
-        }
-        @media (max-width: 1200px) {
-          .conteneur {
-            width: 100%;
-            max-width: 800px; /* Vous pouvez ajuster cette valeur selon vos préférences */
-            height: auto;
-          }
-        
-          .carousel {
-            height: 15vh; /* Ajustez la hauteur selon vos préférences */
-          }
-        }
-        
-        @media (max-width: 600px) {
-          .conteneur {
-            width: 80%;
-            max-width: 250px;
-          }
-        
-          .carousel {
-            height: 35vh;
-          }
-        }
-        
-    </style>
-  </head>
-  <body>
-    <div class="bandeau">
-      <a href="log_out">
-        <img src="/images/porte.png" alt="logout" style="float: left" />
-      </a>
-      
-      <div class="bandeau centered">
-        <a href="archive">
-          <img src="/images/archive.png" alt="archive" style="margin-left: 10px" />
-        </a>
-      </div>
-      <a
-        href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
-      >
-        <img
-          src="/images/aide.png"
-          alt="aide"
-          style="cursor: pointer; margin-left: auto"
-        />
+
+      .carousel {
+        height: 25vh;
+        /* Ajustez la hauteur selon vos préférences */
+      }
+    }
+
+    @media (max-width: 600px) {
+      .conteneur {
+        width: 80%;
+        max-width: 250px;
+      }
+
+      .carousel {
+        height: 35vh;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bandeau">
+    <a href="log_out">
+      <img src="/images/porte.png" alt="logout" style="float: left" />
+    </a>
+
+    <div class="bandeau centered">
+      <a href="archive">
+        <img src="/images/archive.png" alt="archive" style="margin-left: 10px" />
       </a>
     </div>
+    <a href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing">
+      <img src="/images/aide.png" alt="aide" style="cursor: pointer; margin-left: auto" />
+    </a>
+  </div>
 
-    <div class="conteneur">
-      <div class="carousel">
-        <div class="profils" id="carousel">
-           <!-- Iteration sur chaque utilisateur -->
-           <div th:each="utilisateur : ${utilisateurs}" class="profil" th:data-id="${utilisateur.id}">
-            <img th:src="${utilisateur.photoBase64}" alt="Photo de l'utilisateur" style="max-width: 100px; max-height: 100px;">
-            <p class="nom" th:text="${utilisateur.nom}">Nom de l'utilisateur</p>
-            <p class="prenom" th:text="${utilisateur.prenom}">Prénom de l'utilisateur</p>
+  <div class="conteneur">
+    <div class="carousel">
+      <div class="profils" id="carousel">
+        <!-- Iteration sur chaque utilisateur -->
+        <div th:each="utilisateur : ${utilisateurs}" class="profil" th:data-id="${utilisateur.id}">
+          <div th:if="${utilisateur.photoBase64 != null and not #strings.isEmpty(utilisateur.photoBase64)}">
+            <img th:src="${utilisateur.photoBase64}" alt="Photo de profil" />
           </div>
+          <div th:if="${utilisateur.photoBase64 == null or #strings.isEmpty(utilisateur.photoBase64)}">
+            <img src="/images/icone_profil.png" alt="Photo de profil par défaut" />
+          </div>
+          <p class="nom" th:text="${utilisateur.nom}">Nom de l'utilisateur</p>
+          <p class="prenom" th:text="${utilisateur.prenom}">Prénom de l'utilisateur</p>
         </div>
-        
       </div>
-      <div class="button-container">
-          
-        </div>
-      <!-- Ajout de l'image cliquable et du texte "Ajouter un apprenti" -->
-      <div class="ajouter">
-        
-        <a href="utilisateur/nouveau">
-          <img
-            src="/images/logo_plus.png"
-            alt="Ajouter un apprenti"
-            style="cursor: pointer"
-          />
-        </a>
-        <button id="profil_apprenti" style="display: none">
-          Voir son profil
-        </button>
-        <p>Ajouter un apprenti</p>
-      </div>
+
     </div>
-    <script>
-      const carousel = document.getElementById("carousel");
-      const connectButton = document.getElementById("profil_apprenti");
+    <div class="button-container">
 
-      let currentPosition = 0;
-      const itemWidth = 33.33;
-      const itemsInView = 3;
-      const maxPosition = -itemWidth * (6 - itemsInView);
+    </div>
+    <!-- Ajout de l'image cliquable et du texte "Ajouter un apprenti" -->
+    <div class="ajouter">
 
-      let selectedProfile = null;
+      <a href="utilisateur/nouveau">
+        <img src="/images/logo_plus.png" alt="Ajouter un apprenti" style="cursor: pointer" />
+      </a>
+      <button id="profil_apprenti" style="display: none">
+        Voir son profil
+      </button>
+      <p>Ajouter un apprenti</p>
+    </div>
+  </div>
+  <script>
+    const carousel = document.getElementById("carousel");
+    const connectButton = document.getElementById("profil_apprenti");
 
-      
+    let currentPosition = 0;
+    const itemWidth = 33.33;
+    const itemsInView = 3;
+    const maxPosition = -itemWidth * (6 - itemsInView);
 
-      function selectProfile(profile) {
-        if (selectedProfile === profile) {
-          deselectProfile();
-        } else {
-          if (selectedProfile) {
-            selectedProfile.classList.remove("selected");
-          }
-          profile.classList.add("selected");
-          selectedProfile = profile;
-          connectButton.style.display = "block";
-        }
-      }
+    let selectedProfile = null;
 
-      function deselectProfile() {
+
+
+    function selectProfile(profile) {
+      if (selectedProfile === profile) {
+        deselectProfile();
+      } else {
         if (selectedProfile) {
           selectedProfile.classList.remove("selected");
-          selectedProfile = null;
-          connectButton.style.display = "none";
         }
+        profile.classList.add("selected");
+        selectedProfile = profile;
+        connectButton.style.display = "block";
       }
+    }
 
-      
+    function deselectProfile() {
+      if (selectedProfile) {
+        selectedProfile.classList.remove("selected");
+        selectedProfile = null;
+        connectButton.style.display = "none";
+      }
+    }
 
-      carousel.addEventListener("click", (event) => {
-        const profile = event.target.closest(".profil");
-        if (profile) {
-          selectProfile(profile);
-        }
-      });
 
-      connectButton.addEventListener("click", () => {
-          if (selectedProfile) {
-              // Récupérez l'id du profil sélectionné
-              const userId = selectedProfile.getAttribute("data-id");
 
-              // Redirigez vers la page "profil_apprenti" avec l'id selectionné
-              window.location.href = "profil_apprenti/" + userId;
-          }
-      });
+    carousel.addEventListener("click", (event) => {
+      const profile = event.target.closest(".profil");
+      if (profile) {
+        selectProfile(profile);
+      }
+    });
 
-      let touchStartX = 0;
+    connectButton.addEventListener("click", () => {
+      if (selectedProfile) {
+        // Récupérez l'id du profil sélectionné
+        const userId = selectedProfile.getAttribute("data-id");
 
-      carousel.addEventListener("touchstart", (event) => {
-        touchStartX = event.touches[0].clientX;
-      });
+        // Redirigez vers la page "profil_apprenti" avec l'id selectionné
+        window.location.href = "profil_apprenti/" + userId;
+      }
+    });
 
-      
+    let touchStartX = 0;
 
-      carousel.addEventListener("touchend", () => {
-        // Réinitialiser la valeur de départ du toucher
-        touchStartX = 0;
-      });
-    </script>
-  </body>
+    carousel.addEventListener("touchstart", (event) => {
+      touchStartX = event.touches[0].clientX;
+    });
+
+
+
+    carousel.addEventListener("touchend", () => {
+      // Réinitialiser la valeur de départ du toucher
+      touchStartX = 0;
+    });
+  </script>
+</body>
+
 </html>

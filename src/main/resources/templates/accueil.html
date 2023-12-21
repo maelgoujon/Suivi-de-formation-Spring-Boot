@@ -84,8 +84,7 @@
 
 
         .profil img {
-            max-width: 100px;
-            height: auto;
+            max-height: 10vh;
         }
 
         .nom {
@@ -116,7 +115,7 @@
 
         }
 
-        .connexion{
+        .connexion {
             margin-top: 20px;
             background-color: #72bb53;
             border-radius: 10px;
@@ -125,7 +124,8 @@
             padding: 10px 20px;
             cursor: pointer;
         }
-        .reset{
+
+        .reset {
             margin-top: 20px;
             background-color: #ff190d;
             border-radius: 10px;
@@ -133,7 +133,8 @@
             border: none;
             padding: 10px 20px;
             cursor: pointer;
-          }
+        }
+
         .profil {
             position: relative;
             cursor: pointer;
@@ -164,9 +165,9 @@
             justify-content: center;
             align-items: center;
             overflow: auto;
-            
+
         }
-        
+
         .profil .dos p {
             margin: 0;
         }
@@ -254,37 +255,39 @@
 
         @media (min-width: 1600px) {
             .conteneur {
-              width: 100%;
-              max-width: 1500px;
+                width: 100%;
+                max-width: 1500px;
             }
-          
+
             .carousel {
-              height: 25vh;
+                height: 25vh;
             }
-          }
-          @media (max-width: 1200px) {
+        }
+
+        @media (max-width: 1200px) {
             .conteneur {
-              width: 100%;
-              max-width: 800px; /* Vous pouvez ajuster cette valeur selon vos préférences */
-              height: auto;
+                width: 100%;
+                max-width: 800px;
+                /* Vous pouvez ajuster cette valeur selon vos préférences */
+                height: auto;
             }
-          
+
             .carousel {
-              height: 40vh; /* Ajustez la hauteur selon vos préférences */
+                height: 40vh;
+                /* Ajustez la hauteur selon vos préférences */
             }
-          }
-          
-          @media (max-width: 600px) {
+        }
+
+        @media (max-width: 600px) {
             .conteneur {
-              width: 80%;
-              max-width: 250px;
+                width: 80%;
+                max-width: 250px;
             }
-          
+
             .carousel {
-              height: 35vh;
+                height: 35vh;
             }
-          }
-        
+        }
     </style>
 </head>
 
@@ -303,7 +306,7 @@
                 <div th:each="utilisateur : ${utilisateurs}" class="profil"
                     th:onclick="'flipProfile(this, ' + ${utilisateur.id} + ')'" th:data-id="${utilisateur.id}">
                     <div class="dos">
-                        <form  th:action="@{/login}" th:object="${monFormulaire}" method="post">
+                        <form th:action="@{/login}" th:object="${monFormulaire}" method="post">
 
 
                             <input type="hidden" required id="username" name="username" class="hiddenLoginField"
@@ -351,7 +354,8 @@
                         </form>
                     </div>
                     <div class="front">
-                        <div th:if="${utilisateur.photoBase64 != null and not #strings.isEmpty(utilisateur.photoBase64)}">
+                        <div
+                            th:if="${utilisateur.photoBase64 != null and not #strings.isEmpty(utilisateur.photoBase64)}">
                             <img th:src="${utilisateur.photoBase64}" alt="Photo de profil" />
                         </div>
                         <div th:if="${utilisateur.photoBase64 == null or #strings.isEmpty(utilisateur.photoBase64)}">
@@ -430,7 +434,7 @@
                     }
                 }
             }
-            
+
             function selectProfile(profile, userId) {
                 selectedProfile = profile
                 if (selectedProfile === profile || profile.classList.contains('flipped')) {
@@ -550,12 +554,12 @@
                 function showConnectButton() {
                     if (selectedProfile) {
                         // Récupérez le formulaire
-                        
+
                         const connectButton = selectedProfile.querySelector('#connecter');
                         if (connectButton) {
                             connectButton.style.display = 'block';
                             connectButton.addEventListener('click', function () {
-                            form.submit(); // Soumettre le formulaire
+                                form.submit(); // Soumettre le formulaire
                             });
                         }
                     }
