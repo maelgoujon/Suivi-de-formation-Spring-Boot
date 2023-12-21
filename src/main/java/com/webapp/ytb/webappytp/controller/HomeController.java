@@ -32,6 +32,9 @@ import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxAmenagement;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxAmenagementListe;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxAmenagementLoader;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.NatureIntervention;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
@@ -78,7 +81,6 @@ public class HomeController {
         model.addAttribute("utilisateurs", utilisateurs);
         return "accueil";
     }
-    
 
     @GetMapping("/accueil_admin")
     public String admin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
@@ -279,27 +281,9 @@ public class HomeController {
 
     @GetMapping("/test")
     public String showGallery(Model model) {
-        ArrayList<String> listeImages = new ArrayList<>();
-        // repertoire des images
-        String directoryPath = "src/main/resources/static/images/materiel/general/";
-        File directory = new File(directoryPath);
-        // tous les fichiers dans le répertoire qui se terminent par ".png"
-        File[] pngFiles = directory.listFiles((dir, name) -> {
-            String lowerCaseName = name.toLowerCase();
-            return lowerCaseName.endsWith(".jpg") || lowerCaseName.endsWith(".jpeg") || lowerCaseName.endsWith(".png")
-                    || lowerCaseName.endsWith(".gif") || lowerCaseName.endsWith(".bmp");
-        });
+        List<MateriauxAmenagement> materiauxAmenagementList = MateriauxAmenagementLoader.loadElements();
 
-        if (pngFiles != null) {
-            // ajout des noms des fichiers .png avec le préfixe "/images/" à la liste
-            Arrays.stream(pngFiles).map(file -> "/images/materiel/general/" + file.getName()).forEach(listeImages::add);
-        } else {
-            listeImages.add("/images/clock.png"); // si la liste est vide
-        }
-
-        System.out.println(listeImages);
-
-        model.addAttribute("imageList", listeImages);
+        model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
 
         return "testListe";
     }

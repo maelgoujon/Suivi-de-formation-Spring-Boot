@@ -51,10 +51,10 @@
 
 <body>
     <div class="images-selector">
-        <div th:each="image : ${imageList}">
-            <input type="radio" th:id="${'radio_' + image}" th:name="imageGroup" th:value="${image}">
+        <div th:each="element : ${materiauxAmenagementList}">
             <label class="img-card">
-                <img class="imageListe" th:src="${image}" alt="Image">
+                <img class="imageListe" th:src="${element.emplacementFichier}" alt="Image">
+                <span th:text="${element.optionName}"></span>
             </label>
         </div>
     </div>
