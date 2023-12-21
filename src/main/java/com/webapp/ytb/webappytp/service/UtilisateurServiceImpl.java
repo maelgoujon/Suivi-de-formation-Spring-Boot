@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
 
@@ -61,6 +62,12 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 
         // Enregistrez les modifications dans la base de données
         utilisateurRepository.save(utilisateur);
+    }
+
+    @Override
+    public List<Utilisateur> getUtilisateursByRole(String roleStr) {
+        UserRole role = UserRole.valueOf(roleStr); // Convertit la chaîne en énumération
+        return utilisateurRepository.findByRole(role);
     }
 
 }

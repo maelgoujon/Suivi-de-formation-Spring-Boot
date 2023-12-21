@@ -1,9 +1,13 @@
 package com.webapp.ytb.webappytp.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 
 @Repository
@@ -16,4 +20,5 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long>{
     @Query("SELECT MAX(u.id) FROM Utilisateur u")
     Long findMaxId();
 
+    List<Utilisateur> findByRole(UserRole role);
 }

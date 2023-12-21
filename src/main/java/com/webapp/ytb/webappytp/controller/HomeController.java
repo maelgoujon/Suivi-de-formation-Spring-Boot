@@ -59,14 +59,14 @@ public class HomeController {
     // Accueils
     @GetMapping("/")
     public String home(Model model) {
-        List<Utilisateur> utilisateurs = userServ.lire();
+        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
         model.addAttribute("utilisateurs", utilisateurs);
         return "accueil";
     }
 
     @GetMapping("/accueil")
     public String redirectToAccueil(Model model) {
-        List<Utilisateur> utilisateurs = userServ.lire();
+        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
         model.addAttribute("utilisateurs", utilisateurs);
         return "accueil";
     }
@@ -74,7 +74,7 @@ public class HomeController {
     @GetMapping("/accueil_admin")
     public String admin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
-        List<Utilisateur> utilisateurs = userServ.lire();
+        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
         model.addAttribute("utilisateurs", utilisateurs);
         if ("ROLE_ADMIN".equals(role)) {
             return "accueil_admin";
