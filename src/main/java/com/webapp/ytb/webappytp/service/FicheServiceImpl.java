@@ -2,6 +2,7 @@ package com.webapp.ytb.webappytp.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class FicheServiceImpl implements FicheService {
         return ficheRepository.findAll();
     }
     @Override
-    @Transactional
+    @Transactional 
     public FicheIntervention lire(Long id) {
         return ficheRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Fiche non trouvée"));
@@ -37,16 +38,10 @@ public class FicheServiceImpl implements FicheService {
     public FicheIntervention modifier(Long id, FicheIntervention fiche) {
         return ficheRepository.findById(id)
             .map(existingFiche -> {
-                existingFiche.setNomDemandeur(fiche.getNomDemandeur());
-                existingFiche.setDateDemande(fiche.getDateDemande());
-                existingFiche.setDateIntervention(fiche.getDateIntervention());
-                existingFiche.setDateCreation(fiche.getDateCreation());
-                existingFiche.setDureeIntervention(fiche.getDureeIntervention());
-                existingFiche.setLocalisation(fiche.getLocalisation());
-                existingFiche.setDescriptionDemande(fiche.getDescriptionDemande());
-                existingFiche.setDegreUrgence(fiche.getDegreUrgence());
-                existingFiche.setTypeIntervention(fiche.getTypeIntervention());
-                existingFiche.setNatureIntervention(fiche.getNatureIntervention());
+                existingFiche.setDemande(fiche.getDemande());
+                existingFiche.setIntervention(fiche.getIntervention());
+                existingFiche.setMaintenance(fiche.getMaintenance());
+                existingFiche.setEtatFicheFinie(fiche.isEtatFicheFinie());
                 existingFiche.setTravauxRealises(fiche.getTravauxRealises());
                 existingFiche.setTravauxNonRealises(fiche.getTravauxNonRealises());
                 existingFiche.setEvaluation(fiche.getEvaluation());;
@@ -84,4 +79,13 @@ public class FicheServiceImpl implements FicheService {
             throw new Exception("Erreur lors de la manipulation du fichier audio.", e);
         }
     }
+
+    @Transactional
+    @Override
+    public List<FicheIntervention> getFichesByUserId(Long userId) {
+    List<FicheIntervention> fiches = ficheRepository.findByUtilisateurId(userId);
+    return fiches.stream()
+                 .filter(fiche -> fiche.getEvaluation() != null && fiche.getEvaluation().length > 0)
+                 .collect(Collectors.toList());
+}
 }

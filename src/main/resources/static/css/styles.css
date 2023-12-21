@@ -1,5 +1,32 @@
 body {
-    background-color: #425775;
+    background-color: #e3e3e3;
+    font-family: 'Roboto', sans-serif;
+}
+
+
+
+/* Sélecteur pour tous les boutons radio dans le formulaire */
+input[type="radio"] {
+    max-width: 30%;
+    width: 30%;
+    font-family: 'Roboto', sans-serif;
+}
+
+.shrink {
+    flex-shrink: 0;
+}
+
+.submit {
+    width: 100%;
+    background-color: #82de7f;
+    color: #000000;
+    border: none;
+    border-radius: 12px;
+    padding: 1em;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
 }
 
 div,
@@ -13,11 +40,13 @@ form {
     display: flex;
     flex: 1;
     justify-content: center;
+    font-family: 'Roboto', sans-serif;
 }
 
 .test {
     padding: 3px;
     color: rgb(255, 0, 0);
+    font-family: 'Roboto', sans-serif;
 }
 
 .colonne,
@@ -25,10 +54,27 @@ form {
     flex-direction: column;
 }
 
-legend,
+.colonne1 {
+    flex-direction: row;
+}
+
+.colonne1_droite {
+    height: auto;
+}
+.colonne1_gauche {
+    height: auto;
+}
+
+legend {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #69bafb;
+    font-family: 'Roboto', sans-serif;
+}
+
 .titre,
 label {
-    color: wheat;
+    color: #000;
 }
 
 .listeCheckbox {
@@ -47,8 +93,9 @@ label {
 }
 
 .max-width-select {
-    margin-right: 10px; /* Ajustez la marge selon vos besoins */
-    background-color: rgb(179, 179, 179) ;
+    margin-right: 10px;
+    /* Ajustez la marge selon vos besoins */
+
 }
 
 .ligneSelectMateriaux {
@@ -58,14 +105,19 @@ label {
 }
 
 .ligneMateriaux {
-    flex: 0 0 48%; /* Two items per line with a little space in between */
-    margin-bottom: 1em; /* Adjust margin as needed */
+    flex: 0 0 48%;
+    margin-bottom: 1em;
     display: flex;
 }
 
 
+.logo{
+    height: 2em;
+}
 
-
+.prerempli{
+    background-color: #ffbf91;
+}
 .espaceHor {
     flex: none;
     height: 1.5em;
@@ -77,8 +129,9 @@ main {
 
 .border,
 fieldset {
-    border: 3px solid #87BB34;
-    padding: 2em;
+    border-radius: 12px;
+    border: 3px solid #69bafb;
+    padding: 1.2em;
     height: 100%;
 }
 
@@ -114,11 +167,11 @@ textarea {
     }
 
     fieldset {
-        padding: 0.1em 0;
+        /* padding: 0.1em 0;*/
     }
 
     .demi {
-        flex: 0.25;
+        flex: 0.3;
     }
 
     .border {

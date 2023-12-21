@@ -23,12 +23,14 @@
     <div>
         <button id="startRecording" class="button">Commencer l'enregistrement</button>
         <button id="stopRecording" class="button" disabled>Arrêter l'enregistrement</button>
-        <audio id="audioPlayer" controls style="display:none;"></audio>
+        <span id="timer" style="margin: 10px 0;">00:00</span>
+        <audio id="audioPlayer" controls style="display:none;"></audio> 
+        
     </div>
 
     <form id="uploadForm" th:action="@{/fiche/enregistrerAudio}" method="post" enctype="multipart/form-data">
-        <label for="ficheId">ID de la Fiche:</label>
-        <input type="text" id="ficheId" name="ficheId" required>
+        <!-- Utilisez Thymeleaf pour obtenir l'ID de la fiche d'intervention depuis le modèle -->
+        <input type="hidden" th:value="${ficheIntervention.id}" name="ficheId">
         <br>
         <button type="submit" class="button">Uploader l'Audio</button>
     </form>
@@ -38,10 +40,27 @@
             const startRecordingButton = document.getElementById('startRecording');
             const stopRecordingButton = document.getElementById('stopRecording');
             const audioPlayer = document.getElementById('audioPlayer');
+            const timerElement = document.getElementById('timer');
             let mediaRecorder;
             let audioBlob;
             let chunks = [];
+            let timerInterval;
+            let secondsElapsed = 0;
 
+            // Fonction pour mettre à jour le minuteur
+            function updateTimer() {
+                secondsElapsed++;
+                let minutes = Math.floor(secondsElapsed / 60);
+                let seconds = secondsElapsed % 60;
+                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+
+            // Réinitialiser le minuteur
+            function resetTimer() {
+                clearInterval(timerInterval);
+                secondsElapsed = 0;
+                timerElement.textContent = '00:00';
+            }
             // Gestion de l'accès au microphone et de l'enregistrement
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                 navigator.mediaDevices.getUserMedia({ audio: true })
@@ -68,10 +87,12 @@
                             mediaRecorder.start();
                             startRecordingButton.disabled = true;
                             stopRecordingButton.disabled = false;
+                            timerInterval = setInterval(updateTimer, 1000);
                         });
 
                         stopRecordingButton.addEventListener('click', () => {
                             mediaRecorder.stop();
+                            resetTimer();
                         });
                     })
                     .catch((error) => {

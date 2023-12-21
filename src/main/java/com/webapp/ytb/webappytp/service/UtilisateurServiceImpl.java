@@ -12,15 +12,15 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class UtilisateurServiceImpl implements UtilisateurService{
+public class UtilisateurServiceImpl implements UtilisateurService {
 
-    private final UtilisateurRepository utilisateurRepository; 
+    private final UtilisateurRepository utilisateurRepository;
 
     @Override
     public Utilisateur creer(Utilisateur utilisateur) {
         return utilisateurRepository.save(utilisateur);
     }
-    
+
     @Override
     public List<Utilisateur> lire() {
         return utilisateurRepository.findAll();
@@ -39,6 +39,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
             p.setDescription(utilisateur.getDescription());
             return utilisateurRepository.save(p);
         }).orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
     }
 
     @Override
