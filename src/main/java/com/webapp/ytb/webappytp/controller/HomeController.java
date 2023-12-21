@@ -58,6 +58,7 @@ public class HomeController {
 
     @PostMapping("/ajouter_fiche")
     public String ajouter_fiche(@ModelAttribute FicheIntervention fiche, Model model) {
+        fiche.setDateCreation(LocalDate.now());
         FicheIntervention createdFiche = ficheServ.creer(fiche);
         model.addAttribute("createdFiche", createdFiche);
         return "redirect:/fiche/" + createdFiche.getId(); // On affiche la fiche créée

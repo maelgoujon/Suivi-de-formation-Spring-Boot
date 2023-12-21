@@ -42,8 +42,7 @@ public class FicheIntervention {
     @Embedded
     private Intervention intervention;
 
-    @Column
-    // @NotNull(message = "Le champ 'dateCreation' ne peut pas être vide")
+    @Column(nullable = true)
     private LocalDate dateCreation;
 
     @Embedded
