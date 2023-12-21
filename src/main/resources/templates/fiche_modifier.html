@@ -11,7 +11,9 @@
 
     <body class="colonne centre">
         <main class="colonne">
-            <div class="titre border">FICHE D'INTERVENTION N°<span th:text="${ficheIntervention.id}"></span></div>
+            <div class="titre border">FICHE D'INTERVENTION N°<span th:text="${ficheIntervention.id}"></span>&nbsp;:&nbsp;
+                <span th:if="${ficheIntervention.intervention != null}" th:text="${ficheIntervention.intervention.typeIntervention}"></span>
+            </div>
             <form method="post" th:action="@{/updateFiche/{id}(id=${ficheIntervention.id})}"
                 th:object="${ficheIntervention}">
                 <input type="hidden" th:name="${'id'}" th:value="${ficheIntervention.id}" />
