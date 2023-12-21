@@ -184,7 +184,11 @@
       <p><strong>Login: </strong> <span th:text="${utilisateur.login}"></span></p>
       <p><strong>Photo: </strong></p>
       <img th:src="${utilisateur.photoBase64}" alt="Photo de l'utilisateur" style="max-width: 200px; max-height: 200px;">
-      <p><strong>Description: </strong><span th:text="${utilisateur.description}"></span></p>
+      <p th:if="${utilisateur.description != null and not #strings.isEmpty(utilisateur.description)}">
+        <strong>Description: </strong><span th:text="${utilisateur.description}"></span>
+      </p>
+    
+    
       <div class="modifier">
           
           <a th:href="@{'/modif/' + ${utilisateur.id}}">
