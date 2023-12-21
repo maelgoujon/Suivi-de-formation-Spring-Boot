@@ -270,7 +270,7 @@
             }
           
             .carousel {
-              height: 15vh; /* Ajustez la hauteur selon vos préférences */
+              height: 40vh; /* Ajustez la hauteur selon vos préférences */
             }
           }
           
@@ -302,11 +302,6 @@
                 <!-- Iteration sur chaque utilisateur -->
                 <div th:each="utilisateur : ${utilisateurs}" class="profil"
                     th:onclick="'flipProfile(this, ' + ${utilisateur.id} + ')'" th:data-id="${utilisateur.id}">
-                    <div class="front">
-                        <img th:src="${utilisateur.photoBase64}" alt="Photo de l'utilisateur" style="max-width: 150px; max-height: 150px;">
-                        <p class="nom" th:text="${utilisateur.nom}">Nom de l'utilisateur</p>
-                        <p class="prenom" th:text="${utilisateur.prenom}">Prénom de l'utilisateur</p>
-                    </div>
                     <div class="dos">
                         <form  th:action="@{/login}" th:object="${monFormulaire}" method="post">
 
@@ -354,6 +349,16 @@
                                 </div>
                             </fieldset>
                         </form>
+                    </div>
+                    <div class="front">
+                        <div th:if="${utilisateur.photoBase64 != null and not #strings.isEmpty(utilisateur.photoBase64)}">
+                            <img th:src="${utilisateur.photoBase64}" alt="Photo de profil" />
+                        </div>
+                        <div th:if="${utilisateur.photoBase64 == null or #strings.isEmpty(utilisateur.photoBase64)}">
+                            <img src="/images/icone_profil.png" alt="Photo de profil par défaut" />
+                        </div>
+                        <p class="nom" th:text="${utilisateur.nom}">Nom de l'utilisateur</p>
+                        <p class="prenom" th:text="${utilisateur.prenom}">Prénom de l'utilisateur</p>
                     </div>
                 </div>
                 <div class="profil">
