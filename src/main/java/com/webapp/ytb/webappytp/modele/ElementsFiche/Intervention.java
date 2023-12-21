@@ -18,7 +18,7 @@ public class Intervention {
 
     @Column
     private int NiveauDateIntervention;
- 
+
     @Column
     // @NotBlank(message = "Le champ 'DureeIntervention' est obligatoire.")
     private int DureeIntervention;
@@ -26,5 +26,10 @@ public class Intervention {
     @Column
     private int NiveauDureeIntervention;
 
+    @Column
+    private TypeIntervention typeIntervention;
 
+    public enum TypeIntervention {
+        AMENAGEMENT, ELECTRICITE, FINITION, PLOMBERIE, SERRURERIE
+    }
 }

@@ -28,6 +28,21 @@
                     </div>
                 </fieldset>
                 <div class="espaceHor"></div>
+
+
+                <fieldset>
+                    <legend>Type d'intervention</legend>
+                    <div>
+                        <div class="test">
+                            <div th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}" class="demi">
+                                <input type="radio" id="${type}" name="typeIntervention" th:value="${type}" th:field="${fiche.intervention.typeIntervention}"/>
+                                <label for="${type}" th:text="${type}"></label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                
+
                 <fieldset>
                     <legend>Demande</legend>
                     <div>
@@ -79,7 +94,7 @@
 
                 <fieldset>
                     <legend>Intervention</legend>
-                    
+
 
 
                     <div>
@@ -103,7 +118,7 @@
                         </div>
                     </div>
 
-                    
+
                 </fieldset>
 
 
@@ -158,17 +173,17 @@
 
                 <fieldset>
                     <legend>Matériaux utilisés</legend>
-                <div>
-                    <div class="titre">Materiaux Utilises</div>
-                    <div class="test">
-                        <select id="NiveauMateriauxUtilises" name="NiveauMateriauxUtilises"
-                            th:field="${fiche.NiveauMateriauxUtilises}">
-                            <option value="0">Icone</option>
-                            <option value="1">Icone et texte</option>
-                            <option value="2">Texte</option>
-                        </select>
+                    <div>
+                        <div class="titre">Materiaux Utilises</div>
+                        <div class="test">
+                            <select id="NiveauMateriauxUtilises" name="NiveauMateriauxUtilises"
+                                th:field="${fiche.NiveauMateriauxUtilises}">
+                                <option value="0">Icone</option>
+                                <option value="1">Icone et texte</option>
+                                <option value="2">Texte</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
                 </fieldset>
 
 

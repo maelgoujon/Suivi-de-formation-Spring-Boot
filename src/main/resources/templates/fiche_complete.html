@@ -10,7 +10,10 @@
 
     <body class="colonne centre">
         <main class="colonne">
-            <div class="titre border">FICHE D'INTERVENTION N°<span th:text="${ficheIntervention.id}"></span></div>
+            <div class="titre border">FICHE D'INTERVENTION N°<span th:text="${ficheIntervention.id}"></span>&nbsp;:&nbsp;
+                <span th:if="${ficheIntervention.intervention != null}" th:text="${ficheIntervention.intervention.typeIntervention}"></span>
+            </div>
+            
             <form>
 
                 <div class="espaceHor"></div>

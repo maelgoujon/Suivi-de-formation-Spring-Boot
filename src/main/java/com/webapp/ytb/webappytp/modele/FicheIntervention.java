@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.NatureIntervention;
 
@@ -101,6 +102,10 @@ public class FicheIntervention {
 
     public int getDegreUrgence() {
         return demande.getDegreUrgence();
+    }
+
+    public TypeIntervention getTypeIntervention() {
+        return intervention.getTypeIntervention();
     }
 
     public LocalDate getDateIntervention() {
