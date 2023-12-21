@@ -29,15 +29,17 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public Utilisateur modifier(Long id, Utilisateur utilisateur) {
         return utilisateurRepository.findById(id)
-                .map(p -> {
-                    p.setPrenom(utilisateur.getPrenom());
-                    p.setNom(utilisateur.getNom());
-                    p.setLogin(utilisateur.getLogin());
-                    p.setMdp(utilisateur.getMdp());
-                    p.setPhotoBase64(utilisateur.getPhotoBase64());
-                    p.setRole(utilisateur.getRole());
-                    return utilisateurRepository.save(p);
-                }).orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        .map(p-> {
+            p.setPrenom(utilisateur.getPrenom());
+            p.setNom(utilisateur.getNom());
+            p.setLogin(utilisateur.getLogin());
+            p.setMdp(utilisateur.getMdp());
+            p.setPhotoBase64(utilisateur.getPhotoBase64());
+            p.setRole(utilisateur.getRole());
+            p.setDescription(utilisateur.getDescription());
+            return utilisateurRepository.save(p);
+        }).orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
     }
 
     @Override
@@ -68,4 +70,5 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         UserRole role = UserRole.valueOf(roleStr); // Convertit la chaîne en énumération
         return utilisateurRepository.findByRole(role);
     }
+
 }

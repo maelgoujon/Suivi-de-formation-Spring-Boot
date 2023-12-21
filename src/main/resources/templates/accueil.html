@@ -116,6 +116,24 @@
 
         }
 
+        .connexion{
+            margin-top: 20px;
+            background-color: #72bb53;
+            border-radius: 10px;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .reset{
+            margin-top: 20px;
+            background-color: #ff190d;
+            border-radius: 10px;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+          }
         .profil {
             position: relative;
             cursor: pointer;
@@ -145,6 +163,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            overflow: auto;
             
         }
         
@@ -232,6 +251,39 @@
             border-top: 2px solid rgba(0, 0, 0, 0.1);
             border-bottom: 2px solid rgba(0, 0, 0, 0.1);
         }
+
+        @media (min-width: 1600px) {
+            .conteneur {
+              width: 100%;
+              max-width: 1500px;
+            }
+          
+            .carousel {
+              height: 25vh;
+            }
+          }
+          @media (max-width: 1200px) {
+            .conteneur {
+              width: 100%;
+              max-width: 800px; /* Vous pouvez ajuster cette valeur selon vos préférences */
+              height: auto;
+            }
+          
+            .carousel {
+              height: 15vh; /* Ajustez la hauteur selon vos préférences */
+            }
+          }
+          
+          @media (max-width: 600px) {
+            .conteneur {
+              width: 80%;
+              max-width: 250px;
+            }
+          
+            .carousel {
+              height: 35vh;
+            }
+          }
         
     </style>
 </head>
@@ -251,8 +303,7 @@
                 <div th:each="utilisateur : ${utilisateurs}" class="profil"
                     th:onclick="'flipProfile(this, ' + ${utilisateur.id} + ')'" th:data-id="${utilisateur.id}">
                     <div class="front">
-                        <img th:src="@{/images/icone_profil.png}" alt="Photo de profil"
-                            onerror="this.src='/images/default.png';">
+                        <img th:src="${utilisateur.photoBase64}" alt="Photo de l'utilisateur" style="max-width: 150px; max-height: 150px;">
                         <p class="nom" th:text="${utilisateur.nom}">Nom de l'utilisateur</p>
                         <p class="prenom" th:text="${utilisateur.prenom}">Prénom de l'utilisateur</p>
                     </div>
@@ -326,8 +377,8 @@
                             <a class="mdp-oublié" href="mdp_oublieformateur">
                                 <p>Mot de passe oublié?</p>
                             </a>
-                            <input type="reset" value="Annuler">
-                            <input type="submit" value="Connexion">
+                            <input class="reset" type="reset" value="Annuler">
+                            <input class="connexion" type="submit" value="Connexion">
                         </fieldset>
                     </form>
                 </div>
@@ -374,6 +425,7 @@
                     }
                 }
             }
+            
             function selectProfile(profile, userId) {
                 selectedProfile = profile
                 if (selectedProfile === profile || profile.classList.contains('flipped')) {

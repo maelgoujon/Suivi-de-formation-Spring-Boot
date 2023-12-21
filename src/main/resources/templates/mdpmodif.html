@@ -64,7 +64,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 8px;
-            margin: 0 60px;
+        
             align-items: center;
         }
 
@@ -75,7 +75,8 @@
             border: 2px solid #72bb53;
             background-color: #fff;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: 0.3s;
+            
         }
 
         .dot.active {
@@ -91,7 +92,88 @@
         /* Ajoutez cette règle pour appliquer une marge supérieure au bouton */
         button[type="submit"] {
             margin-top: 20px;
+            background-color: #72bb53;
+            border-radius: 10px;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
         }
+        .hidden {
+            display: none;
+            
+        }
+
+        .imagemodif img{
+            height: 50px;
+        }
+
+        .encadre{
+            border: 2px solid #000000; /* Couleur et épaisseur de la bordure */
+            border-radius: 10px;
+            padding: 10px; /* Espace à l'intérieur de la bordure */
+            width: 300px; /* Largeur de la division */
+            margin: 20px; /* Marge autour de la division */
+            padding-bottom: 10px;
+        }
+        @media screen and (max-width: 1920px) and (max-height: 1200px) {
+            .encadre {
+                align-items: center;
+                width: 19%;
+                
+            }
+            h2{
+                font-size: 40px;
+                
+            }
+            #cancelButton{
+              font-size: 25px;
+              
+            }
+            .dot{
+                width: 80px; /* Ajustez la taille des dots selon vos besoins */
+                height: 80px;
+                
+            }
+            .imagemodif img{
+                height: 80px;
+               
+            }
+            button[type="submit"] {
+                font-size: 20px;
+                
+            }
+          }
+    
+          
+        @media screen and (max-width: 1200px) and (max-height: 1920px) {
+            .encadre {
+                align-items: center;
+                width: 37%;
+            }
+            h2{
+                font-size: 40px;
+                margin-top: 50px;
+            }
+            #cancelButton{
+              font-size: 35px;
+              margin-left: 140px;
+            }
+            .dot{
+                width: 100px; /* Ajustez la taille des dots selon vos besoins */
+                height: 100px;
+                margin-top: 15px;
+            }
+            .imagemodif img{
+                height: 100px;
+                margin-left: 140px;
+            }
+            
+          }
+
+       
+          
+          
 
         
     </style>
@@ -120,35 +202,52 @@
             style="cursor: pointer; margin-right: 10px"
           />
         </a>
-      </div>
+    </div>
 
     <h2>Rentrer un nouveau modèle </h2>
-    <!-- Afficher un message de succès si le mdp à été modifié avec succès -->
-    <div th:if="${success}">
-        <p style="color: green;">Mot de passe modifié avec succès!</p>
-    </div>
-    <form class="formulaire" th:action="@{/utilisateur/modifmdp/{id}(id=${utilisateur.id})}" th:object="${utilisateur}" method="post">
-        <!-- ... autres champs ... -->
-    
-        <!-- Intégration du modèle de déverrouillage -->
-        <div class="unlock-container">
-            <div class="pattern" id="patern" name="motdepasse">
-                <!-- 9 points du modèle -->
-                <div class="dot" data-index="1"></div>
-                <div class="dot" data-index="2"></div>
-                <div class="dot" data-index="3"></div>
-                <div class="dot" data-index="4"></div>
-                <div class="dot" data-index="5"></div>
-                <div class="dot" data-index="6"></div>
-                <div class="dot" data-index="7"></div>
-                <div class="dot" data-index="8"></div>
-                <div class="dot" data-index="9"></div>
-            </div>
-            <input type="hidden" th:field="*{mdp}" id="motDePasseHidden" />
-            <button type="submit">Modifier le mot de passe</button>
-            <div id="cancelButton">Annuler la sélection</div>
+    <div class="encadr">
+        <!-- Afficher un message de succès si le mdp à été modifié avec succès -->
+        <div th:if="${success}">
+            <p style="color: green;">Mot de passe modifié avec succès!</p>
         </div>
-    </form>
+        <!-- Afficher un message d'erreur si le mdp n'a pas été modifié avec succès -->
+        <div th:if="${error}">
+            <p style="color: red;">Erreur lors de la modification du mot de passe!</p>
+        </div>
+        <form class="formulaire" th:action="@{/utilisateur/modifmdp/{id}(id=${utilisateur.id})}" th:object="${utilisateur}" method="post">
+            <!-- ... autres champs ... -->
+        
+            <!-- Intégration du modèle de déverrouillage -->
+            <div class="unlock-container">
+                <div class="pattern" id="patern" name="motdepasse">
+                    <!-- 9 points du modèle -->
+                    <div class="dot" data-index="1"></div>
+                    <div class="dot" data-index="2"></div>
+                    <div class="dot" data-index="3"></div>
+                    <div class="dot" data-index="4"></div>
+                    <div class="dot" data-index="5"></div>
+                    <div class="dot" data-index="6"></div>
+                    <div class="dot" data-index="7"></div>
+                    <div class="dot" data-index="8"></div>
+                    <div class="dot" data-index="9"></div>
+                </div>
+                <input type="hidden" th:field="*{mdp}" id="motDePasseHidden" />
+                <button type="submit" id="modifierMdpBtn" class="hidden">Modifier le mot de passe</button>
+                <div id="cancelButton">Annuler la sélection</div>
+                <div class="imagemodif">
+                    <a th:href="@{'/modif/' + ${utilisateur.id}}">
+                        <img
+                        src="/images/return.png"
+                        alt="Modifier un apprenti"
+                        style="cursor: pointer"
+                        />
+                    </a>
+
+                </div>
+            </div>
+        </form>
+    </div>
+        
     
    
     
@@ -158,6 +257,8 @@
             const dots = document.querySelectorAll('.dot');
             const cancelButton = document.getElementById('cancelButton');
             const motDePasseHidden = document.getElementById('motDePasseHidden');
+            const modifierMdpBtn = document.getElementById('modifierMdpBtn');
+        
             let selectedCount = 0;
         
             dots.forEach(dot => {
@@ -166,6 +267,7 @@
                         this.classList.toggle('active');
                         selectedCount = document.querySelectorAll('.dot.active').length;
                         updateHiddenPassword();
+                        toggleModifierMdpBtn();
                     }
                 });
             });
@@ -176,6 +278,7 @@
                 });
                 selectedCount = 0;
                 updateHiddenPassword();
+                toggleModifierMdpBtn();
             });
         
             function updateHiddenPassword() {
@@ -183,7 +286,17 @@
                 const password = Array.from(activeDots).map(dot => dot.getAttribute('data-index')).join('');
                 motDePasseHidden.value = password;
             }
+        
+            function toggleModifierMdpBtn() {
+                if (selectedCount === 4) {
+                    modifierMdpBtn.classList.remove('hidden');
+                } else {
+                    modifierMdpBtn.classList.add('hidden');
+                }
+            }
         });
+        
+        
         
     </script>
 </body>

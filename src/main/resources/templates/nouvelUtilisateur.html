@@ -109,6 +109,106 @@
                 height: auto;
                 margin-top: 10px;
             }
+            button[type="submit"] {
+                margin-top: 20px;
+                background-color: #72bb53;
+                border-radius: 10px;
+                color: black;
+                border: none;
+                padding: 10px 20px;
+                cursor: pointer;
+            }
+            .descriptiontext{
+                display: flex; 
+                align-items: flex-start;
+            }
+
+            .encadre{
+                border: 2px solid #000000; /* Couleur et épaisseur de la bordure */
+                border-radius: 10px;
+                padding: 10px; /* Espace à l'intérieur de la bordure */
+                width: 300px; /* Largeur de la division */
+                margin: 20px; /* Marge autour de la division */
+              }
+            .encadre * {
+                margin-bottom: 10px;
+            }
+
+            @media screen and (max-width: 1920px) and (max-height: 1200px) {
+            .encadre {
+                width: 80%; /* Ajustez la largeur selon vos besoins pour une meilleure adaptation à la tablette */
+                align-items: center;
+            }
+            h2,
+            input,
+            select,
+            label{
+                font-size: 40px;
+            }
+
+            button[type="submit"] {
+                font-size: 30px;
+            }
+            .imagemodif img{
+                height: 150px;
+            }
+            #mdp{
+                font-size: 30px;
+            }
+            }
+
+            @media screen and (max-width: 1200px) and (max-height: 1920px) {
+            .encadre {
+                width:70%; /* Ajustez la largeur selon vos besoins pour une meilleure adaptation à la tablette */
+                align-items: center;
+                
+            }
+            h2,
+            input,
+            select,
+            button,
+            label{
+                font-size: 40px;
+            }
+            
+            button[type="submit"] {
+                font-size: 40px;
+            }
+            .imagemodif img{
+                height: 100px;
+            }
+            #mdp{
+                font-size: 30px;
+            }
+            }
+
+            @media (min-width: 1200px){
+            .encadre {
+                width: 50%; /* Ajustez la largeur selon vos besoins pour une meilleure adaptation à l'ordinateur */
+            }
+        
+            h2{
+                font-size:30px;
+            }
+            label,
+            input,
+            select,
+            button {
+                font-size: 20px;
+            }
+            #mdp{
+                font-size: 20px;
+            }
+            button[type="submit"] {
+                font-size: 20px;
+            }
+        
+            .imagemodif img {
+                height: 70px;
+            }
+            }
+
+
         </style>
         <script>
             function encodeImageToBase64() {
@@ -130,81 +230,101 @@
 <body>
 
     <div class="bandeau">
-        <a th:href="@{/accueil_admin}">
-            <img src="/images/accueil.png" alt="Accueil" style="float: left" />
+        <a href="/log_out">
+          <img src="/images/porte.png" alt="logout" style="float: left" />
         </a>
+        <a href="/archive">
+            <img src="/images/archive.png" alt="archive" style="margin-left: 10px" />
+        </a>
+    
         <div class="bandeau centered">
-            <img src="/images/logo.png" alt="Votre Image" />
-            <h1 style="margin-left: 10px">Admin</h1>
+            <a href="/accueil_admin">
+                <img src="/images/accueil.png" alt="accueil"/>
+            </a>
         </div>
         <a
-            th:href="@{https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing}">
-            <img src="/images/aide.png" alt="aide" style="cursor: pointer; margin-left: auto" />
+          href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
+        >
+          <img
+            src="/images/aide.png"
+            alt="aide"
+            style="cursor: pointer; margin-right: 10px"
+          />
         </a>
     </div>
 
 
 
     <h2>Créer un nouvel utilisateur</h2>
+    <div class="encadre">
+        <!-- Afficher un message de succès si l'utilisateur a été créé avec succès -->
+        <div th:if="${param.success}">
+            <p style="color: green;">Utilisateur créé avec succès!</p>
+        </div>
+        
+        
+        <!-- Formulaire de création d'utilisateur -->
+        <form th:action="@{/utilisateur/creer}" th:object="${utilisateur}" method="post">
 
-    <!-- Afficher un message de succès si l'utilisateur a été créé avec succès -->
-    <div th:if="${param.success}">
-        <p style="color: green;">Utilisateur créé avec succès!</p>
+            <div class="form-row">
+                <div class="col-md-6 form-group">
+                    <label for="nom">Nom:</label>
+                    <input type="text" id="nom" name="nom" th:field="*{nom}" required>
+                </div>
+
+                <div class="col-md-6 form-group">
+                    <label for="prenom">Prénom:</label>
+                    <input type="text" id="prenom" name="prenom" th:field="*{prenom}" required>
+                </div>
+
+                <div class="col-md-6 form-group">
+                    <label for="login">Login:</label>
+                    <input type="text" id="login" name="login" th:field="*{login}" required>
+                </div>
+
+                <div class="col-md-6 form-group">
+                    <label for="mdp">Mot de passe:</label>
+                    <input type="password" id="mdp" name="mdp" th:field="*{mdp}" required>
+                </div>
+
+                <div class="col-md-6 form-group">
+                    <label for="photo">Sélectionner une photo:</label>
+                    <input type="file" id="photo" name="photo" onchange="encodeImageToBase64()" accept="image/*">
+                </div>
+
+                <div class="col-md-6 form-group">
+                    <input hidden="true" type="text" id="photoBase64" name="photoBase64" th:field="*{photoBase64}">
+                </div>
+                
+                <div class="col-md-6 form-group">
+                <label for="role">Role:</label>
+                <select id="role" name="role" th:field="*{role}" required>
+                    <option value="ADMIN">Admin</option>
+                    <option value="SUPERADMIN">Super Admin</option>
+                    <option value="USER">User</option>
+                </select>
+                </div>
+                <div class="col-md-6 form-group">
+                <label for="niveau">Niveau:</label>
+                <select class="form-control" th:field="*{niveau}" id="niveau">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="description">Description:</label>
+                    <div class="descriptiontext">
+                        <textarea id="description" name="description" th:field="*{description}" required></textarea>
+                        
+                    </div>
+                </div>
+                
+                <button type="submit">Créer Utilisateur</button>
+            </div>
+        </form>
     </div>
-    <!-- Formulaire de création d'utilisateur -->
-    <form th:action="@{/utilisateur/creer}" th:object="${utilisateur}" method="post">
-
-        <div class="form-row">
-            <div class="col-md-6 form-group">
-                <label for="nom">Nom:</label>
-                <input type="text" id="nom" name="nom" th:field="*{nom}" required>
-            </div>
-
-            <div class="col-md-6 form-group">
-                <label for="prenom">Prénom:</label>
-                <input type="text" id="prenom" name="prenom" th:field="*{prenom}" required>
-            </div>
-
-            <div class="col-md-6 form-group">
-                <label for="login">Login:</label>
-                <input type="text" id="login" name="login" th:field="*{login}" required>
-            </div>
-
-            <div class="col-md-6 form-group">
-                <label for="mdp">Mot de passe:</label>
-                <input type="password" id="mdp" name="mdp" th:field="*{mdp}" required>
-            </div>
-
-            <div class="col-md-6 form-group">
-                <label for="photo">Sélectionner une photo:</label>
-                <input type="file" id="photo" name="photo" onchange="encodeImageToBase64()" accept="image/*">
-            </div>
-
-            <div class="col-md-6 form-group">
-                <input hidden="true" type="text" id="photoBase64" name="photoBase64" th:field="*{photoBase64}">
-            </div>
-            
-            <div class="col-md-6 form-group">
-            <label for="role">Role:</label>
-            <select id="role" name="role" th:field="*{role}" required>
-                <option value="ADMIN">Admin</option>
-                <option value="SUPERADMIN">Super Admin</option>
-                <option value="USER">User</option>
-            </select>
-        </div>
-            <div class="col-md-6 form-group">
-            <label for="niveau">Niveau:</label>
-            <select class="form-control" th:field="*{niveau}" id="niveau">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
-        </div>
-            <button type="submit">Créer Utilisateur</button>
-        </div>
-    </form>
-    
 </body>
 
 </html>
