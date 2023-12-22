@@ -24,7 +24,7 @@
         }
 
         .images-selector {
-            display: flex;
+            display: none;
             flex-wrap: wrap;
             justify-content: center;
             gap: 10px;
@@ -50,28 +50,50 @@
 </head>
 
 <body>
-    <div class="images-selector">
-        <div th:each="element : ${materiauxAmenagementList}">
-            <label class="img-card">
-                <img class="imageListe" th:src="${element.emplacementFichier}" alt="Image">
-                <span th:text="${element.optionName}"></span>
-            </label>
-        </div>
-    </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        document.addEventListener('DOMContentLoaded', function () {
+            const showMaterialsBtns = document.querySelectorAll('.show-materials-btn');
+            showMaterialsBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const targetId = this.getAttribute('data-target');
+                    const imageSelector = document.getElementById(targetId);
+                    imageSelector.style.display = 'flex';
+                });
+            });
 
-    <div id="selected-image-label"></div>
+            const imageSelectors = document.querySelectorAll('.images-selector');
+            const selectedImageLabels = document.querySelectorAll('[id^="selected-image-label"]');
 
-    <script>
-        const imageSelector = document.querySelector('.images-selector');
-        const selectedImageLabel = document.getElementById('selected-image-label');
+            imageSelectors.forEach((imageSelector, index) => {
+                imageSelector.addEventListener('change', function (event) {
+                    if (event.target.type === 'radio') {
+                        const selectedMaterial = event.target.value;
+                        selectedImageLabels[index].textContent = 'Matériau sélectionné : ' + selectedMaterial;
 
-        imageSelector.addEventListener('change', (event) => {
-            if (event.target.type === 'radio') {
-                const imageName = event.target.value;
-                selectedImageLabel.textContent = `Selected Image: ${imageName}`;
-            }
+                        // Masquer les matériaux après la sélection
+                        imageSelector.style.display = 'none';
+                    }
+                });
+            });
         });
+        /*]]>*/
     </script>
+
+    <!-- Utilisation d'une seule boucle pour générer les sections de la galerie d'images -->
+    <th:block th:each="sectionNumber : ${#numbers.sequence(1,6)}">
+        <button class="show-materials-btn" th:data-target="'material-dropdown' + ${sectionNumber}">Afficher les matériaux</button>
+        <div class="images-selector" th:id="'material-dropdown' + ${sectionNumber}">
+            <div th:each="element, status : ${materiauxAmenagementList}">
+                <label class="img-card">
+                    <img class="imageListe" th:src="${element.emplacementFichier}" alt="Image">
+                    <span th:text="${element.optionName}"></span>
+                    <input type="radio" name="materialRadio" th:value="${element.optionName}" th:id="'radio_' + ${status.index}">
+                </label>
+            </div>
+        </div>
+        <div th:id="'selected-image-label' + ${sectionNumber}"></div>
+    </th:block>
 </body>
 
 </html>
