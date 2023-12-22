@@ -58,7 +58,15 @@
                 btn.addEventListener('click', function () {
                     const targetId = this.getAttribute('data-target');
                     const imageSelector = document.getElementById(targetId);
-                    imageSelector.style.display = 'flex';
+
+                    // Toggle visibility
+                    if (imageSelector.style.display === 'flex') {
+                        imageSelector.style.display = 'none';
+                        this.textContent = 'Afficher les matériaux';
+                    } else {
+                        imageSelector.style.display = 'flex';
+                        this.textContent = 'Cacher les matériaux';
+                    }
                 });
             });
 
