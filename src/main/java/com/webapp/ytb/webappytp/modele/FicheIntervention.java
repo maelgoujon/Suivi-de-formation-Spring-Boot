@@ -8,7 +8,6 @@ import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
-import com.webapp.ytb.webappytp.modele.ElementsFiche.NatureIntervention;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -73,15 +72,15 @@ public class FicheIntervention {
     @Column(nullable = true)
     private byte[] evaluation;
 
-    @Embedded
-    private NatureIntervention natureIntervention;
-
     // Niveaux
     @Column
     private int NiveauTravauxRealises;
 
     @Column
     private int NiveauMateriauxUtilises;
+
+    @Column
+    private int NiveauNatureIntervention;
 
     // getters
     public String getNomDemandeur() {
@@ -132,12 +131,10 @@ public class FicheIntervention {
         return maintenance.getNiveauMaintenanceType();
     }
 
-    public NatureIntervention.NatureType getNatureType() {
-        return natureIntervention.getNatureType();
-    }
+
 
     public int getNiveauNatureIntervention() {
-        return natureIntervention.getNiveauNatureIntervention();
+        return this.NiveauNatureIntervention;
     }
 
     public FicheIntervention(Utilisateur utilisateur) {

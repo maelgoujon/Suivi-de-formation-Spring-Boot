@@ -117,7 +117,7 @@
                 </div>
 
                 <div class="colonne listeCheckbox">
-                    <fieldset class="colonne" th:if="${ficheIntervention.natureIntervention != null}">
+                    <fieldset class="colonne" th:if="${ficheIntervention.Intervention != null}">
                         <legend>Nature de l'intervention</legend>
                         <div th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}"
                                 class="demi">
