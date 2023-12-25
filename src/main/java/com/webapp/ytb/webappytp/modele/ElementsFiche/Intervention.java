@@ -11,6 +11,20 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Intervention {
+    public enum TypeIntervention {
+        AMENAGEMENT, ELECTRICITE, FINITION, PLOMBERIE, SERRURERIE
+    }
+
+    @Column
+    private TypeIntervention typeIntervention;
+
+    public TypeIntervention getTypeIntervention() {
+        return typeIntervention;
+    }
+
+    public void setTypeIntervention(TypeIntervention typeIntervention) {
+        this.typeIntervention = typeIntervention;
+    }
 
     @Column
     // @NotBlank(message = "Le champ 'DateIntervention' est obligatoire.")
@@ -26,10 +40,7 @@ public class Intervention {
     @Column
     private int NiveauDureeIntervention;
 
-    @Column
-    private TypeIntervention typeIntervention;
+    
 
-    public enum TypeIntervention {
-        AMENAGEMENT, ELECTRICITE, FINITION, PLOMBERIE, SERRURERIE
-    }
+    
 }

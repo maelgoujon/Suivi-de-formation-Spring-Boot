@@ -28,6 +28,14 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 10px;
+            position: fixed;
+            top: 15%; /* 100% - 70% */
+            left: 15%; /* 100% - 70% */
+            right: 15%; /* 100% - 70% */
+            bottom: 15%; /* 100% - 70% */
+            background-color: rgba(52, 152, 219, 0.8); /* Couleur bleue avec une transparence de 0.8 */
+            z-index: 999; /* Assure que l'élément est au-dessus du reste de la page */
+            overflow: auto; /* Ajout de la propriété overflow pour rendre le contenu scrollable */
         }
 
         .img-card {
@@ -77,9 +85,9 @@
                 imageSelector.addEventListener('change', function (event) {
                     if (event.target.type === 'radio') {
                         const selectedMaterial = event.target.value;
-                        selectedImageLabels[index].textContent = 'Matériau sélectionné : ' + selectedMaterial;
+                        selectedImageLabels[index].textContent = 'Image sélectionnée : ' + selectedMaterial;
 
-                        // Masquer les matériaux après la sélection
+                        // Masquer les images après la sélection
                         imageSelector.style.display = 'none';
                     }
                 });
@@ -94,9 +102,9 @@
         <div class="images-selector" th:id="'material-dropdown' + ${sectionNumber}">
             <div th:each="element, status : ${materiauxAmenagementList}">
                 <label class="img-card">
-                    <img class="imageListe" th:src="${element.emplacementFichier}" alt="Image">
-                    <span th:text="${element.optionName}"></span>
-                    <input type="radio" name="materialRadio" th:value="${element.optionName}" th:id="'radio_' + ${status.index}">
+                    <img class="imageListe" th:src="${element.imageData}" alt="Image">
+                    <span th:text="${element.nomImage}"></span>
+                    <input type="radio" name="materialRadio" th:value="${element.nomImage}" th:id="'radio_' + ${status.index}">
                 </label>
             </div>
         </div>

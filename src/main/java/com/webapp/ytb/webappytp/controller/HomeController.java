@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,20 +35,23 @@ import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxAmenagement;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxAmenagementListe;
-import com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxAmenagementLoader;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.NatureIntervention;
+import com.webapp.ytb.webappytp.repository.MateriauxAmenagementRepository;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
 
 @Controller
 public class HomeController {
 
+    MateriauxAmenagementRepository materiauxAmenagementRepository;
+
     UtilisateurServiceImpl userServ;
     FicheServiceImpl ficheServ;
 
-    public HomeController(UtilisateurServiceImpl userServ, FicheServiceImpl ficheServ) {
+    public HomeController(UtilisateurServiceImpl userServ,FicheServiceImpl ficheServ,MateriauxAmenagementRepository materiauxAmenagementRepository) {
         this.userServ = userServ;
         this.ficheServ = ficheServ;
+        this.materiauxAmenagementRepository = materiauxAmenagementRepository;
     }
 
     // Ajouter une fiche
@@ -97,8 +101,6 @@ public class HomeController {
     public String redirectToprofil(@PathVariable Long id, Model model) {
         Utilisateur utilisateur = userServ.findById(id);
         model.addAttribute("utilisateur", utilisateur);
-
-        // Retournez le nom de la vue (profil_apprenti)
         return "profil_apprenti";
     }
 
@@ -137,7 +139,7 @@ public class HomeController {
 
     @GetMapping("/suivi_progression/{userId}")
     public String suiviProgression(@PathVariable Long userId, Model model) {
-        Utilisateur utilisateur = userServ.findById(userId); // Supposons que lire renvoie l'utilisateur
+        Utilisateur utilisateur = userServ.findById(userId);
         List<FicheIntervention> fiches = ficheServ.getFichesByUserId(userId);
 
         model.addAttribute("utilisateur", utilisateur);
@@ -155,11 +157,6 @@ public class HomeController {
         FicheIntervention ficheIntervention = ficheServ.lire(ficheId);
         model.addAttribute("ficheIntervention", ficheIntervention);
         return "record";
-    }
-
-    @GetMapping("/bc")
-    public String bc() {
-        return "backup_accueil";
     }
 
     @GetMapping("/mdp_oublie")
@@ -215,7 +212,7 @@ public class HomeController {
             @RequestParam LocalDate newDateIntervention,
             @RequestParam int newDureeIntervention,
             @RequestParam(required = false) Maintenance.MaintenanceType newMaintenanceType,
-            @RequestParam(required = false) NatureIntervention.NatureType newNatureType,
+            @RequestParam(required = false) Intervention.TypeIntervention newNatureType,
             @RequestParam String newTravauxRealises,
             @RequestParam String newTravauxNonRealises,
             @RequestParam Optional<Boolean> newNouvelleIntervention,
@@ -242,7 +239,7 @@ public class HomeController {
             ficheIntervention.getMaintenance().setMaintenanceType(newMaintenanceType);
         }
         if (newNatureType != null) {
-            ficheIntervention.getNatureIntervention().setNatureType(newNatureType);
+            ficheIntervention.getIntervention().setTypeIntervention(newNatureType);
         }
         ficheIntervention.setTravauxRealises(newTravauxRealises);
         ficheIntervention.setTravauxNonRealises(newTravauxNonRealises);
@@ -269,23 +266,12 @@ public class HomeController {
             materiauxOptions.add(newMateriau5);
         }
 
-        // Now you can safely set values at specific indices if needed
         if (materiauxOptions.size() > 0) {
-            // Set values at specific indices if needed
             ficheIntervention.setMateriauxOptions(materiauxOptions);
         }
 
         ficheServ.modifier(id, ficheIntervention);
         return "redirect:/fiche/" + id;
-    }
-
-    @GetMapping("/test")
-    public String showGallery(Model model) {
-        List<MateriauxAmenagement> materiauxAmenagementList = MateriauxAmenagementLoader.loadElements();
-
-        model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
-
-        return "testListe";
     }
 
     @GetMapping("/fiche/liste_fiche")
@@ -298,38 +284,22 @@ public class HomeController {
         return "liste_fiche";
     }
 
-    @RequestMapping("/uploadForm")
-    public String uploadForm() {
-        return "upload";
+    @GetMapping("/fiche/modifier2/{id}")
+    public String showFicheDetails2(@PathVariable long id, Model model) {
+        FicheIntervention ficheIntervention = ficheServ.lire(id);
+        List<MateriauxAmenagement> materiauxAmenagementList = materiauxAmenagementRepository.findAll();
+        model.addAttribute("ficheIntervention", ficheIntervention);
+        model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
+        return "fiche_modifier2";
     }
 
-    @PostMapping("/upload")
-    @ResponseBody
-    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) {
-        try {
-            if (!file.isEmpty()) {
-                // Obtenez le répertoire de travail de l'application
-                String uploadDir = System.getProperty("user.dir") + "/images/";
-                System.out.println("Upload directory: " + uploadDir);
+    @GetMapping("/testListe")
+    public String showGallery(Model model) {
+        List<MateriauxAmenagement> materiauxAmenagementList = materiauxAmenagementRepository.findAll();
 
-                // Ajoutez un séparateur de fichier et le nom du fichier
-                String fileName = file.getOriginalFilename();
-                String filePath = uploadDir + File.separator + fileName;
-                File dest = new File(filePath);
+        model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
 
-                // Enregistrez le fichier
-                file.transferTo(dest);
-                System.out.println("File saved successfully");
-
-                return ResponseEntity.ok("File uploaded successfully!");
-            } else {
-                System.out.println("No file selected to upload.");
-                return ResponseEntity.badRequest().body("No file selected to upload.");
-            }
-        } catch (IOException e) {
-            System.out.println("Failed to save the file");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error uploading the file: " + e.getMessage());
-        }
+        return "testListe";
     }
+
 }

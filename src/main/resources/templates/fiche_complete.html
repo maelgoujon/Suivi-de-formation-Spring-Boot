@@ -119,46 +119,35 @@
                 <div class="colonne listeCheckbox">
                     <fieldset class="colonne" th:if="${ficheIntervention.natureIntervention != null}">
                         <legend>Nature de l'intervention</legend>
-                        <div>
-                            <div class="demi">
-                                <input type="checkbox"
-                                    th:checked="${#strings.equalsIgnoreCase(ficheIntervention.natureIntervention.NatureType, 'AMENAGEMENT')}"
-                                    th:value="AMENAGEMENT" name="natureIntervention">
+                        <div th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}"
+                                class="demi">
+                                <div class="demi">
+                                    <input type="radio" id="${nature}" name="intervention" th:value="${nature}"
+                                        th:checked="${ficheIntervention.Intervention != null and ficheIntervention.Intervention.typeIntervention != null and ficheIntervention.intervention.typeIntervention.name() eq nature.name()}" />
+                                </div>
+                                <div th:switch="${ficheIntervention.NiveauNatureIntervention}">
+                                    <div th:case="0">
+                                        <img class="logo" th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
+                                            th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
+                                    </div>
+                                    <div th:case="1">
+                                        <div class="test">
+                                            <label th:for="${nature}"
+                                                th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
+                                        </div>
+                                        <img class="logo" th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
+                                            th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
+                                    </div>
+                                    <div th:case="2">
+                                        <div class="test">
+                                            <label th:for="${nature}"
+                                                th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
-                            <div class="droite">
-                                <label>Aménagement</label>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="demi">
-                                <input type="checkbox"
-                                    th:checked="${#strings.equalsIgnoreCase(ficheIntervention.natureIntervention.NatureType, 'FINITIONS')}"
-                                    th:value="FINITIONS" name="natureIntervention">
-                            </div>
-                            <div class="droite">
-                                <label>Finitions</label>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="demi">
-                                <input type="checkbox"
-                                    th:checked="${#strings.equalsIgnoreCase(ficheIntervention.natureIntervention.NatureType, 'INSTALLATION_SANITAIRE')}"
-                                    th:value="INSTALLATION_SANITAIRE" name="natureIntervention">
-                            </div>
-                            <div class="droite">
-                                <label>Installation sanitaire</label>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="demi">
-                                <input type="checkbox"
-                                    th:checked="${#strings.equalsIgnoreCase(ficheIntervention.natureIntervention.NatureType, 'INSTALLATION_ELECTRIQUE')}"
-                                    th:value="INSTALLATION_ELECTRIQUE" name="natureIntervention">
-                            </div>
-                            <div class="droite">
-                                <label>Installation électrique</label>
-                            </div>
-                        </div>
+                        
                     </fieldset>
                 </div>
                 <div class="espaceHor"></div>
