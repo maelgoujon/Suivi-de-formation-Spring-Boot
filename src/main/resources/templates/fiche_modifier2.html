@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Fiche Intervention</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css" />
+</head>
+<style>
+    input[type='radio'] {
+        accent-color: #f20000;
+    }
+
+
+    .cardimage {
+        margin: 2vh;
+    }
+
+    .images-selector {
+        display: none;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        position: fixed;
+        top: 10%;
+        left: 10%;
+        right: 10%;
+        bottom: 10%;
+        background-color: rgb(255, 255, 255);
+        z-index: 999;
+        overflow: auto;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        max-width: 600px;
+        margin: 0 auto;
+        border-radius: 3%;
+    }
+
+    .img-card {
+        display: grid;
+        gap: 5px;
+        justify-items: center;
+        text-align: center;
+    }
+
+    .imageListe {
+        max-width: 100px;
+        min-width: 100px;
+    }
+
+    .img-card input {
+        grid-row: 3;
+    }
+
+
+
+    #selected-image-label {
+        margin-top: auto;
+        font-weight: bold;
+        position: absolute;
+        bottom: 10px;
+    }
+
+    .materiaux_vertical {
+        display: block;
+    }
+</style>
+
+
+<body>
+
+    <body class="colonne centre">
+        <main class="colonne">
+            <div class="titre border">FICHE D'INTERVENTION N°<span
+                    th:text="${ficheIntervention.id}"></span>&nbsp;:&nbsp;
+                <span th:if="${ficheIntervention.intervention != null}"
+                    th:text="${ficheIntervention.intervention.typeIntervention}"></span>
+            </div>
+            <form method="post" th:action="@{/updateFiche/{id}(id=${ficheIntervention.id})}"
+                th:object="${ficheIntervention}">
+                <input type="hidden" th:name="${'id'}" th:value="${ficheIntervention.id}" />
+
+                <div class="espaceHor"></div>
+                <fieldset>
+                    <legend>Intervenant</legend>
+                    <div>
+                        <div class="titre">Nom de l'intervenant</div>
+                        <div class="test"> <span th:text="${ficheIntervention.utilisateur.nom}"></span></div>
+                        <div class="titre">Prénom de l'intervenant</div>
+                        <div class="test"> <span th:text="${ficheIntervention.utilisateur.prenom}"></span></div>
+                    </div>
+                </fieldset>
+                <div class="espaceHor"></div>
+                <fieldset class="prerempli">
+                    <legend>Demande</legend>
+                    <div>
+                        <div class="titre">Nom du demandeur</div>
+                        <div class="test">
+                            <input type="text" id="newNomDemandeur" name="newNomDemandeur"
+                                th:value="${ficheIntervention.nomDemandeur}" />
+                        </div>
+                        <div class="titre">Degré d'urgence</div>
+                        <div class="test">
+                            <input type="number" id="newDegreUrgence" name="newDegreUrgence"
+                                th:value="${ficheIntervention.degreUrgence}" />
+                        </div>
+                    </div>
+
+                    <div class="espaceHor"></div>
+                    <div>
+
+                        <div class="titre">Date de la demande</div>
+                        <div class="test">
+                            <input type="date" id="newDateDemande" name="newDateDemande"
+                                th:value="${#temporals.format(ficheIntervention.dateDemande, 'yyyy-MM-dd')}" />
+                        </div>
+
+
+                        <div class="titre">Localisation</div>
+                        <div class="test">
+                            <input type="text" id="newLocalisation" name="newLocalisation"
+                                th:value="${ficheIntervention.localisation}" />
+                        </div>
+
+                    </div>
+                    <div class="espaceHor"></div>
+                    <div class="colonnePrint">
+                        <div class="titre demi">Description de la demande</div>
+
+                        <div class="test">
+                            <!-- textarea de 10 lignes-->
+                            <textarea rows="10" id="newDescription" name="newDescription"
+                                onkeydown="handleDescriptionKeyDown(event)"
+                                th:text="${ficheIntervention.demande.Description}"></textarea>
+                        </div>
+
+
+
+                    </div>
+                </fieldset>
+
+
+                <div class="espaceHor"></div>
+                <fieldset>
+                    <legend>Intervention</legend>
+
+                    <div class="espaceHor"></div>
+                    <div>
+                        <div th:switch="${ficheIntervention.niveauDateIntervention}">
+                            <div th:case="0">
+                                <img class="logo" src="/images/calendar.png" alt="Calendrier" />
+                            </div>
+                            <div th:case="1">
+                                <div class="titre">Date d'intervention</div>
+                                <img class="logo" src="/images/calendar.png" alt="Calendrier" />
+                            </div>
+                            <div th:case="2">
+                                <div class="titre">Date d'intervention</div>
+                            </div>
+                        </div>
+
+                        <div class="test">
+                            <input type="date" id="newDateIntervention" name="newDateIntervention"
+                                th:value="${#temporals.format(ficheIntervention.dateIntervention, 'yyyy-MM-dd')}" />
+                        </div>
+
+                        <div th:switch="${ficheIntervention.niveauDureeIntervention}">
+                            <div th:case="0">
+                                <img class="logo" src="/images/clock.png" alt="Horloge" />
+                            </div>
+                            <div th:case="1">
+                                <div class="titre">Durée de l'opération</div>
+                                <img class="logo" src="/images/clock.png" alt="Horloge" />
+                            </div>
+                            <div th:case="2">
+                                <div class="titre">Durée de l'opération</div>
+                            </div>
+                        </div>
+
+                        <div class="test">
+                            <input type="text" id="newDureeIntervention" name="newDureeIntervention"
+                                th:value="${ficheIntervention.dureeIntervention}" />
+                        </div>
+                    </div>
+                </fieldset>
+                </div>
+
+                <div class="colonne listeCheckbox">
+                    <div class="colonne1">
+                        <!-- Type de Maintenance -->
+                        <fieldset class="colonne1_gauche">
+                            <legend>Type de Maintenance</legend>
+                            <div th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance.MaintenanceType).values()}"
+                                class="demi">
+                                <div class="demi">
+                                    <input type="radio" id="${type}" name="maintenanceType" th:value="${type}"
+                                        th:checked="${ficheIntervention.maintenance != null and ficheIntervention.maintenance.maintenanceType != null and ficheIntervention.maintenance.maintenanceType.ordinal() eq type.ordinal()}" />
+                                </div>
+                                <div th:switch="${ficheIntervention.NiveauMaintenanceType}">
+                                    <div th:case="0">
+                                        <img class="logo" th:src="${'/images/' + type.name().toLowerCase() + '.png'}"
+                                            th:alt="${'/images/' + type.name().toLowerCase() + '.png'}" />
+                                    </div>
+                                    <div th:case="1">
+                                        <div class="test">
+                                            <label th:for="${type}"
+                                                th:text="${#strings.capitalize(type.name().toLowerCase().replace('_', ' '))}"></label>
+                                        </div>
+                                        <img class="logo" th:src="${'/images/' + type.name().toLowerCase() + '.png'}"
+                                            th:alt="${'/images/' + type.name().toLowerCase() + '.png'}" />
+                                    </div>
+                                    <div th:case="2">
+                                        <div class="test">
+                                            <label th:for="${type}"
+                                                th:text="${#strings.capitalize(type.name().toLowerCase().replace('_', ' '))}"></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Hidden input field to hold the selected maintenance type -->
+                            <input type="hidden" name="newMaintenanceType"
+                                th:value="${ficheIntervention.maintenance != null ? ficheIntervention.maintenance.maintenanceType : null}"
+                                id="selectedMaintenanceType">
+                        </fieldset>
+
+
+                        <!-- Nature de l'intervention -->
+                        <fieldset class="colonne1_droite">
+                            <legend>Nature de l'intervention</legend>
+                            <div th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}"
+                                class="demi">
+                                <div class="demi">
+                                    <input type="radio" id="${nature}" name="intervention" th:value="${nature}"
+                                        th:checked="${ficheIntervention.Intervention != null and ficheIntervention.Intervention.typeIntervention != null and ficheIntervention.intervention.typeIntervention.name() eq nature.name()}" />
+                                </div>
+                                <div th:switch="${ficheIntervention.NiveauNatureIntervention}">
+                                    <div th:case="0">
+                                        <img class="logo" th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
+                                            th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
+                                    </div>
+                                    <div th:case="1">
+                                        <div class="test">
+                                            <label th:for="${nature}"
+                                                th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
+                                        </div>
+                                        <img class="logo" th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
+                                            th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
+                                    </div>
+                                    <div th:case="2">
+                                        <div class="test">
+                                            <label th:for="${nature}"
+                                                th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <input type="hidden" name="newNatureType"
+                                th:value="${ficheIntervention.intervention != null ? ficheIntervention.intervention.typeIntervention : null}"
+                                id="selectedNatureType">
+                        </fieldset>
+
+                    </div>
+
+
+
+                </div>
+
+
+                </fieldset>
+
+                <div class="espaceHor"></div>
+
+                <fieldset class="colonne">
+                    <legend th:switch="${ficheIntervention.NiveauTravauxRealises}">
+                        <img th:case="0" class="logo" src="/images/check.png" alt="Fait" />
+                        <span th:case="1">
+                            <img class="logo" src="/images/check.png" alt="Fait" />
+                            Travaux réalisés
+                        </span>
+                        <span th:case="2">Travaux réalisés</span>
+                    </legend>
+
+
+                    <div class="test">
+                        <input type="text" id="newTravauxRealises" name="newTravauxRealises"
+                            th:value="${ficheIntervention.travauxRealises}" />
+                    </div>
+                </fieldset>
+
+
+                <fieldset class="colonne">
+                    <legend th:switch="${ficheIntervention.NiveauTravauxRealises}">
+                        <img th:case="0" class="logo" src="/images/notchecked.png" alt="Non Fait" />
+                        <span th:case="1">
+                            <img class="logo" src="/images/notchecked.png" alt="Non Fait" />
+                            Travaux non réalisés
+                        </span>
+                        <span th:case="2">Travaux non réalisés</span>
+                    </legend>
+
+
+                    <div class="test">
+                        <input type="text" id="newTravauxNonRealises" name="newTravauxNonRealises"
+                            th:value="${ficheIntervention.travauxNonRealises}" />
+                    </div>
+                </fieldset>
+
+
+
+
+                <div class="espaceHor"></div>
+
+
+                <div class="titre demi">
+                    <div class="check">
+                        <input type="checkbox" name="newNouvelleIntervention"
+                            th:checked="${ficheIntervention.nouvelleIntervention}" />
+                    </div>
+                    <div class="droite"> <label>Nécessite une nouvelle intervention</label>
+                    </div>
+                </div>
+                <div class="espaceHor"></div>
+
+                <!----/\----/\----/\------------------------------------------------------------------------------------------>
+                <!---/--\--/--\--/__\------------------- Matériaux Utilisés -------------------------------------------------->
+                <!--/----\/----\/----\---------------------------------------------------------------------------------------->
+
+                <fieldset class="colonne">
+                    <legend th:switch="${ficheIntervention.NiveauMateriauxUtilises}">
+                        <img th:case="0" class="logo" src="/images/materiaux.png" alt="Matériaux" />
+                        <span th:case="1">
+                            <img class="logo" src="/images/materiaux.png" alt="Matériaux" />
+                            Matériaux utilisés
+                        </span>
+                        <span th:case="2">Matériaux utilisés</span>
+                    </legend>
+
+
+                    <!-- Affichage des dropdown si NiveauMateriauxUtilises vaut 2 -->
+                    <div th:if="${ficheIntervention.NiveauMateriauxUtilises == 2}">
+                        <div class="noPrint"></div>
+                        <div th:each="i : ${#numbers.sequence(0,5)}" class="max-width-container">
+                            <select th:id="'materiauxUtilises' + ${i}" name="materiauxUtilises" class="max-width-select"
+                                onchange="updateMateriauField(this, 'selectedMateriau' + ${i})">
+                                <option value=""></option>
+                                <option th:each="element, status : ${materiauxAmenagementList}"
+                                    th:value="${element.nomImage}" th:text="${element.nomImage}"
+                                    th:selected="${ficheIntervention.materiauxOptions != null and ficheIntervention.materiauxOptions.size() > i and ficheIntervention.materiauxOptions[i] == element.nomImage}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Affichage des images et texte si NiveauMateriauxUtilises vaut 1 -->
+                    <div class="materiaux_vertical" th:if="${ficheIntervention.NiveauMateriauxUtilises == 1}">
+                        <div class="noPrint"></div>
+                        <th:block th:each="sectionNumber : ${#numbers.sequence(0,5)}">
+                            <div class="button-row">
+                                <button class="show-materials-btn"
+                                    th:data-target="'material-dropdown' + ${sectionNumber}" type="button"
+                                    onclick="showMaterialSelector(this)">Selectionner le matériau <span
+                                        th:text="${sectionNumber + 1}"></span>
+                                </button>
+                            </div>
+                            <div class="images-selector" th:id="'material-dropdown' + ${sectionNumber}">
+                                <button class="close-btn" type="button" onclick="closeMaterialSelector(this)"
+                                    style="height: fit-content; grid-column: span 3;background-color: red;color: white;">Fermer
+                                </button>
+                                <div class="cardimage" th:each="element, status : ${materiauxAmenagementList}">
+                                    <label class="img-card">
+                                        <img class="imageListe" th:src="${element.imageData}" alt="Image" />
+                                        <span th:text="${element.nomImage}"></span>
+                                        <input type="radio" name="materialRadio" th:value="${element.nomImage}"
+                                            th:id="'radio_' + ${sectionNumber} + '_' + ${status.index}">
+                                    </label>
+
+
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                    <!-- Affichage des images si NiveauMateriauxUtilises vaut 0 -->
+                    <div class="materiaux_vertical" th:if="${ficheIntervention.NiveauMateriauxUtilises == 0}">
+                        <div class="noPrint"></div>
+                        <th:block th:each="sectionNumber : ${#numbers.sequence(0,5)}">
+                            <div class="button-row">
+                                <button class="show-materials-btn"
+                                    th:data-target="'material-dropdown' + ${sectionNumber}" type="button"
+                                    onclick="showMaterialSelector(this)">Selectionner le matériau <span
+                                        th:text="${sectionNumber + 1}"></span>
+                                </button>
+                            </div>
+                            <div class="images-selector" th:id="'material-dropdown' + ${sectionNumber}">
+                                <button class="close-btn" type="button" onclick="closeMaterialSelector(this)"
+                                    style="height: fit-content; grid-column: span 3;background-color: red;color: white;">Fermer
+                                </button>
+                                <div class="cardimage" th:each="element, status : ${materiauxAmenagementList}">
+                                    <label class="img-card">
+                                        <img class="imageListe" th:src="${element.imageData}" alt="Image" />
+                                        <input type="radio" name="materialRadio" th:value="${element.nomImage}"
+                                            th:id="'radio_' + ${sectionNumber} + '_' + ${status.index}">
+                                    </label>
+
+
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+
+
+
+
+                    <input type="hidden" name="newMateriau0" id="selectedMateriau0"
+                        th:value="${ficheIntervention.materiauxOptions[0]}">
+                    <input type="hidden" name="newMateriau1" id="selectedMateriau1"
+                        th:value="${ficheIntervention.materiauxOptions[1]}">
+                    <input type="hidden" name="newMateriau2" id="selectedMateriau2"
+                        th:value="${ficheIntervention.materiauxOptions[2]}">
+                    <input type="hidden" name="newMateriau3" id="selectedMateriau3"
+                        th:value="${ficheIntervention.materiauxOptions[3]}">
+                    <input type="hidden" name="newMateriau4" id="selectedMateriau4"
+                        th:value="${ficheIntervention.materiauxOptions[4]}">
+                    <input type="hidden" name="newMateriau5" id="selectedMateriau5"
+                        th:value="${ficheIntervention.materiauxOptions[5]}">
+
+
+                    </div>
+
+
+
+                    </div>
+                </fieldset>
+                <div class="espaceHor"></div>
+                <div class="espaceHor"></div>
+
+
+                <div id="my-icon-select"></div>
+
+
+                <input class="submit" type="submit" value="Terminer" />
+            </form>
+        </main>
+
+
+
+
+        <script th:inline="javascript">
+            /* <![CDATA[ */
+            function updateMateriauField(selectElement, textFieldId) {
+                var selectedValue = selectElement.value;
+                var index = selectElement.id.replace('materiauxUtilises', '');
+                document.getElementById('selectedMateriau' + index).value = selectedValue;
+            }
+
+            function handleRadioButtonChange(radioButtons, hiddenInput) {
+                radioButtons.forEach(function (radioButton) {
+                    radioButton.addEventListener('change', function () {
+                        if (this.checked) {
+                            hiddenInput.value = this.value;
+                        }
+                    });
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                var selectElements = document.querySelectorAll('select[name="materiauxUtilises"]');
+
+                selectElements.forEach(function (select) {
+                    select.addEventListener('change', function () {
+                        updateMateriauField(select, 'selectedMateriau' + select.id.replace('materiauxUtilises', ''));
+                    });
+                });
+
+                var natureRadioButtons = document.querySelectorAll('input[name="intervention"]');
+                var natureHiddenInput = document.getElementById('selectedNatureType');
+
+                natureRadioButtons.forEach(function (radioButton) {
+                    radioButton.addEventListener('change', function () {
+                        if (this.checked) {
+                            natureHiddenInput.value = this.value;
+                        }
+                    });
+                });
+
+                function closeMaterialSelector(button) {
+                    var imageSelector = button.closest('.images-selector');
+                    imageSelector.style.display = 'none';
+                }
+
+                var radioButtons = document.querySelectorAll('input[name="maintenanceType"]');
+                var hiddenInput = document.getElementById('selectedMaintenanceType');
+
+                radioButtons.forEach(function (radioButton) {
+                    radioButton.addEventListener('change', function () {
+                        if (this.checked) {
+                            hiddenInput.value = this.value;
+                        }
+                    });
+                });
+
+                var showMaterialsBtns = document.querySelectorAll('.show-materials-btn');
+                var hiddenInputs = document.querySelectorAll('[id^="selectedMateriau"]');
+
+                function showMaterialSelector(button) {
+                    var targetId = button.getAttribute('data-target');
+                    var imageSelector = document.getElementById(targetId);
+                    var sectionNumber = targetId.replace('material-dropdown', '');
+
+                    imageSelector.style.display = 'grid';
+                    var radioButtons = imageSelector.querySelectorAll('input[type="radio"]');
+
+                    radioButtons.forEach(function (radioButton) {
+                        radioButton.addEventListener('change', function () {
+                            if (this.checked) {
+                                var selectedMaterial = this.value;
+                                document.getElementById('selectedMateriau' + sectionNumber).value = selectedMaterial;
+                                imageSelector.style.display = 'none';
+                            }
+                        });
+                    });
+
+                    // Ajouter le code pour cocher le bouton radio au chargement de la page
+                    var materiauOption = document.getElementById('selectedMateriau' + sectionNumber).value;
+                    if (materiauOption) {
+                        var radioToCheck = imageSelector.querySelector('input[type="radio"][value="' + materiauOption + '"]');
+                        if (radioToCheck) {
+                            radioToCheck.checked = true;
+                        }
+                    }
+                }
+
+                showMaterialsBtns.forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        showMaterialSelector(this);
+                    });
+                });
+
+                var closeMaterialSelectors = document.querySelectorAll('.close-btn');
+                closeMaterialSelectors.forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        closeMaterialSelector(this);
+                    });
+                });
+            });
+            /* ]]> */
+        </script>
+
+
+    </body>
+
+</html>
