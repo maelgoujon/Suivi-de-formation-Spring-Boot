@@ -67,10 +67,11 @@
 
 <body>
 
+    <button onclick="window.location.href='/materiaux/liste'">Liste des materiaux</button>
+    <br>
     <h2>Ajouter un Materiaux d'Amenagement</h2>
 
-    <form th:action="@{/materiaux/uploadMateriaux}" method="post" enctype="multipart/form-data"
-        th:object="${materiau}">
+    <form th:action="@{/materiaux/uploadMateriaux}" method="post" enctype="multipart/form-data" th:object="${materiau}">
         <label for="nomImage">Nom du materiau :</label>
         <input type="text" id="nomImage" name="nomImage" th:field="*{nomImage}" required>
 
@@ -98,7 +99,6 @@
 
 
 
-    <button onclick="window.location.href='/materiaux/liste'">Liste des materiaux</button>
 
 
 
