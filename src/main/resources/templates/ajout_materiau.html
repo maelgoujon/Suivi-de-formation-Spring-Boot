@@ -30,7 +30,7 @@
 
             // Mettre à jour l'action du formulaire avec l'ID de l'image
             var editForm = document.getElementById('editForm');
-            editForm.action = /*[[@{/modifierImage/}]]*/ + imageId;
+            editForm.action = /*[[@{/materiaux/modifier/}]]*/ + imageId;
 
             // Récupérer les détails de l'image sélectionnée et mettre à jour le formulaire
             var imageDetails = document.getElementById('imageDetails_' + imageId);
@@ -69,13 +69,20 @@
 
     <h2>Ajouter un Materiaux d'Amenagement</h2>
 
-    <form th:action="@{/uploadImageMatAmenagement}" method="post" enctype="multipart/form-data"
-        th:object="${materiauxAmenagement}">
+    <form th:action="@{/materiaux/uploadMateriaux}" method="post" enctype="multipart/form-data"
+        th:object="${materiau}">
         <label for="nomImage">Nom du materiau :</label>
         <input type="text" id="nomImage" name="nomImage" th:field="*{nomImage}" required>
 
         <br>
 
+        <label for="typeIntervention">Type d'intervention :</label>
+        <select id="typeIntervention" name="typeIntervention" th:field="*{typeIntervention}" required>
+            <option
+                th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}"
+                th:value="${type.name()}" th:text="${type.name()}"></option>
+        </select>
+        <br>
         <label for="imageFile">Fichier Image :</label>
         <input type="file" id="imageFile" name="imageFile" accept="image/*" required onchange="handleFileSelect(this)">
 
@@ -89,34 +96,9 @@
         <input type="submit" id="uploadButton" value="Ajouter">
     </form>
 
-    <h2>Toutes les images de Materiaux d'Amenagement</h2>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Nom du materiau</th>
-                <th>Image</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="image : ${allImages}">
-                <td th:text="${image.nomImage}"></td>
-                <td class="max-width-10vh">
-                    <img th:src="@{'/' + ${image.imageUrl}}" alt="Image"
-                        id="imageDetails_${image.id}"
-                        th:attr="data-nomImage=${image.nomImage}, data-imageUrl=${image.imageUrl}" />
-                </td>
 
 
-                <td>
-                    <a th:href="@{/editImage/{id}(id=${image.id})}">Modifier</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-
+    <button onclick="window.location.href='/materiaux/liste'">Liste des materiaux</button>
 
 
 

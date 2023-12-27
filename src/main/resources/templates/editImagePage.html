@@ -53,7 +53,7 @@
 
     <h2>Modifier l'image <span th:text="${image.nomImage}"></span></h2>
 
-    <form th:action="@{'/modifierImage/' + ${id}}" th:object="${image}" method="post" enctype="multipart/form-data">
+    <form th:action="@{'/materiaux/modifier/' + ${id}}" th:object="${image}" method="post" enctype="multipart/form-data">
         <!-- Image actuelle -->
         <h3>Image actuelle : </h3>
         <br>

@@ -39,46 +39,50 @@ public class ImageUploadController {
     @Value("${spring.servlet.multipart.max-file-size}")
     private String MAX_FILE_SIZE;
 
-    @GetMapping("/Materiaux")
+    @GetMapping("/materiaux/ajouter")
     public String showImagePage(Model model) {
         List<Materiaux> allImages = materiauxAmenagementRepository.findAll();
         model.addAttribute("maxFileSize", parseFileSize(MAX_FILE_SIZE));
         model.addAttribute("allImages", allImages);
-        model.addAttribute("materiauxAmenagement", new Materiaux());
-        return "Materiaux";
+        model.addAttribute("materiau", new Materiaux());
+        return "ajout_materiau";
     }
 
-    @PostMapping("/uploadImageMateriaux")
-    public String uploadImage(@ModelAttribute("materiauxAmenagement") Materiaux materiauxAmenagement,
+    @GetMapping("/materiaux/liste")
+    public String liste_materiaux(Model model) {
+        List<Materiaux> allImages = materiauxAmenagementRepository.findAll();
+        model.addAttribute("maxFileSize", parseFileSize(MAX_FILE_SIZE));
+        model.addAttribute("allImages", allImages);
+        model.addAttribute("materiau", new Materiaux());
+        return "liste_materiaux";
+    }
+
+    @PostMapping("/materiaux/uploadMateriaux")
+    public String uploadImage(@ModelAttribute("materiau") Materiaux materiau,
             @RequestParam("imageFile") MultipartFile imageFile,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes, Model model) {
 
         try {
             if (!imageFile.isEmpty()) {
                 String userChosenFileName = StringUtils
-                        .cleanPath(Objects.requireNonNull(materiauxAmenagement.getNomImage()));
+                        .cleanPath(Objects.requireNonNull(materiau.getNomImage()));
 
-                // Obtenez l'extension du fichier original
                 String fileExtension = StringUtils.getFilenameExtension(imageFile.getOriginalFilename());
-
-                // Concaténez le nom choisi par l'utilisateur avec l'extension du fichier
                 String fileName = userChosenFileName + "." + fileExtension;
 
-                // Enregistrez l'image localement en fonction du type d'intervention
-                String imageUrl = saveImageLocally(imageFile, fileName,
-                        materiauxAmenagement.getTypeIntervention());
-                materiauxAmenagement.setImageUrl(imageUrl);
+                String imageUrl = saveImageLocally(imageFile, fileName, materiau.getTypeIntervention());
+                materiau.setImageUrl(imageUrl);
 
-                materiauxAmenagementRepository.save(materiauxAmenagement);
-                redirectAttributes.addFlashAttribute("message", "Image enregistrée avec succès");
+                materiauxAmenagementRepository.save(materiau);
+                redirectAttributes.addFlashAttribute("successMessage", "Materiau enregistré avec succès");
             }
         } catch (MaxUploadSizeExceededException e) {
-            redirectAttributes.addFlashAttribute("error", "La taille du fichier dépasse la limite autorisée.");
+            redirectAttributes.addFlashAttribute("errorMessage", "La taille du fichier dépasse la limite autorisée.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Une image avec ce nom existe déjà.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Une image avec ce nom existe déjà.");
         }
 
-        return "redirect:/Materiaux";
+        return "redirect:/materiaux/liste";
     }
 
     private String saveImageLocally(MultipartFile imageFile, String fileName,
@@ -102,11 +106,11 @@ public class ImageUploadController {
         return imageUrl;
     }
 
-    @PostMapping("/modifierImage/{id}")
+    @PostMapping("/materiaux/modifier/{id}")
     public String editImage(@PathVariable("id") Long id,
             @RequestParam(value = "newImageFile", required = false) MultipartFile newImageFile,
             @RequestParam(value = "newTypeIntervention") Intervention.TypeIntervention newTypeIntervention,
-            Model model) {
+            RedirectAttributes redirectAttributes, Model model) {
         Optional<Materiaux> optionalImage = materiauxAmenagementRepository.findById(id);
         if (optionalImage.isPresent()) {
             Materiaux existingImage = optionalImage.get();
@@ -119,11 +123,9 @@ public class ImageUploadController {
                         // Vérifiez la taille du fichier
                         long maxFileSize = parseFileSize(MAX_FILE_SIZE);
                         if (newImageFile.getSize() > maxFileSize) {
-                            // Gérez le cas où la taille du fichier dépasse la limite
-                            model.addAttribute("message", "La taille du fichier dépasse la limite autorisée.");
-                            model.addAttribute("image", existingImage); // Ajoutez l'image existante au modèle
-                            model.addAttribute("id", id); // Ajoutez l'ID au modèle
-                            return "editImagePage";
+                            redirectAttributes.addFlashAttribute("errorMessage",
+                                    "La taille du fichier dépasse la limite autorisée.");
+                            return "redirect:/materiaux/liste";
                         }
 
                         // Enregistrez la nouvelle image localement et obtenez l'URL
@@ -131,36 +133,30 @@ public class ImageUploadController {
                                 newTypeIntervention);
                         existingImage.setImageUrl(imageUrl);
                     } else {
-                        // Gérez le cas où le type de contenu n'est pas pris en charge
-                        model.addAttribute("message", "Le type de fichier n'est pas pris en charge.");
-                        model.addAttribute("image", existingImage); // Ajoutez l'image existante au modèle
-                        model.addAttribute("id", id); // Ajoutez l'ID au modèle
-                        return "editImagePage";
+                        redirectAttributes.addFlashAttribute("errorMessage",
+                                "Le type de fichier n'est pas pris en charge.");
+                        return "redirect:/materiaux/liste";
                     }
                 }
 
                 // Mettez à jour le type d'intervention avec la nouvelle valeur
                 existingImage.setTypeIntervention(newTypeIntervention);
+
+                materiauxAmenagementRepository.save(existingImage);
+                redirectAttributes.addFlashAttribute("successMessage", "Image modifiée avec succès");
             } catch (FileSizeLimitExceededException ex) {
                 // Interceptez l'exception et gérez-la ici
-                model.addAttribute("message", "La taille du fichier dépasse la limite autorisée.");
-                model.addAttribute("image", existingImage); // Ajoutez l'image existante au modèle
-                model.addAttribute("id", id); // Ajoutez l'ID au modèle
-                return "editImagePage";
+                redirectAttributes.addFlashAttribute("errorMessage",
+                        "La taille du fichier dépasse la limite autorisée.");
             } catch (Exception e) {
                 e.printStackTrace();
                 // Gérez les autres exceptions ici si nécessaire
-                model.addAttribute("message", "Une erreur s'est produite lors de la modification de l'image.");
-                model.addAttribute("image", existingImage); // Ajoutez l'image existante au modèle
-                model.addAttribute("id", id); // Ajoutez l'ID au modèle
-                return "editImagePage";
+                redirectAttributes.addFlashAttribute("errorMessage",
+                        "Une erreur s'est produite lors de la modification de l'image.");
             }
-
-            materiauxAmenagementRepository.save(existingImage);
-            model.addAttribute("message", "Image modifiée avec succès");
         }
 
-        return "redirect:/Materiaux";
+        return "redirect:/materiaux/liste";
     }
 
     private long parseFileSize(String fileSize) {
@@ -168,7 +164,7 @@ public class ImageUploadController {
         return dataSize.toBytes();
     }
 
-    @GetMapping("/editImage/{id}")
+    @GetMapping("/materiaux/modifier/{id}")
     public String showEditImagePage(@PathVariable("id") Long id, Model model) {
         Optional<Materiaux> optionalImage = materiauxAmenagementRepository.findById(id);
         if (optionalImage.isPresent()) {
@@ -179,12 +175,11 @@ public class ImageUploadController {
             model.addAttribute("id", id);
             return "editImagePage";
         } else {
-            return "redirect:/Materiaux";
+            return "redirect:/materiaux/liste";
         }
     }
 
-    // Supprimer une image
-    @GetMapping("/supprimerImage/{id}")
+    @GetMapping("/materiaux/supprimer/{id}")
     public String deleteImage(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
             Optional<Materiaux> optionalImage = materiauxAmenagementRepository.findById(id);
@@ -197,15 +192,15 @@ public class ImageUploadController {
                 // Supprimez l'entité image de la base de données
                 materiauxAmenagementRepository.deleteById(id);
 
-                redirectAttributes.addFlashAttribute("message", "Image supprimée avec succès");
+                redirectAttributes.addFlashAttribute("successMessage", "Image supprimée avec succès");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("error",
+            redirectAttributes.addFlashAttribute("errorMessage",
                     "Une erreur s'est produite lors de la suppression de l'image.");
         }
 
-        return "redirect:/Materiaux";
+        return "redirect:/materiaux/liste";
     }
 
     private void deleteImageLocally(String imageUrl) throws IOException {

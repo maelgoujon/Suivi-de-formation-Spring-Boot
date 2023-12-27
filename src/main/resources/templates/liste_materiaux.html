@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste Materiaux</title>
+
+    <style>
+        .max-width-10vh img {
+            max-width: 10vh;
+        }
+
+        .succes {
+            color: green;
+            font-size: 1.5em;
+        }
+
+        .error {
+            color: red;
+            font-size: 1.5em;
+        }
+    </style>
+
+<body>
+    <h2>Tous les Materiaux </h2>
+
+    <!-- afficher les messages de succès ou d'erreur -->
+    <div th:if="${successMessage}" class="success">
+        <p th:text="${successMessage}" style="color: green;"></p>
+    </div>
+    <div th:if="${errorMessage}" class="error">
+        <p th:text="${errorMessage}" style="color: red;"></p>
+    </div>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nom du materiau</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="image : ${allImages}">
+                <td th:text="${image.nomImage}"></td>
+                <td class="max-width-10vh">
+                    <img th:src="@{'/' + ${image.imageUrl}}" alt="Image" id="imageDetails_${image.id}"
+                        th:attr="data-nomImage=${image.nomImage}, data-imageUrl=${image.imageUrl}" />
+                </td>
+                <td>
+                    <a th:href="@{/materiaux/modifier/{id}(id=${image.id})}">Modifier</a>
+                    <a th:href="@{/materiaux/supprimer/{id}(id=${image.id})}">Supprimer</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <button type="button" onclick="window.location.href='/materiaux/ajouter'">Ajouter un materiau</button>
+
+
+
+
+</body>
+
+</html>
