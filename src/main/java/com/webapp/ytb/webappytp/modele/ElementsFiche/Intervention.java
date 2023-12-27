@@ -12,17 +12,23 @@ import lombok.Setter;
 @Setter
 public class Intervention {
     public enum TypeIntervention {
-        AMENAGEMENT, ELECTRICITE, FINITION, PLOMBERIE, SERRURERIE
+        AMENAGEMENT, ELECTRICITE, FINITION, PLOMBERIE, SERRURERIE;
+    
+        @Override
+        public String toString() {
+            return name();
+        }
     }
+    
 
-    @Column
-    private TypeIntervention typeIntervention;
+    @Column(columnDefinition = "VARCHAR")
+    private String typeIntervention;
 
-    public TypeIntervention getTypeIntervention() {
+    public String getTypeIntervention() {
         return typeIntervention;
     }
 
-    public void setTypeIntervention(TypeIntervention typeIntervention) {
+    public void setTypeIntervention(String typeIntervention) {
         this.typeIntervention = typeIntervention;
     }
 
@@ -40,7 +46,4 @@ public class Intervention {
     @Column
     private int NiveauDureeIntervention;
 
-    
-
-    
 }

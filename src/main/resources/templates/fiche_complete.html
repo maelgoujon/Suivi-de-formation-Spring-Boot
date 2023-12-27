@@ -117,38 +117,37 @@
                 </div>
 
                 <div class="colonne listeCheckbox">
-                    <fieldset class="colonne" th:if="${ficheIntervention.Intervention != null}">
+                    <fieldset class="colonne" th:if="${ficheIntervention.intervention != null}">
                         <legend>Nature de l'intervention</legend>
                         <div th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}"
-                                class="demi">
-                                <div class="demi">
-                                    <input type="radio" id="${nature}" name="intervention" th:value="${nature}"
-                                        th:checked="${ficheIntervention.Intervention != null and ficheIntervention.Intervention.typeIntervention != null and ficheIntervention.intervention.typeIntervention.name() eq nature.name()}" />
-                                </div>
-                                <div th:switch="${ficheIntervention.NiveauNatureIntervention}">
-                                    <div th:case="0">
-                                        <img class="logo" th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
-                                            th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
-                                    </div>
-                                    <div th:case="1">
-                                        <div class="test">
-                                            <label th:for="${nature}"
-                                                th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
-                                        </div>
-                                        <img class="logo" th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
-                                            th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
-                                    </div>
-                                    <div th:case="2">
-                                        <div class="test">
-                                            <label th:for="${nature}"
-                                                th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
-                                        </div>
-                                    </div>
-                                </div>
-
+                            class="demi">
+                            <div class="demi">
+                                <input type="radio" id="${nature}" name="intervention" th:value="${nature}"
+                                    th:checked="${ficheIntervention.intervention.typeIntervention != null and ficheIntervention.intervention.typeIntervention == nature.name()}" />
                             </div>
-                        
+                            <div th:switch="${ficheIntervention.NiveauNatureIntervention}">
+                                <div th:case="0">
+                                    <img class="logo" th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
+                                        th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
+                                </div>
+                                <div th:case="1">
+                                    <div class="test">
+                                        <label th:for="${nature}"
+                                            th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
+                                    </div>
+                                    <img class="logo" th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
+                                        th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
+                                </div>
+                                <div th:case="2">
+                                    <div class="test">
+                                        <label th:for="${nature}"
+                                            th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </fieldset>
+                     
                 </div>
                 <div class="espaceHor"></div>
                 <div class="espaceHor"></div>

@@ -34,7 +34,6 @@ import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Materiaux;
-import com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxAmenagement;
 import com.webapp.ytb.webappytp.repository.MateriauxAmenagementRepository;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
@@ -65,6 +64,7 @@ public class HomeController {
     @PostMapping("/ajouter_fiche")
     public String ajouter_fiche(@ModelAttribute FicheIntervention fiche, Model model) {
         fiche.setDateCreation(LocalDate.now());
+        fiche.setMateriauxOptions(new ArrayList<>());
         FicheIntervention createdFiche = ficheServ.creer(fiche);
         model.addAttribute("createdFiche", createdFiche);
         return "redirect:/fiche/" + createdFiche.getId(); // On affiche la fiche créée
@@ -211,7 +211,7 @@ public class HomeController {
             @RequestParam LocalDate newDateIntervention,
             @RequestParam int newDureeIntervention,
             @RequestParam(required = false) Maintenance.MaintenanceType newMaintenanceType,
-            @RequestParam(required = false) Intervention.TypeIntervention newNatureType,
+            @RequestParam(required = false) String newNatureType,
             @RequestParam String newTravauxRealises,
             @RequestParam String newTravauxNonRealises,
             @RequestParam Optional<Boolean> newNouvelleIntervention,
@@ -286,6 +286,8 @@ public class HomeController {
     @GetMapping("/fiche/modifier2/{id}")
     public String showFicheDetails2(@PathVariable long id, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(id);
+        //String aaa =  ficheIntervention.getIntervention().getTypeIntervention();
+        //List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository.findByTypeIntervention(aaa);
         List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository.findAll();
         model.addAttribute("ficheIntervention", ficheIntervention);
         model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);

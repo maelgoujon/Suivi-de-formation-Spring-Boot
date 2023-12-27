@@ -103,7 +103,7 @@ public class FicheIntervention {
         return demande.getDegreUrgence();
     }
 
-    public TypeIntervention getTypeIntervention() {
+    public String getTypeIntervention() {
         return intervention.getTypeIntervention();
     }
 
