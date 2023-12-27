@@ -32,6 +32,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Materiaux;
 import com.webapp.ytb.webappytp.repository.MateriauxAmenagementRepository;
@@ -46,7 +47,8 @@ public class HomeController {
     UtilisateurServiceImpl userServ;
     FicheServiceImpl ficheServ;
 
-    public HomeController(UtilisateurServiceImpl userServ,FicheServiceImpl ficheServ,MateriauxAmenagementRepository materiauxAmenagementRepository) {
+    public HomeController(UtilisateurServiceImpl userServ, FicheServiceImpl ficheServ,
+            MateriauxAmenagementRepository materiauxAmenagementRepository) {
         this.userServ = userServ;
         this.ficheServ = ficheServ;
         this.materiauxAmenagementRepository = materiauxAmenagementRepository;
@@ -286,13 +288,20 @@ public class HomeController {
     @GetMapping("/fiche/modifier2/{id}")
     public String showFicheDetails2(@PathVariable long id, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(id);
-        //String aaa =  ficheIntervention.getIntervention().getTypeIntervention();
-        //List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository.findByTypeIntervention(aaa);
-        List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository.findAll();
+        String typeInterventionStr = ficheIntervention.getIntervention().getTypeIntervention();
+        Intervention.TypeIntervention typeIntervention = Intervention.TypeIntervention.valueOf(typeInterventionStr);
+        List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository
+                .findByTypeIntervention(typeIntervention);
+
+        // String aaa =
+        // ficheIntervention.getIntervention().getTypeIntervention().toString();
+        // List<Materiaux> materiauxAmenagementList =
+        // materiauxAmenagementRepository.findByTypeIntervention(aaa);
+        // List<Materiaux> materiauxAmenagementList =
+        // materiauxAmenagementRepository.findAll();
         model.addAttribute("ficheIntervention", ficheIntervention);
         model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
         return "fiche_modifier2";
     }
-
 
 }
