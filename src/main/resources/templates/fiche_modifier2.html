@@ -374,6 +374,14 @@
                                 type="button">Selectionner
                                 le matériau <span th:text="${sectionNumber + 1}"></span>
                             </button>
+                                <input type="text" 
+                                    th:attr="name='newMateriau' + ${sectionNumber}, id='selectedMateriau' + ${sectionNumber}"
+                                    th:value="${ficheIntervention.materiauxOptions != null 
+                                        and ficheIntervention.materiauxOptions.size() > sectionNumber ? ficheIntervention.materiauxOptions[sectionNumber] : ''}" 
+                                    style="width: auto;"> 
+                                <button class="clear-button" type="button" 
+                                    th:onclick="'clearInput(\'selectedMateriau' + ${sectionNumber} + '\')'">&times;</button>
+
                         </div>
                         <div class="images-selector" th:id="'material-dropdown' + ${sectionNumber}">
                             <button class="close-btn sticky-btn" type="button"
@@ -393,9 +401,28 @@
                         </div>
                     </th:block>
                 </div>
+            
+                
+                
                 <!-- Affichage des images si NiveauMateriauxUtilises vaut 0 -->
+                <div th:if="${ficheIntervention.NiveauMateriauxUtilises == 2}">
+                    <div class="noPrint"></div>
+                    <div th:each="i : ${#numbers.sequence(0,5)}" class="max-width-container">
+                        <select th:id="'materiauxUtilises' + ${i}" name="materiauxUtilises" class="max-width-select"
+                            onchange="updateMateriauField(this, 'selectedMateriau' + ${i})">
+                            <option value=""></option>
+                            <option th:each="element, status : ${materiauxAmenagementList}"
+                                th:value="${element.nomImage}" th:text="${element.nomImage}"
+                                th:selected="${ficheIntervention.materiauxOptions != null and ficheIntervention.materiauxOptions.size() > i and ficheIntervention.materiauxOptions[i] == element.nomImage}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Affichage des images et texte si NiveauMateriauxUtilises vaut 1 -->
+
                 <div class="materiaux_vertical" th:if="${ficheIntervention.NiveauMateriauxUtilises == 0}">
-                    0
+                    1
                     <div class="noPrint"></div>
                     <th:block th:each="sectionNumber : ${#numbers.sequence(0,5)}">
                         <div class="button-row">
@@ -403,6 +430,14 @@
                                 type="button">Selectionner
                                 le matériau <span th:text="${sectionNumber + 1}"></span>
                             </button>
+                                <input type="text" 
+                                    th:attr="name='newMateriau' + ${sectionNumber}, id='selectedMateriau' + ${sectionNumber}"
+                                    th:value="${ficheIntervention.materiauxOptions != null 
+                                        and ficheIntervention.materiauxOptions.size() > sectionNumber ? ficheIntervention.materiauxOptions[sectionNumber] : ''}" 
+                                    style="width: auto;"> 
+                                <button class="clear-button" type="button" 
+                                    th:onclick="'clearInput(\'selectedMateriau' + ${sectionNumber} + '\')'">&times;</button>
+
                         </div>
                         <div class="images-selector" th:id="'material-dropdown' + ${sectionNumber}">
                             <button class="close-btn sticky-btn" type="button"
@@ -422,28 +457,6 @@
                     </th:block>
                 </div>
 
-
-                <input type="hidden" name="newMateriau0" id="selectedMateriau0"
-                    th:value="${ficheIntervention.materiauxOptions != null and ficheIntervention.materiauxOptions.size() > 0 ? ficheIntervention.materiauxOptions[0] : ''}" />
-
-                <input type="hidden" name="newMateriau1" id="selectedMateriau1"
-                    th:value="${ficheIntervention.materiauxOptions != null and ficheIntervention.materiauxOptions.size() > 1 ? ficheIntervention.materiauxOptions[1] : ''}" />
-
-                <input type="hidden" name="newMateriau2" id="selectedMateriau2"
-                    th:value="${ficheIntervention.materiauxOptions != null and ficheIntervention.materiauxOptions.size() > 2 ? ficheIntervention.materiauxOptions[2] : ''}" />
-
-                <input type="hidden" name="newMateriau3" id="selectedMateriau3"
-                    th:value="${ficheIntervention.materiauxOptions != null and ficheIntervention.materiauxOptions.size() > 3 ? ficheIntervention.materiauxOptions[3] : ''}" />
-
-                <input type="hidden" name="newMateriau4" id="selectedMateriau4"
-                    th:value="${ficheIntervention.materiauxOptions != null and ficheIntervention.materiauxOptions.size() > 4 ? ficheIntervention.materiauxOptions[4] : ''}" />
-
-                <input type="hidden" name="newMateriau5" id="selectedMateriau5"
-                    th:value="${ficheIntervention.materiauxOptions != null and ficheIntervention.materiauxOptions.size() > 5 ? ficheIntervention.materiauxOptions[5] : ''}" />
-
-
-
-
             </fieldset>
             <div class="espaceHor"></div>
             <div class="espaceHor"></div>
@@ -459,7 +472,6 @@
         </form>
 
     </main>
-
 
 
 
@@ -479,6 +491,11 @@
                     }
                 });
             });
+        }
+
+        //clic sur la croix pour effacer le texte
+        function clearInput(inputId) {
+            document.getElementById(inputId).value = '';
         }
 
         document.addEventListener('DOMContentLoaded', function () {
