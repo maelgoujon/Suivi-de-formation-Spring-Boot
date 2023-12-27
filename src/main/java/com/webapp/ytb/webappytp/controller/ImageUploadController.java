@@ -14,6 +14,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.util.StringUtils;
+import java.util.Objects;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -41,17 +48,22 @@ public class ImageUploadController {
 
     @PostMapping("/uploadImageMatAmenagement")
     public String uploadImage(@ModelAttribute("materiauxAmenagement") MateriauxAmenagement materiauxAmenagement,
-                              @RequestParam("imageFile") MultipartFile imageFile,
-                              RedirectAttributes redirectAttributes) {
+            @RequestParam("imageFile") MultipartFile imageFile,
+            RedirectAttributes redirectAttributes) {
 
         try {
             if (!imageFile.isEmpty()) {
-                byte[] imageBytes = imageFile.getBytes();
-                String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+                String userChosenFileName = StringUtils.cleanPath(Objects.requireNonNull(materiauxAmenagement.getNomImage()));
 
-                // Concaténer le préfixe MIME au champ imageData
-                String imageDataWithPrefix = "data:" + imageFile.getContentType() + ";base64," + base64Image;
-                materiauxAmenagement.setImageData(imageDataWithPrefix);
+                // Obtenez l'extension du fichier original
+                String fileExtension = StringUtils.getFilenameExtension(imageFile.getOriginalFilename());
+
+                // Concaténez le nom choisi par l'utilisateur avec l'extension du fichier
+                String fileName = userChosenFileName + "." + fileExtension;
+
+                // Enregistrez l'image localement et obtenez l'URL
+                String imageUrl = saveImageLocally(imageFile, fileName);
+                materiauxAmenagement.setImageUrl(imageUrl);
 
                 materiauxAmenagementRepository.save(materiauxAmenagement);
                 redirectAttributes.addFlashAttribute("message", "Image enregistrée avec succès");
@@ -65,38 +77,59 @@ public class ImageUploadController {
         return "redirect:/imageMatAmenagement";
     }
 
+    private String saveImageLocally(MultipartFile imageFile, String fileName) throws IOException {
+        // Obtenez le chemin d'enregistrement local dans le répertoire static
+        String localPath = "src/main/resources/static/images/materiaux_amenagement/";
+
+        // Assurez-vous que le dossier de destination existe
+        Path uploadPath = Paths.get(localPath);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        // Concaténez le chemin local et le nom du fichier pour obtenir l'URL
+        String imageUrl = "images/materiaux_amenagement/" + fileName;
+
+        // Enregistrez le fichier localement
+        Path targetLocation = uploadPath.resolve(fileName);
+        Files.copy(imageFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+        return imageUrl;
+    }
+
     @PostMapping("/modifierImage/{id}")
     public String editImage(@PathVariable("id") Long id,
-            @RequestParam("newImageFile") MultipartFile newImageFile,
+            @RequestParam(value = "newImageFile", required = false) MultipartFile newImageFile,
             Model model) {
         Optional<MateriauxAmenagement> optionalImage = materiauxAmenagementRepository.findById(id);
         if (optionalImage.isPresent()) {
             MateriauxAmenagement existingImage = optionalImage.get();
-
+    
             try {
-                // Assurez-vous que le type de contenu est correct
-                String contentType = newImageFile.getContentType();
-                if (contentType != null && (contentType.equals("image/jpeg") || contentType.equals("image/png"))) {
-                    // Vérifiez la taille du fichier
-                    long maxFileSize = parseFileSize(MAX_FILE_SIZE);
-                    if (newImageFile.getSize() > maxFileSize) {
-                        // Gérez le cas où la taille du fichier dépasse la limite
-                        model.addAttribute("message", "La taille du fichier dépasse la limite autorisée.");
+                if (newImageFile != null && !newImageFile.isEmpty()) {
+                    // Assurez-vous que le type de contenu est correct
+                    String contentType = newImageFile.getContentType();
+                    if (contentType != null && (contentType.equals("image/jpeg") || contentType.equals("image/png"))) {
+                        // Vérifiez la taille du fichier
+                        long maxFileSize = parseFileSize(MAX_FILE_SIZE);
+                        if (newImageFile.getSize() > maxFileSize) {
+                            // Gérez le cas où la taille du fichier dépasse la limite
+                            model.addAttribute("message", "La taille du fichier dépasse la limite autorisée.");
+                            model.addAttribute("image", existingImage); // Ajoutez l'image existante au modèle
+                            model.addAttribute("id", id); // Ajoutez l'ID au modèle
+                            return "editImagePage";
+                        }
+    
+                        // Enregistrez la nouvelle image localement et obtenez l'URL
+                        String imageUrl = saveImageLocally(newImageFile, existingImage.getNomImage());
+                        existingImage.setImageUrl(imageUrl);
+                    } else {
+                        // Gérez le cas où le type de contenu n'est pas pris en charge
+                        model.addAttribute("message", "Le type de fichier n'est pas pris en charge.");
                         model.addAttribute("image", existingImage); // Ajoutez l'image existante au modèle
                         model.addAttribute("id", id); // Ajoutez l'ID au modèle
                         return "editImagePage";
                     }
-
-                    byte[] newImageBytes = newImageFile.getBytes();
-                    String newBase64Image = Base64.getEncoder().encodeToString(newImageBytes);
-                    String newImageDataWithPrefix = "data:" + contentType + ";base64," + newBase64Image;
-                    existingImage.setImageData(newImageDataWithPrefix);
-                } else {
-                    // Gérez le cas où le type de contenu n'est pas pris en charge
-                    model.addAttribute("message", "Le type de fichier n'est pas pris en charge.");
-                    model.addAttribute("image", existingImage); // Ajoutez l'image existante au modèle
-                    model.addAttribute("id", id); // Ajoutez l'ID au modèle
-                    return "editImagePage";
                 }
             } catch (FileSizeLimitExceededException ex) {
                 // Interceptez l'exception et gérez-la ici
@@ -106,15 +139,20 @@ public class ImageUploadController {
                 return "editImagePage";
             } catch (Exception e) {
                 e.printStackTrace();
+                // Gérez les autres exceptions ici si nécessaire
+                model.addAttribute("message", "Une erreur s'est produite lors de la modification de l'image.");
+                model.addAttribute("image", existingImage); // Ajoutez l'image existante au modèle
+                model.addAttribute("id", id); // Ajoutez l'ID au modèle
+                return "editImagePage";
             }
-
+    
             materiauxAmenagementRepository.save(existingImage);
             model.addAttribute("message", "Image modifiée avec succès");
         }
-
+    
         return "redirect:/imageMatAmenagement";
     }
-
+    
     private long parseFileSize(String fileSize) {
         DataSize dataSize = DataSize.parse(fileSize);
         return dataSize.toBytes();

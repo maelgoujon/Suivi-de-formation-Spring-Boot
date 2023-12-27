@@ -11,11 +11,12 @@
             max-width: 10vh;
         }
 
-        .succes{
+        .succes {
             color: green;
             font-size: 1.5em;
         }
-        .error{
+
+        .error {
             color: red;
             font-size: 1.5em;
         }
@@ -70,7 +71,6 @@
 
     <form th:action="@{/uploadImageMatAmenagement}" method="post" enctype="multipart/form-data"
         th:object="${materiauxAmenagement}">
-        <!-- Ajoutez ici vos champs pour le formulaire d'ajout -->
         <label for="nomImage">Nom de l'image:</label>
         <input type="text" id="nomImage" name="nomImage" th:field="*{nomImage}" required>
 
@@ -78,10 +78,6 @@
 
         <label for="imageFile">Fichier Image :</label>
         <input type="file" id="imageFile" name="imageFile" accept="image/*" required onchange="handleFileSelect(this)">
-
-        <br>
-
-        <input type="hidden" id="imageData" name="imageData" th:field="*{imageData}" readonly="readonly">
 
         <!-- Afficher un message si l'image est enregistrée avec succès -->
         <p class="succes" th:if="${message}" th:text="${message}" style="color: green;"></p>
@@ -107,16 +103,20 @@
             <tr th:each="image : ${allImages}">
                 <td th:text="${image.nomImage}"></td>
                 <td class="max-width-10vh">
-                    <img th:src="${image.imageData}" alt="Image" id="imageDetails_${image.id}"
-                        th:attr="data-nomImage=${image.nomImage}, data-imageData=${image.imageData}" />
-                </td>
-                <td>
-                    <a th:href="@{'/editImage/' + ${image.id}}">Modifier</a>
+                    <img th:src="@{'/' + ${image.imageUrl}}" alt="Image"
+                        id="imageDetails_${image.id}"
+                        th:attr="data-nomImage=${image.nomImage}, data-imageUrl=${image.imageUrl}" />
                 </td>
 
+
+                <td>
+                    <a th:href="@{/editImage/{id}(id=${image.id})}">Modifier</a>
+                </td>
             </tr>
         </tbody>
     </table>
+
+
 
 
 

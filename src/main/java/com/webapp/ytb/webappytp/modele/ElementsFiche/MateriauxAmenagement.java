@@ -20,18 +20,15 @@ public class MateriauxAmenagement {
     @Column(unique = true)
     private String nomImage;
 
-    @Column(columnDefinition = "text", nullable = true)
-    private String imageData;
-
+    // Mettez à jour le champ pour stocker l'URL locale
+    @Column(nullable = true)
+    private String imageUrl;
 
     @Override
     public String toString() {
         return "MateriauxAmenagement{" +
                 "nomImage='" + nomImage + '\'' +
-                ", imageData='" + imageData + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
-
-    
-
 }

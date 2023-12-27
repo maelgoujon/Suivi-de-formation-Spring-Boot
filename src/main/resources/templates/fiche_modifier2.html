@@ -10,6 +10,13 @@
         accent-color: #f20000;
     }
 
+    .sticky-btn {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: rgb(255, 255, 255);
+    }
+
 
     .cardimage {
         margin: 2vh;
@@ -17,34 +24,38 @@
 
     .images-selector {
         display: none;
+        height: fit-content;
+        max-height: 80vh;
         flex-wrap: wrap;
         justify-content: center;
         gap: 10px;
         position: fixed;
-        top: 10%;
-        left: 10%;
-        right: 10%;
-        bottom: 10%;
+        top: 5%;
+        left: 5%;
+        right: 5%;
+        bottom: 5%;
         background-color: rgb(255, 255, 255);
         z-index: 999;
         overflow: auto;
         grid-template-columns: repeat(3, 1fr);
         gap: 10px;
-        max-width: 600px;
+        max-width: 85vw;
         margin: 0 auto;
         border-radius: 3%;
     }
 
     .img-card {
-        display: grid;
-        gap: 5px;
-        justify-items: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* Centrer verticalement */
         text-align: center;
     }
 
     .imageListe {
-        max-width: 100px;
-        min-width: 100px;
+        max-width: 100%;
+        max-height: 100%;
+        height: fit-content;
     }
 
     .img-card input {
@@ -359,24 +370,24 @@
                         <th:block th:each="sectionNumber : ${#numbers.sequence(0,5)}">
                             <div class="button-row">
                                 <button class="show-materials-btn"
-                                    th:data-target="'material-dropdown' + ${sectionNumber}" type="button"
-                                    onclick="showMaterialSelector(this)">Selectionner le matériau <span
-                                        th:text="${sectionNumber + 1}"></span>
+                                    th:data-target="'material-dropdown' + ${sectionNumber}" type="button">Selectionner
+                                    le matériau <span th:text="${sectionNumber + 1}"></span>
                                 </button>
                             </div>
                             <div class="images-selector" th:id="'material-dropdown' + ${sectionNumber}">
-                                <button class="close-btn" type="button" onclick="closeMaterialSelector(this)"
-                                    style="height: fit-content; grid-column: span 3;background-color: red;color: white;">Fermer
+                                <button class="close-btn sticky-btn" type="button"
+                                    style="height: fit-content; grid-column: span 3; background-color: red; color: white;">
+                                    Fermer
                                 </button>
                                 <div class="cardimage" th:each="element, status : ${materiauxAmenagementList}">
                                     <label class="img-card">
-                                        <img class="imageListe" th:src="${element.imageData}" alt="Image" />
+                                        <div style="max-width: 30vh;min-width: 30vh;min-height: 30vh;max-height: 30vh;">
+                                            <img class="imageListe" th:src="@{'/' + ${element.imageUrl}}" alt="Image" />
+                                        </div>
                                         <span th:text="${element.nomImage}"></span>
                                         <input type="radio" name="materialRadio" th:value="${element.nomImage}"
                                             th:id="'radio_' + ${sectionNumber} + '_' + ${status.index}">
                                     </label>
-
-
                                 </div>
                             </div>
                         </th:block>
@@ -387,23 +398,23 @@
                         <th:block th:each="sectionNumber : ${#numbers.sequence(0,5)}">
                             <div class="button-row">
                                 <button class="show-materials-btn"
-                                    th:data-target="'material-dropdown' + ${sectionNumber}" type="button"
-                                    onclick="showMaterialSelector(this)">Selectionner le matériau <span
-                                        th:text="${sectionNumber + 1}"></span>
+                                    th:data-target="'material-dropdown' + ${sectionNumber}" type="button">Selectionner
+                                    le matériau <span th:text="${sectionNumber + 1}"></span>
                                 </button>
                             </div>
                             <div class="images-selector" th:id="'material-dropdown' + ${sectionNumber}">
-                                <button class="close-btn" type="button" onclick="closeMaterialSelector(this)"
-                                    style="height: fit-content; grid-column: span 3;background-color: red;color: white;">Fermer
+                                <button class="close-btn sticky-btn" type="button"
+                                    style="height: fit-content; grid-column: span 3; background-color: red; color: white;">
+                                    Fermer
                                 </button>
                                 <div class="cardimage" th:each="element, status : ${materiauxAmenagementList}">
                                     <label class="img-card">
-                                        <img class="imageListe" th:src="${element.imageData}" alt="Image" />
+                                        <div style="max-width: 30vh;min-width: 30vh;min-height: 30vh;max-height: 30vh;">
+                                            <img class="imageListe" th:src="@{'/' + ${element.imageUrl}}" alt="Image" />
+                                        </div>
                                         <input type="radio" name="materialRadio" th:value="${element.nomImage}"
                                             th:id="'radio_' + ${sectionNumber} + '_' + ${status.index}">
                                     </label>
-
-
                                 </div>
                             </div>
                         </th:block>
