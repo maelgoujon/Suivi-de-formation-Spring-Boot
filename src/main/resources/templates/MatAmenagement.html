@@ -67,11 +67,11 @@
 
 <body>
 
-    <h2>Ajouter une image Materiaux Amenagement</h2>
+    <h2>Ajouter un Materiaux d'Amenagement</h2>
 
     <form th:action="@{/uploadImageMatAmenagement}" method="post" enctype="multipart/form-data"
         th:object="${materiauxAmenagement}">
-        <label for="nomImage">Nom de l'image:</label>
+        <label for="nomImage">Nom du materiau :</label>
         <input type="text" id="nomImage" name="nomImage" th:field="*{nomImage}" required>
 
         <br>
@@ -94,7 +94,7 @@
     <table>
         <thead>
             <tr>
-                <th>Nom de l'image</th>
+                <th>Nom du materiau</th>
                 <th>Image</th>
                 <th>Actions</th>
             </tr>

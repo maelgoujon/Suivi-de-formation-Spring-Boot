@@ -37,13 +37,13 @@ public class ImageUploadController {
     @Value("${spring.servlet.multipart.max-file-size}")
     private String MAX_FILE_SIZE;
 
-    @GetMapping("/imageMatAmenagement")
+    @GetMapping("/MatAmenagement")
     public String showImagePage(Model model) {
         List<MateriauxAmenagement> allImages = materiauxAmenagementRepository.findAll();
         model.addAttribute("maxFileSize", parseFileSize(MAX_FILE_SIZE));
         model.addAttribute("allImages", allImages);
         model.addAttribute("materiauxAmenagement", new MateriauxAmenagement());
-        return "imageMatAmenagement";
+        return "MatAmenagement";
     }
 
     @PostMapping("/uploadImageMatAmenagement")
@@ -74,7 +74,7 @@ public class ImageUploadController {
             redirectAttributes.addFlashAttribute("error", "Une image avec ce nom existe déjà.");
         }
 
-        return "redirect:/imageMatAmenagement";
+        return "redirect:/MatAmenagement";
     }
 
     private String saveImageLocally(MultipartFile imageFile, String fileName) throws IOException {
@@ -150,7 +150,7 @@ public class ImageUploadController {
             model.addAttribute("message", "Image modifiée avec succès");
         }
     
-        return "redirect:/imageMatAmenagement";
+        return "redirect:/MatAmenagement";
     }
     
     private long parseFileSize(String fileSize) {
@@ -169,7 +169,7 @@ public class ImageUploadController {
             model.addAttribute("id", id);
             return "editImagePage";
         } else {
-            return "redirect:/imageMatAmenagement";
+            return "redirect:/MatAmenagement";
         }
     }
 
