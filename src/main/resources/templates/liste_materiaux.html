@@ -20,11 +20,24 @@
             color: red;
             font-size: 1.5em;
         }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        td,
+        th {
+            border: 1px solid black;
+            padding: 0.5em;
+        }
     </style>
+
+
 </head>
 
 <body>
     <h2>Tous les Materiaux </h2>
+
 
     <!-- afficher les messages de succès ou d'erreur -->
     <div th:if="${successMessage}" class="success">
@@ -35,14 +48,19 @@
     </div>
 
     <!-- Champ de recherche -->
-    <label for="searchMaterial">Rechercher un matériau:</label>
-    <input type="text" id="searchMaterial" name="searchMaterial" placeholder="Nom du matériau" oninput="searchMaterial()">
-    
-    <table>
+    <label for="searchMaterial">Rechercher :</label>
+    <input type="text" id="searchMaterial" name="searchMaterial" placeholder="Nom du matériau / Type"
+        oninput="searchMaterial()">
+
+    <button type="button" onclick="window.location.href='/materiaux/ajouter'">Ajouter un materiau</button>
+
+
+    <table aria-label="Table des materiaux">
         <thead>
             <tr>
                 <th>Nom du materiau</th>
                 <th>Image</th>
+                <th>Type</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -53,6 +71,7 @@
                     <img th:src="@{'/' + ${image.imageUrl}}" alt="Image" id="imageDetails_${image.id}"
                         th:attr="data-nomImage=${image.nomImage}, data-imageUrl=${image.imageUrl}" />
                 </td>
+                <td th:text="${image.typeIntervention}"></td>
                 <td>
                     <a th:href="@{/materiaux/modifier/{id}(id=${image.id})}">Modifier</a>
                     <a th:href="@{/materiaux/supprimer/{id}(id=${image.id})}">Supprimer</a>
@@ -61,7 +80,6 @@
         </tbody>
     </table>
 
-    <button type="button" onclick="window.location.href='/materiaux/ajouter'">Ajouter un materiau</button>
 
     <script>
         function searchMaterial() {
@@ -70,8 +88,9 @@
 
             for (var i = 0; i < materialRows.length; i++) {
                 var materialName = materialRows[i].getElementsByTagName('td')[0].innerText.toLowerCase();
+                var materialType = materialRows[i].getElementsByTagName('td')[2].innerText.toLowerCase();
 
-                if (materialName.includes(searchValue)) {
+                if (materialName.includes(searchValue) || materialType.includes(searchValue)) {
                     materialRows[i].style.display = '';
                 } else {
                     materialRows[i].style.display = 'none';
