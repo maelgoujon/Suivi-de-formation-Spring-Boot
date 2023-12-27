@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +32,7 @@ import com.webapp.ytb.webappytp.modele.ElementsFiche.Materiaux;
 import com.webapp.ytb.webappytp.repository.MateriauxAmenagementRepository;
 
 @Controller
+@RequestMapping("/materiaux")
 public class ImageUploadController {
 
     @Autowired
@@ -39,8 +41,8 @@ public class ImageUploadController {
     @Value("${spring.servlet.multipart.max-file-size}")
     private String MAX_FILE_SIZE;
 
-    @GetMapping("/materiaux/ajouter")
-    public String showImagePage(Model model) {
+    @GetMapping("/ajouter")
+        public String showImagePage(Model model) {
         List<Materiaux> allImages = materiauxAmenagementRepository.findAll();
         model.addAttribute("maxFileSize", parseFileSize(MAX_FILE_SIZE));
         model.addAttribute("allImages", allImages);
@@ -48,8 +50,8 @@ public class ImageUploadController {
         return "ajout_materiau";
     }
 
-    @GetMapping("/materiaux/liste")
-    public String liste_materiaux(Model model) {
+    @GetMapping("/liste")
+        public String liste_materiaux(Model model) {
         List<Materiaux> allImages = materiauxAmenagementRepository.findAll();
         model.addAttribute("maxFileSize", parseFileSize(MAX_FILE_SIZE));
         model.addAttribute("allImages", allImages);
@@ -57,8 +59,8 @@ public class ImageUploadController {
         return "liste_materiaux";
     }
 
-    @PostMapping("/materiaux/uploadMateriaux")
-    public String uploadImage(@ModelAttribute("materiau") Materiaux materiau,
+    @PostMapping("/uploadMateriaux")
+        public String uploadImage(@ModelAttribute("materiau") Materiaux materiau,
             @RequestParam("imageFile") MultipartFile imageFile,
             RedirectAttributes redirectAttributes, Model model) {
 
@@ -106,8 +108,8 @@ public class ImageUploadController {
         return imageUrl;
     }
 
-    @PostMapping("/materiaux/modifier/{id}")
-    public String editImage(@PathVariable("id") Long id,
+    @PostMapping("/modifier/{id}")
+        public String editImage(@PathVariable("id") Long id,
             @RequestParam(value = "newImageFile", required = false) MultipartFile newImageFile,
             @RequestParam(value = "newNomImage", required = false) String newNomImage, // Nouveau nom d'image
             @RequestParam(value = "newTypeIntervention") Intervention.TypeIntervention newTypeIntervention,
@@ -170,8 +172,8 @@ public class ImageUploadController {
         return dataSize.toBytes();
     }
 
-    @GetMapping("/materiaux/modifier/{id}")
-    public String showEditImagePage(@PathVariable("id") Long id, Model model) {
+    @GetMapping("/modifier/{id}")
+        public String showEditImagePage(@PathVariable("id") Long id, Model model) {
         Optional<Materiaux> optionalImage = materiauxAmenagementRepository.findById(id);
         if (optionalImage.isPresent()) {
             Materiaux existingImage = optionalImage.get();
@@ -185,8 +187,8 @@ public class ImageUploadController {
         }
     }
 
-    @GetMapping("/materiaux/supprimer/{id}")
-    public String deleteImage(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+    @GetMapping("/supprimer/{id}")
+        public String deleteImage(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
             Optional<Materiaux> optionalImage = materiauxAmenagementRepository.findById(id);
             if (optionalImage.isPresent()) {
