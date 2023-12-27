@@ -292,13 +292,6 @@ public class HomeController {
         Intervention.TypeIntervention typeIntervention = Intervention.TypeIntervention.valueOf(typeInterventionStr);
         List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository
                 .findByTypeIntervention(typeIntervention);
-
-        // String aaa =
-        // ficheIntervention.getIntervention().getTypeIntervention().toString();
-        // List<Materiaux> materiauxAmenagementList =
-        // materiauxAmenagementRepository.findByTypeIntervention(aaa);
-        // List<Materiaux> materiauxAmenagementList =
-        // materiauxAmenagementRepository.findAll();
         model.addAttribute("ficheIntervention", ficheIntervention);
         model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
         return "fiche_modifier2";
