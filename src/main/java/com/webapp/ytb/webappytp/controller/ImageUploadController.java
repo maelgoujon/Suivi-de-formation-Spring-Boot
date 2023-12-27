@@ -109,6 +109,7 @@ public class ImageUploadController {
     @PostMapping("/materiaux/modifier/{id}")
     public String editImage(@PathVariable("id") Long id,
             @RequestParam(value = "newImageFile", required = false) MultipartFile newImageFile,
+            @RequestParam(value = "newNomImage", required = false) String newNomImage, // Nouveau nom d'image
             @RequestParam(value = "newTypeIntervention") Intervention.TypeIntervention newTypeIntervention,
             RedirectAttributes redirectAttributes, Model model) {
         Optional<Materiaux> optionalImage = materiauxAmenagementRepository.findById(id);
@@ -142,8 +143,13 @@ public class ImageUploadController {
                 // Mettez à jour le type d'intervention avec la nouvelle valeur
                 existingImage.setTypeIntervention(newTypeIntervention);
 
+                // Mettez à jour le nom de l'image s'il est fourni
+                if (newNomImage != null && !newNomImage.isEmpty()) {
+                    existingImage.setNomImage(newNomImage);
+                }
+
                 materiauxAmenagementRepository.save(existingImage);
-                redirectAttributes.addFlashAttribute("successMessage", "Image modifiée avec succès");
+                redirectAttributes.addFlashAttribute("successMessage", "Materiau modifiée avec succès");
             } catch (FileSizeLimitExceededException ex) {
                 // Interceptez l'exception et gérez-la ici
                 redirectAttributes.addFlashAttribute("errorMessage",
@@ -152,7 +158,7 @@ public class ImageUploadController {
                 e.printStackTrace();
                 // Gérez les autres exceptions ici si nécessaire
                 redirectAttributes.addFlashAttribute("errorMessage",
-                        "Une erreur s'est produite lors de la modification de l'image.");
+                        "Une erreur s'est produite lors de la modification du Materiau.");
             }
         }
 
@@ -173,7 +179,7 @@ public class ImageUploadController {
             model.addAttribute("maxFileSize", parseFileSize(MAX_FILE_SIZE));
             model.addAttribute("image", existingImage);
             model.addAttribute("id", id);
-            return "editImagePage";
+            return "modifier_materiau";
         } else {
             return "redirect:/materiaux/liste";
         }

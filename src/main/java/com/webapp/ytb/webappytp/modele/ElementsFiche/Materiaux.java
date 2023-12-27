@@ -34,6 +34,10 @@ public class Materiaux {
         this.typeIntervention = Intervention.TypeIntervention.valueOf(type);
     }
 
+    public void setNomImage(String nomImage) {
+        this.nomImage = nomImage;
+    }
+
     @Override
     public String toString() {
         return "Materiaux{" +

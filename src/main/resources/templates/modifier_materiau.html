@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier l'image</title>
+
+    <script type="text/javascript">
+        // Fonction qui affiche le bouton "Modifier" si le nom de l'image a changé et que la taille de l'image est valide
+        function afficherBouttonModifier() {
+            var nomImage = document.getElementById('newNomImage');
+            var isNomImageChanged = nomImage.value != document.getElementById('originalNomImage').value;
+    
+            // Vérifier à la fois le changement de nom et la taille de l'image
+            var isImageSizeValidvar = isImageSizeValid(document.getElementById('newImageFile'), [[${ maxFileSize }]]);
+    
+            document.getElementById('modifierButton').disabled = !isNomImageChanged || !isImageSizeValidvar;
+        }
+    
+        // Fonction qui vérifie si la taille de l'image est valide
+        function isImageSizeValid(fileInput, maxSizeInBytes) {
+            var file = fileInput.files[0];
+            if (!file) {
+                console.log('Aucun fichier sélectionné');
+                return true; // Aucun fichier sélectionné
+            }
+    
+            var fileSize = file.size;
+            var isFileSizeValid = fileSize <= maxSizeInBytes;
+            console.log('Taille du fichier : ' + fileSize + ' octets');
+    
+            // Afficher une alerte si la taille n'est pas valide
+            if (!isFileSizeValid) {
+                alert('La taille du fichier dépasse la limite autorisée (' + (maxSizeInBytes / 1024 / 1024) + ' Mo). Veuillez sélectionner un fichier plus petit.');
+            }
+    
+            return isFileSizeValid;
+        }
+    
+        function previewImage(input) {
+            var preview = document.getElementById('preview');
+            var fileInput = document.getElementById('newImageFile');
+            var file = fileInput.files[0];
+            var maxFileSize = [[${ maxFileSize }]];
+            var reader = new FileReader();
+    
+            reader.onloadend = function () {
+                preview.src = reader.result;
+    
+                var fileSize = file.size; // taille en octets
+    
+                // Vérifier si la taille de l'image ne dépasse pas la limite
+                var isFileSizeValid = fileSize <= maxFileSize;
+    
+                var maxFileSizeInMo = maxFileSize / 1024 / 1024;
+    
+                var nomImage = document.getElementById('newNomImage');
+                var isNomImageChanged = nomImage.value != document.getElementById('originalNomImage').value;
+    
+                // Activer le bouton si la taille de l'image est dans les limites et le nom de l'image a changé
+                document.getElementById('modifierButton').disabled = !isFileSizeValid || !isNomImageChanged;
+    
+                // Afficher une alerte si la taille n'est pas valide
+                if (!isFileSizeValid) {
+                    alert('La taille du fichier dépasse la limite autorisée (' + maxFileSizeInMo + ' Mo). Veuillez sélectionner un fichier plus petit.');
+                }
+    
+                // Appeler afficherBouttonModifier seulement si la taille de l'image est valide
+                if (isFileSizeValid) {
+                    afficherBouttonModifier();
+                }
+            };
+    
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "";
+            }
+        }
+    </script>
+    
+
+</head>
+
+<body>
+
+    <h2>Modifier l'image <span th:text="${image.nomImage}"></span></h2>
+    <form th:action="@{'/materiaux/modifier/' + ${id}}" th:object="${image}" method="post"
+        enctype="multipart/form-data">
+
+        <!-- Image actuelle -->
+        <h3>Image actuelle : </h3>
+        <br>
+        <img th:src="@{'/' + ${image.imageUrl}}" alt="Image" style="max-width: 20vh;" />
+        <br>
+
+        <!-- Type d'intervention actuel -->
+        <h3>Type d'intervention actuel : <span th:text="${image.typeIntervention}"></span></h3>
+        <br>
+        <!--Ancien nom de l'image-->
+        <input type="hidden" id="originalNomImage" th:value="${image.nomImage}" />
+        <!-- Nouveau nom d'image -->
+        <h3>Nouveau nom d'image :</h3>
+        <input type="text" id="newNomImage" name="newNomImage" th:value="${image.nomImage}" onchange="afficherBouttonModifier()">
+
+        <br>
+
+        <!-- Nouveau type d'intervention -->
+        <h3>Nouveau type d'intervention :</h3>
+        <select id="newTypeIntervention" name="newTypeIntervention" required>
+            <option
+                th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}"
+                th:value="${type.name()}" th:text="${type.name()}"
+                th:selected="${type.name() == image.typeIntervention.name()}"></option>
+        </select>
+
+
+        <br>
+
+        <!-- Nouvelle image -->
+        <h3>Nouvelle image : </h3>
+        <input type="file" id="newImageFile" name="newImageFile" accept="image/*" onchange="previewImage(this)">
+        <br>
+
+        <!-- Prévisualisation de la nouvelle image -->
+        <img id="preview" style="max-width: 10vh;">
+
+        <br>
+
+        <!-- Bouton Modifier -->
+        <input type="submit" id="modifierButton" value="Modifier" disabled>
+    </form>
+
+    <p th:text="${message}"></p>
+
+</body>
+
+</html>
