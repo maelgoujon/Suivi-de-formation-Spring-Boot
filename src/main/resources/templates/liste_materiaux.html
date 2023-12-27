@@ -31,13 +31,10 @@
             padding: 0.5em;
         }
     </style>
-
-
 </head>
 
 <body>
     <h2>Tous les Materiaux </h2>
-
 
     <!-- afficher les messages de succès ou d'erreur -->
     <div th:if="${successMessage}" class="success">
@@ -47,13 +44,19 @@
         <p th:text="${errorMessage}" style="color: red;"></p>
     </div>
 
-    <!-- Champ de recherche -->
+    <!-- Champs de recherche -->
     <label for="searchMaterial">Rechercher :</label>
-    <input type="text" id="searchMaterial" name="searchMaterial" placeholder="Nom du matériau / Type"
-        oninput="searchMaterial()">
+    <input type="text" id="searchMaterial" name="searchMaterial" placeholder="Nom du matériau" oninput="searchMaterial()">
+
+    <label for="typeDropdown">Type de matériau :</label>
+    <select id="typeDropdown" name="typeDropdown" onchange="searchMaterialByType()">
+        <option value="">Tous</option>
+        <th:block th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention$TypeIntervention).values()}">
+            <option th:value="${type}" th:text="${type}"></option>
+        </th:block>
+    </select>
 
     <button type="button" onclick="window.location.href='/materiaux/ajouter'">Ajouter un materiau</button>
-
 
     <table aria-label="Table des materiaux">
         <thead>
@@ -80,7 +83,6 @@
         </tbody>
     </table>
 
-
     <script>
         function searchMaterial() {
             var searchValue = document.getElementById('searchMaterial').value.toLowerCase();
@@ -88,9 +90,23 @@
 
             for (var i = 0; i < materialRows.length; i++) {
                 var materialName = materialRows[i].getElementsByTagName('td')[0].innerText.toLowerCase();
+
+                if (materialName.includes(searchValue)) {
+                    materialRows[i].style.display = '';
+                } else {
+                    materialRows[i].style.display = 'none';
+                }
+            }
+        }
+
+        function searchMaterialByType() {
+            var selectedType = document.getElementById('typeDropdown').value.toLowerCase();
+            var materialRows = document.getElementById('materialTableBody').getElementsByTagName('tr');
+
+            for (var i = 0; i < materialRows.length; i++) {
                 var materialType = materialRows[i].getElementsByTagName('td')[2].innerText.toLowerCase();
 
-                if (materialName.includes(searchValue) || materialType.includes(searchValue)) {
+                if (selectedType === '' || materialType === selectedType) {
                     materialRows[i].style.display = '';
                 } else {
                     materialRows[i].style.display = 'none';
