@@ -11,7 +11,7 @@
             max-width: 10vh;
         }
 
-        .succes {
+        .success {
             color: green;
             font-size: 1.5em;
         }
@@ -21,6 +21,7 @@
             font-size: 1.5em;
         }
     </style>
+</head>
 
 <body>
     <h2>Tous les Materiaux </h2>
@@ -33,7 +34,10 @@
         <p th:text="${errorMessage}" style="color: red;"></p>
     </div>
 
-
+    <!-- Champ de recherche -->
+    <label for="searchMaterial">Rechercher un matériau:</label>
+    <input type="text" id="searchMaterial" name="searchMaterial" placeholder="Nom du matériau" oninput="searchMaterial()">
+    
     <table>
         <thead>
             <tr>
@@ -42,7 +46,7 @@
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="materialTableBody">
             <tr th:each="image : ${allImages}">
                 <td th:text="${image.nomImage}"></td>
                 <td class="max-width-10vh">
@@ -57,12 +61,24 @@
         </tbody>
     </table>
 
-
     <button type="button" onclick="window.location.href='/materiaux/ajouter'">Ajouter un materiau</button>
 
+    <script>
+        function searchMaterial() {
+            var searchValue = document.getElementById('searchMaterial').value.toLowerCase();
+            var materialRows = document.getElementById('materialTableBody').getElementsByTagName('tr');
 
+            for (var i = 0; i < materialRows.length; i++) {
+                var materialName = materialRows[i].getElementsByTagName('td')[0].innerText.toLowerCase();
 
-
+                if (materialName.includes(searchValue)) {
+                    materialRows[i].style.display = '';
+                } else {
+                    materialRows[i].style.display = 'none';
+                }
+            }
+        }
+    </script>
 </body>
 
 </html>

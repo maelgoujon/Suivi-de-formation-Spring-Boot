@@ -102,7 +102,7 @@
         <input type="hidden" id="originalNomImage" th:value="${image.nomImage}" />
         <!-- Nouveau nom d'image -->
         <h3>Nouveau nom d'image :</h3>
-        <input type="text" id="newNomImage" name="newNomImage" th:value="${image.nomImage}" onchange="afficherBouttonModifier()">
+        <input type="text" id="newNomImage" name="newNomImage" th:value="${image.nomImage}" oninput="afficherBouttonModifier()">
 
         <br>
 
