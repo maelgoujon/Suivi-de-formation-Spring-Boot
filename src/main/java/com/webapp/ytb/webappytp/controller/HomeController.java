@@ -33,6 +33,7 @@ import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.Materiaux;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.MateriauxAmenagement;
 import com.webapp.ytb.webappytp.repository.MateriauxAmenagementRepository;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
@@ -285,19 +286,11 @@ public class HomeController {
     @GetMapping("/fiche/modifier2/{id}")
     public String showFicheDetails2(@PathVariable long id, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(id);
-        List<MateriauxAmenagement> materiauxAmenagementList = materiauxAmenagementRepository.findAll();
+        List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository.findAll();
         model.addAttribute("ficheIntervention", ficheIntervention);
         model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
         return "fiche_modifier2";
     }
 
-    @GetMapping("/testListe")
-    public String showGallery(Model model) {
-        List<MateriauxAmenagement> materiauxAmenagementList = materiauxAmenagementRepository.findAll();
-
-        model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
-
-        return "testListe";
-    }
 
 }

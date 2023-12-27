@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Images Materiaux Amenagement</title>
+
+    <style>
+        .max-width-10vh img {
+            max-width: 10vh;
+        }
+
+        .succes {
+            color: green;
+            font-size: 1.5em;
+        }
+
+        .error {
+            color: red;
+            font-size: 1.5em;
+        }
+    </style>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function editImage(imageId) {
+            // Afficher le formulaire d'édition
+            document.getElementById('editForm').style.display = 'block';
+
+            // Mettre à jour l'action du formulaire avec l'ID de l'image
+            var editForm = document.getElementById('editForm');
+            editForm.action = /*[[@{/modifierImage/}]]*/ + imageId;
+
+            // Récupérer les détails de l'image sélectionnée et mettre à jour le formulaire
+            var imageDetails = document.getElementById('imageDetails_' + imageId);
+            document.getElementById('nomImage').value = imageDetails.getAttribute('data-nomImage');
+            document.getElementById('currentImageData').src = imageDetails.getAttribute('data-imageData');
+        }
+
+        function handleFileSelect(input) {
+            var file = input.files[0];
+            /*<![CDATA[*/
+            var maxFileSize = [[${ maxFileSize }]];
+            /*]]>*/
+
+            // Vérifier si la taille de l'image ne dépasse pas la limite
+            var isFileSizeValid = file.size <= maxFileSize;
+
+            // Cacher le bouton Uploader si la taille de l'image est trop grande
+            document.getElementById('uploadButton').disabled = !isFileSizeValid;
+
+            // Afficher une alerte si la taille n'est pas valide
+            if (!isFileSizeValid) {
+                alert('La taille du fichier dépasse la limite autorisée (' + (maxFileSize / 1024 / 1024) + ' Mo). Veuillez sélectionner un fichier plus petit.');
+            }
+        }
+
+        // Afficher le bouton Uploader au chargement de la page
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('uploadButton').style.display = 'block';
+        });
+        /*]]>*/
+    </script>
+
+</head>
+
+<body>
+
+    <h2>Ajouter un Materiaux d'Amenagement</h2>
+
+    <form th:action="@{/uploadImageMateriaux}" method="post" enctype="multipart/form-data"
+        th:object="${materiauxAmenagement}">
+        <label for="nomImage">Nom du materiau :</label>
+        <input type="text" id="nomImage" name="nomImage" th:field="*{nomImage}" required>
+
+        <br>
+
+        <label for="typeIntervention">Type d'intervention :</label>
+        <select id="typeIntervention" name="typeIntervention" th:field="*{typeIntervention}" required>
+            <option
+                th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}"
+                th:value="${type.name()}" th:text="${type.name()}"></option>
+        </select>
+        <br>
+        <label for="imageFile">Fichier Image :</label>
+        <input type="file" id="imageFile" name="imageFile" accept="image/*" required onchange="handleFileSelect(this)">
+
+        <!-- Afficher un message si l'image est enregistrée avec succès -->
+        <p class="succes" th:if="${message}" th:text="${message}" style="color: green;"></p>
+
+        <!-- Afficher un message d'erreur si l'enregistrement de l'image échoue -->
+        <p class="error" th:if="${error}" th:text="${error}" style="color: red;"></p>
+
+        <!-- Afficher le bouton Uploader -->
+        <input type="submit" id="uploadButton" value="Ajouter">
+    </form>
+
+    <h2>Toutes les images de Materiaux d'Amenagement</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nom du materiau</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="image : ${allImages}">
+                <td th:text="${image.nomImage}"></td>
+                <td class="max-width-10vh">
+                    <img th:src="@{'/' + ${image.imageUrl}}" alt="Image" id="imageDetails_${image.id}"
+                        th:attr="data-nomImage=${image.nomImage}, data-imageUrl=${image.imageUrl}" />
+                </td>
+                <td>
+                    <a th:href="@{/editImage/{id}(id=${image.id})}">Modifier</a>
+                    <a th:href="@{/supprimerImage/{id}(id=${image.id})}">Supprimer</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+
+
+</body>
+
+</html>

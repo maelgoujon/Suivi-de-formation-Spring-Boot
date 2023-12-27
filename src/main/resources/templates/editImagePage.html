@@ -54,13 +54,28 @@
     <h2>Modifier l'image <span th:text="${image.nomImage}"></span></h2>
 
     <form th:action="@{'/modifierImage/' + ${id}}" th:object="${image}" method="post" enctype="multipart/form-data">
-        <!-- Afficher l'image actuelle -->
+        <!-- Image actuelle -->
         <h3>Image actuelle : </h3>
         <br>
-        <img th:src="@{'/' + ${image.imageUrl}}" alt="Image" style="max-width: 20vh;"/>
+        <img th:src="@{'/' + ${image.imageUrl}}" alt="Image" style="max-width: 20vh;" />
         <br>
 
-        <!-- Sélectionner une nouvelle image -->
+        <!-- Type d'intervention actuel -->
+        <h3>Type d'intervention actuel : <span th:text="${image.typeIntervention}"></span></h3>
+        <br>
+
+        <!-- Nouveau type d'intervention -->
+        <h3>Nouveau type d'intervention :</h3>
+        <select id="newTypeIntervention" name="newTypeIntervention" required>
+            <option
+                th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}"
+                th:value="${type.name()}" th:text="${type.name()}"
+                th:selected="${type.name() == image.typeIntervention.name()}"></option>
+        </select>
+
+        <br>
+
+        <!-- Nouvelle image -->
         <h3>Nouvelle image : </h3>
         <input type="file" id="newImageFile" name="newImageFile" accept="image/*" required
             onchange="previewImage(this)">

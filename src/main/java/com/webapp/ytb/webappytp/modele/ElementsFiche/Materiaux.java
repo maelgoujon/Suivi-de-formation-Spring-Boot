@@ -5,13 +5,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
-public class MateriauxAmenagement {
+public class Materiaux {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +26,20 @@ public class MateriauxAmenagement {
     @Column(nullable = true)
     private String imageUrl;
 
+    @Enumerated(EnumType.STRING)
+    @Column
+    private Intervention.TypeIntervention typeIntervention;
+
+    public void setType(String type) {
+        this.typeIntervention = Intervention.TypeIntervention.valueOf(type);
+    }
+
     @Override
     public String toString() {
-        return "MateriauxAmenagement{" +
+        return "Materiaux{" +
                 "nomImage='" + nomImage + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
+                ", typeIntervention=" + typeIntervention +
                 '}';
     }
 }
