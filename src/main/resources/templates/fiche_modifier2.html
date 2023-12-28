@@ -59,9 +59,10 @@
     }
 
     .imageListe {
-        max-width: 100%;
-        max-height: 100%;
-        height: fit-content;
+        max-height: 20vh;
+        max-width: 20vw;
+        height: 100%;
+        object-fit: contain;
     }
 
     .img-card input {
@@ -376,20 +377,21 @@
                     1
                     <div class="noPrint"></div>
                     <th:block th:each="sectionNumber : ${#numbers.sequence(0,5)}">
-                        <div class="button-row">
-                            <button class="show-materials-btn" th:data-target="'material-dropdown' + ${sectionNumber}"
-                                type="button">Selectionner
-                                le matériau <span th:text="${sectionNumber + 1}"></span>
-                            </button>
-                            <input type="text"
-                                th:attr="name='newMateriau' + ${sectionNumber}, id='selectedMateriau' + ${sectionNumber}"
-                                th:value="${ficheIntervention.materiauxOptions != null 
-                                        and ficheIntervention.materiauxOptions.size() > sectionNumber ? ficheIntervention.materiauxOptions[sectionNumber] : ''}"
-                                style="width: auto;">
-                            <button class="clear-button" type="button"
-                                th:onclick="'clearInput(\'selectedMateriau' + ${sectionNumber} + '\')'">&times;</button>
 
-                        </div>
+                        <button class="show-materials-btn" th:data-target="'material-dropdown' + ${sectionNumber}"
+                            type="button">Selectionner
+                            le matériau <span th:text="${sectionNumber + 1}"></span>
+                        </button>
+                        <br>
+                        <input type="text" disabled="disabled"
+                            th:attr="name='newMateriau' + ${sectionNumber}, id='selectedMateriau' + ${sectionNumber}"
+                            th:value="${ficheIntervention.materiauxOptions != null 
+                                        and ficheIntervention.materiauxOptions.size() > sectionNumber ? ficheIntervention.materiauxOptions[sectionNumber] : ''}"
+                            style="width: auto;">
+                        <button class="clear-button" type="button"
+                            th:onclick="'clearInput(\'selectedMateriau' + ${sectionNumber} + '\');refresh_images_selectionnees(); '">&times;</button>
+
+
                         <div class="images-selector" th:id="'material-dropdown' + ${sectionNumber}">
                             <button class="close-btn sticky-btn" type="button"
                                 style="height: fit-content; grid-column: span 3; background-color: red; color: white;">
@@ -397,15 +399,21 @@
                             </button>
                             <div class="cardimage" th:each="element, status : ${materiauxAmenagementList}">
                                 <label class="img-card">
-                                    <div style="max-width: 30vh;min-width: 30vh;min-height: 30vh;max-height: 30vh;">
+                                    <div style="max-width: 100%;min-width: 100%;min-height: 100%;max-height: 100%;">
                                         <img class="imageListe" th:src="@{'/' + ${element.imageUrl}}" alt="Image" />
                                     </div>
                                     <span th:text="${element.nomImage}"></span>
                                     <input type="radio" name="materialRadio" th:value="${element.nomImage}"
-                                        th:id="'radio_' + ${sectionNumber} + '_' + ${status.index}">
+                                        th:id="'radio_' + ${sectionNumber} + '_' + ${status.index}"
+                                        onclick="displaySelectedImage(this)">
                                 </label>
                             </div>
+
                         </div>
+
+                        <img th:id="'selected-image_' + ${sectionNumber}" alt="image selectionnée"
+                            style="max-height: 15vh; max-width: 80vw; width: 100%; height: 100%; object-fit: contain;">
+
 
                     </th:block>
                 </div>
@@ -414,7 +422,7 @@
                 <!-- Affichage des images et texte si NiveauMateriauxUtilises vaut 0 -->
 
                 <div class="materiaux_vertical" th:if="${ficheIntervention.NiveauMateriauxUtilises == 0}">
-                    1
+                    0
                     <div class="noPrint"></div>
                     <th:block th:each="sectionNumber : ${#numbers.sequence(0,5)}">
                         <div class="button-row">
@@ -422,13 +430,13 @@
                                 type="button">Selectionner
                                 le matériau <span th:text="${sectionNumber + 1}"></span>
                             </button>
-                            <input type="text"
+                            <input type="hidden"
                                 th:attr="name='newMateriau' + ${sectionNumber}, id='selectedMateriau' + ${sectionNumber}"
                                 th:value="${ficheIntervention.materiauxOptions != null 
                                         and ficheIntervention.materiauxOptions.size() > sectionNumber ? ficheIntervention.materiauxOptions[sectionNumber] : ''}"
                                 style="width: auto;">
                             <button class="clear-button" type="button"
-                                th:onclick="'clearInput(\'selectedMateriau' + ${sectionNumber} + '\')'">&times;</button>
+                                th:onclick="'clearInput(\'selectedMateriau' + ${sectionNumber} + '\');refresh_images_selectionnees(); '">&times;</button>
 
                         </div>
                         <div class="images-selector" th:id="'material-dropdown' + ${sectionNumber}">
@@ -438,14 +446,21 @@
                             </button>
                             <div class="cardimage" th:each="element, status : ${materiauxAmenagementList}">
                                 <label class="img-card">
-                                    <div style="max-width: 30vh;min-width: 30vh;min-height: 30vh;max-height: 30vh;">
+                                    <div style="max-width: 100%;min-width: 100%;min-height: 100%;max-height: 100%;">
                                         <img class="imageListe" th:src="@{'/' + ${element.imageUrl}}" alt="Image" />
                                     </div>
                                     <input type="radio" name="materialRadio" th:value="${element.nomImage}"
-                                        th:id="'radio_' + ${sectionNumber} + '_' + ${status.index}">
+                                        th:id="'radio_' + ${sectionNumber} + '_' + ${status.index}"
+                                        onclick="displaySelectedImage(this)">
                                 </label>
                             </div>
+
                         </div>
+
+                        <img th:id="'selected-image_' + ${sectionNumber}" alt="image selectionnée"
+                            style="max-height: 15vh; max-width: 80vw; width: 100%; height: 100%; object-fit: contain;">
+
+
                     </th:block>
                 </div>
 
@@ -485,12 +500,53 @@
             });
         }
 
+        function displaySelectedImage(radioInput) {
+            // Récupérer l'URL de l'image
+            var imageUrl = radioInput.parentElement.querySelector('.imageListe').src;
+
+            // Récupérer le sectionNumber de l'image sélectionnée
+            var sectionNumber = radioInput.id.split('_')[1];
+
+            // Récupérer l'élément 'selected-image' avec le sectionNumber
+            var selectedImage = document.getElementById('selected-image_' + sectionNumber);
+
+            // Mettre à jour l'URL de l'image
+            selectedImage.src = imageUrl;
+        }
+
         //clic sur la croix pour effacer le texte
         function clearInput(inputId) {
             document.getElementById(inputId).value = '';
         }
 
+        function refresh_images_selectionnees() {
+            //afficher les images selectionnées au démarrage de la page
+            var materiauOptions = document.querySelectorAll('[id^="selectedMateriau"]');
+            materiauOptions.forEach(function (materiauOption) {
+                var sectionNumber = materiauOption.id.replace('selectedMateriau', '');
+
+                // Sélectionnez le bouton radio dans le contexte de la section correspondante
+                var radioToCheck = document.querySelector('#material-dropdown' + sectionNumber + ' input[type="radio"][value="' + materiauOption.value + '"]');
+
+
+                if (radioToCheck) {
+                    radioToCheck.checked = true;
+                    displaySelectedImage(radioToCheck);
+                } else {
+                    document.getElementById('selected-image_' + sectionNumber).src = '/images/notchecked.png';
+                }
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
+
+
+            refresh_images_selectionnees();
+
+
+
+
+
             var selectElements = document.querySelectorAll('select[name="materiauxUtilises"]');
 
             selectElements.forEach(function (select) {
