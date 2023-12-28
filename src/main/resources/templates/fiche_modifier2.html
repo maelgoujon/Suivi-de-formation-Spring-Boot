@@ -21,6 +21,7 @@
         position: relative;
         z-index: 1001;
         /* Adjust the z-index value as needed to ensure it's above the material selection buttons */
+
     }
 
     .cardimage {
@@ -78,6 +79,10 @@
 
     .materiaux_vertical {
         display: block;
+    }
+
+    .submit {
+        background-color: #6657A6;
     }
 </style>
 
@@ -294,8 +299,9 @@
 
 
                 <div class="test">
-                    <input type="text" id="newTravauxRealises" name="newTravauxRealises"
-                        th:value="${ficheIntervention.travauxRealises}" />
+                    <textarea rows="10" id="newTravauxRealises" name="newTravauxRealises"
+                        onkeydown="handleDescriptionKeyDown(event)"
+                        th:text="${ficheIntervention.travauxRealises}"></textarea>
                 </div>
             </fieldset>
 
@@ -312,8 +318,9 @@
 
 
                 <div class="test">
-                    <input type="text" id="newTravauxNonRealises" name="newTravauxNonRealises"
-                        th:value="${ficheIntervention.travauxNonRealises}" />
+                    <textarea rows="10" id="newTravauxNonRealises" name="newTravauxNonRealises"
+                        onkeydown="handleDescriptionKeyDown(event)"
+                        th:text="${ficheIntervention.travauxNonRealises}"></textarea>
                 </div>
             </fieldset>
 
@@ -374,13 +381,13 @@
                                 type="button">Selectionner
                                 le matériau <span th:text="${sectionNumber + 1}"></span>
                             </button>
-                                <input type="text" 
-                                    th:attr="name='newMateriau' + ${sectionNumber}, id='selectedMateriau' + ${sectionNumber}"
-                                    th:value="${ficheIntervention.materiauxOptions != null 
-                                        and ficheIntervention.materiauxOptions.size() > sectionNumber ? ficheIntervention.materiauxOptions[sectionNumber] : ''}" 
-                                    style="width: auto;"> 
-                                <button class="clear-button" type="button" 
-                                    th:onclick="'clearInput(\'selectedMateriau' + ${sectionNumber} + '\')'">&times;</button>
+                            <input type="text"
+                                th:attr="name='newMateriau' + ${sectionNumber}, id='selectedMateriau' + ${sectionNumber}"
+                                th:value="${ficheIntervention.materiauxOptions != null 
+                                        and ficheIntervention.materiauxOptions.size() > sectionNumber ? ficheIntervention.materiauxOptions[sectionNumber] : ''}"
+                                style="width: auto;">
+                            <button class="clear-button" type="button"
+                                th:onclick="'clearInput(\'selectedMateriau' + ${sectionNumber} + '\')'">&times;</button>
 
                         </div>
                         <div class="images-selector" th:id="'material-dropdown' + ${sectionNumber}">
@@ -399,27 +406,12 @@
                                 </label>
                             </div>
                         </div>
+
                     </th:block>
                 </div>
-            
-                
-                
-                <!-- Affichage des images si NiveauMateriauxUtilises vaut 0 -->
-                <div th:if="${ficheIntervention.NiveauMateriauxUtilises == 2}">
-                    <div class="noPrint"></div>
-                    <div th:each="i : ${#numbers.sequence(0,5)}" class="max-width-container">
-                        <select th:id="'materiauxUtilises' + ${i}" name="materiauxUtilises" class="max-width-select"
-                            onchange="updateMateriauField(this, 'selectedMateriau' + ${i})">
-                            <option value=""></option>
-                            <option th:each="element, status : ${materiauxAmenagementList}"
-                                th:value="${element.nomImage}" th:text="${element.nomImage}"
-                                th:selected="${ficheIntervention.materiauxOptions != null and ficheIntervention.materiauxOptions.size() > i and ficheIntervention.materiauxOptions[i] == element.nomImage}">
-                            </option>
-                        </select>
-                    </div>
-                </div>
 
-                <!-- Affichage des images et texte si NiveauMateriauxUtilises vaut 1 -->
+
+                <!-- Affichage des images et texte si NiveauMateriauxUtilises vaut 0 -->
 
                 <div class="materiaux_vertical" th:if="${ficheIntervention.NiveauMateriauxUtilises == 0}">
                     1
@@ -430,13 +422,13 @@
                                 type="button">Selectionner
                                 le matériau <span th:text="${sectionNumber + 1}"></span>
                             </button>
-                                <input type="text" 
-                                    th:attr="name='newMateriau' + ${sectionNumber}, id='selectedMateriau' + ${sectionNumber}"
-                                    th:value="${ficheIntervention.materiauxOptions != null 
-                                        and ficheIntervention.materiauxOptions.size() > sectionNumber ? ficheIntervention.materiauxOptions[sectionNumber] : ''}" 
-                                    style="width: auto;"> 
-                                <button class="clear-button" type="button" 
-                                    th:onclick="'clearInput(\'selectedMateriau' + ${sectionNumber} + '\')'">&times;</button>
+                            <input type="text"
+                                th:attr="name='newMateriau' + ${sectionNumber}, id='selectedMateriau' + ${sectionNumber}"
+                                th:value="${ficheIntervention.materiauxOptions != null 
+                                        and ficheIntervention.materiauxOptions.size() > sectionNumber ? ficheIntervention.materiauxOptions[sectionNumber] : ''}"
+                                style="width: auto;">
+                            <button class="clear-button" type="button"
+                                th:onclick="'clearInput(\'selectedMateriau' + ${sectionNumber} + '\')'">&times;</button>
 
                         </div>
                         <div class="images-selector" th:id="'material-dropdown' + ${sectionNumber}">
