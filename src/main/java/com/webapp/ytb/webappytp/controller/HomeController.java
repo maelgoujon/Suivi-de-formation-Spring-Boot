@@ -229,20 +229,29 @@ public class HomeController {
         boolean nouvelleInterventionValue = newNouvelleIntervention.orElse(false);
 
         FicheIntervention ficheIntervention = ficheServ.lire(id);
-        ficheIntervention.getDemande().setNomDemandeur(newNomDemandeur);
-        ficheIntervention.getDemande().setDateDemande(newDateDemande);
-        ficheIntervention.getDemande().setLocalisation(newLocalisation);
-        ficheIntervention.getDemande().setDescription(newDescription);
+        if (newNomDemandeur != null){
+            ficheIntervention.getDemande().setNomDemandeur(newNomDemandeur);
+        }
+        if (newDateDemande != null) {
+            ficheIntervention.getDemande().setDateDemande(newDateDemande);
+        }
+        if (newLocalisation != null) {
+            ficheIntervention.getDemande().setLocalisation(newLocalisation);
+        }
+        if (newDescription != null) {
+            ficheIntervention.getDemande().setDescription(newDescription);
+        }
         if (newDegreUrgence != null) {
             ficheIntervention.getDemande().setDegreUrgence(newDegreUrgence);
         }
 
-        ficheIntervention.getIntervention().setDateIntervention(newDateIntervention);
+        if (newDateIntervention != null) {
+            ficheIntervention.getIntervention().setDateIntervention(newDateIntervention);
+        }
 
         if (newDureeIntervention != null) {
         ficheIntervention.getIntervention().setDureeIntervention(newDureeIntervention);
         }
-
 
         if (newMaintenanceType != null) {
             ficheIntervention.getMaintenance().setMaintenanceType(newMaintenanceType);
@@ -275,7 +284,7 @@ public class HomeController {
             materiauxOptions.add(newMateriau5);
         }
 
-        if (materiauxOptions.size() > 0) {
+        if (!materiauxOptions.isEmpty()) {
             ficheIntervention.setMateriauxOptions(materiauxOptions);
         }
 
