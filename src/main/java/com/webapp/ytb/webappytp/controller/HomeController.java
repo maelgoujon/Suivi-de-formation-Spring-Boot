@@ -205,17 +205,17 @@ public class HomeController {
 
     @PostMapping("/updateFiche/{id}")
     public String updateFiche(@PathVariable long id,
-            @RequestParam String newNomDemandeur,
-            @RequestParam LocalDate newDateDemande,
-            @RequestParam String newLocalisation,
-            @RequestParam String newDescription,
-            @RequestParam int newDegreUrgence,
-            @RequestParam LocalDate newDateIntervention,
-            @RequestParam int newDureeIntervention,
+            @RequestParam(required = false) String newNomDemandeur,
+            @RequestParam(required = false) LocalDate newDateDemande,
+            @RequestParam(required = false) String newLocalisation,
+            @RequestParam(required = false) String newDescription,
+            @RequestParam (required = false) Integer newDegreUrgence,
+            @RequestParam(required = false) LocalDate newDateIntervention,
+            @RequestParam (required = false) Integer newDureeIntervention,
             @RequestParam(required = false) Maintenance.MaintenanceType newMaintenanceType,
             @RequestParam(required = false) String newNatureType,
-            @RequestParam String newTravauxRealises,
-            @RequestParam String newTravauxNonRealises,
+            @RequestParam(required = false) String newTravauxRealises,
+            @RequestParam(required = false) String newTravauxNonRealises,
             @RequestParam Optional<Boolean> newNouvelleIntervention,
             @RequestParam(required = false) String newMateriau0,
             @RequestParam(required = false) String newMateriau1,
@@ -233,9 +233,17 @@ public class HomeController {
         ficheIntervention.getDemande().setDateDemande(newDateDemande);
         ficheIntervention.getDemande().setLocalisation(newLocalisation);
         ficheIntervention.getDemande().setDescription(newDescription);
-        ficheIntervention.getDemande().setDegreUrgence(newDegreUrgence);
+        if (newDegreUrgence != null) {
+            ficheIntervention.getDemande().setDegreUrgence(newDegreUrgence);
+        }
+
         ficheIntervention.getIntervention().setDateIntervention(newDateIntervention);
+
+        if (newDureeIntervention != null) {
         ficheIntervention.getIntervention().setDureeIntervention(newDureeIntervention);
+        }
+
+
         if (newMaintenanceType != null) {
             ficheIntervention.getMaintenance().setMaintenanceType(newMaintenanceType);
         }
@@ -295,6 +303,18 @@ public class HomeController {
         model.addAttribute("ficheIntervention", ficheIntervention);
         model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
         return "fiche_modifier2";
+    }
+
+    @GetMapping("/fiche/modifier3/{id}")
+    public String showFicheDetails3(@PathVariable long id, Model model) {
+        FicheIntervention ficheIntervention = ficheServ.lire(id);
+        String typeInterventionStr = ficheIntervention.getIntervention().getTypeIntervention();
+        Intervention.TypeIntervention typeIntervention = Intervention.TypeIntervention.valueOf(typeInterventionStr);
+        List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository
+                .findByTypeIntervention(typeIntervention);
+        model.addAttribute("ficheIntervention", ficheIntervention);
+        model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
+        return "fiche_modifier3";
     }
 
 }

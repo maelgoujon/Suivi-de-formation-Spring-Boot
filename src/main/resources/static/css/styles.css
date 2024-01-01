@@ -3,7 +3,85 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
+input[type='radio'] {
+    accent-color: #f20000;
+}
 
+.sticky-btn {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: rgb(255, 255, 255);
+}
+
+.submit-container {
+    position: relative;
+    z-index: 1001;
+    /* Adjust the z-index value as needed to ensure it's above the material selection buttons */
+
+}
+
+.cardimage {
+    margin: 2vh;
+}
+
+.images-selector {
+    display: none;
+    height: fit-content;
+    max-height: 80vh;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    position: fixed;
+    top: 5%;
+    left: 5%;
+    right: 5%;
+    bottom: 5%;
+    background-color: rgb(255, 255, 255);
+    z-index: 999;
+    overflow: auto;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 85vw;
+    margin: 0 auto;
+    border-radius: 3%;
+}
+
+.img-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Centrer verticalement */
+    text-align: center;
+}
+
+.imageListe {
+    max-height: 20vh;
+    max-width: 20vw;
+    height: 100%;
+    object-fit: contain;
+}
+
+.img-card input {
+    grid-row: 3;
+}
+
+
+
+#selected-image-label {
+    margin-top: auto;
+    font-weight: bold;
+    position: absolute;
+    bottom: 10px;
+}
+
+.materiaux_vertical {
+    display: block;
+}
+
+.submit {
+    background-color: #6657A6;
+}
 
 /* Sélecteur pour tous les boutons radio dans le formulaire */
 input[type="radio"] {

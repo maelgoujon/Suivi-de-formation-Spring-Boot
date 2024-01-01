@@ -4,6 +4,8 @@
 <head>
     <title>Fiche Intervention</title>
     <link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <style>
     input[type='radio'] {
@@ -89,6 +91,7 @@
 
 
 <body class="colonne centre">
+    
     <main class="colonne">
         <div class="titre border">FICHE D'INTERVENTION N°<span th:text="${ficheIntervention.id}"></span>&nbsp;:&nbsp;
             <span th:if="${ficheIntervention.intervention != null}"
@@ -107,6 +110,7 @@
                     <div class="titre">Prénom de l'intervenant</div>
                     <div class="test"> <span th:text="${ficheIntervention.utilisateur.prenom}"></span></div>
                 </div>
+                
             </fieldset>
             <div class="espaceHor"></div>
             <fieldset class="prerempli">
@@ -238,7 +242,7 @@
                         </div>
 
                         <!-- Hidden input field to hold the selected maintenance type -->
-                        <input type="hidden" name="newMaintenanceType"
+                        <input type="text" name="newMaintenanceType"
                             th:value="${ficheIntervention.maintenance != null ? ficheIntervention.maintenance.maintenanceType : null}"
                             id="selectedMaintenanceType">
                     </fieldset>

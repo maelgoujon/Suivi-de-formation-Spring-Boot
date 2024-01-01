@@ -33,7 +33,7 @@ import com.webapp.ytb.webappytp.repository.MateriauxAmenagementRepository;
 
 @Controller
 @RequestMapping("/materiaux")
-public class ImageUploadController {
+public class MateriauxController {
 
     @Autowired
     private MateriauxAmenagementRepository materiauxAmenagementRepository;
