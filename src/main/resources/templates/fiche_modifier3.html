@@ -128,7 +128,7 @@
          <h4 class="mb-3">Intervention </h4>
          <div class="row">
             <div class="col-md-6 mb-3">
-               <label for="newDateIntervention">Date de l'intervention !! à corriger</label>
+               <label for="newDateIntervention">Date de l'intervention</label>
                <input type="date" id="newDateIntervention" name="newDateIntervention" class="form-control"
                   th:value="${#temporals.format(ficheIntervention.dateIntervention, 'yyyy-MM-dd')}" />
                <label for="newDureeIntervention">Durée de l'intervention</label>
@@ -229,8 +229,88 @@
             </div>
          </div>
 
+         <!-- Affichage des images et texte si NiveauMateriauxUtilises vaut 1 -->
+         <div class="materiaux_vertical" th:if="${ficheIntervention.NiveauMateriauxUtilises == 1}">
+            niveau1
+            <div class="noPrint"></div>
+            <div class="container">
+               <div class="row">
+                  <th:block th:each="sectionNumber : ${#numbers.sequence(0,5)}">
+                     <div class="col-md-6 mb-3 " style="padding: 1rem;">
+                        <div class="input-group">
+                           <div class="input-group-prepend">
+                              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                 th:attr="data-target='#exampleModalCenter' + ${sectionNumber}">
+                                 Selectionner le matériau <span th:text="${sectionNumber + 1}"></span>
+                              </button>
+                           </div>
+                           <input type="text" class="form-control" aria-describedby="basic-addon2"
+                              th:value="${ficheIntervention.materiauxOptions != null 
+                                       and ficheIntervention.materiauxOptions.size() > sectionNumber ? ficheIntervention.materiauxOptions[sectionNumber] : ''}"
+                              th:id="'newMateriau' + ${sectionNumber}" th:name="'newMateriau' + ${sectionNumber}">
+                        </div>
+                        <!-- Modal -->
+                        <div class="modal fade" th:id="'exampleModalCenter' + ${sectionNumber}" tabindex="-1"
+                           role="dialog" aria-labelledby="'exampleModalCenterTitle' + ${sectionNumber}"
+                           aria-hidden="true">
+                           <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                              <div class="modal-content">
+                                 <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Selectionner le matériau <span
+                                          th:text="${sectionNumber + 1}"></span></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                       <span aria-hidden="true">&times;</span>
+                                    </button>
+                                 </div>
+                                 <div class="modal-body" style="overflow-y: auto; max-height: calc(100vh - 210px);">
+                                    <!-- Ajout du style ici -->
+                                    <div th:id="'material-dropdown' + ${sectionNumber}">
+                                       <div class="container-fluid">
+                                          <div class="row d-flex align-items-stretch">
+                                             <!--Cardimages-->
+                                             <div class="col-md-6 mb-4 flex-fill" style="max-width: 300px;"
+                                                th:each="element, status : ${materiauxAmenagementList}">
+                                                <label
+                                                   class="card cardimage d-flex flex-column align-items-center h-100"
+                                                   tabindex="0">
+                                                   <div
+                                                      class="d-flex flex-column justify-content-end align-items-center"
+                                                      style="max-width: 100%;min-width: 100%;min-height: 100%;max-height: 100%;">
+                                                      <img class="imageListe d-block mx-auto rounded"
+                                                         th:src="@{'/' + ${element.imageUrl}}" alt="Image" />
+                                                      <p class="text-center" th:text="${element.nomImage}"></p>
+                                                      <input type="radio" name="materialRadio"
+                                                         th:value="${element.nomImage}"
+                                                         th:id="'radio_' + ${sectionNumber} + '_' + ${status.index}"
+                                                         onclick="displaySelectedImage(this)"
+                                                         style="visibility: hidden;">
+                                                   </div>
+                                                </label>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="modal-footer"><!--Bouton effacer-->
+                                    <button class="clear-button btn btn-secondary" type="button"
+                                       th:onclick="'clearInput(\'newMateriau' + ${sectionNumber} + '\');refresh_images_selectionnees();effacerBordures(' + ${sectionNumber} + ');'">Aucun</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <img th:id="'selected-image_' + ${sectionNumber}" alt="image selectionnée"
+                           style="max-height: 15vh; max-width: 80vw; height: 100%; object-fit: contain;margin: 1rem;"
+                           class="rounded mx-auto d-block">
+                     </div>
+                  </th:block>
+               </div>
+            </div>
+         </div>
          <!-- Affichage des images et texte si NiveauMateriauxUtilises vaut 0 -->
          <div class="materiaux_vertical" th:if="${ficheIntervention.NiveauMateriauxUtilises == 0}">
+            niveau0
             <div class="noPrint"></div>
             <div class="container">
                <div class="row">
@@ -252,7 +332,7 @@
                         <div class="modal fade" th:id="'exampleModalCenter' + ${sectionNumber}" tabindex="-1"
                            role="dialog" aria-labelledby="'exampleModalCenterTitle' + ${sectionNumber}"
                            aria-hidden="true">
-                           <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                           <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
                               <div class="modal-content">
                                  <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLongTitle">Selectionner le matériau <span
@@ -261,11 +341,9 @@
                                        <span aria-hidden="true">&times;</span>
                                     </button>
                                  </div>
-                                 <div class="modal-body">
+                                 <div class="modal-body" style="overflow-y: auto; max-height: calc(100vh - 210px);">
+                                    <!-- Ajout du style ici -->
                                     <div th:id="'material-dropdown' + ${sectionNumber}">
-                                       <!--Bouton effacer-->
-                                       <button class="clear-button" type="button"
-                                          th:onclick="'clearInput(\'newMateriau' + ${sectionNumber} + '\');refresh_images_selectionnees();'">Aucun</button>
                                        <div class="container-fluid">
                                           <div class="row d-flex align-items-stretch">
                                              <!--Cardimages-->
@@ -276,99 +354,9 @@
                                                    tabindex="0">
                                                    <div
                                                       style="max-width: 100%;min-width: 100%;min-height: 100%;max-height: 100%;">
-                                                      <img class="imageListe d-block mx-auto"
+                                                      <img class="imageListe d-block mx-auto rounded"
                                                          th:src="@{'/' + ${element.imageUrl}}" alt="Image" />
 
-                                                         <input type="radio" name="materialRadio"
-                                                         th:value="${element.nomImage}"
-                                                         th:id="'radio_' + ${sectionNumber} + '_' + ${status.index}"
-                                                         onclick="displaySelectedImage(this)"
-                                                         style="visibility: hidden;">
-                                                   </div>
-                                                </label>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </div>
-                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="w-100"></div>
-                        <img th:id="'selected-image_' + ${sectionNumber}" alt="image selectionnée"
-                           style="max-height: 15vh; max-width: 80vw; height: 100%; object-fit: contain;margin: 1rem;"
-                           class="rounded mx-auto d-block">
-                     </div>
-                  </th:block>
-               </div>
-            </div>
-
-
-            <!--------------------------Nouvelle Intervention--------------------------------------->
-            <hr />
-            <div class="form-check">
-               <input class="form-check-input" type="checkbox" name="newNouvelleIntervention"
-                  th:checked="${ficheIntervention.nouvelleIntervention}" id="nouvelleIntervention" />
-               <label class="form-check-label" for="nouvelleIntervention">
-                  Nécessite une nouvelle intervention
-               </label>
-            </div>
-
-         </div>
-
-         <!-- Affichage des images et texte si NiveauMateriauxUtilises vaut 1 -->
-         <div class="materiaux_vertical" th:if="${ficheIntervention.NiveauMateriauxUtilises == 1}">
-            <div class="noPrint"></div>
-            <div class="container">
-               <div class="row">
-                  <th:block th:each="sectionNumber : ${#numbers.sequence(0,5)}">
-                     <div class="col-md-6 mb-3 " style="padding: 1rem;">
-                        <div class="input-group">
-                           <div class="input-group-prepend">
-                              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                 th:attr="data-target='#exampleModalCenter' + ${sectionNumber}">
-                                 Selectionner le matériau <span th:text="${sectionNumber + 1}"></span>
-                              </button>
-                           </div>
-                           <input type="text" class="form-control" aria-describedby="basic-addon2"
-                              th:value="${ficheIntervention.materiauxOptions != null 
-                              and ficheIntervention.materiauxOptions.size() > sectionNumber ? ficheIntervention.materiauxOptions[sectionNumber] : ''}"
-                              th:id="'newMateriau' + ${sectionNumber}" th:name="'newMateriau' + ${sectionNumber}">
-                        </div>
-                        <!-- Modal -->
-                        <div class="modal fade" th:id="'exampleModalCenter' + ${sectionNumber}" tabindex="-1"
-                           role="dialog" aria-labelledby="'exampleModalCenterTitle' + ${sectionNumber}"
-                           aria-hidden="true">
-                           <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                              <div class="modal-content">
-                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLongTitle">Selectionner le matériau <span
-                                          th:text="${sectionNumber + 1}"></span></h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                       <span aria-hidden="true">&times;</span>
-                                    </button>
-                                 </div>
-                                 <div class="modal-body">
-                                    <div th:id="'material-dropdown' + ${sectionNumber}">
-                                       <!--Bouton effacer-->
-                                       <button class="clear-button" type="button"
-                                          th:onclick="'clearInput(\'newMateriau' + ${sectionNumber} + '\');refresh_images_selectionnees();'">Aucun</button>
-                                       <div class="container-fluid">
-                                          <div class="row d-flex align-items-stretch">
-                                             <!--Cardimages-->
-                                             <div class="col-md-6 mb-4 flex-fill" style="max-width: 300px;"
-                                                th:each="element, status : ${materiauxAmenagementList}">
-                                                <label
-                                                   class="card cardimage d-flex flex-column align-items-center h-100">
-                                                   <div
-                                                      style="max-width: 100%;min-width: 100%;min-height: 100%;max-height: 100%;">
-                                                      <img class="imageListe d-block mx-auto"
-                                                         th:src="@{'/' + ${element.imageUrl}}" alt="Image" />
-
-                                                      <span class="text-center" th:text="${element.nomImage}"></span>
                                                       <input type="radio" name="materialRadio"
                                                          th:value="${element.nomImage}"
                                                          th:id="'radio_' + ${sectionNumber} + '_' + ${status.index}"
@@ -381,8 +369,10 @@
                                        </div>
                                     </div>
                                  </div>
-                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                 <div class="modal-footer"><!--Bouton effacer-->
+                                    <button class="clear-button btn btn-secondary" type="button"
+                                       th:onclick="'clearInput(\'newMateriau' + ${sectionNumber} + '\');refresh_images_selectionnees();effacerBordures(' + ${sectionNumber} + ');'">Aucun</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
                                  </div>
                               </div>
                            </div>
@@ -395,6 +385,8 @@
                   </th:block>
                </div>
             </div>
+
+
 
 
             <!--------------------------Nouvelle Intervention--------------------------------------->
@@ -440,6 +432,16 @@
                      hiddenInput.value = this.value;
                   }
                });
+            });
+         }
+
+         //fonction pour effacer les bordures rouges des images non selectionnées de la même sectionnumber quand je clique sur le bouton aucun
+         function effacerBordures(sectionNumber) {
+            var radioButtons = document.querySelectorAll('input[type="radio"][name="materialRadio"]');
+            radioButtons.forEach(function (radioButton) {
+               if (radioButton.id.split('_')[1] == sectionNumber) {
+                  radioButton.parentElement.style.border = 'none';
+               }
             });
          }
 
