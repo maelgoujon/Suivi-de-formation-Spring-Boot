@@ -6,7 +6,14 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"></script>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
    <title>Formulaire Bootstrap</title>
    <link rel="icon" type="image/x-icon"
@@ -17,10 +24,16 @@
          height: 1.5rem;
       }
 
+      .form-check-input:checked {
+         background-color: black;
+         border-color: black;
+      }
+
       .imageListe {
          max-height: 20vh;
          max-width: 100%;
          object-fit: contain;
+         margin: 1rem;
       }
 
       .images-selector {
@@ -52,9 +65,9 @@
 
    <div class="container">
 
-      <section class="jumbotron text-center">
+      <section class="h-100 p-5 text-white bg-dark rounded-3" style="margin-top: calc(var(--bs-gutter-x) * .5);">
          <div class="container">
-            <h1 class="jumbotron-heading">FICHE D'INTERVENTION N°
+            <h1 class="display-4">FICHE D'INTERVENTION N°
                <span th:text="${ficheIntervention.id}"></span>&nbsp;:&nbsp;
                <span th:if="${ficheIntervention.intervention != null}"
                   th:text="${ficheIntervention.intervention.typeIntervention}"></span>
@@ -231,373 +244,383 @@
 
          <!-- Affichage des images et texte si NiveauMateriauxUtilises vaut 1 -->
          <div class="materiaux_vertical" th:if="${ficheIntervention.NiveauMateriauxUtilises == 1}">
-            niveau1
+         
             <div class="noPrint"></div>
             <div class="container">
                <div class="row">
                   <th:block th:each="sectionNumber : ${#numbers.sequence(0,5)}">
-                     <div class="col-md-6 mb-3 " style="padding: 1rem;">
-                        <div class="input-group">
-                           <div class="input-group-prepend">
-                              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                 th:attr="data-target='#exampleModalCenter' + ${sectionNumber}">
-                                 Selectionner le matériau <span th:text="${sectionNumber + 1}"></span>
-                              </button>
-                           </div>
-                           <input type="text" class="form-control" aria-describedby="basic-addon2"
-                              th:value="${ficheIntervention.materiauxOptions != null 
-                                       and ficheIntervention.materiauxOptions.size() > sectionNumber ? ficheIntervention.materiauxOptions[sectionNumber] : ''}"
-                              th:id="'newMateriau' + ${sectionNumber}" th:name="'newMateriau' + ${sectionNumber}">
-                        </div>
-                        <!-- Modal -->
-                        <div class="modal fade" th:id="'exampleModalCenter' + ${sectionNumber}" tabindex="-1"
-                           role="dialog" aria-labelledby="'exampleModalCenterTitle' + ${sectionNumber}"
-                           aria-hidden="true">
-                           <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-                              <div class="modal-content">
-                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLongTitle">Selectionner le matériau <span
-                                          th:text="${sectionNumber + 1}"></span></h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                       <span aria-hidden="true">&times;</span>
-                                    </button>
-                                 </div>
-                                 <div class="modal-body" style="overflow-y: auto; max-height: calc(100vh - 210px);">
-                                    <!-- Ajout du style ici -->
-                                    <div th:id="'material-dropdown' + ${sectionNumber}">
-                                       <div class="container-fluid">
-                                          <div class="row d-flex align-items-stretch">
-                                             <!--Cardimages-->
-                                             <div class="col-md-6 mb-4 flex-fill" style="max-width: 300px;"
-                                                th:each="element, status : ${materiauxAmenagementList}">
-                                                <label
-                                                   class="card cardimage d-flex flex-column align-items-center h-100"
-                                                   tabindex="0">
-                                                   <div
-                                                      class="d-flex flex-column justify-content-end align-items-center"
-                                                      style="max-width: 100%;min-width: 100%;min-height: 100%;max-height: 100%;">
-                                                      <img class="imageListe d-block mx-auto rounded"
-                                                         th:src="@{'/' + ${element.imageUrl}}" alt="Image" />
-                                                      <p class="text-center" th:text="${element.nomImage}"></p>
-                                                      <input type="radio" name="materialRadio"
-                                                         th:value="${element.nomImage}"
-                                                         th:id="'radio_' + ${sectionNumber} + '_' + ${status.index}"
-                                                         onclick="displaySelectedImage(this)"
-                                                         style="visibility: hidden;">
-                                                   </div>
-                                                </label>
+                     <div class="col-6 col-sm-6 col-lg-4 mb-4 flex-fill " data-bs-toggle="modal"
+                        th:attr="data-bs-target='#exampleModalCenter' + ${sectionNumber}">
+                        <div id="case" style="border: 2px solid #212529;border-radius: 0.4rem; height: 100%;">
+
+
+                           <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" style="width: 100%;"
+                              th:attr="data-bs-target='#exampleModalCenter' + ${sectionNumber}">
+                              Selectionner le matériau <span th:text="${sectionNumber + 1}"></span>
+                           </button>
+
+                           <!-- Modal -->
+                           <div class="modal fade" th:id="'exampleModalCenter' + ${sectionNumber}" tabindex="-1"
+                              role="dialog" aria-labelledby="'exampleModalCenterTitle' + ${sectionNumber}"
+                              aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                                 <div class="modal-content">
+                                    <div class="modal-header">
+                                       <h5 class="modal-title" id="exampleModalLongTitle">Selectionner le matériau <span
+                                             th:text="${sectionNumber + 1}"></span></h5>
+                                       <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                          aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" style="overflow-y: auto; max-height: calc(100vh - 210px);">
+                                       <!-- Ajout du style ici -->
+                                       <div th:id="'material-dropdown' + ${sectionNumber}">
+                                          <div class="container-fluid">
+                                             <div class="row d-flex align-items-stretch">
+                                                <!--Cardimages-->
+                                                <div class="col-6 col-sm-6 col-lg-4 mb-4" style="max-width: 300px;"
+                                                   th:each="element, status : ${materiauxAmenagementList}">
+                                                   <label
+                                                      class="card cardimage d-flex flex-column align-items-center h-100"
+                                                      tabindex="0">
+                                                      <div
+                                                         class="d-flex flex-column justify-content-end align-items-center"
+                                                         style="max-width: 100%;min-width: 100%;min-height: 100%;max-height: 100%;">
+                                                         <img class="imageListe d-block mx-auto rounded"
+                                                            th:src="@{'/' + ${element.imageUrl}}" alt="Image" />
+                                                         <p class="text-center" th:text="${element.nomImage}"></p>
+                                                         <input type="radio" name="materialRadio"
+                                                            th:value="${element.nomImage}"
+                                                            th:id="'radio_' + ${sectionNumber} + '_' + ${status.index}"
+                                                            onclick="displaySelectedImage(this)"
+                                                            style="visibility: hidden;">
+                                                      </div>
+                                                   </label>
+                                                </div>
                                              </div>
                                           </div>
                                        </div>
                                     </div>
-                                 </div>
-                                 <div class="modal-footer"><!--Bouton effacer-->
-                                    <button class="clear-button btn btn-secondary" type="button"
-                                       th:onclick="'clearInput(\'newMateriau' + ${sectionNumber} + '\');refresh_images_selectionnees();effacerBordures(' + ${sectionNumber} + ');'">Aucun</button>
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                                    <div class="modal-footer"><!--Bouton effacer-->
+                                       <button class="clear-button btn btn-secondary" type="button"
+                                          th:onclick="'clearInput(\'newMateriau' + ${sectionNumber} + '\');refresh_images_selectionnees();effacerBordures(' + ${sectionNumber} + ');'">Aucun</button>
+                                       <button type="button" class="btn btn-danger"
+                                          data-bs-dismiss="modal">Fermer</button>
+                                    </div>
                                  </div>
                               </div>
                            </div>
+                           <div class="w-100"></div>
+                           <img th:id="'selected-image_' + ${sectionNumber}" alt="image selectionnée"
+                              style="max-height: 15vh; max-width: 80vw; width: 100%; object-fit: contain;margin: 1rem;height: inherit;"
+                              class="rounded mx-auto d-block">
+
+                           <div class="w-100"></div>
+                           <input type="text" class="form-control mx-auto d-block" aria-describedby="basic-addon2"
+                              th:value="${ficheIntervention.materiauxOptions != null 
+                                  and ficheIntervention.materiauxOptions.size() > sectionNumber ? ficheIntervention.materiauxOptions[sectionNumber] : ''}"
+                              th:id="'newMateriau' + ${sectionNumber}" th:name="'newMateriau' + ${sectionNumber}">
                         </div>
-                        <div class="w-100"></div>
-                        <img th:id="'selected-image_' + ${sectionNumber}" alt="image selectionnée"
-                           style="max-height: 15vh; max-width: 80vw; height: 100%; object-fit: contain;margin: 1rem;"
-                           class="rounded mx-auto d-block">
                      </div>
-                  </th:block>
                </div>
+               </th:block>
             </div>
          </div>
+
+
          <!-- Affichage des images et texte si NiveauMateriauxUtilises vaut 0 -->
          <div class="materiaux_vertical" th:if="${ficheIntervention.NiveauMateriauxUtilises == 0}">
-            niveau0
+
             <div class="noPrint"></div>
             <div class="container">
                <div class="row">
                   <th:block th:each="sectionNumber : ${#numbers.sequence(0,5)}">
-                     <div class="col-md-6 mb-3 " style="padding: 1rem;">
-                        <div class="input-group">
-                           <div class="input-group-prepend">
-                              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                 th:attr="data-target='#exampleModalCenter' + ${sectionNumber}">
-                                 Selectionner le matériau <span th:text="${sectionNumber + 1}"></span>
-                              </button>
-                           </div>
-                           <input type="hidden" class="form-control" aria-describedby="basic-addon2"
-                              th:value="${ficheIntervention.materiauxOptions != null 
-                                       and ficheIntervention.materiauxOptions.size() > sectionNumber ? ficheIntervention.materiauxOptions[sectionNumber] : ''}"
-                              th:id="'newMateriau' + ${sectionNumber}" th:name="'newMateriau' + ${sectionNumber}">
-                        </div>
-                        <!-- Modal -->
-                        <div class="modal fade" th:id="'exampleModalCenter' + ${sectionNumber}" tabindex="-1"
-                           role="dialog" aria-labelledby="'exampleModalCenterTitle' + ${sectionNumber}"
-                           aria-hidden="true">
-                           <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-                              <div class="modal-content">
-                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLongTitle">Selectionner le matériau <span
-                                          th:text="${sectionNumber + 1}"></span></h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                       <span aria-hidden="true">&times;</span>
-                                    </button>
-                                 </div>
-                                 <div class="modal-body" style="overflow-y: auto; max-height: calc(100vh - 210px);">
-                                    <!-- Ajout du style ici -->
-                                    <div th:id="'material-dropdown' + ${sectionNumber}">
-                                       <div class="container-fluid">
-                                          <div class="row d-flex align-items-stretch">
-                                             <!--Cardimages-->
-                                             <div class="col-md-6 mb-4 flex-fill" style="max-width: 300px;"
-                                                th:each="element, status : ${materiauxAmenagementList}">
-                                                <label
-                                                   class="card cardimage d-flex flex-column align-items-center h-100"
-                                                   tabindex="0">
-                                                   <div
-                                                      style="max-width: 100%;min-width: 100%;min-height: 100%;max-height: 100%;">
-                                                      <img class="imageListe d-block mx-auto rounded"
-                                                         th:src="@{'/' + ${element.imageUrl}}" alt="Image" />
+                     <div class="col-6 col-sm-6 col-lg-4 mb-4 flex-fill " data-bs-toggle="modal"
+                        th:attr="data-bs-target='#exampleModalCenter' + ${sectionNumber}">
+                        <div id="case" style="border: 2px solid #212529;border-radius: 0.4rem; height: 100%;">
 
-                                                      <input type="radio" name="materialRadio"
-                                                         th:value="${element.nomImage}"
-                                                         th:id="'radio_' + ${sectionNumber} + '_' + ${status.index}"
-                                                         onclick="displaySelectedImage(this)"
-                                                         style="visibility: hidden;">
-                                                   </div>
-                                                </label>
+
+                           <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" style="width: 100%;"
+                              th:attr="data-bs-target='#exampleModalCenter' + ${sectionNumber}">
+                              Selectionner le matériau <span th:text="${sectionNumber + 1}"></span>
+                           </button>
+
+                           <!-- Modal -->
+                           <div class="modal fade" th:id="'exampleModalCenter' + ${sectionNumber}" tabindex="-1"
+                              role="dialog" aria-labelledby="'exampleModalCenterTitle' + ${sectionNumber}"
+                              aria-hidden="true">
+                              <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                                 <div class="modal-content">
+                                    <div class="modal-header">
+                                       <h5 class="modal-title" id="exampleModalLongTitle">Selectionner le matériau <span
+                                             th:text="${sectionNumber + 1}"></span></h5>
+                                       <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                          aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" style="overflow-y: auto; max-height: calc(100vh - 210px);">
+                                       <!-- Ajout du style ici -->
+                                       <div th:id="'material-dropdown' + ${sectionNumber}">
+                                          <div class="container-fluid">
+                                             <div class="row d-flex align-items-stretch">
+                                                <!--Cardimages-->
+                                                <div class="col-6 col-sm-6 col-lg-4 mb-4" style="max-width: 300px;"
+                                                   th:each="element, status : ${materiauxAmenagementList}">
+                                                   <label
+                                                      class="card cardimage d-flex flex-column align-items-center h-100"
+                                                      tabindex="0">
+                                                      <div
+                                                         class="d-flex flex-column justify-content-end align-items-center"
+                                                         style="max-width: 100%;min-width: 100%;min-height: 100%;max-height: 100%;">
+                                                         <img class="imageListe d-block mx-auto rounded"
+                                                            th:src="@{'/' + ${element.imageUrl}}" alt="Image" />
+                                                         <input type="radio" name="materialRadio"
+                                                            th:value="${element.nomImage}"
+                                                            th:id="'radio_' + ${sectionNumber} + '_' + ${status.index}"
+                                                            onclick="displaySelectedImage(this)"
+                                                            style="visibility: hidden;">
+                                                      </div>
+                                                   </label>
+                                                </div>
                                              </div>
                                           </div>
                                        </div>
                                     </div>
-                                 </div>
-                                 <div class="modal-footer"><!--Bouton effacer-->
-                                    <button class="clear-button btn btn-secondary" type="button"
-                                       th:onclick="'clearInput(\'newMateriau' + ${sectionNumber} + '\');refresh_images_selectionnees();effacerBordures(' + ${sectionNumber} + ');'">Aucun</button>
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                                    <div class="modal-footer"><!--Bouton effacer-->
+                                       <button class="clear-button btn btn-secondary" type="button"
+                                          th:onclick="'clearInput(\'newMateriau' + ${sectionNumber} + '\');refresh_images_selectionnees();effacerBordures(' + ${sectionNumber} + ');'">Aucun</button>
+                                       <button type="button" class="btn btn-danger"
+                                          data-bs-dismiss="modal">Fermer</button>
+                                    </div>
                                  </div>
                               </div>
                            </div>
+                           <div class="w-100"></div>
+                           <img th:id="'selected-image_' + ${sectionNumber}" alt="image selectionnée"
+                              style="max-height: 15vh; max-width: 80vw; width: 100%; object-fit: contain;margin: 1rem;height: inherit;"
+                              class="rounded mx-auto d-block">
+
+                           <div class="w-100"></div>
+                           <input type="hidden" class="form-control mx-auto d-block" aria-describedby="basic-addon2"
+                              th:value="${ficheIntervention.materiauxOptions != null 
+                                  and ficheIntervention.materiauxOptions.size() > sectionNumber ? ficheIntervention.materiauxOptions[sectionNumber] : ''}"
+                              th:id="'newMateriau' + ${sectionNumber}" th:name="'newMateriau' + ${sectionNumber}">
                         </div>
-                        <div class="w-100"></div>
-                        <img th:id="'selected-image_' + ${sectionNumber}" alt="image selectionnée"
-                           style="max-height: 15vh; max-width: 80vw; height: 100%; object-fit: contain;margin: 1rem;"
-                           class="rounded mx-auto d-block">
                      </div>
-                  </th:block>
                </div>
+               </th:block>
             </div>
-
-
-
-
-            <!--------------------------Nouvelle Intervention--------------------------------------->
-            <hr />
-            <div class="form-check">
-               <input class="form-check-input" type="checkbox" name="newNouvelleIntervention"
-                  th:checked="${ficheIntervention.nouvelleIntervention}" id="nouvelleIntervention" />
-               <label class="form-check-label" for="nouvelleIntervention">
-                  Nécessite une nouvelle intervention
-               </label>
-            </div>
-
          </div>
 
 
 
-         <div class="submit-container">
-            <input class="submit" type="submit" value="Terminer" />
+         <!--------------------------Nouvelle Intervention--------------------------------------->
+         <hr />
+         <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="newNouvelleIntervention"
+               th:checked="${ficheIntervention.nouvelleIntervention}" id="nouvelleIntervention" />
+            <label class="form-check-label" for="nouvelleIntervention">
+               Nécessite une nouvelle intervention
+            </label>
          </div>
+
+
+         <hr />
+
+         <!--------------------------Validation--------------------------------------->
+         <div class="submit-container" style="height: 10vh;width: 100%;margin-bottom: calc(var(--bs-gutter-x) * .5);">
+            <button class="btn btn-dark" type="submit" style="height: inherit;width: inherit;">Terminer</button>
+         </div>
+
 
 
       </form>
 
+   </div>
 
 
-      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-      <script th:inline="javascript">
-         /* <![CDATA[ */
+   <script th:inline="javascript">
+      /* <![CDATA[ */
 
 
-         function updateMateriauField(selectElement, textFieldId) {
-            var selectedValue = selectElement.value;
-            var index = selectElement.id.replace('materiauxUtilises', '');
-            document.getElementById('selectedMateriau' + index).value = selectedValue;
-         }
+      function updateMateriauField(selectElement, textFieldId) {
+         var selectedValue = selectElement.value;
+         var index = selectElement.id.replace('materiauxUtilises', '');
+         document.getElementById('selectedMateriau' + index).value = selectedValue;
+      }
 
-         function handleRadioButtonChange(radioButtons, hiddenInput) {
-            radioButtons.forEach(function (radioButton) {
-               radioButton.addEventListener('change', function () {
-                  if (this.checked) {
-                     hiddenInput.value = this.value;
-                  }
-               });
-            });
-         }
-
-         //fonction pour effacer les bordures rouges des images non selectionnées de la même sectionnumber quand je clique sur le bouton aucun
-         function effacerBordures(sectionNumber) {
-            var radioButtons = document.querySelectorAll('input[type="radio"][name="materialRadio"]');
-            radioButtons.forEach(function (radioButton) {
-               if (radioButton.id.split('_')[1] == sectionNumber) {
-                  radioButton.parentElement.style.border = 'none';
+      function handleRadioButtonChange(radioButtons, hiddenInput) {
+         radioButtons.forEach(function (radioButton) {
+            radioButton.addEventListener('change', function () {
+               if (this.checked) {
+                  hiddenInput.value = this.value;
                }
-            });
-         }
-
-         function displaySelectedImage(radioInput) {
-            // Récupérer l'URL de l'image
-            var imageUrl = radioInput.parentElement.querySelector('.imageListe').src;
-
-            // Récupérer le sectionNumber de l'image sélectionnée
-            var sectionNumber = radioInput.id.split('_')[1];
-
-            var inputNewMaterial = 'newMateriau' + sectionNumber;
-
-            // Mettre à jour le champ caché
-            document.getElementById(inputNewMaterial).value = radioInput.value;
-
-            // Récupérer l'élément 'selected-image' avec le sectionNumber
-            var selectedImage = document.getElementById('selected-image_' + sectionNumber);
-
-            // Mettre à jour l'URL de l'image et changer l'arrière-plan
-            selectedImage.src = imageUrl;
-
-            //effacer les bordures rouges des images non selectionnées dans le même groupe
-            var radioButtons = document.querySelectorAll('input[type="radio"][name="materialRadio"]');
-            radioButtons.forEach(function (radioButton) {
-               if (radioButton.id.split('_')[1] == sectionNumber) {
-                  radioButton.parentElement.style.border = 'none';
-               }
-            });
-
-            // Mettre à jour la bordure de l'image sélectionnée
-            radioInput.parentElement.style.border = '2px solid red';
-
-         }
-
-         //clic sur la croix pour effacer le texte
-         function clearInput(inputId) {
-            document.getElementById(inputId).value = '';
-         }
-
-         function closeMaterialSelector(button) {
-            var imageSelector = button.closest('.images-selector');
-            imageSelector.style.display = 'none';
-         }
-
-         function refresh_images_selectionnees() {
-            //afficher les images selectionnées au démarrage de la page
-            var materiauOptions = document.querySelectorAll('[id^="newMateriau"]');
-            materiauOptions.forEach(function (materiauOption) {
-               var sectionNumber = materiauOption.id.replace('newMateriau', '');
-
-               // Sélectionnez le bouton radio dans le contexte de la section correspondante
-               var radioToCheck = document.querySelector('#material-dropdown' + sectionNumber + ' input[type="radio"][value="' + materiauOption.value + '"]');
-
-
-               if (radioToCheck) {
-                  //mettre en rouge la bordure de l'image selectionnée
-                  radioToCheck.parentElement.style.border = '2px solid red';
-                  radioToCheck.checked = true;
-                  displaySelectedImage(radioToCheck);
-               } else {
-                  document.getElementById('selected-image_' + sectionNumber).src = '/images/notchecked.png';
-               }
-            });
-         }
-
-
-
-         document.addEventListener('DOMContentLoaded', function () {
-
-
-
-
-            refresh_images_selectionnees();
-
-
-
-
-
-            var selectElements = document.querySelectorAll('select[name="materiauxUtilises"]');
-
-            selectElements.forEach(function (select) {
-               select.addEventListener('change', function () {
-                  updateMateriauField(select, 'newMateriau' + select.id.replace('materiauxUtilises', ''));
-               });
-            });
-
-            var natureRadioButtons = document.querySelectorAll('input[name="intervention"]');
-            var natureHiddenInput = document.getElementById('selectedNatureType');
-
-            natureRadioButtons.forEach(function (radioButton) {
-               radioButton.addEventListener('change', function () {
-                  if (this.checked) {
-                     natureHiddenInput.value = this.value;
-                  }
-               });
-            });
-
-
-
-            var radioButtons = document.querySelectorAll('input[name="maintenanceType"]');
-            var hiddenInput = document.getElementById('selectedMaintenanceType');
-
-            radioButtons.forEach(function (radioButton) {
-               radioButton.addEventListener('change', function () {
-                  if (this.checked) {
-                     hiddenInput.value = this.value;
-                  }
-               });
-            });
-
-            var showMaterialsBtns = document.querySelectorAll('.show-materials-btn');
-            var hiddenInputs = document.querySelectorAll('[id^="newMateriau"]');
-
-            function showMaterialSelector(button) {
-               var targetId = button.getAttribute('data-target');
-               var imageSelector = document.getElementById(targetId);
-               var sectionNumber = targetId.replace('material-dropdown', '');
-
-               imageSelector.style.display = 'grid';
-               var radioButtons = imageSelector.querySelectorAll('input[type="radio"]');
-
-               radioButtons.forEach(function (radioButton) {
-                  radioButton.addEventListener('change', function () {
-                     if (this.checked) {
-                        var selectedMaterial = this.value;
-                        document.getElementById('newMateriau' + sectionNumber).value = selectedMaterial;
-                        imageSelector.style.display = 'none';
-                     }
-                  });
-               });
-
-               // Ajouter le code pour cocher le bouton radio au chargement de la page
-               var materiauOption = document.getElementById('newMateriau' + sectionNumber).value;
-               if (materiauOption) {
-                  var radioToCheck = imageSelector.querySelector('input[type="radio"][value="' + materiauOption + '"]');
-                  if (radioToCheck) {
-                     radioToCheck.checked = true;
-                  }
-               }
-            }
-
-            showMaterialsBtns.forEach(function (btn) {
-               btn.addEventListener('click', function () {
-                  showMaterialSelector(this);
-               });
-            });
-
-            var closeMaterialSelectors = document.querySelectorAll('.close-btn');
-            closeMaterialSelectors.forEach(function (btn) {
-               btn.addEventListener('click', function () {
-                  closeMaterialSelector(this);
-               });
             });
          });
-         /* ]]> */
-      </script>
+      }
+
+      //fonction pour effacer les bordures rouges des images non selectionnées de la même sectionnumber quand je clique sur le bouton aucun
+      function effacerBordures(sectionNumber) {
+         var radioButtons = document.querySelectorAll('input[type="radio"][name="materialRadio"]');
+         radioButtons.forEach(function (radioButton) {
+            if (radioButton.id.split('_')[1] == sectionNumber) {
+               radioButton.parentElement.style.border = 'none';
+            }
+         });
+      }
+
+      function displaySelectedImage(radioInput) {
+         // Récupérer l'URL de l'image
+         var imageUrl = radioInput.parentElement.querySelector('.imageListe').src;
+
+         // Récupérer le sectionNumber de l'image sélectionnée
+         var sectionNumber = radioInput.id.split('_')[1];
+
+         var inputNewMaterial = 'newMateriau' + sectionNumber;
+
+         // Mettre à jour le champ caché
+         document.getElementById(inputNewMaterial).value = radioInput.value;
+
+         // Récupérer l'élément 'selected-image' avec le sectionNumber
+         var selectedImage = document.getElementById('selected-image_' + sectionNumber);
+
+         // Mettre à jour l'URL de l'image et changer l'arrière-plan
+         selectedImage.src = imageUrl;
+
+         //effacer les bordures rouges des images non selectionnées dans le même groupe
+         var radioButtons = document.querySelectorAll('input[type="radio"][name="materialRadio"]');
+         radioButtons.forEach(function (radioButton) {
+            if (radioButton.id.split('_')[1] == sectionNumber) {
+               radioButton.parentElement.style.border = 'none';
+            }
+         });
+
+         // Mettre à jour la bordure de l'image sélectionnée
+         radioInput.parentElement.style.border = '2px solid #212529';
+         radioInput.parentElement.style.borderRadius = '0.35rem';
+
+      }
+
+      //clic sur la croix pour effacer le texte
+      function clearInput(inputId) {
+         document.getElementById(inputId).value = '';
+      }
+
+      function closeMaterialSelector(button) {
+         var imageSelector = button.closest('.images-selector');
+         imageSelector.style.display = 'none';
+      }
+
+      function refresh_images_selectionnees() {
+         //afficher les images selectionnées au démarrage de la page
+         var materiauOptions = document.querySelectorAll('[id^="newMateriau"]');
+         materiauOptions.forEach(function (materiauOption) {
+            var sectionNumber = materiauOption.id.replace('newMateriau', '');
+
+            // Sélectionnez le bouton radio dans le contexte de la section correspondante
+            var radioToCheck = document.querySelector('#material-dropdown' + sectionNumber + ' input[type="radio"][value="' + materiauOption.value + '"]');
+
+
+            if (radioToCheck) {
+               //mettre en rouge la bordure de l'image selectionnée
+               radioToCheck.parentElement.style.border = '2px solid red';
+               radioToCheck.checked = true;
+               displaySelectedImage(radioToCheck);
+            } else {
+               document.getElementById('selected-image_' + sectionNumber).src = '/images/notchecked.png';
+            }
+         });
+      }
+
+
+
+      document.addEventListener('DOMContentLoaded', function () {
+
+
+
+
+         refresh_images_selectionnees();
+
+
+
+
+
+         var selectElements = document.querySelectorAll('select[name="materiauxUtilises"]');
+
+         selectElements.forEach(function (select) {
+            select.addEventListener('change', function () {
+               updateMateriauField(select, 'newMateriau' + select.id.replace('materiauxUtilises', ''));
+            });
+         });
+
+         var natureRadioButtons = document.querySelectorAll('input[name="intervention"]');
+         var natureHiddenInput = document.getElementById('selectedNatureType');
+
+         natureRadioButtons.forEach(function (radioButton) {
+            radioButton.addEventListener('change', function () {
+               if (this.checked) {
+                  natureHiddenInput.value = this.value;
+               }
+            });
+         });
+
+
+
+         var radioButtons = document.querySelectorAll('input[name="maintenanceType"]');
+         var hiddenInput = document.getElementById('selectedMaintenanceType');
+
+         radioButtons.forEach(function (radioButton) {
+            radioButton.addEventListener('change', function () {
+               if (this.checked) {
+                  hiddenInput.value = this.value;
+               }
+            });
+         });
+
+         var showMaterialsBtns = document.querySelectorAll('.show-materials-btn');
+         var hiddenInputs = document.querySelectorAll('[id^="newMateriau"]');
+
+         function showMaterialSelector(button) {
+            var targetId = button.getAttribute('data-target');
+            var imageSelector = document.getElementById(targetId);
+            var sectionNumber = targetId.replace('material-dropdown', '');
+
+            imageSelector.style.display = 'grid';
+            var radioButtons = imageSelector.querySelectorAll('input[type="radio"]');
+
+            radioButtons.forEach(function (radioButton) {
+               radioButton.addEventListener('change', function () {
+                  if (this.checked) {
+                     var selectedMaterial = this.value;
+                     document.getElementById('newMateriau' + sectionNumber).value = selectedMaterial;
+                     imageSelector.style.display = 'none';
+                  }
+               });
+            });
+
+            // Ajouter le code pour cocher le bouton radio au chargement de la page
+            var materiauOption = document.getElementById('newMateriau' + sectionNumber).value;
+            if (materiauOption) {
+               var radioToCheck = imageSelector.querySelector('input[type="radio"][value="' + materiauOption + '"]');
+               if (radioToCheck) {
+                  radioToCheck.checked = true;
+               }
+            }
+         }
+
+         showMaterialsBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+               showMaterialSelector(this);
+            });
+         });
+
+         var closeMaterialSelectors = document.querySelectorAll('.close-btn');
+         closeMaterialSelectors.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+               closeMaterialSelector(this);
+            });
+         });
+      });
+      /* ]]> */
+   </script>
 
 </body>
 
