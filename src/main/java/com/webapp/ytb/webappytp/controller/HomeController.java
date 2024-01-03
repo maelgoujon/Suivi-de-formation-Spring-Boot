@@ -309,6 +309,7 @@ public class HomeController {
                 .findByTypeIntervention(typeIntervention);
         model.addAttribute("ficheIntervention", ficheIntervention);
         model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
+        model.addAttribute("color", "#00FF00");
         return "fiche_modifier3";
     }
 

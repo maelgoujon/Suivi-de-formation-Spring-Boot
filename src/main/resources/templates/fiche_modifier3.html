@@ -71,8 +71,7 @@
          <!--------------------------Intervenant--------------------------------------->
          <hr />
 
-
-         <h4 class="mb-3">Intervenant </h4>
+         <h2 class="display-5" th:style="'color: ' + ${color}">Intervenant</h2>
          <div class="row">
             <div class="col-md-6 mb-3">
                <label for="firstName">Prénom</label>
@@ -95,8 +94,7 @@
 
          <!--------------------------Demande--------------------------------------->
          <hr />
-
-         <h4 class="mb-3">Demande </h4>
+         <h2 class="display-5">Demande</h2>
          <div class="row">
             <div class="col-md-6 mb-3">
                <label for="disabledNomDemandeur">Nom du demandeur</label>
@@ -129,7 +127,7 @@
          <!--------------------------Intervention--------------------------------------->
          <hr />
 
-         <h4 class="mb-3">Intervention </h4>
+         <h2 class="display-5">Intervention</h2>
          <div class="row">
             <div class="col-md-6 mb-3">
                <label for="newDateIntervention">Date de l'intervention</label>
@@ -184,8 +182,17 @@
          <hr />
          <legend th:switch="${ficheIntervention.NiveauTravauxRealises}">
             <img th:case="0" class="logo" src="/images/check.png" alt="Fait" />
-            <h4 th:case="1" class="mb-3"><img class="logo" src="/images/check.png" alt="Fait" />Travaux réalisés </h4>
-            <h4 th:case="2" class="mb-3">Travaux réalisés</h4>
+
+            <div th:case="1" class="row align-items-center">
+               <div class="col-auto">
+                   <img class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
+               </div>
+               <div class="col-auto">
+                   <h2 class="display-5">Travaux réalisés</h2>
+               </div>
+           </div>
+
+            <h2 class="display-5" th:case="2">Travaux réalisés</h2>
          </legend>
          <div class="form-group">
             <textarea rows="10" id="newTravauxRealises" class="form-control" name="newTravauxRealises"
@@ -196,9 +203,18 @@
          <hr />
          <legend th:switch="${ficheIntervention.NiveauTravauxRealises}">
             <img th:case="0" class="logo" src="/images/notchecked.png" alt="Fait" />
-            <h4 th:case="1" class="mb-3"><img class="logo" src="/images/notchecked.png" alt="Pas fait" />Travaux non
-               réalisés </h4>
-            <h4 th:case="2" class="mb-3">Travaux réalisés</h4>
+
+            <div th:case="1" class="row align-items-center">
+               <div class="col-auto">
+                   <img class="display-5" src="/images/notchecked.png" alt="Pas fait" style="height: 1em;" />
+               </div>
+               <div class="col-auto">
+                   <h2 class="display-5">Travaux non réalisés</h2>
+               </div>
+           </div>
+
+
+            <h2 class="display-5" th:case="2">Travaux non réalisés</h2>
          </legend>
          <div class="form-group">
             <textarea rows="10" class="form-control" id="newTravauxNonRealises" name="newTravauxNonRealises"
@@ -207,10 +223,19 @@
 
          <!--------------------------Matériaux--------------------------------------->
          <hr />
+
          <legend th:switch="${ficheIntervention.NiveauMateriauxUtilises}">
             <img th:case="0" class="logo" src="/images/materiaux.png" alt="Materiaux" />
-            <h4 th:case="1" class="mb-3"><img class="logo" src="/images/materiaux.png" alt="Materiaux" />Materiaux</h4>
-            <h4 th:case="2" class="mb-3">Materiaux</h4>
+            <div th:case="1" class="row align-items-center">
+               <div class="col-auto">
+                  <img class="display-5" src="/images/materiaux.png" alt="Materiaux" style="height: 1em;" />
+               </div>
+               <div class="col-auto">
+                  <h2 class="display-5">Materiaux</h2>
+               </div>
+            </div>
+
+            <h2 class="display-5" th:case="2">Materiaux</h2>
          </legend>
 
          <!-- Affichage des dropdown si NiveauMateriauxUtilises vaut 2 -->
@@ -235,7 +260,7 @@
 
          <!-- Affichage des images et texte si NiveauMateriauxUtilises vaut 1 -->
          <div class="materiaux_vertical" th:if="${ficheIntervention.NiveauMateriauxUtilises == 1}">
-         
+
             <div class="noPrint"></div>
             <div class="container">
                <div class="row">
