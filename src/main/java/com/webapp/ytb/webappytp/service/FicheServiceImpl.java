@@ -44,7 +44,7 @@ public class FicheServiceImpl implements FicheService {
                 existingFiche.setEtatFicheFinie(fiche.isEtatFicheFinie());
                 existingFiche.setTravauxRealises(fiche.getTravauxRealises());
                 existingFiche.setTravauxNonRealises(fiche.getTravauxNonRealises());
-                existingFiche.setEvaluation(fiche.getEvaluation());;
+                existingFiche.setEvaluation(fiche.getEvaluation());
     
                 return ficheRepository.save(existingFiche);
             })

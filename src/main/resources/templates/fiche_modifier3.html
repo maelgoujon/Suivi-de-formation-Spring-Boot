@@ -44,7 +44,6 @@
          z-index: 999;
          overflow: auto;
          grid-template-columns: repeat(3, 1fr);
-         gap: 10px;
          max-width: 85vw;
          margin: 0 auto;
          border-radius: 3%;
@@ -559,8 +558,6 @@
          });
 
          var showMaterialsBtns = document.querySelectorAll('.show-materials-btn');
-         var hiddenInputs = document.querySelectorAll('[id^="newMateriau"]');
-
          function showMaterialSelector(button) {
             var targetId = button.getAttribute('data-target');
             var imageSelector = document.getElementById(targetId);

@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
-import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 
 import jakarta.persistence.Column;
@@ -134,7 +133,7 @@ public class FicheIntervention {
 
 
     public int getNiveauNatureIntervention() {
-        return this.NiveauNatureIntervention;
+        return this.niveauNatureIntervention;
     }
 
     public FicheIntervention(Utilisateur utilisateur) {
