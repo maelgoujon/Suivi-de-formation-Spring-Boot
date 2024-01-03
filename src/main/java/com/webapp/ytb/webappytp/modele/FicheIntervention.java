@@ -74,13 +74,13 @@ public class FicheIntervention {
 
     // Niveaux
     @Column
-    private int NiveauTravauxRealises;
+    private int niveauTravauxRealises;
 
     @Column
-    private int NiveauMateriauxUtilises;
+    private int niveauMateriauxUtilises;
 
     @Column
-    private int NiveauNatureIntervention;
+    private int niveauNatureIntervention;
 
     // getters
     public String getNomDemandeur() {

@@ -20,8 +20,6 @@ public class ArchiveService {
         try {
             return new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
         } catch (ParseException e) {
-            // Handle parsing exception as needed
-            e.printStackTrace();
             return null;
         }
     }

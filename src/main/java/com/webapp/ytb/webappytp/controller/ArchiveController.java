@@ -31,7 +31,6 @@ public class ArchiveController {
         try {
             return new SimpleDateFormat("dd/MM/yyyy").parse(dateString);
         } catch (ParseException e) {
-            e.printStackTrace();
             return null;
         }
     }

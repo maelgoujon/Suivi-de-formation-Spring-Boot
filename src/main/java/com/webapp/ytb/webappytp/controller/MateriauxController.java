@@ -157,7 +157,6 @@ public class MateriauxController {
                 redirectAttributes.addFlashAttribute("errorMessage",
                         "La taille du fichier dépasse la limite autorisée.");
             } catch (Exception e) {
-                e.printStackTrace();
                 // Gérez les autres exceptions ici si nécessaire
                 redirectAttributes.addFlashAttribute("errorMessage",
                         "Une erreur s'est produite lors de la modification du Materiau.");
@@ -203,7 +202,6 @@ public class MateriauxController {
                 redirectAttributes.addFlashAttribute("successMessage", "Image supprimée avec succès");
             }
         } catch (Exception e) {
-            e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorMessage",
                     "Une erreur s'est produite lors de la suppression de l'image.");
         }
