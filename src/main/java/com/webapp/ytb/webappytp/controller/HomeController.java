@@ -185,7 +185,13 @@ public class HomeController {
     @GetMapping("/fiche/modifier/{id}")
     public String showFicheDetails(@PathVariable long id, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(id);
+        String typeInterventionStr = ficheIntervention.getIntervention().getTypeIntervention();
+        Intervention.TypeIntervention typeIntervention = Intervention.TypeIntervention.valueOf(typeInterventionStr);
+        List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository
+                .findByTypeIntervention(typeIntervention);
         model.addAttribute("ficheIntervention", ficheIntervention);
+        model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
+        model.addAttribute("color", "#8fabd9");
         return "fiche_modifier";
     }
 
@@ -195,9 +201,9 @@ public class HomeController {
             @RequestParam(required = false) LocalDate newDateDemande,
             @RequestParam(required = false) String newLocalisation,
             @RequestParam(required = false) String newDescription,
-            @RequestParam (required = false) Integer newDegreUrgence,
+            @RequestParam(required = false) Integer newDegreUrgence,
             @RequestParam(required = false) LocalDate newDateIntervention,
-            @RequestParam (required = false) Integer newDureeIntervention,
+            @RequestParam(required = false) Integer newDureeIntervention,
             @RequestParam(required = false) Maintenance.MaintenanceType newMaintenanceType,
             @RequestParam(required = false) String newNatureType,
             @RequestParam(required = false) String newTravauxRealises,
@@ -215,7 +221,7 @@ public class HomeController {
         boolean nouvelleInterventionValue = newNouvelleIntervention.orElse(false);
 
         FicheIntervention ficheIntervention = ficheServ.lire(id);
-        if (newNomDemandeur != null){
+        if (newNomDemandeur != null) {
             ficheIntervention.getDemande().setNomDemandeur(newNomDemandeur);
         }
         if (newDateDemande != null) {
@@ -236,7 +242,7 @@ public class HomeController {
         }
 
         if (newDureeIntervention != null) {
-        ficheIntervention.getIntervention().setDureeIntervention(newDureeIntervention);
+            ficheIntervention.getIntervention().setDureeIntervention(newDureeIntervention);
         }
 
         if (newMaintenanceType != null) {
@@ -286,31 +292,6 @@ public class HomeController {
         model.addAttribute("users", users);
         model.addAttribute("fiches", fiches); // Ajout de la liste des fiches
         return "liste_fiche";
-    }
-
-    @GetMapping("/fiche/modifier2/{id}")
-    public String showFicheDetails2(@PathVariable long id, Model model) {
-        FicheIntervention ficheIntervention = ficheServ.lire(id);
-        String typeInterventionStr = ficheIntervention.getIntervention().getTypeIntervention();
-        Intervention.TypeIntervention typeIntervention = Intervention.TypeIntervention.valueOf(typeInterventionStr);
-        List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository
-                .findByTypeIntervention(typeIntervention);
-        model.addAttribute("ficheIntervention", ficheIntervention);
-        model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
-        return "fiche_modifier2";
-    }
-
-    @GetMapping("/fiche/modifier3/{id}")
-    public String showFicheDetails3(@PathVariable long id, Model model) {
-        FicheIntervention ficheIntervention = ficheServ.lire(id);
-        String typeInterventionStr = ficheIntervention.getIntervention().getTypeIntervention();
-        Intervention.TypeIntervention typeIntervention = Intervention.TypeIntervention.valueOf(typeInterventionStr);
-        List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository
-                .findByTypeIntervention(typeIntervention);
-        model.addAttribute("ficheIntervention", ficheIntervention);
-        model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
-        model.addAttribute("color", "#8fabd9");
-        return "fiche_modifier3";
     }
 
 }
