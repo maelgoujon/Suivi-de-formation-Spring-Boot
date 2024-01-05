@@ -185,6 +185,10 @@
   <div class="checkbox-container">
     <!-- Colonnes par défaut -->
     <label>
+      <input type="checkbox" checked="checked" id="chkNomIntervenant" onclick="toggleColumn('NomIntervenant')" />
+      Nom Intervenant
+    </label>
+    <label>
       <input type="checkbox" checked="checked" id="chkNomDemandeur" onclick="toggleColumn('NomDemandeur')" />
       Nom Demandeur
     </label>
@@ -259,6 +263,7 @@
       recherche:</label>
     <select id="columnSelect">
       <option value="all">Toutes</option>
+      <option value="NomIntervenant">Nom Intervenant</option>
       <option value="NomDemandeur">Nom Demandeur</option>
       <option value="DateIntervention">Date Intervention</option>
       <option value="DateCreation">Date Création</option>
@@ -284,6 +289,7 @@
   <table id="interventionsTable" border="1">
     <thead>
       <tr>
+        <th id="thNomIntervenant">Intervenant</th>
         <th id="thNomDemandeur">Nom Demandeur</th>
         <th id="thDateDemande">Date Demande</th>
         <th id="thDateIntervention">Date Intervention</th>
@@ -309,15 +315,15 @@
       </tr>
     </thead>
     <tbody>
-      <!-- Loop through the list of fiches and display each one -->
       <tr th:each="fiche : ${fiches}">
+        <td id="tdNomIntervenant" th:text="${fiche.utilisateur.nom} + ' ' + ${fiche.utilisateur.prenom}"></td>
         <td id="tdNomDemandeur" th:text="${fiche.nomDemandeur}"></td>
         <td id="tdDateDemande" th:text="${fiche.dateDemande}"></td>
         <td id="tdDateIntervention" th:text="${fiche.DateIntervention}"></td>
         <td id="tdDateCreation" th:text="${fiche.dateCreation}"></td>
         <td id="tdDegreUrgence" th:text="${fiche.DegreUrgence}"></td>
         <td id="tdTypeIntervention" th:text="${fiche.maintenanceType}"></td>
-        <td id="tdNatureIntervention" th:text="${fiche.NatureType}"></td>
+        <td id="tdNatureIntervention" th:text="${fiche.typeIntervention}"></td>
         <td id="tdEtatFicheFinie" th:text="${fiche.etatFicheFinie ? 'Oui' : 'Non'}"></td>
         <td id="tdNouvelleIntervention" th:text="${fiche.nouvelleIntervention ? 'Oui' : 'Non'}"></td>
         <td id="tdDureeIntervention" style="display: none" th:text="${fiche.dureeIntervention}"></td>
@@ -378,7 +384,7 @@
         var anyKeywordFound = false;
 
         if (selectedColumn === "all") {
-          // Parcourir toutes les colonnes sauf la dernière deux (voir note ci-dessous)
+          // Parcourir toutes les colonnes sauf la dernière deux
           for (j = 0; j < tr[i].cells.length - 2; j++) {
             td = tr[i].cells[j];
 
