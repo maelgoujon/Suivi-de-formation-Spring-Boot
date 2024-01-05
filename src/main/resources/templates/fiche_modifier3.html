@@ -71,7 +71,21 @@
          <!--------------------------Intervenant--------------------------------------->
          <hr />
 
-         <h2 class="display-5" th:style="'color: ' + ${color}">Intervenant</h2>
+         <legend th:switch="${ficheIntervention.niveauUtilisateur}">
+            <img th:case="0" class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
+            <div th:case="1" class="row align-items-center">
+               <div class="col-auto">
+                  <img class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
+               </div>
+               <div class="col-auto">
+                  <h2 class="display-5" th:style="'color: ' + ${color}">Intervenant</h2>
+               </div>
+            </div>
+            <h2 class="display-5" th:case="2" th:style="'color: ' + ${color}">Intervenant</h2>
+         </legend>
+
+
+
          <div class="row">
             <div class="col-md-6 mb-3">
                <label for="firstName">Prénom</label>
@@ -94,7 +108,21 @@
 
          <!--------------------------Demande--------------------------------------->
          <hr />
-         <h2 class="display-5">Demande</h2>
+
+
+         <legend th:switch="${ficheIntervention.demande.niveauDemande}">
+            <img th:case="0" class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
+            <div th:case="1" class="row align-items-center">
+               <div class="col-auto">
+                  <img class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
+               </div>
+               <div class="col-auto">
+                  <h2 class="display-5" th:style="'color: ' + ${color}">Demande</h2>
+               </div>
+            </div>
+            <h2 class="display-5" th:case="2" th:style="'color: ' + ${color}">Demande</h2>
+         </legend>
+
          <div class="row">
             <div class="col-md-6 mb-3">
                <label for="disabledNomDemandeur">Nom du demandeur</label>
@@ -127,7 +155,19 @@
          <!--------------------------Intervention--------------------------------------->
          <hr />
 
-         <h2 class="display-5">Intervention</h2>
+         <legend th:switch="${ficheIntervention.intervention.niveauIntervention}">
+            <img th:case="0" class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
+            <div th:case="1" class="row align-items-center">
+               <div class="col-auto">
+                  <img class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
+               </div>
+               <div class="col-auto">
+                  <h2 class="display-5" th:style="'color: ' + ${color}">Intervention</h2>
+               </div>
+            </div>
+            <h2 class="display-5" th:case="2" th:style="'color: ' + ${color}">Intervention</h2>
+         </legend>
+
          <div class="row">
             <div class="col-md-6 mb-3">
                <label for="newDateIntervention">Date de l'intervention</label>
@@ -180,19 +220,19 @@
 
          <!--------------------------Travaux réalisés--------------------------------------->
          <hr />
-         <legend th:switch="${ficheIntervention.NiveauTravauxRealises}">
-            <img th:case="0" class="logo" src="/images/check.png" alt="Fait" />
 
+
+         <legend th:switch="${ficheIntervention.NiveauTravauxRealises}">
+            <img th:case="0" class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
-                   <img class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
+                  <img class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
                </div>
                <div class="col-auto">
-                   <h2 class="display-5">Travaux réalisés</h2>
+                  <h2 class="display-5" th:style="'color: ' + ${color}">Travaux réalisés</h2>
                </div>
-           </div>
-
-            <h2 class="display-5" th:case="2">Travaux réalisés</h2>
+            </div>
+            <h2 class="display-5" th:case="2" th:style="'color: ' + ${color}">Travaux réalisés</h2>
          </legend>
          <div class="form-group">
             <textarea rows="10" id="newTravauxRealises" class="form-control" name="newTravauxRealises"
@@ -202,19 +242,19 @@
          <!--------------------------Travaux NON réalisés--------------------------------------->
          <hr />
          <legend th:switch="${ficheIntervention.NiveauTravauxRealises}">
-            <img th:case="0" class="logo" src="/images/notchecked.png" alt="Fait" />
+            <img th:case="0" class="display-5" src="/images/notchecked.png" alt="Pas Fait" style="height: 1em;" />
 
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
-                   <img class="display-5" src="/images/notchecked.png" alt="Pas fait" style="height: 1em;" />
+                  <img class="display-5" src="/images/notchecked.png" alt="Pas fait" style="height: 1em;" />
                </div>
                <div class="col-auto">
-                   <h2 class="display-5">Travaux non réalisés</h2>
+                  <h2 class="display-5" th:style="'color: ' + ${color}">Travaux non réalisés</h2>
                </div>
-           </div>
+            </div>
 
 
-            <h2 class="display-5" th:case="2">Travaux non réalisés</h2>
+            <h2 class="display-5" th:case="2" th:style="'color: ' + ${color}">Travaux non réalisés</h2>
          </legend>
          <div class="form-group">
             <textarea rows="10" class="form-control" id="newTravauxNonRealises" name="newTravauxNonRealises"
@@ -231,11 +271,11 @@
                   <img class="display-5" src="/images/materiaux.png" alt="Materiaux" style="height: 1em;" />
                </div>
                <div class="col-auto">
-                  <h2 class="display-5">Materiaux</h2>
+                  <h2 class="display-5" th:style="'color: ' + ${color}">Materiaux</h2>
                </div>
             </div>
 
-            <h2 class="display-5" th:case="2">Materiaux</h2>
+            <h2 class="display-5" th:case="2" th:style="'color: ' + ${color}">Materiaux</h2>
          </legend>
 
          <!-- Affichage des dropdown si NiveauMateriauxUtilises vaut 2 -->

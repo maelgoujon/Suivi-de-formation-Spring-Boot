@@ -46,4 +46,7 @@ public class Intervention {
     @Column
     private int NiveauDureeIntervention;
 
+    @Column
+    private int niveauIntervention;
+
 }

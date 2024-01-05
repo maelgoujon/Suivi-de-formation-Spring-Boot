@@ -64,6 +64,9 @@ public class FicheIntervention {
     @JoinColumn(name = "utilisateur_id")
     private Utilisateur utilisateur;
 
+    @Column
+    private int niveauUtilisateur;
+
     @Column(name = "materiaux")
     private List<String> materiauxOptions;
 

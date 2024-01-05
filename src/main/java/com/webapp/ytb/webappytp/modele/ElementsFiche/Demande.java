@@ -36,6 +36,9 @@ public class Demande {
     @NotBlank(message = "Le champ 'Degré d'urgence' est obligatoire.")
     private int DegreUrgence;
 
+    @Column
+    private int niveauDemande;
+
 
 
 }
