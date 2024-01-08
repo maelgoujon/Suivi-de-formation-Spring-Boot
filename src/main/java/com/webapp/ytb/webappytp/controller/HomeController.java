@@ -120,7 +120,13 @@ public class HomeController {
     @GetMapping("/fiche/{id}")
     public String fiche(@PathVariable Long id, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(id);
+        String typeInterventionStr = ficheIntervention.getIntervention().getTypeIntervention();
+        Intervention.TypeIntervention typeIntervention = Intervention.TypeIntervention.valueOf(typeInterventionStr);
+        List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository
+                .findByTypeIntervention(typeIntervention);
         model.addAttribute("ficheIntervention", ficheIntervention);
+        model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
+        model.addAttribute("color", "#8fabd9");
         return "fiche_complete";
     }
 

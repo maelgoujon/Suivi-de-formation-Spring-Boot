@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Fiche Intervention</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+    <body class="colonne centre">
+        <main class="colonne">
+            <div class="titre border">FICHE D'INTERVENTION N°<span th:text="${ficheIntervention.id}"></span>&nbsp;:&nbsp;
+                <span th:if="${ficheIntervention.intervention != null}" th:text="${ficheIntervention.intervention.typeIntervention}"></span>
+            </div>
+            
+            <form>
+
+                <div class="espaceHor"></div>
+                <fieldset>
+                    <legend>Intervenant</legend>
+                    <div>
+                        <div class="titre">Nom de l'intervenant</div>
+                        <div class="test"> <span th:text="${ficheIntervention.utilisateur.nom}"></span></div>
+                        <div class="titre">Prénom de l'intervenant</div>
+                        <div class="test"> <span th:text="${ficheIntervention.utilisateur.prenom}"></span></div>
+                    </div>
+                </fieldset>
+                <div class="espaceHor"></div>
+                <fieldset>
+                    <legend>Demande</legend>
+                    <div>
+                        <div class="titre">Nom du demandeur</div>
+                        <div class="test"> <span th:text="${ficheIntervention.nomDemandeur}"></span></div>
+                    </div>
+                    <div class="espaceHor"></div>
+                    <div>
+                        <div class="titre">Date de la demande</div>
+                        <div class="test">
+                            <span th:text="${#temporals.format(ficheIntervention.dateDemande, 'dd/MM/yyyy')}"></span>
+                        </div>
+                        <div class="titre">Localisation</div>
+                        <div class="test"> <span th:text="${ficheIntervention.localisation}"></span></div>
+                    </div>
+                    <div class="espaceHor"></div>
+                    <div class="colonnePrint">
+                        <div class="titre demi">Description de la demande</div>
+                        <div class="test">
+                            <span disabled rows="10" th:text="${ficheIntervention.demande.Description}">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="espaceHor"></div>
+                    <div>
+                        <div class="titre demi">Degré d'urgence</div>
+                        <div class="test">
+                            <span th:text="${ficheIntervention.degreUrgence}"></span>
+                        </div>
+                    </div>
+                    </div>
+                </fieldset>
+
+
+
+
+                <div class="espaceHor"></div>
+                <fieldset th:if="${ficheIntervention.intervention != null}">
+                    <legend>Intervention</legend>
+
+                    <div class="espaceHor"></div>
+                    <div>
+                        <div class="titre">Date d'intervention</div>
+                        <div class="test">
+                            <span
+                                th:text="${#temporals.format(ficheIntervention.dateIntervention, 'dd/MM/yyyy')}"></span>
+                        </div>
+                        <div class="titre">Durée de l'opération</div>
+                        <div class="test" th:if="${ficheIntervention.dureeIntervention != null}">
+
+                            <span th:text="${ficheIntervention.dureeIntervention}"></span>
+                        </div>
+                    </div>
+                </fieldset>
+
+
+
+                <div class="colonne listeCheckbox"
+                    th:if="${ficheIntervention.maintenance != null and ficheIntervention.maintenance.maintenanceType != null}">
+                    <!-- Type de Maintenance -->
+                    <fieldset class="colonne">
+                        <legend>Type de Maintenance</legend>
+                        <div>
+                            <div class="demi">
+                                <input type="checkbox"
+                                    th:checked="${#strings.equalsIgnoreCase(ficheIntervention.maintenance.maintenanceType, 'ameliorative')}"
+                                    th:value="ameliorative" name="typeIntervention">
+                            </div>
+                            <div class="droite"> <label>améliorative</label></div>
+                        </div>
+                        <div>
+                            <div class="demi">
+                                <input type="checkbox"
+                                    th:checked="${#strings.equalsIgnoreCase(ficheIntervention.maintenance.maintenanceType, 'preventive')}"
+                                    th:value="preventive" name="typeIntervention">
+                            </div>
+                            <div class="droite"> <label>préventive</label></div>
+                        </div>
+                        <div>
+                            <div class="demi">
+                                <input type="checkbox"
+                                    th:checked="${#strings.equalsIgnoreCase(ficheIntervention.maintenance.maintenanceType, 'corrective')}"
+                                    th:value="corrective" name="typeIntervention">
+                            </div>
+                            <div class="droite"> <label>corrective</label></div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="colonne listeCheckbox">
+                    <fieldset class="colonne" th:if="${ficheIntervention.intervention != null}">
+                        <legend>Nature de l'intervention</legend>
+                        <div th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}"
+                            class="demi">
+                            <div class="demi">
+                                <input type="radio" id="${nature}" name="intervention" th:value="${nature}"
+                                    th:checked="${ficheIntervention.intervention.typeIntervention != null and ficheIntervention.intervention.typeIntervention == nature.name()}" />
+                            </div>
+                            <div th:switch="${ficheIntervention.NiveauNatureIntervention}">
+                                <div th:case="0">
+                                    <img class="logo" th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
+                                        th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
+                                </div>
+                                <div th:case="1">
+                                    <div class="test">
+                                        <label th:for="${nature}"
+                                            th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
+                                    </div>
+                                    <img class="logo" th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
+                                        th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
+                                </div>
+                                <div th:case="2">
+                                    <div class="test">
+                                        <label th:for="${nature}"
+                                            th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                     
+                </div>
+                <div class="espaceHor"></div>
+                <div class="espaceHor"></div>
+                </fieldset>
+
+
+
+                <fieldset class="colonne" th:if="${ficheIntervention.travauxRealises != null}">
+                    <legend>Travaux réalisés</legend>
+                    <div>
+                        <div class="colonnePrint">
+                            <div class="test">
+                                <span th:text="${ficheIntervention.travauxRealises}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="espaceHor"></div>
+                </fieldset>
+
+
+
+
+
+                <fieldset class="colonne" th:if="${ficheIntervention.travauxNonRealises != null}">
+                    <legend>Travaux non réalisés</legend>
+                    <div>
+                        <div class="colonnePrint">
+                            <div class="test">
+                                <span th:text="${ficheIntervention.travauxNonRealises}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="espaceHor"></div>
+                </fieldset>
+
+
+
+                <div>
+                    <div class="noPrint "></div>
+                    <div class="check">
+                        <input type="checkbox" th:checked="${ficheIntervention.nouvelleIntervention}" />
+                    </div>
+                    <div class="droite"> <label>Nécessite une nouvelle intervention</label>
+                    </div>
+                </div>
+                <div class="espaceHor"></div>
+
+
+                <fieldset class="colonne" th:if="${ficheIntervention.travauxRealises != null}">
+                    <!-- Matériaux Utilisés -->
+                    <legend>Matériaux Utilisé</legend>
+                    <div class="noPrint"></div>
+                    <div class="espaceHor"></div>
+                    <div class="ligneSelectMateriaux">
+                        <div th:each="ligneMateriaux : ${ficheIntervention.materiauxOptions}" class="ligneMateriaux">
+                            <div th:each="materiel : ${ligneMateriaux}" class="max-width-container">
+                                <select class="max-width-select">
+                                    <option th:each="m : ${materiel}" th:value="${m}" th:text="${m}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+
+                </div>
+                </fieldset>
+                <div class="espaceHor"></div>
+
+                <div class="noPrint">
+                    <div></div>
+                    <button>Imprimer</button>
+                    <div></div>
+                </div>
+            </form>
+        </main>
+    </body>
+    <script>
+        bouton = document.getElementsByTagName("button")[0];
+        bouton.addEventListener("click", imprimer);
+
+        function imprimer(e) {
+            e.preventDefault();
+            window.print();
+        }
+
+        /* Dupliquer les select */
+        lesSelect = document.getElementsByClassName("selectADupliquer");
+        select = lesSelect[0].childNodes[1];
+        for (let i = 1; i < lesSelect.length; i++) {
+            lesSelect[i].appendChild(select.cloneNode(true));
+        }
+    </script>
+
+
+</html>
