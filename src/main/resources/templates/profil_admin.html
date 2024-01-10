@@ -182,36 +182,16 @@
     <h2>Profil de : <span th:text="${utilisateur.nom}"></span> <span th:text="${utilisateur.prenom}"></span></h2>
     <div class="encadre">
       <p><strong>Login: </strong> <span th:text="${utilisateur.login}"></span></p>
-      <p><strong>Photo: </strong></p>
-      <img th:src="${utilisateur.photoBase64}" alt="Photo de l'utilisateur" style="max-width: 200px; max-height: 200px;">
-      <p th:if="${utilisateur.description != null and not #strings.isEmpty(utilisateur.description)}">
-        <strong>Description: </strong><span th:text="${utilisateur.description}"></span>
-      </p>
-    
-    
+      
       <div class="modifier">
-          
           <a th:href="@{'/modif/' + ${utilisateur.id}}">
             <img
               src="/images/modif.png"
-              alt="Modifier un apprenti"
+              alt="Modifier admin"
               class="modifimg"
             />
           </a>
-          <p>Modifier profil apprenti</p>
-
-          <a href="utilisateur/supprimer">
-              <img
-                src="/images/archive.png"
-                alt="Modifier un apprenti"
-                class="archiveimg"
-              />
-          </a>
-          <p style=" margin-left: 13px">Archiver le profil</p>
-          <a href="@{'/liste_fiche/' + ${utilisateur.id}}"><h1 >+</h1></a>
-          <a href="@{'/liste_fiche/' + ${utilisateur.id}}"><p >Ajouter une fiche</p></a>
-
-            
+          <p>Modifier profil</p>
       </div>
     </div>
 </body>

@@ -24,6 +24,8 @@ import com.webapp.ytb.webappytp.modele.ElementsFiche.Materiaux;
 import com.webapp.ytb.webappytp.repository.MateriauxAmenagementRepository;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
+import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
+
 
 @Controller
 public class HomeController {
@@ -73,6 +75,22 @@ public class HomeController {
         return "accueil";
     }
 
+    @GetMapping("/accueil_superadmin")
+    public String superadmin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
+        
+        // Modifiez la ligne suivante pour récupérer tous les utilisateurs
+        List<Utilisateur> utilisateurs = userServ.getAllUtilisateurs();
+        
+        model.addAttribute("utilisateurs", utilisateurs);
+        
+        if ("ROLE_SUPERADMIN".equals(role)) {
+            return "accueil_superadmin";
+        }
+        
+        return "redirect:/accueil";
+    }
+
     @GetMapping("/accueil_admin")
     public String admin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
@@ -90,6 +108,30 @@ public class HomeController {
         model.addAttribute("utilisateur", utilisateur);
         return "profil_apprenti";
     }
+
+    @GetMapping("/profil_admin")
+    public String redirectToprofiladmin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
+        Utilisateur utilisateur;
+
+        // Vérifiez le rôle de l'utilisateur
+        if ("ROLE_ADMIN".equals(role)) {
+            // Si l'utilisateur a le rôle d'admin, récupérez les informations de l'utilisateur connecté
+            String login = userDetails.getUsername();
+            utilisateur = userServ.findUserByLogin(login);
+
+            // Ajoutez l'utilisateur à votre modèle
+            model.addAttribute("utilisateur", utilisateur);
+
+            // Redirigez vers la page de profil_admin
+            return "profil_admin";
+        } else {
+            // Si l'utilisateur n'a pas le rôle d'admin, redirigez-le vers la page d'accueil
+            return "redirect:/accueil";
+        }
+    }
+
+
 
     @GetMapping("/modif/{id}")
     public String modif(@PathVariable Long id, Model model) {
