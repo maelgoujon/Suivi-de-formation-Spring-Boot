@@ -248,56 +248,57 @@
         </form>
     </div>
         
-    
-   
-    
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const dots = document.querySelectorAll('.dot');
             const cancelButton = document.getElementById('cancelButton');
             const motDePasseHidden = document.getElementById('motDePasseHidden');
             const modifierMdpBtn = document.getElementById('modifierMdpBtn');
-        
-            let selectedCount = 0;
-        
+    
+            let selectedOrder = []; // Ajout de cette variable pour stocker l'ordre de sélection
+    
             dots.forEach(dot => {
                 dot.addEventListener('click', function () {
-                    if (selectedCount < 4) {
+                    if (selectedOrder.length < 4) {
                         this.classList.toggle('active');
-                        selectedCount = document.querySelectorAll('.dot.active').length;
-                        updateHiddenPassword();
+                        updateSelectedOrder(this.getAttribute('data-index'));
                         toggleModifierMdpBtn();
                     }
                 });
             });
-        
+    
             cancelButton.addEventListener('click', function () {
                 dots.forEach(dot => {
                     dot.classList.remove('active');
                 });
-                selectedCount = 0;
+                selectedOrder = [];
                 updateHiddenPassword();
                 toggleModifierMdpBtn();
             });
-        
-            function updateHiddenPassword() {
-                const activeDots = document.querySelectorAll('.dot.active');
-                const password = Array.from(activeDots).map(dot => dot.getAttribute('data-index')).join('');
-                motDePasseHidden.value = password;
+    
+            function updateSelectedOrder(index) {
+                if (selectedOrder.includes(index)) {
+                    // Si l'index est déjà présent, le retirer
+                    selectedOrder = selectedOrder.filter(item => item !== index);
+                } else {
+                    // Sinon, l'ajouter à la fin du tableau
+                    selectedOrder.push(index);
+                }
+                updateHiddenPassword();
             }
-        
+    
+            function updateHiddenPassword() {
+                motDePasseHidden.value = selectedOrder.join('');
+            }
+    
             function toggleModifierMdpBtn() {
-                if (selectedCount === 4) {
+                if (selectedOrder.length === 4) {
                     modifierMdpBtn.classList.remove('hidden');
                 } else {
                     modifierMdpBtn.classList.add('hidden');
                 }
             }
         });
-        
-        
-        
     </script>
 </body>
 
