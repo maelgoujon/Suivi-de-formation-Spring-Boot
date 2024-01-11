@@ -34,19 +34,37 @@ public class Intervention {
 
     @Column
     // @NotBlank(message = "Le champ 'DateIntervention' est obligatoire.")
-    private LocalDate DateIntervention;
-
-    @Column
-    private int NiveauDateIntervention;
+    private LocalDate dateIntervention;
 
     @Column
     // @NotBlank(message = "Le champ 'DureeIntervention' est obligatoire.")
-    private int DureeIntervention;
+    private int dureeIntervention;
+
+    //Niveaux
 
     @Column
-    private int NiveauDureeIntervention;
+    private int niveauTitreIntervention;
 
     @Column
-    private int niveauIntervention;
+    private int niveauDureeIntervention;
+
+    @Column
+    private int niveauTypeIntervention;
+
+    @Column
+    private int niveauDateIntervention;
+
+    //Couleurs
+    @Column
+    private String couleurTitreIntervention;
+
+    @Column
+    private String couleurDureeIntervention;
+
+    @Column
+    private String couleurTypeIntervention;
+
+    @Column
+    private String couleurDateIntervention;
 
 }

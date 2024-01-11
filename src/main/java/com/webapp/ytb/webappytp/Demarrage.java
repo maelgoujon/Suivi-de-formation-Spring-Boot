@@ -3,7 +3,7 @@ package com.webapp.ytb.webappytp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -13,6 +13,7 @@ import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervenant;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Materiaux;
@@ -34,6 +35,8 @@ public class Demarrage implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+
+        
 
         // Création des matériaux Amenagement
         for (int i = 1; i <= 4; i++) {
@@ -135,13 +138,27 @@ public class Demarrage implements ApplicationRunner {
             Demande demande = new Demande();
             Maintenance maintenance = new Maintenance();
             Intervention intervention = new Intervention();
+            Intervenant intervenant = new Intervenant();
+            // Définir les attributs de l'intervenant
+            intervenant.setNom("Michel");
+            intervenant.setPrenom("Michel");
+            intervenant.setNiveauNom(1);
+            intervenant.setNiveauPrenom(1);
+            intervenant.setNiveauTitreIntervenant(1);
+            intervenant.setCouleurTitreIntervenant("#FF00FF");
+            intervenant.setCouleurNom("#FFFF00");
+            intervenant.setCouleurPrenom("#00FFFF");
             // Définir les attributs de l'intervention
             intervention.setTypeIntervention(Intervention.TypeIntervention.AMENAGEMENT.toString());
             intervention.setDateIntervention(LocalDate.now());
             intervention.setNiveauDateIntervention(1);
             intervention.setDureeIntervention(1);
             intervention.setNiveauDureeIntervention(1);
-            intervention.setNiveauIntervention(1);
+            intervention.setNiveauTitreIntervention(1);
+            intervention.setCouleurTitreIntervention("#FF00FF");
+            intervention.setCouleurDureeIntervention("#FFFF00");
+            intervention.setCouleurTypeIntervention("#00FFFF");
+            intervention.setCouleurDateIntervention("#FF00FF");
             // Définir les attributs de la maintenance
             maintenance.setMaintenanceType(Maintenance.MaintenanceType.AMELIORATIVE);
             maintenance.setNiveauMaintenanceType(1);
@@ -151,8 +168,20 @@ public class Demarrage implements ApplicationRunner {
             demande.setLocalisation("Localisation de la demande");
             demande.setDescription("Description de la demande");
             demande.setDegreUrgence(1);
-            demande.setNiveauDemande(1);
+            demande.setNiveauTitreDemande(1);
+            demande.setNiveauNomDemandeur(1);
+            demande.setNiveauDateDemande(1);
+            demande.setNiveauLocalisation(1);
+            demande.setNiveauDescription(1);
+            demande.setNiveauDegreUrgence(1);
+            demande.setCouleurTitreDemande("#FF00FF");
+            demande.setCouleurNomDemandeur("#FFFF00");
+            demande.setCouleurDateDemande("#00FFFF");
+            demande.setCouleurLocalisation("#FF00FF");
+            demande.setCouleurDescription("#FFFF00");
+            demande.setCouleurDegreUrgence("#00FFFF");
             // Définir les attributs de la fiche d'intervention
+            nouvelleFiche.setIntervenant(intervenant);
             nouvelleFiche.setDemande(demande);
             nouvelleFiche.setMaintenance(maintenance);
             nouvelleFiche.setIntervention(intervention);
@@ -160,13 +189,16 @@ public class Demarrage implements ApplicationRunner {
             nouvelleFiche.setEtatFicheFinie(false);
             nouvelleFiche.setNouvelleIntervention(true);
             nouvelleFiche.setUtilisateur(michel);
-            nouvelleFiche.setNiveauUtilisateur(1);
+            nouvelleFiche.setNiveauIntervenant(1);
             nouvelleFiche.setTravauxRealises("Travaux réalisés par Michel Michel");
             nouvelleFiche.setTravauxNonRealises("Travaux non réalisés par Michel Michel");
             nouvelleFiche.setNiveauTravauxRealises(1);
+            nouvelleFiche.setCouleurTravauxRealises("#FF00FF");
+            nouvelleFiche.setCouleurTravauxNonRealises("#FFFF00");
+            nouvelleFiche.setNiveauMateriauxUtilises(1);
+            nouvelleFiche.setCouleurMateriauxUtilises("#00FFFF");
             // Ajouter les materiaux de type amenagement
-            // On crée une liste de taille 6 et on y ajoute dans les 4 premiers les
-            // materiaux et rien dans les deux derniers
+            // On ajoute 4 materiaux et rien dans les deux derniers
             List<String> materiauxAmenagement = new ArrayList<>();
             materiauxAmenagement.add("materiau1");
             materiauxAmenagement.add("materiau2");

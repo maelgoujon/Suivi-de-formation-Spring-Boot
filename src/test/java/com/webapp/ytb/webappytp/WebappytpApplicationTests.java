@@ -159,13 +159,13 @@ class WebappytpApplicationTests {
 		intervention.setNiveauDateIntervention(1);
 		intervention.setDureeIntervention(1);
 		intervention.setNiveauDureeIntervention(1);
-		intervention.setNiveauIntervention(1);
+		intervention.setNiveauTitreIntervention(1);
 		assertEquals("typeIntervention", intervention.getTypeIntervention(), "Le type d'intervention doit être 'typeIntervention'");
 		assertEquals(LocalDate.of(2020, 12, 31), intervention.getDateIntervention(), "La date de l'intervention doit être 'dateIntervention'");
 		assertEquals(1, intervention.getNiveauDateIntervention(), "Le niveau de la date de l'intervention doit être 1");
 		assertEquals(1, intervention.getDureeIntervention(), "La durée de l'intervention doit être 1");
 		assertEquals(1, intervention.getNiveauDureeIntervention(), "Le niveau de la durée de l'intervention doit être 1");
-		assertEquals(1, intervention.getNiveauIntervention(), "Le niveau de l'intervention doit être 1");
+		assertEquals(1, intervention.getNiveauTitreIntervention(), "Le niveau de l'intervention doit être 1");
 	}
 
 	//Valeurs possibles : AMENAGEMENT, ELECTRICITE, FINITION, PLOMBERIE, SERRURERIE;

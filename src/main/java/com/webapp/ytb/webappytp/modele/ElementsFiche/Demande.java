@@ -36,9 +36,42 @@ public class Demande {
     @NotBlank(message = "Le champ 'Degré d'urgence' est obligatoire.")
     private int DegreUrgence;
 
+    //Niveaux
     @Column
-    private int niveauDemande;
+    private int niveauTitreDemande;
 
+    @Column
+    private int niveauNomDemandeur;
 
+    @Column
+    private int niveauDateDemande;
+
+    @Column
+    private int niveauLocalisation;
+
+    @Column
+    private int niveauDescription;
+
+    @Column
+    private int niveauDegreUrgence;
+
+    //Couleurs
+    @Column
+    private String couleurTitreDemande;
+
+    @Column
+    private String couleurNomDemandeur;
+
+    @Column
+    private String couleurDateDemande;
+
+    @Column
+    private String couleurLocalisation;
+
+    @Column
+    private String couleurDescription;
+
+    @Column
+    private String couleurDegreUrgence;
 
 }
