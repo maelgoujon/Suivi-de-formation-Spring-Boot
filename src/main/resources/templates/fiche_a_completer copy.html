@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr" xml:lang="fr">
+
+<head>
+    <title>Fiche Intervention</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+    <body class="colonne centre">
+        <main class="colonne">
+            <div class="titre border">CREER UNE NOUVELLE FICHE D'INTERVENTION</div>
+            <form th:action="@{/ajouter_fiche}" th:object="${fiche}" method="post" id="ficheForm" class="fiche-form">
+
+                <div class="espaceHor"></div>
+
+                <fieldset>
+                    <legend>Intervenant</legend>
+                    <div>
+                        <div class="titre">Nom de l'intervenant</div>
+                        <div class="test">
+                            <select id="utilisateur" name="utilisateur.id" th:field="*{utilisateur.id}">
+                                <option th:each="user : ${users}" th:value="${user.id}"
+                                    th:text="${user.nom} + ' ' + ${user.prenom}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="espaceHor"></div>
+
+
+                <fieldset>
+                    <legend>Type d'intervention</legend>
+                    <div>
+                        <div class="test">
+                            <div th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}" class="demi">
+                                <input type="radio" id="${type}" name="typeIntervention" th:value="${type}" th:field="${fiche.intervention.typeIntervention}"/>
+                                <label for="${type}" th:text="${type}"></label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                
+
+                <fieldset>
+                    <legend>Demande</legend>
+                    <div>
+                        <div class="titre">Nom du demandeur</div>
+                        <div class="test">
+                            <input type="text" id="nomDemandeur" name="nomDemandeur" th:field="*{demande.nomDemandeur}">
+                        </div>
+                    </div>
+                    <div class="espaceHor"></div>
+                    <div>
+                        <div class="titre">Date de la demande</div>
+                        <div class="test">
+                            <input type="date" placeholder="dd-mm-yyyy" id="dateDemande" name="dateDemande"
+                                th:field="*{demande.dateDemande}">
+                        </div>
+
+
+
+
+                        <div class="titre">Localisation</div>
+                        <div class="test">
+                            <input type="text" id="localisation" name="localisation" th:field="*{demande.localisation}">
+                        </div>
+                    </div>
+                    <div class="espaceHor"></div>
+                    <div class="colonnePrint">
+                        <div class="titre demi">Description de la demande</div>
+                        <div class="test">
+                            <input type="text" id="description" name="description" th:field="*{demande.description}">
+                        </div>
+                    </div>
+                    <div class="espaceHor"></div>
+                    <div>
+                        <div class="titre demi">Degré d'urgence</div>
+                        <div class="test">
+                            <input type="number" id="degreUrgence" name="degreUrgence"
+                                th:field="*{demande.degreUrgence}">
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="espaceHor"></div>
+
+                <div class="espaceHor"></div>
+
+                <div class="titre border">NIVEAUX</div>
+
+                <div class="espaceHor"></div>
+
+
+                <fieldset>
+                    <legend>Intervention</legend>
+
+
+
+                    <div>
+                        <div class="titre">Date Intervention</div>
+                        <div class="test">
+                            <select id="NiveauDateIntervention" name="NiveauDateIntervention"
+                                th:field="${fiche.intervention.NiveauDateIntervention}">
+                                <option value="0">Icone</option>
+                                <option value="1">Icone et texte</option>
+                                <option value="2">Texte</option>
+                            </select>
+                        </div>
+                        <div class="titre">Duree Intervention</div>
+                        <div class="test">
+                            <select id="NiveauDureeIntervention" name="NiveauDureeIntervention"
+                                th:field="${fiche.intervention.NiveauDureeIntervention}">
+                                <option value="0">Icone</option>
+                                <option value="1">Icone et texte</option>
+                                <option value="2">Texte</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                </fieldset>
+
+
+
+
+
+                <fieldset>
+                    <legend>Type de maintenance</legend>
+                    <div>
+                        <div class="titre">Maintenance Type</div>
+                        <div class="test">
+                            <select id="NiveauMaintenanceType" name="NiveauMaintenanceType"
+                                th:field="${fiche.maintenance.NiveauMaintenanceType}">
+                                <option value="0">Icone</option>
+                                <option value="1">Icone et texte</option>
+                                <option value="2">Texte</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Nature de l'intervention</legend>
+                    <div>
+                        <div class="titre">Nature Intervention</div>
+                        <div class="test">
+                            <select id="NiveauNatureIntervention" name="NiveauNatureIntervention"
+                                th:field="${fiche.NiveauNatureIntervention}">
+                                <option value="0">Icone</option>
+                                <option value="1">Icone et texte</option>
+                                <option value="2">Texte</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Travaux (non) réalisés</legend>
+                    <div>
+                        <div class="titre">Travaux Realises</div>
+                        <div class="test">
+                            <select id="NiveauTravauxRealises" name="NiveauTravauxRealises"
+                                th:field="${fiche.NiveauTravauxRealises}">
+                                <option value="0">Icone</option>
+                                <option value="1">Icone et texte</option>
+                                <option value="2">Texte</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+
+
+                <fieldset>
+                    <legend>Matériaux utilisés</legend>
+                    <div>
+                        <div class="titre">Materiaux Utilises</div>
+                        <div class="test">
+                            <select id="NiveauMateriauxUtilises" name="NiveauMateriauxUtilises"
+                                th:field="${fiche.NiveauMateriauxUtilises}">
+                                <option value="0">Icone</option>
+                                <option value="1">Icone et texte</option>
+                                <option value="2">Texte</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+
+
+
+                <div class="espaceHor"></div>
+
+
+                <button type="submit">Submit</button>
+            </form>
+        </main>
+    </body>
+    <script>
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const dateDemandeInput = document.getElementById('dateDemande');
+
+            dateDemandeInput.addEventListener('input', function () {
+                let inputValue = dateDemandeInput.value;
+                if (inputValue.length === 2 || inputValue.length === 5) {
+                    inputValue += '/';
+                }
+
+                if (inputValue.length > 10) {
+                    inputValue = inputValue.slice(0, 10);
+                }
+
+                dateDemandeInput.value = inputValue;
+            });
+        });
+
+        // Add this script to format all date inputs when the page is loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            const dateInputs = document.querySelectorAll('input[type="date"]');
+            dateInputs.forEach(function (input) {
+                input.value = formatDate(input.value);
+            });
+        });
+
+        // Function to format date as dd/MM/yyyy
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+    </script>
+
+
+</html>
