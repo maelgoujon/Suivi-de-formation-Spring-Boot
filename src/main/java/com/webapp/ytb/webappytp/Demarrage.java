@@ -1,6 +1,8 @@
 package com.webapp.ytb.webappytp;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -109,8 +111,6 @@ public class Demarrage implements ApplicationRunner {
             admin.setDescription("Description de l'administrateur");
             utilisateurRepository.save(admin);
         }
-        
-
 
         // Création d'un utilisateur
         Utilisateur michel = utilisateurRepository.findUserByLogin("michelmichel");
@@ -164,7 +164,17 @@ public class Demarrage implements ApplicationRunner {
             nouvelleFiche.setTravauxRealises("Travaux réalisés par Michel Michel");
             nouvelleFiche.setTravauxNonRealises("Travaux non réalisés par Michel Michel");
             nouvelleFiche.setNiveauTravauxRealises(1);
-
+            // Ajouter les materiaux de type amenagement
+            // On crée une liste de taille 6 et on y ajoute dans les 4 premiers les
+            // materiaux et rien dans les deux derniers
+            List<String> materiauxAmenagement = new ArrayList<>();
+            materiauxAmenagement.add("materiau1");
+            materiauxAmenagement.add("materiau2");
+            materiauxAmenagement.add("materiau3");
+            materiauxAmenagement.add("");
+            materiauxAmenagement.add("materiau4");
+            materiauxAmenagement.add("");
+            nouvelleFiche.setMateriauxOptions(materiauxAmenagement);
             ficheRepository.save(nouvelleFiche);
         }
     }
