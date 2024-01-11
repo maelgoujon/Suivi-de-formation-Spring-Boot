@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 
-<!--Bootstrap html form-->
 
 <head>
    <meta charset="UTF-8">
@@ -12,9 +11,10 @@
    <link href="/css/bootstrap.min.css" rel="stylesheet" />
    <script src="/js/bootstrap.bundle.min.js"></script>
    <link rel="stylesheet" href="/css/font-awesome.min.css" />
-   <title>Formulaire Bootstrap</title>
+   <title>Modifier Fiche</title>
    <link rel="icon" type="image/x-icon"
       href="https://upload.wikimedia.org/wikipedia/commons/e/e9/Minsk_Metro_Line_3.png" />
+      
    <style>
       .logo {
          width: 1.5rem;
@@ -58,8 +58,7 @@
 
       <section class="h-100 p-5 text-white bg-dark rounded-3" style="margin-top: calc(var(--bs-gutter-x) * .5);">
          <div class="container">
-            <h1 class="display-4">FICHE D'INTERVENTION N°
-               <span th:text="${ficheIntervention.id}"></span>&nbsp;:&nbsp;
+            <h1 class="display-4">FICHE D'INTERVENTION:&nbsp;
                <span th:if="${ficheIntervention.intervention != null}"
                   th:text="${ficheIntervention.intervention.typeIntervention}"></span>
             </h1>
@@ -177,7 +176,7 @@
                   th:value="${ficheIntervention.dureeIntervention}">
             </div>
             <div class="col-md-6 mb-3">
-               <label for="newMaintenanceType" >Type de maintenance <b>!!COULEUR</b></label>
+               <label for="newMaintenanceType" th:style="'color: ' + ${ficheIntervention.Maintenance.CouleurMaintenanceType}">Type de maintenance</label>
                <div id="newMaintenanceType"
                   th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance.MaintenanceType).values()}">
                   <div class="media form-check">

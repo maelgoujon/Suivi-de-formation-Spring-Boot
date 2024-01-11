@@ -146,7 +146,7 @@ public class Demarrage implements ApplicationRunner {
             intervenant.setNiveauPrenom(1);
             intervenant.setNiveauTitreIntervenant(1);
             intervenant.setCouleurTitreIntervenant("#FF00FF");
-            intervenant.setCouleurNom("#FFFF00");
+            intervenant.setCouleurNom("#F00");
             intervenant.setCouleurPrenom("#00FFFF");
             // Définir les attributs de l'intervention
             intervention.setTypeIntervention(Intervention.TypeIntervention.AMENAGEMENT.toString());
@@ -156,12 +156,13 @@ public class Demarrage implements ApplicationRunner {
             intervention.setNiveauDureeIntervention(1);
             intervention.setNiveauTitreIntervention(1);
             intervention.setCouleurTitreIntervention("#FF00FF");
-            intervention.setCouleurDureeIntervention("#FFFF00");
+            intervention.setCouleurDureeIntervention("#F00");
             intervention.setCouleurTypeIntervention("#00FFFF");
             intervention.setCouleurDateIntervention("#FF00FF");
             // Définir les attributs de la maintenance
             maintenance.setMaintenanceType(Maintenance.MaintenanceType.AMELIORATIVE);
             maintenance.setNiveauMaintenanceType(1);
+            maintenance.setCouleurMaintenanceType("#FF00FF");
             // Définir les attributs de la demande
             demande.setNomDemandeur("Nom du demandeur");
             demande.setDateDemande(LocalDate.now());
@@ -175,10 +176,10 @@ public class Demarrage implements ApplicationRunner {
             demande.setNiveauDescription(1);
             demande.setNiveauDegreUrgence(1);
             demande.setCouleurTitreDemande("#FF00FF");
-            demande.setCouleurNomDemandeur("#FFFF00");
+            demande.setCouleurNomDemandeur("#F00");
             demande.setCouleurDateDemande("#00FFFF");
             demande.setCouleurLocalisation("#FF00FF");
-            demande.setCouleurDescription("#FFFF00");
+            demande.setCouleurDescription("#F00");
             demande.setCouleurDegreUrgence("#00FFFF");
             // Définir les attributs de la fiche d'intervention
             nouvelleFiche.setIntervenant(intervenant);
@@ -194,7 +195,7 @@ public class Demarrage implements ApplicationRunner {
             nouvelleFiche.setTravauxNonRealises("Travaux non réalisés par Michel Michel");
             nouvelleFiche.setNiveauTravauxRealises(1);
             nouvelleFiche.setCouleurTravauxRealises("#FF00FF");
-            nouvelleFiche.setCouleurTravauxNonRealises("#FFFF00");
+            nouvelleFiche.setCouleurTravauxNonRealises("#F00");
             nouvelleFiche.setNiveauMateriauxUtilises(1);
             nouvelleFiche.setCouleurMateriauxUtilises("#00FFFF");
             // Ajouter les materiaux de type amenagement
