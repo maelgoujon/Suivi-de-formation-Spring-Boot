@@ -120,10 +120,10 @@ class WebappytpApplicationTests {
 		Materiaux materiaux = new Materiaux();
 		materiaux.setNomImage("nomImage");
 		materiaux.setImageUrl("imageUrl");
-		materiaux.setType("type");
+		materiaux.setTypeIntervention(Intervention.TypeIntervention.AMENAGEMENT);
 		assertEquals("nomImage", materiaux.getNomImage(), "Le nom de l'image doit être 'nomImage'");
 		assertEquals("imageUrl", materiaux.getImageUrl(), "L'url de l'image doit être 'imageUrl'");
-		assertEquals("type", materiaux.getTypeIntervention().toString(), "Le type d'intervention doit être 'type'");
+		assertEquals("AMENAGEMENT", materiaux.getTypeIntervention().toString(), "Le type d'intervention doit être 'type'");
 	}
 
 	// ---------------------------//
