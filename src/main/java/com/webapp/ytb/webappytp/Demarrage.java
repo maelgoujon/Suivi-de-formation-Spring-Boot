@@ -40,7 +40,7 @@ public class Demarrage implements ApplicationRunner {
 
         // Création des matériaux Amenagement
         for (int i = 1; i <= 4; i++) {
-            String nomMateriau = "materiau" + i;
+            String nomMateriau = "AMENAGEMENT" + i;
             Materiaux materiaux = materiauxRepository.findByNomImage(nomMateriau);
             if (materiaux == null) {
                 materiaux = new Materiaux();
@@ -52,7 +52,7 @@ public class Demarrage implements ApplicationRunner {
         }
         // Création des matériaux Electricite
         for (int i = 5; i <= 8; i++) {
-            String nomMateriau = "materiau" + i;
+            String nomMateriau = "ELECTRICITE" + i;
             Materiaux materiaux = materiauxRepository.findByNomImage(nomMateriau);
             if (materiaux == null) {
                 materiaux = new Materiaux();
@@ -64,7 +64,7 @@ public class Demarrage implements ApplicationRunner {
         }
         // Création des matériaux FINITION
         for (int i = 9; i <= 12; i++) {
-            String nomMateriau = "materiau" + i;
+            String nomMateriau = "FINITION" + i;
             Materiaux materiaux = materiauxRepository.findByNomImage(nomMateriau);
             if (materiaux == null) {
                 materiaux = new Materiaux();
@@ -76,20 +76,20 @@ public class Demarrage implements ApplicationRunner {
         }
         // Création des matériaux PLOMBERIE
         for (int i = 13; i <= 16; i++) {
-            String nomMateriau = "materiau" + i;
+            String nomMateriau = "PLOMBERIE" + i;
             Materiaux materiaux = materiauxRepository.findByNomImage(nomMateriau);
             if (materiaux == null) {
                 materiaux = new Materiaux();
                 materiaux.setNomImage(nomMateriau);
                 materiaux.setImageUrl("images/plomberie.png");
-                materiaux.setType("ELECTRICITE");
+                materiaux.setType("PLOMBERIE");
                 materiauxRepository.save(materiaux);
             }
         }
 
         // Création des matériaux SERRURERIE
         for (int i = 17; i <= 20; i++) {
-            String nomMateriau = "materiau" + i;
+            String nomMateriau = "SERRURERIE" + i;
             Materiaux materiaux = materiauxRepository.findByNomImage(nomMateriau);
             if (materiaux == null) {
                 materiaux = new Materiaux();
@@ -201,11 +201,11 @@ public class Demarrage implements ApplicationRunner {
             // Ajouter les materiaux de type amenagement
             // On ajoute 4 materiaux et rien dans les deux derniers
             List<String> materiauxAmenagement = new ArrayList<>();
-            materiauxAmenagement.add("materiau1");
-            materiauxAmenagement.add("materiau2");
-            materiauxAmenagement.add("materiau3");
+            materiauxAmenagement.add("AMENAGEMENT1");
+            materiauxAmenagement.add("AMENAGEMENT2");
+            materiauxAmenagement.add("AMENAGEMENT3");
             materiauxAmenagement.add("");
-            materiauxAmenagement.add("materiau4");
+            materiauxAmenagement.add("AMENAGEMENT4");
             materiauxAmenagement.add("");
             nouvelleFiche.setMateriauxOptions(materiauxAmenagement);
             ficheRepository.save(nouvelleFiche);

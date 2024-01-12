@@ -65,8 +65,7 @@
          </div>
       </section>
 
-
-      <form method="post" th:action="@{/updateFiche/{id}(id=${ficheIntervention.id})}" th:object="${ficheIntervention}">
+      <form method="post" th:action="@{/updateFiche/{id}(id=${ficheIntervention.id})}" th:object="${ficheIntervention}" id="ficheForm">
          <!--------------------------Intervenant--------------------------------------->
          <hr />
 
@@ -179,16 +178,16 @@
 
          <div class="row">
             <div class="col-md-4 mb-3">
-                  <label for="newDateIntervention"
-                     th:style="'color: ' + ${ficheIntervention.Intervention.couleurDateIntervention}">Date de
-                     l'intervention</label>
-                  <input type="date" id="newDateIntervention" name="newDateIntervention" class="form-control"
-                     th:value="${#temporals.format(ficheIntervention.dateIntervention, 'yyyy-MM-dd')}" />
-                  <label for="newDureeIntervention"
-                     th:style="'color: ' + ${ficheIntervention.Intervention.couleurDureeIntervention}">Durée de
-                     l'intervention</label>
-                  <input type="text" id="newDureeIntervention" name="newDureeIntervention" class="form-control"
-                     th:value="${ficheIntervention.dureeIntervention}">
+               <label for="newDateIntervention"
+                  th:style="'color: ' + ${ficheIntervention.Intervention.couleurDateIntervention}">Date de
+                  l'intervention</label>
+               <input type="date" id="newDateIntervention" name="newDateIntervention" class="form-control"
+                  th:value="${#temporals.format(ficheIntervention.dateIntervention, 'yyyy-MM-dd')}" />
+               <label for="newDureeIntervention"
+                  th:style="'color: ' + ${ficheIntervention.Intervention.couleurDureeIntervention}">Durée de
+                  l'intervention</label>
+               <input type="text" id="newDureeIntervention" name="newDureeIntervention" class="form-control"
+                  th:value="${ficheIntervention.dureeIntervention}">
             </div>
 
 
@@ -518,6 +517,9 @@
          <div class="submit-container" style="height: 10vh;width: 100%;margin-bottom: calc(var(--bs-gutter-x) * .5);">
             <button class="btn btn-dark" type="submit" style="height: inherit;width: inherit;">Terminer</button>
          </div>
+            
+            <input type="hidden" id="url"
+            th:value="@{/fiche/updateTypeIntervention/{id}(id=${ficheIntervention.id})}" />
 
 
 
@@ -529,6 +531,12 @@
    <script th:inline="javascript">
       /* <![CDATA[ */
 
+      function updateTypeIntervention() {
+         var form = document.getElementById('ficheForm');
+         /* Utilisez Thymeleaf pour générer la nouvelle URL */
+         form.action = document.getElementById('url').value;
+         form.submit();
+      }
 
       function updateMateriauField(selectElement, textFieldId) {
          var selectedValue = selectElement.value;
@@ -640,6 +648,7 @@
             radioButton.addEventListener('change', function () {
                if (this.checked) {
                   natureHiddenInput.value = this.value;
+                  updateTypeIntervention();
                }
             });
          });
