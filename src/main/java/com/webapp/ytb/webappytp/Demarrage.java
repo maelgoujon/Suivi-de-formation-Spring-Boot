@@ -41,8 +41,6 @@ public class Demarrage implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        
-
         // Création des matériaux Amenagement
         for (int i = 1; i <= 4; i++) {
             String nomMateriau = "AMENAGEMENT" + i;
@@ -105,20 +103,6 @@ public class Demarrage implements ApplicationRunner {
             }
         }
 
-
-        // Creation Formation 1
-            Formation formation = new Formation();
-            formation.setNom("Agent de maintenance en bâtiment");
-            formation.setDescription("Description Formation1");
-            formationRepository.save(formation);
-
-        // Creation Formation 2
-        Formation formation2 = new Formation();
-        formation2.setNom("Nom Formation");
-        formation2.setDescription("Description Formation2");
-        formationRepository.save(formation2);
-        
-
         // Creation de l´administrateur
         Utilisateur admin = utilisateurRepository.findUserByLogin("admin");
         if (admin == null) {
@@ -169,7 +153,8 @@ public class Demarrage implements ApplicationRunner {
             CIP.setMdp("cip");
             CIP.setRole(UserRole.CIP);
             CIP.setPhotoBase64(photoBase64);
-            CIP.setDescription("Suivi parcours, évolution des compétences, adaptation de la situation d'examen. Pas de modifs visuelles");
+            CIP.setDescription(
+                    "Suivi parcours, évolution des compétences, adaptation de la situation d'examen. Pas de modifs visuelles");
             utilisateurRepository.save(CIP);
         }
 
@@ -187,6 +172,18 @@ public class Demarrage implements ApplicationRunner {
             michel.setDescription("Description de Michel Michel");
             utilisateurRepository.save(michel);
         }
+
+        // Creation Formation 1
+        Formation formation = new Formation();
+        formation.setNom("Agent de maintenance en bâtiment");
+        formation.setDescription("Description Formation1");
+        formationRepository.save(formation);
+
+        // Creation Formation 2
+        Formation formation2 = new Formation();
+        formation2.setNom("Nom Formation");
+        formation2.setDescription("Description Formation2");
+        formationRepository.save(formation2);
 
         // Creation d'une fiche d'Intervention
         FicheIntervention ficheIntervention = ficheRepository

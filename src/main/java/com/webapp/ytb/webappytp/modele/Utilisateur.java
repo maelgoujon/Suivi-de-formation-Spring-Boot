@@ -1,5 +1,6 @@
 package com.webapp.ytb.webappytp.modele;
 
+import java.util.HashSet;
 import java.util.List;
 
 import jakarta.persistence.*;

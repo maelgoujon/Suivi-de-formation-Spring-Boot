@@ -29,7 +29,5 @@ public class Formation {
     @Column(length = 500)
     private String description;
 
-    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Utilisateur> utilisateurs;
+
 }
