@@ -1,135 +1,220 @@
 <!DOCTYPE html>
 <html lang="fr">
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Enregistreur et Uploader Audio</title>
+    <!-- Ajout de Bootstrap -->
+    <script src="/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="/js/bootstrap.bundle.min.js"></script>
     <style>
-        .button {
-            padding: 10px;
-            margin: 5px 0;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+      body {
+        padding: 20px;
+      }
+
+      .button {
+        margin-top: 10px;
+      }
+
+      #timer {
+        display: block;
+        margin: 10px 0;
+      }
+
+      .bandeau {
+        background-color: #bbdefb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 80px;
+        border-bottom: 1px solid black;
+      }
+
+      .bandeau img {
+        max-width: 60px;
+        height: auto;
+      }
+
+      .bandeau h1 {
+        color: black;
+        margin: 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-    <h1>Enregistreur et Uploader Audio</h1>
+  <body>
+    <div class="bandeau">
+      <a href="log_out">
+        <img src="/images/porte.png" alt="logout" style="float: left" />
+      </a>
 
-    <div>
-        <button id="startRecording" class="button">Commencer l'enregistrement</button>
-        <button id="stopRecording" class="button" disabled>Arrêter l'enregistrement</button>
-        <span id="timer" style="margin: 10px 0;">00:00</span>
-        <audio id="audioPlayer" controls style="display:none;"></audio> 
-        
+      <div class="bandeau centered">
+        <a href="archive">
+          <img
+            src="/images/archive.png"
+            alt="archive"
+            style="margin-left: 10px"
+          />
+        </a>
+      </div>
+      <a
+        href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
+      >
+        <img
+          src="/images/aide.png"
+          alt="aide"
+          style="cursor: pointer; margin-left: auto"
+        />
+      </a>
+    </div>
+    <div
+      class="container d-flex justify-content-center align-items-center vh-100"
+    >
+      <div class="text-center">
+        <h1 class="mt-4 mb-4">Enregistreur et Uploader Audio</h1>
+
+        <div class="mb-4">
+          <button id="startRecording" class="btn btn-success button">
+            Commencer l'enregistrement
+          </button>
+          <button id="stopRecording" class="btn btn-danger button" disabled>
+            Arrêter l'enregistrement
+          </button>
+          <span id="timer">00:00</span>
+          <audio id="audioPlayer" controls style="display: none"></audio>
+        </div>
+
+        <form
+          id="uploadForm"
+          th:action="@{/fiche/enregistrerAudio}"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <!-- Utilisez Thymeleaf pour obtenir l'ID de la fiche d'intervention depuis le modèle -->
+          <input
+            type="hidden"
+            th:value="${ficheIntervention.id}"
+            name="ficheId"
+          />
+          <button type="submit" class="btn btn-primary button">
+            Uploader l'Audio
+          </button>
+        </form>
+      </div>
     </div>
 
-    <form id="uploadForm" th:action="@{/fiche/enregistrerAudio}" method="post" enctype="multipart/form-data">
-        <!-- Utilisez Thymeleaf pour obtenir l'ID de la fiche d'intervention depuis le modèle -->
-        <input type="hidden" th:value="${ficheIntervention.id}" name="ficheId">
-        <br>
-        <button type="submit" class="button">Uploader l'Audio</button>
-    </form>
+    <!-- Ajout des scripts Bootstrap et jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const startRecordingButton = document.getElementById('startRecording');
-            const stopRecordingButton = document.getElementById('stopRecording');
-            const audioPlayer = document.getElementById('audioPlayer');
-            const timerElement = document.getElementById('timer');
-            let mediaRecorder;
-            let audioBlob;
-            let chunks = [];
-            let timerInterval;
-            let secondsElapsed = 0;
+      document.addEventListener("DOMContentLoaded", () => {
+        const startRecordingButton = document.getElementById("startRecording");
+        const stopRecordingButton = document.getElementById("stopRecording");
+        const audioPlayer = document.getElementById("audioPlayer");
+        const timerElement = document.getElementById("timer");
+        let mediaRecorder;
+        let audioBlob;
+        let chunks = [];
+        let timerInterval;
+        let secondsElapsed = 0;
 
-            // Fonction pour mettre à jour le minuteur
-            function updateTimer() {
-                secondsElapsed++;
-                let minutes = Math.floor(secondsElapsed / 60);
-                let seconds = secondsElapsed % 60;
-                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }
+        // Fonction pour mettre à jour le minuteur
+        function updateTimer() {
+          secondsElapsed++;
+          let minutes = Math.floor(secondsElapsed / 60);
+          let seconds = secondsElapsed % 60;
+          timerElement.textContent = `${minutes
+            .toString()
+            .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+        }
 
-            // Réinitialiser le minuteur
-            function resetTimer() {
-                clearInterval(timerInterval);
-                secondsElapsed = 0;
-                timerElement.textContent = '00:00';
-            }
-            // Gestion de l'accès au microphone et de l'enregistrement
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ audio: true })
-                    .then((stream) => {
-                        mediaRecorder = new MediaRecorder(stream);
+        // Réinitialiser le minuteur
+        function resetTimer() {
+          clearInterval(timerInterval);
+          secondsElapsed = 0;
+          timerElement.textContent = "00:00";
+        }
+        // Gestion de l'accès au microphone et de l'enregistrement
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices
+            .getUserMedia({ audio: true })
+            .then((stream) => {
+              mediaRecorder = new MediaRecorder(stream);
 
-                        mediaRecorder.ondataavailable = (event) => {
-                            if (event.data.size > 0) chunks.push(event.data);
-                        };
+              mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) chunks.push(event.data);
+              };
 
-                        mediaRecorder.onstop = () => {
-                            audioBlob = new Blob(chunks, { type: 'audio/mp3' });
-                            chunks = [];
+              mediaRecorder.onstop = () => {
+                audioBlob = new Blob(chunks, { type: "audio/mp3" });
+                chunks = [];
 
-                            const audioURL = URL.createObjectURL(audioBlob);
-                            audioPlayer.src = audioURL;
-                            audioPlayer.style.display = 'block';
+                const audioURL = URL.createObjectURL(audioBlob);
+                audioPlayer.src = audioURL;
+                audioPlayer.style.display = "block";
 
-                            startRecordingButton.disabled = false;
-                            stopRecordingButton.disabled = true;
-                        };
+                startRecordingButton.disabled = false;
+                stopRecordingButton.disabled = true;
+              };
 
-                        startRecordingButton.addEventListener('click', () => {
-                            mediaRecorder.start();
-                            startRecordingButton.disabled = true;
-                            stopRecordingButton.disabled = false;
-                            timerInterval = setInterval(updateTimer, 1000);
-                        });
+              startRecordingButton.addEventListener("click", () => {
+                mediaRecorder.start();
+                startRecordingButton.disabled = true;
+                stopRecordingButton.disabled = false;
+                timerInterval = setInterval(updateTimer, 1000);
+              });
 
-                        stopRecordingButton.addEventListener('click', () => {
-                            mediaRecorder.stop();
-                            resetTimer();
-                        });
-                    })
-                    .catch((error) => {
-                        console.error('Erreur lors de l\'accès au microphone:', error);
-                    });
-            } else {
-                console.error('L\'API MediaRecorder n\'est pas prise en charge dans ce navigateur.');
-            }
-
-            // Gestionnaire d'événements pour la soumission du formulaire
-            document.getElementById('uploadForm').addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                const formData = new FormData(this);
-                if (audioBlob) {
-                    formData.append('audioFile', audioBlob, 'enregistrement.mp3');
-                } else {
-                    console.error('Aucun enregistrement audio détecté.');
-                    return; // Ne pas envoyer le formulaire si aucun audio n'est enregistré
-                }
-
-                fetch('/fiche/enregistrerAudio', {
-                    method: 'POST',
-                    body: formData
-                }).then(response => {
-                    if (response.ok) {
-                        alert('Enregistrement audio réussi');
-                    } else {
-                        alert('Échec de l\'envoi de l\'enregistrement audio');
-                    }
-                }).catch(error => {
-                    alert('Erreur lors de l\'envoi de l\'enregistrement audio:', error);
-                });
+              stopRecordingButton.addEventListener("click", () => {
+                mediaRecorder.stop();
+                resetTimer();
+              });
+            })
+            .catch((error) => {
+              console.error("Erreur lors de l'accès au microphone:", error);
             });
-        });
+        } else {
+          console.error(
+            "L'API MediaRecorder n'est pas prise en charge dans ce navigateur."
+          );
+        }
+
+        // Gestionnaire d'événements pour la soumission du formulaire
+        document
+          .getElementById("uploadForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            if (audioBlob) {
+              formData.append("audioFile", audioBlob, "enregistrement.mp3");
+            } else {
+              console.error("Aucun enregistrement audio détecté.");
+              return; // Ne pas envoyer le formulaire si aucun audio n'est enregistré
+            }
+
+            fetch("/fiche/enregistrerAudio", {
+              method: "POST",
+              body: formData,
+            })
+              .then((response) => {
+                if (response.ok) {
+                  alert("Enregistrement audio réussi");
+                } else {
+                  alert("Échec de l'envoi de l'enregistrement audio");
+                }
+              })
+              .catch((error) => {
+                alert(
+                  "Erreur lors de l'envoi de l'enregistrement audio:",
+                  error
+                );
+              });
+          });
+      });
     </script>
-
-</body>
-
+  </body>
 </html>

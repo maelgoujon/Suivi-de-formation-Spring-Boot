@@ -1,26 +1,49 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Écouter l'Audio Enregistré</title>
-</head>
-<body>
-    <h1>Écouter l'Audio Enregistré</h1>
+    <!-- Ajout de Bootstrap -->
+    <script src="/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <style>
+      body {
+        padding: 20px;
+        text-align: center;
+      }
 
-    <audio id="audioPlayer" controls></audio>
+      h1 {
+        margin-bottom: 20px;
+      }
 
-    <!-- Utilisez Thymeleaf pour obtenir l'ID de la fiche d'intervention depuis le modèle -->
-    <script th:inline="javascript">
+      #audioPlayer {
+        width: 100%;
+        max-width: 600px;
+        margin: 20px auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Écouter l'Audio Enregistré</h1>
+
+      <audio id="audioPlayer" controls></audio>
+
+      <!-- Utilisez Thymeleaf pour obtenir l'ID de la fiche d'intervention depuis le modèle -->
+      <script th:inline="javascript">
         /* Récupérez l'ID de la fiche d'intervention depuis le modèle */
-        var ficheId = /*[[${ficheIntervention.id}]]*/ '';
+        var ficheId = /*[[${ficheIntervention.id}]]*/ "";
 
         // Construire l'URL pour récupérer l'audio en utilisant l'ID de la fiche
         var audioUrl = `/fiche/evaluation/${ficheId}`;
 
         // Définir la source et charger l'audio
-        var audioPlayer = document.getElementById('audioPlayer');
+        var audioPlayer = document.getElementById("audioPlayer");
         audioPlayer.src = audioUrl;
         audioPlayer.load();
-    </script>
-</body>
+      </script>
+    </div>
+  </body>
 </html>
