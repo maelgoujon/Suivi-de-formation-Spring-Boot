@@ -3,16 +3,12 @@ package com.webapp.ytb.webappytp.controller;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
-
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,8 +28,6 @@ import com.webapp.ytb.webappytp.modele.ElementsFiche.Materiaux;
 import com.webapp.ytb.webappytp.repository.MateriauxAmenagementRepository;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
-import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
-import org.springframework.security.core.userdetails.User;
 
 
 @Controller
