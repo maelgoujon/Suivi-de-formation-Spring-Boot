@@ -18,7 +18,7 @@ public class SecurityConfig {
                 "/css/**",
                 "/images/**",
                 "/fonts/**",
-                "/scripts/**",
+                "/js/**",
         };
 
         http
