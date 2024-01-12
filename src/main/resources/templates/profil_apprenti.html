@@ -221,15 +221,15 @@
               <p>Ajouter une fiche</p>
           </a>
 
-          <a th:if="${utilisateurConnecteRole == 'ROLE_ADMIN'}" th:href="@{'/liste_fiche/' + ${utilisateur.id}}">
+          <a th:if="${utilisateurConnecteRole == 'ROLE_ADMIN' or utilisateurConnecteRole == 'ROLE_CIP' or utilisateurConnecteRole == 'ROLE_EDUCSIMPLE'}" th:href="@{'/liste_fiche/' + ${utilisateur.id}}">
             <img
                 src="/images/yeux.png"
                 alt="Voir fiche"
                 class="modifimg"
               />
-              
+             
           </a>
-          <p>Voir ses fiches</p>
+          <p th:if="${utilisateurConnecteRole == 'ROLE_ADMIN' or utilisateurConnecteRole == 'ROLE_CIP' or utilisateurConnecteRole == 'ROLE_EDUCSIMPLE'}" th:href="@{'/liste_fiche/' + ${utilisateur.id}}">Voir ses fiches</p> 
 
             
       </div>

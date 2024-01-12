@@ -146,8 +146,8 @@ public class Demarrage implements ApplicationRunner {
             CIP = new Utilisateur();
             CIP.setNom("CIP");
             CIP.setPrenom("CIP");
-            CIP.setLogin("CIP");
-            CIP.setMdp("CIP");
+            CIP.setLogin("cip");
+            CIP.setMdp("cip");
             CIP.setRole(UserRole.CIP);
             CIP.setPhotoBase64(photoBase64);
             CIP.setDescription("Suivi parcours, évolution des compétences, adaptation de la situation d'examen. Pas de modifs visuelles");
@@ -161,7 +161,7 @@ public class Demarrage implements ApplicationRunner {
             michel.setNom("Michel");
             michel.setPrenom("Michel");
             michel.setLogin("michelmichel");
-            michel.setMdp("michel_password");
+            michel.setMdp("1234");
             michel.setRole(UserRole.USER);
             michel.setNiveau(1);
             michel.setPhotoBase64(photoBase64);
