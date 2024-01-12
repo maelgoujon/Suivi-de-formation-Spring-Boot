@@ -109,8 +109,14 @@ public class Demarrage implements ApplicationRunner {
         // Creation Formation 1
             Formation formation = new Formation();
             formation.setNom("Agent de maintenance en bâtiment");
-            formation.setDescription("fesfesesf");
+            formation.setDescription("Description Formation1");
             formationRepository.save(formation);
+
+        // Creation Formation 2
+        Formation formation2 = new Formation();
+        formation2.setNom("Nom Formation");
+        formation2.setDescription("Description Formation2");
+        formationRepository.save(formation2);
         
 
         // Creation de l´administrateur
