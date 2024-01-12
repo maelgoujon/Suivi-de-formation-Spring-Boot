@@ -78,72 +78,7 @@ public class HomeController {
         return "redirect:/fiche/" + createdFiche.getId(); // On affiche la fiche créée
     }
 
-    // Accueils
-    @GetMapping("/")
-    public String home(Model model) {
-        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
-        model.addAttribute("utilisateurs", utilisateurs);
-        return "accueil";
-    }
-
-    @GetMapping("/accueil")
-    public String redirectToAccueil(Model model) {
-        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
-        model.addAttribute("utilisateurs", utilisateurs);
-        return "accueil";
-    }
-
-    @GetMapping("/ancienaccueil")
-    public String redirectToAccueil2(Model model) {
-        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
-        model.addAttribute("utilisateurs", utilisateurs);
-        return "ancienaccueil";
-    }
-
-    @GetMapping("/accueil_admin")
-    public String admin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
-        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
-        model.addAttribute("utilisateurs", utilisateurs);
-        if ("ROLE_ADMIN".equals(role)) {
-            return "accueil_admin";
-        }
-        return "redirect:/accueil";
-    }
-
-    @GetMapping("/profil_apprenti/{id}")
-    public String redirectToprofil(@PathVariable Long id, Model model) {
-        Utilisateur utilisateur = userServ.findById(id);
-        model.addAttribute("utilisateur", utilisateur);
-        return "profil_apprenti";
-    }
-
-    @GetMapping("/modif/{id}")
-    public String modif(@PathVariable Long id, Model model) {
-        Utilisateur utilisateur = userServ.findById(id);
-        model.addAttribute("utilisateur", utilisateur);
-        return "modif";
-    }
-
-    @GetMapping("/mdpmodif/{id}")
-    public String mdpmodif(@PathVariable Long id, Model model) {
-        Utilisateur utilisateur = userServ.findById(id);
-        model.addAttribute("utilisateur", utilisateur);
-        return "mdpmodif";
-    }
-
-    // deconnection
-    @GetMapping("/log_out")
-    public String log_out() {
-        return "log_out";
-    }
-
-    @GetMapping("/select_fiche")
-    public String select_fiche() {
-        return "select_fiche";
-    }
-
-    // Afficher la fiche no
+    // Afficher la fiche n°
     @GetMapping("/fiche/{id}")
     public String fiche(@PathVariable Long id, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(id);
@@ -155,54 +90,6 @@ public class HomeController {
         model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
         model.addAttribute("color", "#8fabd9");
         return "fiche_complete";
-    }
-
-    @GetMapping("/suivi_progression/{userId}")
-    public String suiviProgression(@PathVariable Long userId, Model model) {
-        Utilisateur utilisateur = userServ.findById(userId);
-        List<FicheIntervention> fiches = ficheServ.getFichesByUserId(userId);
-
-        model.addAttribute("utilisateur", utilisateur);
-        model.addAttribute("fiches", fiches);
-        return "suivi_progression";
-    }
-
-    @GetMapping("/presentation")
-    public String presentation() {
-        return "presentation";
-    }
-
-    @GetMapping("/record/{ficheId}")
-    public String record(@PathVariable Long ficheId, Model model) {
-        FicheIntervention ficheIntervention = ficheServ.lire(ficheId);
-        model.addAttribute("ficheIntervention", ficheIntervention);
-        return "record";
-    }
-
-    @GetMapping("/recordaffichage/{ficheId}")
-    public String recordaffichage(@PathVariable Long ficheId, Model model) {
-        FicheIntervention ficheIntervention = ficheServ.lire(ficheId);
-        model.addAttribute("ficheIntervention", ficheIntervention);
-        return "recordaffichage";
-    }
-
-    @GetMapping("/fiche/evaluation/{id}")
-    public ResponseEntity<byte[]> getAudioEvaluation(@PathVariable Long id) {
-        try {
-            FicheIntervention fiche = ficheServ.lire(id);
-
-            if (fiche == null || fiche.getEvaluation() == null) {
-                return ResponseEntity.notFound().build();
-            }
-
-            byte[] audioData = fiche.getEvaluation();
-
-            return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType("audio/mp3"))
-                    .body(audioData);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
     @GetMapping("/fiche/modifier/{id}")
@@ -415,6 +302,13 @@ public class HomeController {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
         model.addAttribute("utilisateurs", utilisateurs);
         return "accueil";
+    }
+
+    @GetMapping("/ancienaccueil")
+    public String redirectToAncienAccueil(Model model) {
+        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
+        model.addAttribute("utilisateurs", utilisateurs);
+        return "ancienaccueil";
     }
 
     @GetMapping("/accueil_admin")
