@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.service.UtilisateurService;
 
@@ -30,6 +31,9 @@ public class UtilisateurController {
     // Page de création de nouvel utilisateur
     @GetMapping("/nouveau")
     public String afficherFormulaireCreationUtilisateur(Model model) {
+        // Récupérez les rôles définis dans l'enum UserRole
+        UserRole[] roles = UserRole.values();
+        model.addAttribute("roles", roles);
         model.addAttribute("utilisateur", new Utilisateur());
         return "nouvelUtilisateur";
     }

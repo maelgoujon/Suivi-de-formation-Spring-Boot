@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
       <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Modifier Apprenti</title>
+      <title>Modifier</title>
       <style>
         body {
           margin: 0;
@@ -220,7 +220,7 @@
     </a>
 
     <div class="bandeau centered">
-        <a href="/accueil_admin">
+        <a href="/accueil_superadmin">
             <img src="/images/accueil.png" alt="accueil"/>
         </a>
     </div>
@@ -262,8 +262,10 @@
                 <input type="text" id="login" name="login" th:field="*{login}" required>
             </div>
 
+    
             
-            <input type="hidden" id="motdepasse" name="motdepasse" th:value="${utilisateur.mdp}"    th:field="*{mdp}" required>
+            <label for="motdepasse">Mot de passe:</label>
+<input type="text" id="motdepasse" name="motdepasse" th:value="${utilisateur.mdp}" th:field="*{mdp}" required>
             
 
             <div class="col-md-6 form-group">
@@ -276,22 +278,12 @@
             </div>
             
             <div class="col-md-6 form-group">
-            <label for="role">Role:</label>
-            <select id="role" name="role" th:field="*{role}" required>
-              <option th:each="role : ${roles}" th:value="${role}" th:text="${role}"></option>
-            </select>
-          
-          
-          
-        </div>
-            <div class="col-md-6 form-group">
-            <label for="niveau">Niveau:</label>
-            <select class="form-control" th:field="*{niveau}" id="niveau">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+              <label for="role">Role:</label>
+              <select id="role" name="role" th:field="*{role}" required>
+                <option th:each="role : ${roles}" th:value="${role}" th:text="${role}"></option>
               </select>
+        </div>
+            
         </div>
         <div class="col-md-6 form-group">
           <label for="description">Description:</label>
@@ -300,12 +292,10 @@
           </div>
         </div>
 
-          <button type="submit">Modifier Utilisateur</button>
+        <button type="submit">Modifier Utilisateur</button>
       </div>
     </form>
-    <div class="boutonmdp">
-      <button id="mdp" th:attr="data-userid=${utilisateur.id}">Modifier Mot de passe</button>
-    </div>
+    
     <div class="imagemodif">
       <div class="imagemodif">
         <a th:href="@{'/profil_apprenti/' + ${utilisateur.id}}">
