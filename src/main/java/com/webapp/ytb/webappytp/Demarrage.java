@@ -10,6 +10,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
+import com.webapp.ytb.webappytp.modele.Formation;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
@@ -18,6 +19,7 @@ import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Materiaux;
 import com.webapp.ytb.webappytp.repository.FicheRepository;
+import com.webapp.ytb.webappytp.repository.FormationRepository;
 import com.webapp.ytb.webappytp.repository.MateriauxRepository;
 import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
 
@@ -32,6 +34,9 @@ public class Demarrage implements ApplicationRunner {
 
     @Autowired
     private MateriauxRepository materiauxRepository;
+
+    @Autowired
+    private FormationRepository formationRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -99,6 +104,14 @@ public class Demarrage implements ApplicationRunner {
                 materiauxRepository.save(materiaux);
             }
         }
+
+
+        // Creation Formation 1
+            Formation formation = new Formation();
+            formation.setNom("Agent de maintenance en bâtiment");
+            formation.setDescription("fesfesesf");
+            formationRepository.save(formation);
+        
 
         // Creation de l´administrateur
         Utilisateur admin = utilisateurRepository.findUserByLogin("admin");
