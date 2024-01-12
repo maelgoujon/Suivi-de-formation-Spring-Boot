@@ -3,6 +3,7 @@ package com.webapp.ytb.webappytp.controller;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
@@ -164,7 +165,11 @@ public class HomeController {
         if (isUserSuperAdmin(userDetails)) {
             Utilisateur utilisateur = userServ.findById(id);
             model.addAttribute("utilisateur", utilisateur);
-
+    
+            // Récupérez les rôles définis dans l'enum UserRole
+            UserRole[] roles = UserRole.values();
+            model.addAttribute("roles", roles);
+    
             // Vérifiez si le rôle du compte sélectionné est USER
             if (utilisateur.getRole() == UserRole.USER) {
                 return "modif";
@@ -177,9 +182,15 @@ public class HomeController {
             return "redirect:/accueil";
         }
     }
+    
+
+
 
     @GetMapping("/modif_admin/{id}")
     public String modifadmin(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        // Récupérez les rôles définis dans l'enum UserRole
+        UserRole[] roles = UserRole.values();
+        model.addAttribute("roles", roles);
         // Vérifiez si l'utilisateur connecté a le rôle de superadmin
         if (isUserSuperAdmin(userDetails)) {
             Utilisateur utilisateur = userServ.findById(id);
@@ -193,9 +204,6 @@ public class HomeController {
             return "redirect:/accueil";
         }
     }
-
-
-
 
     private boolean isUserSuperAdmin(UserDetails userDetails) {
         return userDetails.getAuthorities().stream()

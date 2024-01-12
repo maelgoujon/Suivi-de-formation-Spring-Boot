@@ -278,12 +278,10 @@
             </div>
             
             <div class="col-md-6 form-group">
-            <label for="role">Role:</label>
-            <select id="role" name="role" th:field="*{role}" required>
-                <option value="ADMIN">Admin</option>
-                <option value="SUPERADMIN">Super Admin</option>
-                <option value="USER">User</option>
-            </select>
+              <label for="role">Role:</label>
+              <select id="role" name="role" th:field="*{role}" required>
+                <option th:each="role : ${roles}" th:value="${role}" th:text="${role}"></option>
+              </select>
         </div>
             <div class="col-md-6 form-group">
             <label for="niveau">Niveau:</label>
