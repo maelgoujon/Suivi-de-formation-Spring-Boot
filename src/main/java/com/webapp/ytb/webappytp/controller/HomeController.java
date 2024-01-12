@@ -73,6 +73,13 @@ public class HomeController {
         return "accueil";
     }
 
+    @GetMapping("/ancienaccueil")
+    public String redirectToAccueil2(Model model) {
+        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
+        model.addAttribute("utilisateurs", utilisateurs);
+        return "ancienaccueil";
+    }
+
     @GetMapping("/accueil_admin")
     public String admin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
@@ -150,16 +157,6 @@ public class HomeController {
         FicheIntervention ficheIntervention = ficheServ.lire(ficheId);
         model.addAttribute("ficheIntervention", ficheIntervention);
         return "record";
-    }
-
-    @GetMapping("/mdp_oublie")
-    public String mdp_oublie() {
-        return "mdp_oublie";
-    }
-
-    @GetMapping("/mdp_oublieformateur")
-    public String mdp_oublieformateur() {
-        return "mdp_oublieformateur";
     }
 
     @GetMapping("/recordaffichage/{ficheId}")

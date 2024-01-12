@@ -1,574 +1,254 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            height: 100vh;
-        }
-
-        .bandeau {
-            background-color: #bbdefb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 80px;
-            border-bottom: 1px solid black;
-        }
-
-        .logo-and-admin {
-            display: flex;
-            /* Afficher les éléments en ligne */
-            align-items: center;
-            /* Aligner verticalement au centre */
-        }
-
-        .bandeau img {
-            max-width: 60px;
-            height: auto;
-            margin-right: 20px;
-        }
-
-        .bandeau h1 {
-            color: black;
-            margin: 0;
-        }
-
-        .conteneur {
-            width: 80%;
-            max-width: 800px;
-            margin: 100px auto;
-            background-color: white;
-            border: 1px solid black;
-            text-align: center;
-            padding: 20px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            /* Masque les éléments au-delà du conteneur */
-        }
-
-        .titre {
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
-
-        .profils {
-            display: flex;
-            transition: transform 0.3s;
-            /* Animation de transition fluide */
-        }
-
-        .profil {
-            border: 1px solid black;
-            padding: 10px;
-            margin: 10px;
-            flex: 0 0 calc(30% - 20px);
-            text-align: center;
-            cursor: pointer;
-            position: relative;
-        }
-
-
-
-        .profil img {
-            max-height: 10vh;
-        }
-
-        .nom {
-            font-weight: bold;
-        }
-
-        .prenom {
-            font-style: italic;
-        }
-
-
-
-
-
-        .button-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-        }
-
-        #connecter {
-            background-color: #72bb53;
-            border-radius: 10px;
-            color: black;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-
-        }
-
-        .connexion {
-            margin-top: 20px;
-            background-color: #72bb53;
-            border-radius: 10px;
-            color: black;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-
-        .reset {
-            margin-top: 20px;
-            background-color: #ff190d;
-            border-radius: 10px;
-            color: black;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-
-        .profil {
-            position: relative;
-            cursor: pointer;
-            perspective: 1000px;
-            /* Définit la perspective pour le retournement */
-            transform-style: preserve-3d;
-            /* Indique que les enfants doivent être rendus en 3D */
-            transition: transform 0.6s;
-            /* Ajoute une transition au transform pour une animation fluide */
-        }
-
-        .profil.flip {
-            transform: rotateY(180deg);
-        }
-
-        /* Ajoutez un style pour l'arrière de la carte */
-        .profil .dos {
-            transform: rotateY(180deg);
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            backface-visibility: hidden;
-            /* Empêche le clignotement pendant l'animation */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: auto;
-
-        }
-
-        .profil .dos p {
-            margin: 0;
-        }
-
-        .profil.flip .front {
-            visibility: hidden;
-
-        }
-
-        .pattern-lock {
-            display: flex;
-            justify-content: space-between;
-            width: 200px;
-            /* Ajustez la largeur selon vos besoins */
-            margin: 20px auto;
-            /* Ajustez la marge selon vos besoins */
-        }
-
-        .pattern-lock-dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: #fff;
-            cursor: pointer;
-        }
-
-        .unlock-container {
-            width: 300px;
-            text-align: center;
-            border: none;
-        }
-
-        .pattern {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-            /* Ajoutez la marge souhaitée entre les points */
-            margin: 0 60px;
-            /* Pour rapprocher les ronds sur les côtés */
-            align-items: center;
-        }
-
-        .dot {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid #72bb53;
-            background-color: #fff;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .dot.active {
-            background-color: #72bb53;
-        }
-
-        fieldset {
-
-            border-width: 0px;
-
-        }
-
-        .button-container {
-            display: grid;
-        }
-
-        .annuler {
-            display: flex;
-            align-items: center;
-        }
-
-        .carousel {
-            display: block;
-            width: 100%;
-            height: 40vh;
-            /* Ajustez la hauteur maximale en pourcentage de la hauteur de l'écran */
-            background: white;
-            overflow-x: scroll;
-            padding: 10px;
-            margin: 0;
-            white-space: nowrap;
-            border-top: 2px solid rgba(0, 0, 0, 0.1);
-            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-        }
-
-        @media (min-width: 1600px) {
-            .conteneur {
-                width: 100%;
-                max-width: 1500px;
-            }
-
-            .carousel {
-                height: 25vh;
-            }
-        }
-
-        @media (max-width: 1200px) {
-            .conteneur {
-                width: 100%;
-                max-width: 800px;
-                /* Vous pouvez ajuster cette valeur selon vos préférences */
-                height: auto;
-            }
-
-            .carousel {
-                height: 40vh;
-                /* Ajustez la hauteur selon vos préférences */
-            }
-        }
-
-        @media (max-width: 600px) {
-            .conteneur {
-                width: 80%;
-                max-width: 250px;
-            }
-
-            .carousel {
-                height: 35vh;
-            }
-        }
-    </style>
+    <title>Page d'Accueil</title>
+    <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico">
+    <!-- Ajoutez les liens vers les fichiers CSS Bootstrap ici -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/accueil.css" rel="stylesheet">
 </head>
 
 <body>
-    <div class="bandeau">
-        <a href="accueil">
-            <img src="/images/accueil.png" alt="Accueil" style="float: left;">
-        </a>
+
+    <!-- Barre de navigation Bootstrap -->
+    <nav class="navbar bg-body-tertiary">
+        <div class="container d-flex justify-content-between align-items-center">
+            <!-- Bouton gauche pour le mot de passe oublié -->
+            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modalMdpOublie">
+                <img src="/images/mdp_oublie.png" alt="Mot de Passe Oublié?" width="50" height="50">
+            </button>
+
+            <!-- Logo accueil au centre -->
+            <a class="navbar-brand mx-auto" href="/">
+                <img src="/images/accueil.png" alt="Accueil" width="50" height="50">
+            </a>
+
+            <!-- Bouton droit pour l'admin -->
+            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modalConnexionAdmin">
+                <img src="/images/admin.png" alt="Connexion Admin" width="50" height="50">
+                Admin
+            </button>
+        </div>
+    </nav>
+
+    <div class="modal fade" id="modalMdpOublie" tabindex="-1" aria-labelledby="modalMdpOublieLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalMdpOublieLabel">Réinitialisation du mot de passe</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Demander de l'aide à un formateur <img type="button" src="/images/son.png" alt="Lire le nom"
+                            onclick="lireTexte('Demander de l\'aide à un formateur')" style="width: 20px;"></p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="conteneur">
-        <div class="titre">Sélectionner un profil</div>
-        <div class="carousel">
-            <div class="profils" id="carousel">
-                <!-- Iteration sur chaque utilisateur -->
-                <div th:each="utilisateur : ${utilisateurs}" class="profil"
-                    th:onclick="'flipProfile(this, ' + ${utilisateur.id} + ')'" th:data-id="${utilisateur.id}">
-                    <div class="dos">
-                        <form th:action="@{/login}" th:object="${monFormulaire}" method="post">
-
-
-                            <input type="hidden" required id="username" name="username" class="hiddenLoginField"
-                                th:value="${utilisateur.login}"><br />
-
-                            <input type="hidden" class="hiddenPasswordField" name="password">
-
-                            <fieldset>
-                                <!-- Thymeleaf + Spring Security error display -->
-                                <div th:if="${param.error}" class="alert alert-danger">
-                                    Mot de passe invalide.
-                                </div>
-
-                                <div th:if="${param.logout}" class="alert alert-success">
-                                    Vous avez été déconnecté.
-                                </div>
-
-                                <!-- Intégration du modèle de déverrouillage -->
-                                <div class="unlock-container">
-                                    <div class="pattern" id="pattern">
-                                        <!-- 9 points du modèle -->
-                                        <div class="dot" data-index="1"></div>
-                                        <div class="dot" data-index="2"></div>
-                                        <div class="dot" data-index="3"></div>
-                                        <div class="dot" data-index="4"></div>
-                                        <div class="dot" data-index="5"></div>
-                                        <div class="dot" data-index="6"></div>
-                                        <div class="dot" data-index="7"></div>
-                                        <div class="dot" data-index="8"></div>
-                                        <div class="dot" data-index="9"></div>
-                                    </div>
-                                    <div class="button-container">
-                                        <button class="annuler" onclick="annulerSelection(event)">Annuler<img
-                                                src="/images/return.png" alt="retourne profil" style="width: 20px;"
-                                                onclick="annulerSelection(event)"></button>
-                                    </div>
-                                    <a class="mdp-oublié" href="mdp_oublie">
-                                        <p>Mot de passe oublié?</p>
-                                    </a>
-                                </div>
-                                <div class="button-container">
-                                    <button type="submit" id="connecter" style="display: none;">Se connecter</button>
-                                </div>
-                            </fieldset>
-                        </form>
-                    </div>
-                    <div class="front">
-                        <div
-                            th:if="${utilisateur.photoBase64 != null and not #strings.isEmpty(utilisateur.photoBase64)}">
-                            <img th:src="${utilisateur.photoBase64}" alt="Photo de profil" />
-                        </div>
-                        <div th:if="${utilisateur.photoBase64 == null or #strings.isEmpty(utilisateur.photoBase64)}">
-                            <img src="/images/icone_profil.png" alt="Photo de profil par défaut" />
-                        </div>
-                        <p class="nom" th:text="${utilisateur.nom}">Nom de l'utilisateur</p>
-                        <p class="prenom" th:text="${utilisateur.prenom}">Prénom de l'utilisateur</p>
-                    </div>
+    <div class="modal fade" id="modalConnexionAdmin" tabindex="-1" aria-labelledby="modalConnexionAdminLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalConnexionAdminLabel">Connexion Admin</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                 </div>
-                <div class="profil">
-                    <img src="/images/icone_profil.png" alt="Autre">
-                    <form th:action="@{/login}" th:object="${monFormulaire}" method="post">
-                        <fieldset>
-                            <!-- Thymeleaf + Spring Security error display -->
-                            <div th:if="${error}" class="alert alert-danger">
-                                Mot de passe invalide.
-                            </div>
-
-                            <div th:if="${param.logout}" class="alert alert-success">
-                                Vous avez été déconnecté.
-                            </div>
-                            <label class="login-title"><b>Nom d'utilisateur :</b></label><br />
-                            <input type="text" placeholder="Nom d'utilisateur" required id="username"
-                                name="username"><br />
-                            <label class="login-title"><b>Mot de passe :</b></label><br />
-                            <input type="password" placeholder="Mot de passe" required id="password"
-                                name="password"><br />
-                            <a class="mdp-oublié" href="mdp_oublieformateur">
-                                <p>Mot de passe oublié?</p>
-                            </a>
-                            <input class="reset" type="reset" value="Annuler">
-                            <input class="connexion" type="submit" value="Connexion">
-                        </fieldset>
+                <div class="modal-body">
+                    <form id="adminLoginForm" th:action="@{/login}" method="post">
+                        <div class="mb-3">
+                            <label for="adminUsername" class="form-label">Nom d'utilisateur</label>
+                            <input type="text" class="form-control" id="adminUsername" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="adminPassword" class="form-label">Mot de passe</label>
+                            <input type="password" class="form-control" id="adminPassword" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Se Connecter</button>
+                        <button type="button" class="btn btn-secondary" data-bs-container="body"
+                            data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="Demander de l'aide au SUPERADMIN">
+                            Mot de Passe Oublié ?
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center">
+                    <!-- Message d'erreur -->
+                    <div th:if="${param.error}" class="alert alert-danger d-flex align-items-center" role="alert">
+                        <img src="/images/alert.png" alt="Mauvais Mot de Passe" width="30" height="30" class="me-3">
+                        <div>
+                            Mot de passe invalide.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center">
+                    <!-- Message de succès -->
+                    <div th:if="${param.logout}" class="alert alert-success d-flex align-items-center" role="alert">
+                        <img src="/images/success.png" alt="Déconnexion Réussie" width="30" height="30" class="me-3">
+                        <div>
+                            Vous avez été déconnecté.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div th:each="utilisateur : ${utilisateurs}" class="col">
+                    <div class="card-container">
+                        <!-- Flippable card -->
+                        <div class="card-flip">
+                            <!-- Front of the card -->
+                            <div class="card card-front">
+                                <div
+                                    th:if="${utilisateur.photoBase64 != null and not #strings.isEmpty(utilisateur.photoBase64)}">
+                                    <img class="card-img-top" th:src="${utilisateur.photoBase64}"
+                                        alt="Photo de profil" />
+                                </div>
+                                <div
+                                    th:if="${utilisateur.photoBase64 == null or #strings.isEmpty(utilisateur.photoBase64)}">
+                                    <img class="card-img-top" src="/images/icone_profil.png"
+                                        alt="Photo de profil par défaut" />
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-nom" th:text="${utilisateur.nom}">Nom de l'utilisateur</p>
+                                    <p class="card-prenom" th:text="${utilisateur.prenom}">Prénom de l'utilisateur</p>
+                                </div>
+                            </div>
+                            <!-- Back of the card -->
+                            <div class="card card-back">
+                                <!-- Content for the back of the card -->
+                                <div class="card-body">
+                                    <form id="loginForm" th:action="@{/login}" th:object="${monFormulaire}"
+                                        method="post">
+                                        <input type="hidden" required id="username" name="username"
+                                            class="hiddenLoginField" th:value="${utilisateur.login}">
+                                        <input type="hidden" class="password" name="password">
+                                        <fieldset>
+                                            <div class="container">
+                                                <div class="row justify-content-center">
+                                                    <div class="col-4 text-center pattern-dot" data-number="1"></div>
+                                                    <div class="col-4 text-center pattern-dot" data-number="2"></div>
+                                                    <div class="col-4 text-center pattern-dot" data-number="3"></div>
+                                                </div>
+                                                <div class="row justify-content-center">
+                                                    <div class="col-4 text-center pattern-dot" data-number="4"></div>
+                                                    <div class="col-4 text-center pattern-dot" data-number="5"></div>
+                                                    <div class="col-4 text-center pattern-dot" data-number="6"></div>
+                                                </div>
+                                                <div class="row justify-content-center">
+                                                    <div class="col-4 text-center pattern-dot" data-number="7"></div>
+                                                    <div class="col-4 text-center pattern-dot" data-number="8"></div>
+                                                    <div class="col-4 text-center pattern-dot" data-number="9"></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col text-center">
+                                                        <button class="btn btn-secondary mt-3" type="button"
+                                                            onclick="resetPattern()">Annuler</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col text-center">
+                                                <button class="connecter btn btn-primary mt-3" type="button">Se
+                                                    Connecter</button>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                    <div class="icon-container text-center mt-2">
+                                        <a class="btn arrow_return_left" type="button" href="/">
+                                            <img src="/images/arrow_return_left.png" alt="Retourner la carte" width="40"
+                                                height="40">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Ajoutez les liens vers les fichiers JavaScript Bootstrap et jQuery ici -->
+        <script src="/js/jquery-3.2.1.slim.min.js"></script>
+        <script src="/js/popper.min.js"></script>
+        <script src="/js/bootstrap.bundle.min.js"></script>
 
         <script>
-            let flippedProfiles = [];
-            const carousel = document.getElementById('carousel');
-            const connectButton = document.getElementById('connecter');
-
-            let currentPosition = 0;
-            const itemWidth = 33.33;
-            const itemsInView = 2;
-            const maxPosition = -itemWidth * (6 - itemsInView);
-
-            let selectedProfile = null;
-            let selectedUserId = null;
-
-
-            carousel.addEventListener('click', (event) => {
-                const profile = event.target.closest('.profil');
-                if (profile) {
-                    selectProfile(profile);
-                }
-            });
-
-            connectButton.addEventListener('click', () => {
-                if (selectedProfile) {
-                    window.location.href = 'presentation';
-                }
-            });
-
             function lireTexte(texte) {
                 const syntheseVocale = window.speechSynthesis;
                 const message = new SpeechSynthesisUtterance(texte);
                 syntheseVocale.speak(message);
             }
-            function flipProfile(profile) {
-                if (!profile.classList.contains('flipped')) {
-                    profile.classList.add('flip', 'flipped');
-                    if (!flippedProfiles.includes(profile)) {
-                        flippedProfiles.push(profile);
-                    }
-                }
-            }
-
-            function selectProfile(profile, userId) {
-                selectedProfile = profile
-                if (selectedProfile === profile || profile.classList.contains('flipped')) {
-                    deselectProfile();
-                } else {
-                    if (selectedProfile) {
-                        selectedProfile.classList.remove('selected');
-                    }
-                    profile.classList.add('selected');
-                    selectedProfile = profile;
-                    selectedUserId = selectedUserId;
-                    connectButton.style.display = 'block';
-                }
-
-                const otherProfiles = document.querySelectorAll('.profil');
-                otherProfiles.forEach((otherProfile) => {
-                    if (otherProfile !== profile && !otherProfile.classList.contains('flipped')) {
-                        otherProfile.removeEventListener('click', flipProfile);
-                    }
-                });
-            }
-
-            function deselectProfile() {
-                if (selectedProfile) {
-                    selectedProfile.classList.remove('selected');
-                    selectedProfile.classList.remove('flipped');
-                    selectedProfile = null;
-                }
-            }
-
-
-            function annulerSelection(event) {
-                // Réinitialiser le tableau des ronds sélectionnés
-                selectedDots = [];
-
-                // Désélectionner tous les ronds
-                const dots = document.querySelectorAll(".dot");
-                dots.forEach(dot => {
-                    dot.classList.remove("active");
-                });
-
-                // Masquer le bouton "connexion"
-                document.getElementById('connecter').style.display = 'none';
-
-                // Retirer la classe "flipped" du profil actuellement sélectionné
-                if (selectedProfile && selectedProfile.classList.contains('flipped')) {
-                    selectedProfile.classList.remove('flipped');
-                }
-            }
-
-
 
             document.addEventListener("DOMContentLoaded", function () {
-                const dots = document.querySelectorAll(".dot");
-                let selectedDots = [];
-                let selectedProfile = null;
-                let selectedUserId = null;
+                const cardContainers = document.querySelectorAll('.card-container');
+                cardContainers.forEach(container => {
+                    let password = []; // Créer un tableau de mot de passe unique pour chaque conteneur de carte
 
-                // Gestionnaire de clic pour les points du modèle de verrouillage
-                dots.forEach(dot => {
-                    dot.addEventListener("click", function () {
-                        const index = dot.getAttribute("data-index");
-                        if (selectedDots.length < 4 || dot.classList.contains("active")) {
-                            toggleDot(dot, index);
-                        }
-
-                        console.log("Séquence actuelle : " + selectedDots.join("->"));
-
-                        if (selectedDots.length === 4) {
-                            let generatedPassword = selectedDots.join("");
-                            console.log("Mot de passe généré : " + generatedPassword);
-                            updatePassword(generatedPassword);
+                    // Ajout du gestionnaire d'événements pour retourner les cartes
+                    container.addEventListener('click', function () {
+                        const cardFlip = this.querySelector('.card-flip');
+                        if (!cardFlip.classList.contains('is-flipped')) {
+                            cardFlip.classList.add('is-flipped');
                         }
                     });
-                });
 
-                // Toggle the state of a dot
-                function toggleDot(dot, index) {
-                    if (!dot.classList.contains("active")) {
-                        dot.classList.add("active");
-                        selectedDots.push(index);
-                    }
-                }
+                    // Ajout du gestionnaire d'événements pour les points de motif
+                    const dots = container.querySelectorAll('.pattern-dot');
+                    const connectButton = container.querySelector('.connecter');
+                    const passwordField = container.querySelector('.password');
 
-                // Sélection d'un profil
-                const profils = document.querySelectorAll(".profil");
-                profils.forEach(profil => {
-                    profil.addEventListener("click", function () {
-                        if (selectedProfile !== this) {
-                            selectedProfile = this;
-                            selectedUserId = this.getAttribute('data-id');
-                            console.log("Profil sélectionné avec ID : " + selectedUserId);
-                            resetDots();
-                        }
+                    dots.forEach(dot => {
+                        dot.addEventListener('click', function () {
+                            if (!this.classList.contains('selected') && password.length < 4) {
+                                this.classList.add('selected');
+                                password.push(this.getAttribute('data-number'));
+                                passwordField.value = password.join('');
+
+                                if (password.length === 4) {
+                                    connectButton.style.display = 'block';
+                                }
+                            }
+                        });
                     });
+
+                    connectButton.addEventListener('click', function () {
+                        container.querySelector('form').submit();
+                    });
+
+
+                    container.resetPattern = function () {
+                        password = [];
+                        passwordField.value = '';
+                        dots.forEach(dot => dot.classList.remove('selected'));
+                        connectButton.style.display = 'none';
+                    };
                 });
 
-                function resetDots() {
-                    selectedDots = [];
-                    dots.forEach(dot => dot.classList.remove('active'));
-                    console.log("Points réinitialisés.");
-                }
+                // Fonction globale pour réinitialiser le modèle
+                window.resetPattern = function () {
+                    cardContainers.forEach(container => {
+                        container.resetPattern();
+                    });
+                };
 
-                function updatePassword(password) {
-                    if (selectedProfile) {
-                        let hiddenPasswordField = selectedProfile.querySelector('.hiddenPasswordField');
-                        if (hiddenPasswordField) {
-                            hiddenPasswordField.value = password;
-                            console.log("Mot de passe mis à jour pour le profil " + selectedUserId);
-                            showConnectButton();
-                        } else {
-                            console.error("Champ caché non trouvé dans le profil sélectionné.");
-                        }
-                    }
-                }
-
-                function showConnectButton() {
-                    if (selectedProfile) {
-                        // Récupérez le formulaire
-
-                        const connectButton = selectedProfile.querySelector('#connecter');
-                        if (connectButton) {
-                            connectButton.style.display = 'block';
-                            connectButton.addEventListener('click', function () {
-                                form.submit(); // Soumettre le formulaire
-                            });
-                        }
-                    }
-                }
-
+                const popovers = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+                popovers.map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
             });
 
-
         </script>
+
 </body>
 
 </html>

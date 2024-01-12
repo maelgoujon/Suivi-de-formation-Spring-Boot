@@ -1,0 +1,88 @@
+.navbar.bg-body-tertiary{
+    background-color: #89CFF0 !important;
+    margin-bottom: 1%
+}
+
+.card-container {
+    perspective: 1000px;
+    height: 345px;
+}
+.card-flip {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+}
+
+.card-flip.is-flipped {
+    transform: rotateY(180deg);
+}
+.card-front, .card-back {
+    top: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    overflow: hidden
+}
+
+.card-back {
+    transform: rotateY(180deg);
+}
+
+.card-img-top {
+    width: 50% !important;
+    display: block;
+    margin: 0 auto;
+    padding-top: 2.5%;
+}
+
+.card-body {
+    display: block;
+    margin: 0 auto;
+}
+
+.card-nom {
+    font-weight: bold; 
+}
+
+.pattern-dot {
+    width: 50px; /* Diameter of the dot */
+    height: 50px; /* Diameter of the dot */
+    margin: 3px; /* Spacing for top and bottom */
+    border-radius: 50%; /* Makes the dot round */
+    border: 2px solid #72bb53; /* Border color */
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+/* Hover effect for the dot */
+.pattern-dot:hover {
+    background-color: #72bb53; /* Dot fill color when hovered */
+}
+
+.pattern-dot.selected {
+    background-color: #72bb53; /* Green color when selected */
+}
+
+.connecter {
+    display: none;
+}
+
+.col.text-center {
+    text-align: center; 
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+}
+
+@media (max-width: 576px) {
+    .card-body {
+        padding: 0.5rem;
+    }
+    .pattern-dot {
+        margin: 10px 0; /* Espace réduit pour les petits écrans */
+    }
+}
