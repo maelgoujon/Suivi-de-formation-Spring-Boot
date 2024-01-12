@@ -69,7 +69,7 @@
          <!--------------------------Intervenant--------------------------------------->
          <hr />
 
-         <legend th:switch="${ficheIntervention.niveauIntervenant}">
+         <legend th:switch="${ficheIntervention.Intervenant.niveauTitreIntervenant}">
             <img th:case="0" class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
@@ -80,7 +80,7 @@
                      Intervenant</h2>
                </div>
             </div>
-            <h2 class="display-5" th:case="2" th:style="'color: ' + ${color}">Intervenant</h2>
+            <h2 class="display-5" th:case="2" th:style="'color: ' + ${ficheIntervention.Intervenant.couleurTitreIntervenant}">Intervenant</h2>
          </legend>
 
 

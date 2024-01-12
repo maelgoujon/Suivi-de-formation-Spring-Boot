@@ -84,6 +84,9 @@ public class FicheIntervention {
     private int niveauTravauxRealises;
 
     @Column
+    private int niveauTravauxNonRealises;
+
+    @Column
     private int niveauMateriauxUtilises;
 
     @Column
