@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervenant;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 
@@ -35,6 +36,10 @@ public class FicheIntervention {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+
+    @Embedded
+    private Intervenant intervenant;
+
     @Embedded
     private Demande demande;
 
@@ -64,9 +69,6 @@ public class FicheIntervention {
     @JoinColumn(name = "utilisateur_id")
     private Utilisateur utilisateur;
 
-    @Column
-    private int niveauUtilisateur;
-
     @Column(name = "materiaux")
     private List<String> materiauxOptions;
 
@@ -76,6 +78,9 @@ public class FicheIntervention {
 
     // Niveaux
     @Column
+    private int niveauIntervenant;
+
+    @Column
     private int niveauTravauxRealises;
 
     @Column
@@ -83,6 +88,16 @@ public class FicheIntervention {
 
     @Column
     private int niveauNatureIntervention;
+
+    //Couleurs
+    @Column
+    private String couleurTravauxRealises;
+
+    @Column
+    private String couleurTravauxNonRealises;
+
+    @Column
+    private String couleurMateriauxUtilises;
 
     // getters
     public String getNomDemandeur() {

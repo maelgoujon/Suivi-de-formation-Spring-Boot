@@ -39,4 +39,8 @@ public class Maintenance {
     
     @Column
     private int NiveauMaintenanceType;
+
+    @Column
+    private String CouleurMaintenanceType;
+
 }

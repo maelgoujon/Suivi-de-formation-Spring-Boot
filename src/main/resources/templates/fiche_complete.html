@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 
-<!--Bootstrap html form-->
 
 <head>
    <meta charset="UTF-8">
@@ -12,9 +11,10 @@
    <link href="/css/bootstrap.min.css" rel="stylesheet" />
    <script src="/js/bootstrap.bundle.min.js"></script>
    <link rel="stylesheet" href="/css/font-awesome.min.css" />
-   <title>Formulaire Bootstrap</title>
+   <title>Modifier Fiche</title>
    <link rel="icon" type="image/x-icon"
       href="https://upload.wikimedia.org/wikipedia/commons/e/e9/Minsk_Metro_Line_3.png" />
+
    <style>
       .logo {
          width: 1.5rem;
@@ -58,8 +58,7 @@
 
       <section class="h-100 p-5 text-white bg-dark rounded-3" style="margin-top: calc(var(--bs-gutter-x) * .5);">
          <div class="container">
-            <h1 class="display-4">FICHE D'INTERVENTION N°
-               <span th:text="${ficheIntervention.id}"></span>&nbsp;:&nbsp;
+            <h1 class="display-4">FICHE D'INTERVENTION:&nbsp;
                <span th:if="${ficheIntervention.intervention != null}"
                   th:text="${ficheIntervention.intervention.typeIntervention}"></span>
             </h1>
@@ -71,14 +70,15 @@
          <!--------------------------Intervenant--------------------------------------->
          <hr />
 
-         <legend th:switch="${ficheIntervention.niveauUtilisateur}">
+         <legend th:switch="${ficheIntervention.niveauIntervenant}">
             <img th:case="0" class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
                   <img class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
                </div>
                <div class="col-auto">
-                  <h2 class="display-5" th:style="'color: ' + ${color}">Intervenant</h2>
+                  <h2 class="display-5" th:style="'color: ' + ${ficheIntervention.Intervenant.couleurTitreIntervenant}">
+                     Intervenant</h2>
                </div>
             </div>
             <h2 class="display-5" th:case="2" th:style="'color: ' + ${color}">Intervenant</h2>
@@ -88,7 +88,8 @@
 
          <div class="row">
             <div class="col-md-6 mb-3">
-               <label for="firstName">Prénom</label>
+               <label for="firstName"
+                  th:style="'color: ' + ${ficheIntervention.Intervenant.couleurPrenom}">Prénom</label>
                <input type="text" class="form-control" id="firstName" placeholder=""
                   th:value="${ficheIntervention.utilisateur.nom}" required="">
                <div class="invalid-feedback">
@@ -96,7 +97,7 @@
                </div>
             </div>
             <div class="col-md-6 mb-3">
-               <label for="lastName">Nom</label>
+               <label for="lastName" th:style="'color: ' + ${ficheIntervention.Intervenant.couleurNom}">Nom</label>
                <input type="text" class="form-control" id="lastName" placeholder=""
                   th:value="${ficheIntervention.utilisateur.prenom}" required="">
                <div class="invalid-feedback">
@@ -109,35 +110,40 @@
          <!--------------------------Demande--------------------------------------->
          <hr />
 
-
-         <legend th:switch="${ficheIntervention.demande.niveauDemande}">
+         <legend th:switch="${ficheIntervention.demande.niveauTitreDemande}">
             <img th:case="0" class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
                   <img class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
                </div>
                <div class="col-auto">
-                  <h2 class="display-5" th:style="'color: ' + ${color}">Demande</h2>
+                  <h2 class="display-5" th:style="'color: ' + ${ficheIntervention.Demande.couleurTitreDemande}">Demande
+                  </h2>
                </div>
             </div>
-            <h2 class="display-5" th:case="2" th:style="'color: ' + ${color}">Demande</h2>
+            <h2 class="display-5" th:case="2" th:style="'color: ' + ${ficheIntervention.Demande.couleurTitreDemande}">
+               Demande</h2>
          </legend>
 
          <div class="row">
             <div class="col-md-6 mb-3">
-               <label for="disabledNomDemandeur">Nom du demandeur</label>
+               <label for="disabledNomDemandeur"
+                  th:style="'color: ' + ${ficheIntervention.Demande.couleurNomDemandeur}">Nom du demandeur</label>
                <input type="text" id="disabledNomDemandeur" class="form-control"
                   th:placeholder="${ficheIntervention.demande.NomDemandeur}" disabled>
-               <label for="disabledDegreUrgence">Degré d'urgence</label>
+               <label for="disabledDegreUrgence"
+                  th:style="'color: ' + ${ficheIntervention.Demande.couleurDegreUrgence}">Degré d'urgence</label>
                <input type="text" id="disabledDegreUrgence" class="form-control"
                   th:placeholder="${ficheIntervention.degreUrgence}" disabled>
             </div>
             <div class="col-md-6 mb-3">
-               <label for="disabledDateDemande">Date de la demande</label>
+               <label for="disabledDateDemande"
+                  th:style="'color: ' + ${ficheIntervention.Demande.couleurDateDemande}">Date de la demande</label>
                <input type="date" id="disabledDateDemande" name="disabledDateDemande" class="form-control"
                   th:value="${#temporals.format(ficheIntervention.dateDemande, 'yyyy-MM-dd')}" disabled />
 
-               <label for="disabledLocalisation">Localisation</label>
+               <label for="disabledLocalisation"
+                  th:style="'color: ' + ${ficheIntervention.Demande.couleurLocalisation}">Localisation</label>
                <input type="text" id="disabledLocalisation" class="form-control"
                   th:placeholder="${ficheIntervention.localisation}" disabled>
             </div>
@@ -145,7 +151,8 @@
          <div>
             <div class="form-group">
 
-               <label for="disabledDescription">Description</label>
+               <label for="disabledDescription"
+                  th:style="'color: ' + ${ficheIntervention.Demande.couleurDescription}">Description</label>
                <textarea rows="10" id="disabledDescription" class="form-control"
                   th:placeholder="${ficheIntervention.demande.Description}" disabled></textarea>
             </div>
@@ -155,39 +162,72 @@
          <!--------------------------Intervention--------------------------------------->
          <hr />
 
-         <legend th:switch="${ficheIntervention.intervention.niveauIntervention}">
+         <legend th:switch="${ficheIntervention.intervention.niveauTitreIntervention}">
             <img th:case="0" class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
                   <img class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
                </div>
                <div class="col-auto">
-                  <h2 class="display-5" th:style="'color: ' + ${color}">Intervention</h2>
+                  <h2 class="display-5"
+                     th:style="'color: ' + ${ficheIntervention.Intervention.couleurTitreIntervention}">Intervention</h2>
                </div>
             </div>
-            <h2 class="display-5" th:case="2" th:style="'color: ' + ${color}">Intervention</h2>
+            <h2 class="display-5" th:case="2"
+               th:style="'color: ' + ${ficheIntervention.Intervention.couleurTitreIntervention}">Intervention</h2>
          </legend>
 
          <div class="row">
-            <div class="col-md-6 mb-3">
-               <label for="newDateIntervention">Date de l'intervention</label>
-               <input type="date" id="newDateIntervention" name="newDateIntervention" class="form-control"
-                  th:value="${#temporals.format(ficheIntervention.dateIntervention, 'yyyy-MM-dd')}" />
-               <label for="newDureeIntervention">Durée de l'intervention</label>
-               <input type="text" id="newDureeIntervention" name="newDureeIntervention" class="form-control"
-                  th:value="${ficheIntervention.dureeIntervention}">
+            <div class="col-md-4 mb-3">
+                  <label for="newDateIntervention"
+                     th:style="'color: ' + ${ficheIntervention.Intervention.couleurDateIntervention}">Date de
+                     l'intervention</label>
+                  <input type="date" id="newDateIntervention" name="newDateIntervention" class="form-control"
+                     th:value="${#temporals.format(ficheIntervention.dateIntervention, 'yyyy-MM-dd')}" />
+                  <label for="newDureeIntervention"
+                     th:style="'color: ' + ${ficheIntervention.Intervention.couleurDureeIntervention}">Durée de
+                     l'intervention</label>
+                  <input type="text" id="newDureeIntervention" name="newDureeIntervention" class="form-control"
+                     th:value="${ficheIntervention.dureeIntervention}">
             </div>
-            <div class="col-md-6 mb-3">
-               <label for="newMaintenanceType">Type de maintenance</label>
+
+
+            <div class="col-md-4 mb-3">
+               <label for="disabledTypeIntervention"
+                  th:style="'color: ' + ${ficheIntervention.Intervention.couleurTypeIntervention}">Type
+                  d'intervention</label>
+               <div id="disabledTypeIntervention"
+                  th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}">
+                  <div class="media form-check">
+                     <input class="form-check-input" type="radio" name="intervention" th:value="${nature.name()}"
+                        th:id="${'radio-' + nature}"
+                        th:checked="${ficheIntervention.Intervention != null and ficheIntervention.typeIntervention != null and ficheIntervention.typeIntervention eq nature.name()}" />
+                     <img class="align-self-start mr-3 logo"
+                        th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
+                        th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
+                     <label th:for="${'radio-' + nature}"
+                        th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
+                  </div>
+               </div>
+               <input type="hidden" name="newNatureType"
+                  th:value="${ficheIntervention.intervention != null ? ficheIntervention.intervention.typeIntervention : null}"
+                  id="selectedNatureType">
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+               <label for="newMaintenanceType"
+                  th:style="'color: ' + ${ficheIntervention.Maintenance.CouleurMaintenanceType}">Type de
+                  maintenance</label>
                <div id="newMaintenanceType"
                   th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance.MaintenanceType).values()}">
                   <div class="media form-check">
                      <input class="form-check-input" type="radio" name="maintenanceType" th:value="${type}"
-                        id="${type.name()}"
+                        th:id="${'radio-' + type.name()}"
                         th:checked="${ficheIntervention.maintenance != null and ficheIntervention.maintenance.maintenanceType != null and ficheIntervention.maintenance.maintenanceType.ordinal() eq type.ordinal()}" />
                      <img class="align-self-start mr-3 logo" th:src="${'/images/' + type.name().toLowerCase() + '.png'}"
                         th:alt="${'/images/' + type.name().toLowerCase() + '.png'}">
-                     <label th:for="${type}"
+                     <label th:for="${'radio-' + type.name()}"
                         th:text="${#strings.capitalize(type.name().toLowerCase().replace('_', ' '))}"></label>
                   </div>
                </div>
@@ -197,25 +237,8 @@
                   id="selectedMaintenanceType">
             </div>
 
-            <div class="col-md-6 mb-3">
-               <label for="disabledTypeIntervention">Type d'intervention</label>
-               <div id="disabledTypeIntervention"
-                  th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}">
-                  <div class="media form-check">
-                     <input class="form-check-input" type="radio" name="intervention" th:value="${nature.name()}"
-                        id="${nature}"
-                        th:checked="${ficheIntervention.Intervention != null and ficheIntervention.typeIntervention != null and ficheIntervention.typeIntervention eq nature.name()}" />
-                     <img class="align-self-start mr-3 logo"
-                        th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
-                        th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
-                     <label th:for="${nature}"
-                        th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
-                  </div>
-               </div>
-               <input type="hidden" name="newNatureType"
-                  th:value="${ficheIntervention.intervention != null ? ficheIntervention.intervention.typeIntervention : null}"
-                  id="selectedNatureType">
-            </div>
+
+
          </div>
 
          <!--------------------------Travaux réalisés--------------------------------------->
@@ -229,10 +252,13 @@
                   <img class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
                </div>
                <div class="col-auto">
-                  <h2 class="display-5" th:style="'color: ' + ${color}">Travaux réalisés</h2>
+                  <h2 class="display-5" th:style="'color: ' + ${ficheIntervention.couleurTravauxRealises}">Travaux
+                     réalisés
+                  </h2>
                </div>
             </div>
-            <h2 class="display-5" th:case="2" th:style="'color: ' + ${color}">Travaux réalisés</h2>
+            <h2 class="display-5" th:case="2" th:style="'color: ' + ${ficheIntervention.couleurTravauxRealises}">Travaux
+               réalisés</h2>
          </legend>
          <div class="form-group">
             <textarea rows="10" id="newTravauxRealises" class="form-control" name="newTravauxRealises"
@@ -249,12 +275,16 @@
                   <img class="display-5" src="/images/notchecked.png" alt="Pas fait" style="height: 1em;" />
                </div>
                <div class="col-auto">
-                  <h2 class="display-5" th:style="'color: ' + ${color}">Travaux non réalisés</h2>
+                  <h2 class="display-5" th:style="'color: ' + ${ficheIntervention.couleurTravauxNonRealises}">Travaux
+                     non
+                     réalisés</h2>
                </div>
             </div>
 
 
-            <h2 class="display-5" th:case="2" th:style="'color: ' + ${color}">Travaux non réalisés</h2>
+            <h2 class="display-5" th:case="2" th:style="'color: ' + ${ficheIntervention.couleurTravauxNonRealises}">
+               Travaux
+               non réalisés</h2>
          </legend>
          <div class="form-group">
             <textarea rows="10" class="form-control" id="newTravauxNonRealises" name="newTravauxNonRealises"
@@ -265,17 +295,20 @@
          <hr />
 
          <legend th:switch="${ficheIntervention.NiveauMateriauxUtilises}">
-            <img th:case="0" class="logo" src="/images/materiaux.png" alt="Materiaux" />
+            <img th:case="0" class="display-5" src="/images/materiaux.png" alt="Materiaux" style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
                   <img class="display-5" src="/images/materiaux.png" alt="Materiaux" style="height: 1em;" />
                </div>
                <div class="col-auto">
-                  <h2 class="display-5" th:style="'color: ' + ${color}">Materiaux</h2>
+                  <h2 class="display-5" th:style="'color: ' + ${ficheIntervention.couleurMateriauxUtilises}">Materiaux
+                  </h2>
                </div>
             </div>
 
-            <h2 class="display-5" th:case="2" th:style="'color: ' + ${color}">Materiaux</h2>
+            <h2 class="display-5" th:case="2" th:style="'color: ' + ${ficheIntervention.couleurMateriauxUtilises}">
+               Materiaux
+            </h2>
          </legend>
 
          <!-- Affichage des dropdown si NiveauMateriauxUtilises vaut 2 -->

@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervenant;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Materiaux;
@@ -38,7 +40,6 @@ import org.springframework.security.core.userdetails.User;
 public class HomeController {
 
     MateriauxAmenagementRepository materiauxAmenagementRepository;
-
     UtilisateurServiceImpl userServ;
     FicheServiceImpl ficheServ;
 
@@ -49,6 +50,10 @@ public class HomeController {
         this.materiauxAmenagementRepository = materiauxAmenagementRepository;
     }
 
+    //-----------------------------------------//
+    //------------Fiche Intervention-----------//
+    //-----------------------------------------//
+
     // Ajouter une fiche
     @GetMapping("/ajout_fiche")
     public String ajout_fiche(Model model) {
@@ -57,17 +62,243 @@ public class HomeController {
         model.addAttribute("users", userServ.lire());
         return "fiche_a_completer";
     }
-
     @PostMapping("/ajouter_fiche")
     public String ajouter_fiche(@ModelAttribute FicheIntervention fiche, Model model) {
         fiche.setDateCreation(LocalDate.now());
         fiche.setMateriauxOptions(new ArrayList<>());
+        Demande demande = new Demande();
+        Intervenant intervenant = new Intervenant();
+        Intervention intervention = new Intervention();
+        Maintenance maintenance = new Maintenance();
+        fiche.setDemande(demande);
+        fiche.setIntervenant(intervenant);
+        fiche.setIntervention(intervention);
+        fiche.setMaintenance(maintenance);
+        //on mets tous les niveaux a 1
+        fiche.setNiveauIntervenant(1);
+        fiche.setNiveauTravauxRealises(1);
+        fiche.setNiveauMateriauxUtilises(1);
+        fiche.setNiveauNatureIntervention(1);
+        fiche.getIntervenant().setCouleurTitreIntervenant("#8fabd9");
+        fiche.getIntervenant().setCouleurNom("#9e9e9e");
+        fiche.getIntervenant().setCouleurPrenom("#212121");
         FicheIntervention createdFiche = ficheServ.creer(fiche);
         model.addAttribute("createdFiche", createdFiche);
         return "redirect:/fiche/" + createdFiche.getId(); // On affiche la fiche créée
     }
 
-    // Accueils
+    // Afficher la fiche n°
+    @GetMapping("/fiche/{id}")
+    public String fiche(@PathVariable Long id, Model model) {
+        FicheIntervention ficheIntervention = ficheServ.lire(id);
+        String typeInterventionStr = ficheIntervention.getIntervention().getTypeIntervention();
+        Intervention.TypeIntervention typeIntervention = Intervention.TypeIntervention.valueOf(typeInterventionStr);
+        List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository
+                .findByTypeIntervention(typeIntervention);
+        model.addAttribute("ficheIntervention", ficheIntervention);
+        model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
+        model.addAttribute("color", "#8fabd9");
+        return "fiche_complete";
+    }
+
+    @GetMapping("/fiche/modifier/{id}")
+    public String showFicheDetails(@PathVariable long id, Model model) {
+        FicheIntervention ficheIntervention = ficheServ.lire(id);
+
+        // Utiliser directement le type d'intervention de la fiche
+        String typeInterventionStr = ficheIntervention.getIntervention().getTypeIntervention();
+        List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository.findByTypeIntervention(
+                Intervention.TypeIntervention.valueOf(typeInterventionStr));
+
+        model.addAttribute("ficheIntervention", ficheIntervention);
+        model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
+        model.addAttribute("color", "#8fabd9");
+
+        return "fiche_modifier";
+    }
+    @PostMapping("/updateFiche/{id}")
+    public String updateFiche(@PathVariable long id,
+            @RequestParam(required = false) String newNomDemandeur,
+            @RequestParam(required = false) LocalDate newDateDemande,
+            @RequestParam(required = false) String newLocalisation,
+            @RequestParam(required = false) String newDescription,
+            @RequestParam(required = false) Integer newDegreUrgence,
+            @RequestParam(required = false) LocalDate newDateIntervention,
+            @RequestParam(required = false) Integer newDureeIntervention,
+            @RequestParam(required = false) Maintenance.MaintenanceType newMaintenanceType,
+            @RequestParam(required = false) String newNatureType,
+            @RequestParam(required = false) String newTravauxRealises,
+            @RequestParam(required = false) String newTravauxNonRealises,
+            @RequestParam Optional<Boolean> newNouvelleIntervention,
+            @RequestParam(required = false) String newMateriau0,
+            @RequestParam(required = false) String newMateriau1,
+            @RequestParam(required = false) String newMateriau2,
+            @RequestParam(required = false) String newMateriau3,
+            @RequestParam(required = false) String newMateriau4,
+            @RequestParam(required = false) String newMateriau5
+
+    ) {
+
+        boolean nouvelleInterventionValue = newNouvelleIntervention.orElse(false);
+
+        FicheIntervention ficheIntervention = ficheServ.lire(id);
+        if (newNomDemandeur != null) {
+            ficheIntervention.getDemande().setNomDemandeur(newNomDemandeur);
+        }
+        if (newDateDemande != null) {
+            ficheIntervention.getDemande().setDateDemande(newDateDemande);
+        }
+        if (newLocalisation != null) {
+            ficheIntervention.getDemande().setLocalisation(newLocalisation);
+        }
+        if (newDescription != null) {
+            ficheIntervention.getDemande().setDescription(newDescription);
+        }
+        if (newDegreUrgence != null) {
+            ficheIntervention.getDemande().setDegreUrgence(newDegreUrgence);
+        }
+
+        if (newDateIntervention != null) {
+            ficheIntervention.getIntervention().setDateIntervention(newDateIntervention);
+        }
+
+        if (newDureeIntervention != null) {
+            ficheIntervention.getIntervention().setDureeIntervention(newDureeIntervention);
+        }
+
+        if (newMaintenanceType != null) {
+            ficheIntervention.getMaintenance().setMaintenanceType(newMaintenanceType);
+        }
+        if (newNatureType != null) {
+            ficheIntervention.getIntervention().setTypeIntervention(newNatureType);
+        }
+        ficheIntervention.setTravauxRealises(newTravauxRealises);
+        ficheIntervention.setTravauxNonRealises(newTravauxNonRealises);
+        ficheIntervention.setNouvelleIntervention(nouvelleInterventionValue);
+
+        ArrayList<String> materiauxOptions = new ArrayList<>();
+
+        if (newMateriau0 != null) {
+            materiauxOptions.add(newMateriau0);
+        }
+        if (newMateriau1 != null) {
+            materiauxOptions.add(newMateriau1);
+        }
+        if (newMateriau2 != null) {
+            materiauxOptions.add(newMateriau2);
+        }
+        if (newMateriau3 != null) {
+            materiauxOptions.add(newMateriau3);
+        }
+        if (newMateriau4 != null) {
+            materiauxOptions.add(newMateriau4);
+        }
+        if (newMateriau5 != null) {
+            materiauxOptions.add(newMateriau5);
+        }
+
+        if (!materiauxOptions.isEmpty()) {
+            ficheIntervention.setMateriauxOptions(materiauxOptions);
+        }
+
+        ficheServ.modifier(id, ficheIntervention);
+        return "redirect:/fiche/" + id;
+    }
+
+    @PostMapping("/fiche/updateTypeIntervention/{id}")
+    public String updateFicheTypeIntervention(@PathVariable long id,
+            @RequestParam(required = false) String newNomDemandeur,
+            @RequestParam(required = false) LocalDate newDateDemande,
+            @RequestParam(required = false) String newLocalisation,
+            @RequestParam(required = false) String newDescription,
+            @RequestParam(required = false) Integer newDegreUrgence,
+            @RequestParam(required = false) LocalDate newDateIntervention,
+            @RequestParam(required = false) Integer newDureeIntervention,
+            @RequestParam(required = false) Maintenance.MaintenanceType newMaintenanceType,
+            @RequestParam(required = false) String newNatureType,
+            @RequestParam(required = false) String newTravauxRealises,
+            @RequestParam(required = false) String newTravauxNonRealises,
+            @RequestParam Optional<Boolean> newNouvelleIntervention,
+            @RequestParam(required = false) String newMateriau0,
+            @RequestParam(required = false) String newMateriau1,
+            @RequestParam(required = false) String newMateriau2,
+            @RequestParam(required = false) String newMateriau3,
+            @RequestParam(required = false) String newMateriau4,
+            @RequestParam(required = false) String newMateriau5
+
+    ) {
+
+        boolean nouvelleInterventionValue = newNouvelleIntervention.orElse(false);
+
+        FicheIntervention ficheIntervention = ficheServ.lire(id);
+        if (newNomDemandeur != null) {
+            ficheIntervention.getDemande().setNomDemandeur(newNomDemandeur);
+        }
+        if (newDateDemande != null) {
+            ficheIntervention.getDemande().setDateDemande(newDateDemande);
+        }
+        if (newLocalisation != null) {
+            ficheIntervention.getDemande().setLocalisation(newLocalisation);
+        }
+        if (newDescription != null) {
+            ficheIntervention.getDemande().setDescription(newDescription);
+        }
+        if (newDegreUrgence != null) {
+            ficheIntervention.getDemande().setDegreUrgence(newDegreUrgence);
+        }
+
+        if (newDateIntervention != null) {
+            ficheIntervention.getIntervention().setDateIntervention(newDateIntervention);
+        }
+
+        if (newDureeIntervention != null) {
+            ficheIntervention.getIntervention().setDureeIntervention(newDureeIntervention);
+        }
+
+        if (newMaintenanceType != null) {
+            ficheIntervention.getMaintenance().setMaintenanceType(newMaintenanceType);
+        }
+        if (newNatureType != null) {
+            ficheIntervention.getIntervention().setTypeIntervention(newNatureType);
+        }
+        ficheIntervention.setTravauxRealises(newTravauxRealises);
+        ficheIntervention.setTravauxNonRealises(newTravauxNonRealises);
+        ficheIntervention.setNouvelleIntervention(nouvelleInterventionValue);
+
+        ArrayList<String> materiauxOptions = new ArrayList<>();
+
+        if (newMateriau0 != null) {
+            materiauxOptions.add(newMateriau0);
+        }
+        if (newMateriau1 != null) {
+            materiauxOptions.add(newMateriau1);
+        }
+        if (newMateriau2 != null) {
+            materiauxOptions.add(newMateriau2);
+        }
+        if (newMateriau3 != null) {
+            materiauxOptions.add(newMateriau3);
+        }
+        if (newMateriau4 != null) {
+            materiauxOptions.add(newMateriau4);
+        }
+        if (newMateriau5 != null) {
+            materiauxOptions.add(newMateriau5);
+        }
+
+        if (!materiauxOptions.isEmpty()) {
+            ficheIntervention.setMateriauxOptions(materiauxOptions);
+        }
+
+        ficheServ.modifier(id, ficheIntervention);
+        return "redirect:/fiche/modifier/" + id;
+    }
+
+
+    //-----------------------------------------//
+    //------------Accueils---------------------//
+    //-----------------------------------------//
+
     @GetMapping("/")
     public String home(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
@@ -81,7 +312,6 @@ public class HomeController {
         model.addAttribute("utilisateurs", utilisateurs);
         return "accueil";
     }
-
     @GetMapping("/accueil_superadmin")
     public String superadmin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
@@ -104,6 +334,13 @@ public class HomeController {
     }
 
 
+
+    @GetMapping("/ancienaccueil")
+    public String redirectToAncienAccueil(Model model) {
+        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
+        model.addAttribute("utilisateurs", utilisateurs);
+        return "ancienaccueil";
+    }
 
 
     @GetMapping("/accueil_admin")
@@ -236,20 +473,6 @@ public class HomeController {
         return "select_fiche";
     }
 
-    // Afficher la fiche no
-    @GetMapping("/fiche/{id}")
-    public String fiche(@PathVariable Long id, Model model) {
-        FicheIntervention ficheIntervention = ficheServ.lire(id);
-        String typeInterventionStr = ficheIntervention.getIntervention().getTypeIntervention();
-        Intervention.TypeIntervention typeIntervention = Intervention.TypeIntervention.valueOf(typeInterventionStr);
-        List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository
-                .findByTypeIntervention(typeIntervention);
-        model.addAttribute("ficheIntervention", ficheIntervention);
-        model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
-        model.addAttribute("color", "#8fabd9");
-        return "fiche_complete";
-    }
-
     @GetMapping("/suivi_progression/{userId}")
     public String suiviProgression(@PathVariable Long userId, Model model) {
         Utilisateur utilisateur = userServ.findById(userId);
@@ -308,108 +531,7 @@ public class HomeController {
         }
     }
 
-    @GetMapping("/fiche/modifier/{id}")
-    public String showFicheDetails(@PathVariable long id, Model model) {
-        FicheIntervention ficheIntervention = ficheServ.lire(id);
-        String typeInterventionStr = ficheIntervention.getIntervention().getTypeIntervention();
-        Intervention.TypeIntervention typeIntervention = Intervention.TypeIntervention.valueOf(typeInterventionStr);
-        List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository
-                .findByTypeIntervention(typeIntervention);
-        model.addAttribute("ficheIntervention", ficheIntervention);
-        model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
-        model.addAttribute("color", "#8fabd9");
-        return "fiche_modifier";
-    }
-
-    @PostMapping("/updateFiche/{id}")
-    public String updateFiche(@PathVariable long id,
-            @RequestParam(required = false) String newNomDemandeur,
-            @RequestParam(required = false) LocalDate newDateDemande,
-            @RequestParam(required = false) String newLocalisation,
-            @RequestParam(required = false) String newDescription,
-            @RequestParam(required = false) Integer newDegreUrgence,
-            @RequestParam(required = false) LocalDate newDateIntervention,
-            @RequestParam(required = false) Integer newDureeIntervention,
-            @RequestParam(required = false) Maintenance.MaintenanceType newMaintenanceType,
-            @RequestParam(required = false) String newNatureType,
-            @RequestParam(required = false) String newTravauxRealises,
-            @RequestParam(required = false) String newTravauxNonRealises,
-            @RequestParam Optional<Boolean> newNouvelleIntervention,
-            @RequestParam(required = false) String newMateriau0,
-            @RequestParam(required = false) String newMateriau1,
-            @RequestParam(required = false) String newMateriau2,
-            @RequestParam(required = false) String newMateriau3,
-            @RequestParam(required = false) String newMateriau4,
-            @RequestParam(required = false) String newMateriau5
-
-    ) {
-
-        boolean nouvelleInterventionValue = newNouvelleIntervention.orElse(false);
-
-        FicheIntervention ficheIntervention = ficheServ.lire(id);
-        if (newNomDemandeur != null) {
-            ficheIntervention.getDemande().setNomDemandeur(newNomDemandeur);
-        }
-        if (newDateDemande != null) {
-            ficheIntervention.getDemande().setDateDemande(newDateDemande);
-        }
-        if (newLocalisation != null) {
-            ficheIntervention.getDemande().setLocalisation(newLocalisation);
-        }
-        if (newDescription != null) {
-            ficheIntervention.getDemande().setDescription(newDescription);
-        }
-        if (newDegreUrgence != null) {
-            ficheIntervention.getDemande().setDegreUrgence(newDegreUrgence);
-        }
-
-        if (newDateIntervention != null) {
-            ficheIntervention.getIntervention().setDateIntervention(newDateIntervention);
-        }
-
-        if (newDureeIntervention != null) {
-            ficheIntervention.getIntervention().setDureeIntervention(newDureeIntervention);
-        }
-
-        if (newMaintenanceType != null) {
-            ficheIntervention.getMaintenance().setMaintenanceType(newMaintenanceType);
-        }
-        if (newNatureType != null) {
-            ficheIntervention.getIntervention().setTypeIntervention(newNatureType);
-        }
-        ficheIntervention.setTravauxRealises(newTravauxRealises);
-        ficheIntervention.setTravauxNonRealises(newTravauxNonRealises);
-        ficheIntervention.setNouvelleIntervention(nouvelleInterventionValue);
-
-        ArrayList<String> materiauxOptions = new ArrayList<>();
-
-        if (newMateriau0 != null) {
-            materiauxOptions.add(newMateriau0);
-        }
-        if (newMateriau1 != null) {
-            materiauxOptions.add(newMateriau1);
-        }
-        if (newMateriau2 != null) {
-            materiauxOptions.add(newMateriau2);
-        }
-        if (newMateriau3 != null) {
-            materiauxOptions.add(newMateriau3);
-        }
-        if (newMateriau4 != null) {
-            materiauxOptions.add(newMateriau4);
-        }
-        if (newMateriau5 != null) {
-            materiauxOptions.add(newMateriau5);
-        }
-
-        if (!materiauxOptions.isEmpty()) {
-            ficheIntervention.setMateriauxOptions(materiauxOptions);
-        }
-
-        ficheServ.modifier(id, ficheIntervention);
-        return "redirect:/fiche/" + id;
-    }
-
+    
     @GetMapping("/fiche/liste_fiche")
     public String showCreateInterventionForm(Model model) {
         List<Utilisateur> users = userServ.lire();

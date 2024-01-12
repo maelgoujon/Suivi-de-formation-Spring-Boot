@@ -7,5 +7,6 @@ import com.webapp.ytb.webappytp.modele.ElementsFiche.Materiaux;
 
 @Repository
 public interface MateriauxRepository extends JpaRepository<Materiaux, Long> {
-        // Ajoutez des méthodes personnalisées si nécessaire
+        //trouver avec le nom de l'image
+        Materiaux findByNomImage(String nomImage);
 }
