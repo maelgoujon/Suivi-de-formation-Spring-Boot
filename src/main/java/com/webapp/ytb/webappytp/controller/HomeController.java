@@ -41,9 +41,9 @@ public class HomeController {
         this.materiauxAmenagementRepository = materiauxAmenagementRepository;
     }
 
-    //-----------------------------------------//
-    //------------Fiche Intervention-----------//
-    //-----------------------------------------//
+    // -----------------------------------------//
+    // ------------Fiche Intervention-----------//
+    // -----------------------------------------//
 
     // Ajouter une fiche
     @GetMapping("/ajout_fiche")
@@ -53,6 +53,7 @@ public class HomeController {
         model.addAttribute("users", userServ.lire());
         return "fiche_a_completer";
     }
+
     @PostMapping("/ajouter_fiche")
     public String ajouter_fiche(@ModelAttribute FicheIntervention fiche, Model model) {
         fiche.setDateCreation(LocalDate.now());
@@ -61,21 +62,56 @@ public class HomeController {
         Intervenant intervenant = new Intervenant();
         Intervention intervention = new Intervention();
         Maintenance maintenance = new Maintenance();
+        // demande
+        demande.setNomDemandeur(fiche.getDemande().getNomDemandeur());
+        demande.setDateDemande(fiche.getDemande().getDateDemande());
+        demande.setLocalisation(fiche.getDemande().getLocalisation());
+        demande.setDescription(fiche.getDemande().getDescription());
+        demande.setDegreUrgence(fiche.getDemande().getDegreUrgence());
+        if (fiche.getDemande().getCouleurTitreDemande() != null) {
+            demande.setCouleurTitreDemande(fiche.getDemande().getCouleurTitreDemande());
+        } else {
+            demande.setCouleurTitreDemande("#000000");
+        }
+        demande.setNiveauTitreDemande(fiche.getDemande().getNiveauTitreDemande());
+        // intervention
+        intervention.setNiveauTitreIntervention(fiche.getIntervention().getNiveauTitreIntervention());
+        intervention.setCouleurTitreIntervention(fiche.getIntervention().getCouleurTitreIntervention());
+        if (fiche.getIntervention() != null)
+        {
+            if (fiche.getIntervention().getTypeIntervention() != null) {
+                intervention.setTypeIntervention(fiche.getIntervention().getTypeIntervention());
+            }
+            if (fiche.getIntervention().getDateIntervention() != null) {
+                intervention.setDateIntervention(fiche.getIntervention().getDateIntervention());
+            }
+            if (fiche.getIntervention().getDureeIntervention() != 0) {
+                intervention.setDureeIntervention(fiche.getIntervention().getDureeIntervention());
+            }
+        }
+        // maintenance
+        if (fiche.getMaintenance() != null && fiche.getMaintenance().getMaintenanceType() != null) {
+            maintenance.setMaintenanceType(fiche.getMaintenance().getMaintenanceType());
+        }
+        // intervenant
+        intervenant.setCouleurNom(fiche.getIntervenant().getCouleurNom());
+        intervenant.setCouleurPrenom(fiche.getIntervenant().getCouleurPrenom());
+        intervenant.setCouleurTitreIntervenant(fiche.getIntervenant().getCouleurTitreIntervenant());
+        intervenant.setNiveauTitreIntervenant(fiche.getIntervenant().getNiveauTitreIntervenant());  
+        //Travaux
+        fiche.setNiveauTravauxRealises(fiche.getNiveauTravauxRealises());
+        fiche.setNiveauTravauxNonRealises(fiche.getNiveauTravauxNonRealises());
         fiche.setDemande(demande);
         fiche.setIntervenant(intervenant);
         fiche.setIntervention(intervention);
         fiche.setMaintenance(maintenance);
-        //on mets tous les niveaux a 1
+        // on mets tous les niveaux a 1
         fiche.setNiveauIntervenant(1);
-        fiche.setNiveauTravauxRealises(1);
-        fiche.setNiveauMateriauxUtilises(1);
         fiche.setNiveauNatureIntervention(1);
-        fiche.getIntervenant().setCouleurTitreIntervenant("#8fabd9");
-        fiche.getIntervenant().setCouleurNom("#9e9e9e");
-        fiche.getIntervenant().setCouleurPrenom("#212121");
-        FicheIntervention createdFiche = ficheServ.creer(fiche);
+        FicheIntervention createdFiche = ficheServ
+                .creer(fiche);
         model.addAttribute("createdFiche", createdFiche);
-        return "redirect:/fiche/" + createdFiche.getId(); // On affiche la fiche créée
+        return "redirect:/fiche/" + createdFiche.getId();
     }
 
     // Afficher la fiche no
@@ -83,7 +119,10 @@ public class HomeController {
     public String fiche(@PathVariable Long id, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(id);
         String typeInterventionStr = ficheIntervention.getIntervention().getTypeIntervention();
-        Intervention.TypeIntervention typeIntervention = Intervention.TypeIntervention.valueOf(typeInterventionStr);
+        Intervention.TypeIntervention typeIntervention = null;
+        if (typeInterventionStr != null) {
+            typeIntervention = Intervention.TypeIntervention.valueOf(typeInterventionStr);
+        }
         List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository
                 .findByTypeIntervention(typeIntervention);
         model.addAttribute("ficheIntervention", ficheIntervention);
@@ -92,22 +131,28 @@ public class HomeController {
         return "fiche_complete";
     }
 
-    //modifier la fiche no
+    // modifier la fiche no
     @GetMapping("/fiche/modifier/{id}")
     public String showFicheDetails(@PathVariable long id, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(id);
 
         // Utiliser directement le type d'intervention de la fiche
         String typeInterventionStr = ficheIntervention.getIntervention().getTypeIntervention();
-        List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository.findByTypeIntervention(
-                Intervention.TypeIntervention.valueOf(typeInterventionStr));
+        Intervention.TypeIntervention typeIntervention = null;
+        if (typeInterventionStr != null) {
+            typeIntervention = Intervention.TypeIntervention.valueOf(typeInterventionStr);
+            List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository.findByTypeIntervention(
+                    Intervention.TypeIntervention.valueOf(typeInterventionStr));
+
+            model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
+        }
 
         model.addAttribute("ficheIntervention", ficheIntervention);
-        model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
         model.addAttribute("color", "#8fabd9");
 
         return "fiche_modifier";
     }
+
     @PostMapping("/updateFiche/{id}")
     public String updateFiche(@PathVariable long id,
             @RequestParam(required = false) String newNomDemandeur,
@@ -286,10 +331,9 @@ public class HomeController {
         return "redirect:/fiche/modifier/" + id;
     }
 
-
-    //-----------------------------------------//
-    //------------Accueils---------------------//
-    //-----------------------------------------//
+    // -----------------------------------------//
+    // ------------Accueils---------------------//
+    // -----------------------------------------//
 
     @GetMapping("/")
     public String home(Model model) {
@@ -406,7 +450,6 @@ public class HomeController {
         }
     }
 
-    
     @GetMapping("/fiche/liste_fiche")
     public String showCreateInterventionForm(Model model) {
         List<Utilisateur> users = userServ.lire();
