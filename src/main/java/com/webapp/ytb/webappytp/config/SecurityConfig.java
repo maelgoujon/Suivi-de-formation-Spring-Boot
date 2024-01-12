@@ -18,13 +18,12 @@ public class SecurityConfig {
                 "/css/**",
                 "/images/**",
                 "/fonts/**",
-                "/scripts/**",
+                "/js/**",
         };
 
         http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(staticResources).permitAll()
-                        .requestMatchers("mdp_oublie").permitAll()
                         .requestMatchers("/", "/accueil").permitAll()
                         .requestMatchers("/login").permitAll()
                         .anyRequest().authenticated())

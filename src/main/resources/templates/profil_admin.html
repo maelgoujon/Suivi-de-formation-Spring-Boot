@@ -182,57 +182,7 @@
     <h2>Profil de : <span th:text="${utilisateur.nom}"></span> <span th:text="${utilisateur.prenom}"></span></h2>
     <div class="encadre">
       <p><strong>Login: </strong> <span th:text="${utilisateur.login}"></span></p>
-      <p><strong>Photo: </strong></p>
-      <img th:src="${utilisateur.photoBase64}" alt="Photo de l'utilisateur" style="max-width: 200px; max-height: 200px;">
-      <p th:if="${utilisateur.description != null and not #strings.isEmpty(utilisateur.description)}">
-        <strong>Description: </strong><span th:text="${utilisateur.description}"></span>
-      </p>
-    
-    
-      <div class="modifier">
-          
-          <a th:href="@{'/modif/' + ${utilisateur.id}}">
-            <img
-              src="/images/modif.png"
-              alt="Modifier un apprenti"
-              class="modifimg"
-            />
-          </a>
-          <p>Modifier profil</p>
-
-          <a href="utilisateur/supprimer">
-              <img
-                src="/images/archive.png"
-                alt="Modifier un apprenti"
-                class="archiveimg"
-              />
-          </a>
-          <p style=" margin-left: 13px">Archiver le profil</p>
-         
-
-          <!--S'affiche que si on est en admin -->
-          <a th:if="${utilisateurConnecteRole == 'ROLE_ADMIN'}" href="/ajout_fiche">
-
-            <h1>+</h1>
-          </a>
-        
-          <a th:if="${utilisateurConnecteRole == 'ROLE_ADMIN'}" href="/ajout_fiche">
-
-              <p>Ajouter une fiche</p>
-          </a>
-
-          <a th:if="${utilisateurConnecteRole == 'ROLE_ADMIN' or utilisateurConnecteRole == 'ROLE_CIP' or utilisateurConnecteRole == 'ROLE_EDUCSIMPLE'}" th:href="@{'/liste_fiche/' + ${utilisateur.id}}">
-            <img
-                src="/images/yeux.png"
-                alt="Voir fiche"
-                class="modifimg"
-              />
-             
-          </a>
-          <p th:if="${utilisateurConnecteRole == 'ROLE_ADMIN' or utilisateurConnecteRole == 'ROLE_CIP' or utilisateurConnecteRole == 'ROLE_EDUCSIMPLE'}" th:href="@{'/liste_fiche/' + ${utilisateur.id}}">Voir ses fiches</p> 
-
-            
-      </div>
-    </div>
+      
+      
 </body>
 </html>

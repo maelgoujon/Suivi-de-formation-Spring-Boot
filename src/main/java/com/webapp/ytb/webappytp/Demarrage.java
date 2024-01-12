@@ -10,6 +10,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
+import com.webapp.ytb.webappytp.modele.Formation;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
@@ -18,6 +19,7 @@ import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Materiaux;
 import com.webapp.ytb.webappytp.repository.FicheRepository;
+import com.webapp.ytb.webappytp.repository.FormationRepository;
 import com.webapp.ytb.webappytp.repository.MateriauxRepository;
 import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
 
@@ -32,6 +34,9 @@ public class Demarrage implements ApplicationRunner {
 
     @Autowired
     private MateriauxRepository materiauxRepository;
+
+    @Autowired
+    private FormationRepository formationRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -100,6 +105,20 @@ public class Demarrage implements ApplicationRunner {
             }
         }
 
+
+        // Creation Formation 1
+            Formation formation = new Formation();
+            formation.setNom("Agent de maintenance en bâtiment");
+            formation.setDescription("Description Formation1");
+            formationRepository.save(formation);
+
+        // Creation Formation 2
+        Formation formation2 = new Formation();
+        formation2.setNom("Nom Formation");
+        formation2.setDescription("Description Formation2");
+        formationRepository.save(formation2);
+        
+
         // Creation de l´administrateur
         Utilisateur admin = utilisateurRepository.findUserByLogin("admin");
         if (admin == null) {
@@ -109,10 +128,49 @@ public class Demarrage implements ApplicationRunner {
             admin.setLogin("admin");
             admin.setMdp("admin");
             admin.setRole(UserRole.ADMIN);
-            admin.setNiveau(1);
             admin.setPhotoBase64(photoBase64);
-            admin.setDescription("Description de l'administrateur");
+            admin.setDescription("Création et modification visuelles totales, laisser des traces écrite/vocal");
             utilisateurRepository.save(admin);
+        }
+        // Creation de l´educsimple
+        Utilisateur educsimple = utilisateurRepository.findUserByLogin("educsimple");
+        if (educsimple == null) {
+            educsimple = new Utilisateur();
+            educsimple.setNom("Educ");
+            educsimple.setPrenom("Simple");
+            educsimple.setLogin("educsimple");
+            educsimple.setMdp("educsimple");
+            educsimple.setRole(UserRole.EDUCSIMPLE);
+            educsimple.setPhotoBase64(photoBase64);
+            educsimple.setDescription("Utilisation des fiches, pourra laisser des traces écrite/vocal \r\n" + //
+                    "");
+            utilisateurRepository.save(educsimple);
+        }
+        // Creation du superadmin
+        Utilisateur superadmin = utilisateurRepository.findUserByLogin("superadmin");
+        if (superadmin == null) {
+            superadmin = new Utilisateur();
+            superadmin.setNom("Super");
+            superadmin.setPrenom("Admin");
+            superadmin.setLogin("superadmin");
+            superadmin.setMdp("superadmin");
+            superadmin.setRole(UserRole.SUPERADMIN);
+            superadmin.setPhotoBase64(photoBase64);
+            superadmin.setDescription("Description de l'administrateur");
+            utilisateurRepository.save(superadmin);
+        }
+        // Creation du CIP
+        Utilisateur CIP = utilisateurRepository.findUserByLogin("CIP");
+        if (CIP == null) {
+            CIP = new Utilisateur();
+            CIP.setNom("CIP");
+            CIP.setPrenom("CIP");
+            CIP.setLogin("cip");
+            CIP.setMdp("cip");
+            CIP.setRole(UserRole.CIP);
+            CIP.setPhotoBase64(photoBase64);
+            CIP.setDescription("Suivi parcours, évolution des compétences, adaptation de la situation d'examen. Pas de modifs visuelles");
+            utilisateurRepository.save(CIP);
         }
 
         // Création d'un utilisateur
@@ -122,7 +180,7 @@ public class Demarrage implements ApplicationRunner {
             michel.setNom("Michel");
             michel.setPrenom("Michel");
             michel.setLogin("michelmichel");
-            michel.setMdp("michel_password");
+            michel.setMdp("1234");
             michel.setRole(UserRole.USER);
             michel.setNiveau(1);
             michel.setPhotoBase64(photoBase64);

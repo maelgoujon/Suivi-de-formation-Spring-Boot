@@ -20,4 +20,7 @@ public interface UtilisateurService {
     void modifierMotDePasse(Long id, String nouveauMotDePasse);
 
     public List<Utilisateur> getUtilisateursByRole(String roleStr);
+
+    Utilisateur findUserByLogin(String login);
+    List<Utilisateur> getAllUtilisateurs();
 }

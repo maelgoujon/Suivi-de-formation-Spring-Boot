@@ -3,11 +3,16 @@ package com.webapp.ytb.webappytp.controller;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
+
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
+import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervenant;
@@ -26,6 +32,9 @@ import com.webapp.ytb.webappytp.modele.ElementsFiche.Materiaux;
 import com.webapp.ytb.webappytp.repository.MateriauxAmenagementRepository;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
+import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
+import org.springframework.security.core.userdetails.User;
+
 
 @Controller
 public class HomeController {
@@ -114,7 +123,7 @@ public class HomeController {
         return "redirect:/fiche/" + createdFiche.getId();
     }
 
-    // Afficher la fiche no
+    // Afficher la fiche n°
     @GetMapping("/fiche/{id}")
     public String fiche(@PathVariable Long id, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(id);
@@ -348,31 +357,135 @@ public class HomeController {
         model.addAttribute("utilisateurs", utilisateurs);
         return "accueil";
     }
-
     @GetMapping("/accueil_admin")
     public String admin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
-        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
-        model.addAttribute("utilisateurs", utilisateurs);
-        if ("ROLE_ADMIN".equals(role)) {
-            return "accueil_admin";
+        
+        if ("ROLE_SUPERADMIN".equals(role)) {
+            return "redirect:/accueil_superadmin";
+        } else if ("ROLE_ADMIN".equals(role) || "ROLE_CIP".equals(role) || "ROLE_EDUCSIMPLE".equals(role)) {
+            // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle "ADMIN"
+            List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
+            model.addAttribute("utilisateurs", utilisateurs);
+            return "/accueil_admin";
+        } else {
+            return "redirect:/accueil";
         }
-        return "redirect:/accueil";
     }
 
+    @GetMapping("/accueil_superadmin")
+    public String superadmin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
+
+        if ("ROLE_SUPERADMIN".equals(role)) {
+            // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle "SUPERADMIN"
+            List<Utilisateur> utilisateurs = userServ.getAllUtilisateurs();
+            model.addAttribute("utilisateurs", utilisateurs);
+            return "/accueil_superadmin";
+        } else {
+            return "redirect:/accueil";
+        }
+    }
+
+    @GetMapping("/ancienaccueil")
+        public String redirectToAncienAccueil(Model model) {
+            List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
+            model.addAttribute("utilisateurs", utilisateurs);
+            return "ancienaccueil";
+        }
+
     @GetMapping("/profil_apprenti/{id}")
-    public String redirectToprofil(@PathVariable Long id, Model model) {
+    public String redirectToprofil(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        String role = userDetails.getAuthorities().iterator().next().getAuthority();
+        // Placer le rôle dans le modèle
+        model.addAttribute("utilisateurConnecteRole", role);
         Utilisateur utilisateur = userServ.findById(id);
         model.addAttribute("utilisateur", utilisateur);
         return "profil_apprenti";
     }
 
-    @GetMapping("/modif/{id}")
-    public String modif(@PathVariable Long id, Model model) {
-        Utilisateur utilisateur = userServ.findById(id);
-        model.addAttribute("utilisateur", utilisateur);
-        return "modif";
+    @GetMapping("/profil_admin")
+    public String redirectToprofiladmin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
+        Utilisateur utilisateur;
+
+        // Vérifiez le rôle de l'utilisateur
+        if ("ROLE_ADMIN".equals(role) || "ROLE_SUPERADMIN".equals(role) || "ROLE_CIP".equals(role) || "ROLE_EDUCSIMPLE".equals(role)) {
+            // Si l'utilisateur a le rôle d'admin, récupérez les informations de l'utilisateur connecté
+            String login = userDetails.getUsername();
+            utilisateur = userServ.findUserByLogin(login);
+
+            // Ajoutez l'utilisateur à votre modèle
+            model.addAttribute("utilisateur", utilisateur);
+
+            // Redirigez vers la page de profil_admin
+            return "profil_admin";
+        } else {
+            // Si l'utilisateur n'a pas le rôle d'admin, redirigez-le vers la page d'accueil
+            return "redirect:/accueil";
+        }
     }
+
+
+
+    @GetMapping("/modif/{id}")
+    public String modif(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        // Vérifiez si l'utilisateur connecté a le rôle de superadmin
+        if (isUserSuperAdmin(userDetails)) {
+            Utilisateur utilisateur = userServ.findById(id);
+            model.addAttribute("utilisateur", utilisateur);
+    
+            // Récupérez les rôles définis dans l'enum UserRole
+            UserRole[] roles = UserRole.values();
+            model.addAttribute("roles", roles);
+    
+            // Vérifiez si le rôle du compte sélectionné est USER
+            if (utilisateur.getRole() == UserRole.USER) {
+                return "/modif";
+            } else {
+                // Si le rôle du compte sélectionné n'est pas USER, redirigez-le vers modif_admin
+                return "redirect:/modif_admin/" + id;
+            }
+        } else {
+            // Si l'utilisateur connecté n'est pas superadmin, redirigez-le vers la page d'accueil
+            return "redirect:/accueil";
+        }
+    }
+    
+
+
+
+    @GetMapping("/modif_admin/{id}")
+    public String modifadmin(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        // Récupérez les rôles définis dans l'enum UserRole
+        UserRole[] roles = UserRole.values();
+        model.addAttribute("roles", roles);
+
+        // Vérifiez si l'utilisateur connecté a le rôle de superadmin
+        if (isUserSuperAdmin(userDetails)) {
+            Utilisateur utilisateur = userServ.findById(id);
+            model.addAttribute("utilisateur", utilisateur);
+
+            // Votre logique spécifique pour la page modif_admin
+            if (utilisateur.getRole() == UserRole.USER) {
+                // Si le rôle de l'utilisateur est USER, redirigez vers la page modif
+                return "redirect:/modif/" + id;
+            } else {
+                // Sinon, affichez la page modif_admin
+                return "/modif_admin";
+            }
+        } else {
+            // Si l'utilisateur connecté n'est pas superadmin, redirigez-le vers la page d'accueil
+            return "redirect:/accueil";
+        }
+    }
+
+
+    private boolean isUserSuperAdmin(UserDetails userDetails) {
+        return userDetails.getAuthorities().stream()
+                .anyMatch(role -> role.getAuthority().equals("ROLE_SUPERADMIN"));
+    }
+
 
     @GetMapping("/mdpmodif/{id}")
     public String mdpmodif(@PathVariable Long id, Model model) {
@@ -380,7 +493,7 @@ public class HomeController {
         model.addAttribute("utilisateur", utilisateur);
         return "mdpmodif";
     }
-
+    
     // deconnection
     @GetMapping("/log_out")
     public String log_out() {
