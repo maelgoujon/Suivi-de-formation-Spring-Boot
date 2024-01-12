@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nouvel Utilisateur</title>
 
-    <head>
+    
         <meta charset="UTF-8" />
         <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -297,21 +297,21 @@
                 </div>
                 
                 <div class="col-md-6 form-group">
+            
                 <label for="role">Role:</label>
                 <select id="role" name="role" th:field="*{role}" required>
-                    <option value="ADMIN">Admin</option>
-                    <option value="SUPERADMIN">Super Admin</option>
-                    <option value="USER">User</option>
+                    <option th:each="role : ${roles}" th:value="${role}" th:text="${role}"></option>
                 </select>
                 </div>
                 <div class="col-md-6 form-group">
-                <label for="niveau">Niveau:</label>
-                <select class="form-control" th:field="*{niveau}" id="niveau">
+                <label for="niveau" id="niveauLabel">Niveau:</label>
+                <select class="form-control" th:field="*{niveau}" id="niveauSelect">
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                 </select>
+                
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="description">Description:</label>
@@ -328,3 +328,31 @@
 </body>
 
 </html>
+
+<script>
+    // Fonction pour gérer les changements dans la sélection du rôle
+    function handleRoleChange() {
+        // Récupérer la sélection du rôle
+        var selectedRole = document.getElementById("role").value;
+
+        // Récupérer la liste déroulante Niveau et le label Niveau
+        var niveauSelect = document.getElementById("niveauSelect");
+        var niveauLabel = document.getElementById("niveauLabel");
+
+        // Condition pour cacher le label et la liste déroulante Niveau si le rôle n'est pas USER
+        if (selectedRole !== "USER") {
+            niveauSelect.style.display = "none";
+            niveauLabel.style.display = "none";
+        } else {
+            niveauSelect.style.display = "block";
+            niveauLabel.style.display = "block";
+        }
+    }
+
+    // Ajouter un écouteur d'événements pour la sélection du rôle
+    document.getElementById("role").addEventListener("change", handleRoleChange);
+
+    // Appeler la fonction lors du chargement de la page pour traiter la valeur initiale
+    handleRoleChange();
+</script>
+

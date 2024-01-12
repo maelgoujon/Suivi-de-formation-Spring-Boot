@@ -1,5 +1,5 @@
 package com.webapp.ytb.webappytp.modele;
 
 public enum UserRole {
-    ADMIN, SUPERADMIN, USER, EDUCSIMPLE
+    ADMIN, SUPERADMIN, USER, EDUCSIMPLE, CIP
 }

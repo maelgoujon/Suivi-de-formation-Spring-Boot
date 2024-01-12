@@ -93,7 +93,7 @@ public class HomeController {
 
         if ("ROLE_SUPERADMIN".equals(role)) {
             return "/accueil_superadmin";
-        } else if ("ROLE_ADMIN".equals(role)) {
+        } else if ("ROLE_ADMIN".equals(role) || "ROLE_CIP".equals(role)) {
             // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle "ADMIN"
             // Vous pouvez rediriger vers la page d'accueil admin ou faire d'autres actions nécessaires.
             return "redirect:/accueil_admin";
@@ -114,7 +114,7 @@ public class HomeController {
         // Modifiez la ligne suivante pour récupérer tous les utilisateurs avec le rôle "ADMIN"
         if ("ROLE_SUPERADMIN".equals(role)) {
             return "redirect:/accueil_superadmin";
-        } else if ("ROLE_ADMIN".equals(role)) {
+        } else if ("ROLE_ADMIN".equals(role) || "ROLE_CIP".equals(role)) {
             // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle "ADMIN"
             // Vous pouvez rediriger vers la page d'accueil admin ou faire d'autres actions nécessaires.
             return "/accueil_admin";
@@ -172,7 +172,7 @@ public class HomeController {
     
             // Vérifiez si le rôle du compte sélectionné est USER
             if (utilisateur.getRole() == UserRole.USER) {
-                return "modif";
+                return "/modif";
             } else {
                 // Si le rôle du compte sélectionné n'est pas USER, redirigez-le vers modif_admin
                 return "redirect:/modif_admin/" + id;
@@ -191,19 +191,26 @@ public class HomeController {
         // Récupérez les rôles définis dans l'enum UserRole
         UserRole[] roles = UserRole.values();
         model.addAttribute("roles", roles);
+
         // Vérifiez si l'utilisateur connecté a le rôle de superadmin
         if (isUserSuperAdmin(userDetails)) {
             Utilisateur utilisateur = userServ.findById(id);
             model.addAttribute("utilisateur", utilisateur);
-            
+
             // Votre logique spécifique pour la page modif_admin
-            
-            return "modif_admin";
+            if (utilisateur.getRole() == UserRole.USER) {
+                // Si le rôle de l'utilisateur est USER, redirigez vers la page modif
+                return "redirect:/modif/" + id;
+            } else {
+                // Sinon, affichez la page modif_admin
+                return "/modif_admin";
+            }
         } else {
             // Si l'utilisateur connecté n'est pas superadmin, redirigez-le vers la page d'accueil
             return "redirect:/accueil";
         }
     }
+
 
     private boolean isUserSuperAdmin(UserDetails userDetails) {
         return userDetails.getAuthorities().stream()

@@ -283,14 +283,7 @@
                 <option th:each="role : ${roles}" th:value="${role}" th:text="${role}"></option>
               </select>
         </div>
-            <div class="col-md-6 form-group">
-            <label for="niveau">Niveau:</label>
-            <select class="form-control" th:field="*{niveau}" id="niveau">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
+            
         </div>
         <div class="col-md-6 form-group">
           <label for="description">Description:</label>
