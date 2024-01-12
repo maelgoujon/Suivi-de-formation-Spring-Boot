@@ -122,10 +122,49 @@ public class Demarrage implements ApplicationRunner {
             admin.setLogin("admin");
             admin.setMdp("admin");
             admin.setRole(UserRole.ADMIN);
-            admin.setNiveau(1);
             admin.setPhotoBase64(photoBase64);
-            admin.setDescription("Description de l'administrateur");
+            admin.setDescription("Création et modification visuelles totales, laisser des traces écrite/vocal");
             utilisateurRepository.save(admin);
+        }
+        // Creation de l´educsimple
+        Utilisateur educsimple = utilisateurRepository.findUserByLogin("educsimple");
+        if (educsimple == null) {
+            educsimple = new Utilisateur();
+            educsimple.setNom("Educ");
+            educsimple.setPrenom("Simple");
+            educsimple.setLogin("educsimple");
+            educsimple.setMdp("educsimple");
+            educsimple.setRole(UserRole.EDUCSIMPLE);
+            educsimple.setPhotoBase64(photoBase64);
+            educsimple.setDescription("Utilisation des fiches, pourra laisser des traces écrite/vocal \r\n" + //
+                    "");
+            utilisateurRepository.save(educsimple);
+        }
+        // Creation du superadmin
+        Utilisateur superadmin = utilisateurRepository.findUserByLogin("superadmin");
+        if (superadmin == null) {
+            superadmin = new Utilisateur();
+            superadmin.setNom("Super");
+            superadmin.setPrenom("Admin");
+            superadmin.setLogin("superadmin");
+            superadmin.setMdp("superadmin");
+            superadmin.setRole(UserRole.SUPERADMIN);
+            superadmin.setPhotoBase64(photoBase64);
+            superadmin.setDescription("Description de l'administrateur");
+            utilisateurRepository.save(superadmin);
+        }
+        // Creation du CIP
+        Utilisateur CIP = utilisateurRepository.findUserByLogin("CIP");
+        if (CIP == null) {
+            CIP = new Utilisateur();
+            CIP.setNom("CIP");
+            CIP.setPrenom("CIP");
+            CIP.setLogin("cip");
+            CIP.setMdp("cip");
+            CIP.setRole(UserRole.CIP);
+            CIP.setPhotoBase64(photoBase64);
+            CIP.setDescription("Suivi parcours, évolution des compétences, adaptation de la situation d'examen. Pas de modifs visuelles");
+            utilisateurRepository.save(CIP);
         }
 
         // Création d'un utilisateur
@@ -135,7 +174,7 @@ public class Demarrage implements ApplicationRunner {
             michel.setNom("Michel");
             michel.setPrenom("Michel");
             michel.setLogin("michelmichel");
-            michel.setMdp("michel_password");
+            michel.setMdp("1234");
             michel.setRole(UserRole.USER);
             michel.setNiveau(1);
             michel.setPhotoBase64(photoBase64);

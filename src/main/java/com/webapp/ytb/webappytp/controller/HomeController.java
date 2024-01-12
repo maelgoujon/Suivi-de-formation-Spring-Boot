@@ -312,55 +312,42 @@ public class HomeController {
         model.addAttribute("utilisateurs", utilisateurs);
         return "accueil";
     }
+    @GetMapping("/accueil_admin")
+    public String admin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
+        
+        if ("ROLE_SUPERADMIN".equals(role)) {
+            return "redirect:/accueil_superadmin";
+        } else if ("ROLE_ADMIN".equals(role) || "ROLE_CIP".equals(role) || "ROLE_EDUCSIMPLE".equals(role)) {
+            // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle "ADMIN"
+            List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
+            model.addAttribute("utilisateurs", utilisateurs);
+            return "/accueil_admin";
+        } else {
+            return "redirect:/accueil";
+        }
+    }
+
     @GetMapping("/accueil_superadmin")
     public String superadmin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
 
-        // Modifiez la ligne suivante pour récupérer tous les utilisateurs
-        List<Utilisateur> utilisateurs = userServ.getAllUtilisateurs();
-
-        model.addAttribute("utilisateurs", utilisateurs);
-
         if ("ROLE_SUPERADMIN".equals(role)) {
+            // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle "SUPERADMIN"
+            List<Utilisateur> utilisateurs = userServ.getAllUtilisateurs();
+            model.addAttribute("utilisateurs", utilisateurs);
             return "/accueil_superadmin";
-        } else if ("ROLE_ADMIN".equals(role) || "ROLE_CIP".equals(role)) {
-            // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle "ADMIN"
-            // Vous pouvez rediriger vers la page d'accueil admin ou faire d'autres actions nécessaires.
-            return "redirect:/accueil_admin";
         } else {
-            // Si le rôle n'est ni superadmin ni admin, redirigez-le vers la page d'accueil normale
             return "redirect:/accueil";
         }
     }
-
-
 
     @GetMapping("/ancienaccueil")
-    public String redirectToAncienAccueil(Model model) {
-        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
-        model.addAttribute("utilisateurs", utilisateurs);
-        return "ancienaccueil";
-    }
-
-
-    @GetMapping("/accueil_admin")
-    public String admin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
-        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
-        model.addAttribute("utilisateurs", utilisateurs);
-        // Modifiez la ligne suivante pour récupérer tous les utilisateurs avec le rôle "ADMIN"
-        if ("ROLE_SUPERADMIN".equals(role)) {
-            return "redirect:/accueil_superadmin";
-        } else if ("ROLE_ADMIN".equals(role) || "ROLE_CIP".equals(role)) {
-            // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle "ADMIN"
-            // Vous pouvez rediriger vers la page d'accueil admin ou faire d'autres actions nécessaires.
-            return "/accueil_admin";
-        } else {
-            // Si le rôle n'est ni superadmin ni admin, redirigez-le vers la page d'accueil normale
-            return "redirect:/accueil";
+        public String redirectToAncienAccueil(Model model) {
+            List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
+            model.addAttribute("utilisateurs", utilisateurs);
+            return "ancienaccueil";
         }
-    }
-
 
     @GetMapping("/profil_apprenti/{id}")
     public String redirectToprofil(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
@@ -378,7 +365,7 @@ public class HomeController {
         Utilisateur utilisateur;
 
         // Vérifiez le rôle de l'utilisateur
-        if ("ROLE_ADMIN".equals(role) || "ROLE_SUPERADMIN".equals(role)) {
+        if ("ROLE_ADMIN".equals(role) || "ROLE_SUPERADMIN".equals(role) || "ROLE_CIP".equals(role) || "ROLE_EDUCSIMPLE".equals(role)) {
             // Si l'utilisateur a le rôle d'admin, récupérez les informations de l'utilisateur connecté
             String login = userDetails.getUsername();
             utilisateur = userServ.findUserByLogin(login);
