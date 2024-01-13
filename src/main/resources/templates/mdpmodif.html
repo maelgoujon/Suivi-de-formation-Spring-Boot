@@ -5,40 +5,15 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Ajoutez les liens vers les fichiers CSS Bootstrap ici -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/accueil.css" rel="stylesheet" />
+    <!-- Ajoutez les liens vers les fichiers JavaScript Bootstrap et jQuery ici -->
+    <script src="/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
     <title>Modifier mot de passe </title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            height: 100vh;
-            align-items: center;
-          }
-
-        .bandeau {
-            background-color: #bbdefb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 80px;
-            border-bottom: 1px solid black;
-        }
-
-        .bandeau img {
-            max-width: 60px;
-            height: auto;
-        }
-
-        .bandeau h1 {
-            color: black;
-            margin: 0;
-        }
-
         .unlock-container {
             width: 300px;
             text-align: center;
@@ -64,7 +39,6 @@
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 8px;
-        
             align-items: center;
         }
 
@@ -76,7 +50,6 @@
             background-color: #fff;
             cursor: pointer;
             transition: 0.3s;
-            
         }
 
         .dot.active {
@@ -86,7 +59,7 @@
         #cancelButton {
             margin-top: 20px;
             cursor: pointer;
-            color: red;
+            color: white; /* Texte en blanc */
         }
 
         /* Ajoutez cette règle pour appliquer une marge supérieure au bouton */
@@ -99,164 +72,82 @@
             padding: 10px 20px;
             cursor: pointer;
         }
+
         .hidden {
             display: none;
-            
         }
 
-        .imagemodif img{
+        .imagemodif img {
             height: 50px;
         }
-
-        .encadre{
-            border: 2px solid #000000; /* Couleur et épaisseur de la bordure */
-            border-radius: 10px;
-            padding: 10px; /* Espace à l'intérieur de la bordure */
-            width: 300px; /* Largeur de la division */
-            margin: 20px; /* Marge autour de la division */
-            padding-bottom: 10px;
-        }
-        @media screen and (max-width: 1920px) and (max-height: 1200px) {
-            .encadre {
-                align-items: center;
-                width: 19%;
-                
-            }
-            h2{
-                font-size: 40px;
-                
-            }
-            #cancelButton{
-              font-size: 25px;
-              
-            }
-            .dot{
-                width: 80px; /* Ajustez la taille des dots selon vos besoins */
-                height: 80px;
-                
-            }
-            .imagemodif img{
-                height: 80px;
-               
-            }
-            button[type="submit"] {
-                font-size: 20px;
-                
-            }
-          }
-    
-          
-        @media screen and (max-width: 1200px) and (max-height: 1920px) {
-            .encadre {
-                align-items: center;
-                width: 37%;
-            }
-            h2{
-                font-size: 40px;
-                margin-top: 50px;
-            }
-            #cancelButton{
-              font-size: 35px;
-              margin-left: 140px;
-            }
-            .dot{
-                width: 100px; /* Ajustez la taille des dots selon vos besoins */
-                height: 100px;
-                margin-top: 15px;
-            }
-            .imagemodif img{
-                height: 100px;
-                margin-left: 140px;
-            }
-            
-          }
-
-       
-          
-          
-
-        
     </style>
 </head>
 
 <body>
-    <div class="bandeau">
-        <a href="/log_out">
-          <img src="/images/porte.png" alt="logout" style="float: left" />
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color" style="background-color: #bbdefb;"> <!-- Fond du header en #2596be -->
+        <a href="accueil_admin" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+            <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
         </a>
-        <a href="/archive">
-            <img src="/images/archive.png" alt="archive" style="margin-left: 10px" />
-        </a>
-    
-        <div class="bandeau centered">
-            <a href="/accueil_admin">
-                <img src="/images/accueil.png" alt="accueil"/>
-            </a>
-        </div>
-        <a
-          href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
-        >
-          <img
-            src="/images/aide.png"
-            alt="aide"
-            style="cursor: pointer; margin-right: 10px"
-          />
-        </a>
-    </div>
 
-    <h2>Rentrer un nouveau modèle </h2>
-    <div class="encadr">
-        <!-- Afficher un message de succès si le mdp à été modifié avec succès -->
-        <div th:if="${success}">
-            <p style="color: green;">Mot de passe modifié avec succès!</p>
-        </div>
-        <!-- Afficher un message d'erreur si le mdp n'a pas été modifié avec succès -->
-        <div th:if="${error}">
-            <p style="color: red;">Erreur lors de la modification du mot de passe!</p>
-        </div>
-        <form class="formulaire" th:action="@{/utilisateur/modifmdp/{id}(id=${utilisateur.id})}" th:object="${utilisateur}" method="post">
-            <!-- ... autres champs ... -->
-        
-            <!-- Intégration du modèle de déverrouillage -->
-            <div class="unlock-container">
-                <div class="pattern" id="patern" name="motdepasse">
-                    <!-- 9 points du modèle -->
-                    <div class="dot" data-index="1"></div>
-                    <div class="dot" data-index="2"></div>
-                    <div class="dot" data-index="3"></div>
-                    <div class="dot" data-index="4"></div>
-                    <div class="dot" data-index="5"></div>
-                    <div class="dot" data-index="6"></div>
-                    <div class="dot" data-index="7"></div>
-                    <div class="dot" data-index="8"></div>
-                    <div class="dot" data-index="9"></div>
-                </div>
-                <input type="hidden" th:field="*{mdp}" id="motDePasseHidden" />
-                <button type="submit" id="modifierMdpBtn" class="hidden">Modifier le mot de passe</button>
-                <div id="cancelButton">Annuler la sélection</div>
-                <div class="imagemodif">
-                    <a th:href="@{'/modif/' + ${utilisateur.id}}">
-                        <img
-                        src="/images/return.png"
-                        alt="Modifier un apprenti"
-                        style="cursor: pointer"
-                        />
-                    </a>
+        <ul class="nav nav-pills">
+            <li class="nav-item"><a href="../../accueil_superadmin" class="nav-link active text-white fs-5" aria-current="page">Accueil</a></li>
+            <li class="nav-item"><a href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing" class="nav-link text-black fs-5">Aide</a></li>
+            <li class="nav-item"><a href="log_out" class="nav-link text-black fs-5">Se déconnecter</a></li>
+        </ul>
+    </header>
 
-                </div>
+    <div class="container mt-4">
+        <h2>Rentrer un nouveau modèle </h2>
+        <div class="encadr">
+            <!-- Afficher un message de succès si le mdp à été modifié avec succès -->
+            <div th:if="${success}" class="alert alert-success">
+                Mot de passe modifié avec succès!
             </div>
-        </form>
+            <!-- Afficher un message d'erreur si le mdp n'a pas été modifié avec succès -->
+            <div th:if="${error}" class="alert alert-danger">
+                Erreur lors de la modification du mot de passe!
+            </div>
+
+            <form class="formulaire" th:action="@{/utilisateur/modifmdp/{id}(id=${utilisateur.id})}" th:object="${utilisateur}" method="post">
+                <!-- ... autres champs ... -->
+
+                <!-- Intégration du modèle de déverrouillage -->
+                <div class="unlock-container">
+                    <div class="pattern" id="patern" name="motdepasse">
+                        <!-- 9 points du modèle -->
+                        <div class="dot" data-index="1"></div>
+                        <div class="dot" data-index="2"></div>
+                        <div class="dot" data-index="3"></div>
+                        <div class="dot" data-index="4"></div>
+                        <div class="dot" data-index="5"></div>
+                        <div class="dot" data-index="6"></div>
+                        <div class="dot" data-index="7"></div>
+                        <div class="dot" data-index="8"></div>
+                        <div class="dot" data-index="9"></div>
+                    </div>
+                    <input type="hidden" th:field="*{mdp}" id="motDePasseHidden" />
+                    <button type="submit" id="modifierMdpBtn" class="hidden btn btn-primary">Modifier le mot de passe</button>
+                    <div id="cancelButton" class="btn btn-danger">Annuler la sélection</div>
+                    <div class="imagemodif mt-3">
+                        <a th:href="@{'/modif/' + ${utilisateur.id}}">
+                            <img src="/images/return.png" alt="Modifier un apprenti" style="cursor: pointer" class="img-fluid">
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-        
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const dots = document.querySelectorAll('.dot');
             const cancelButton = document.getElementById('cancelButton');
             const motDePasseHidden = document.getElementById('motDePasseHidden');
             const modifierMdpBtn = document.getElementById('modifierMdpBtn');
-    
+
             let selectedOrder = []; // Ajout de cette variable pour stocker l'ordre de sélection
-    
+
             dots.forEach(dot => {
                 dot.addEventListener('click', function () {
                     if (selectedOrder.length < 4) {
@@ -266,7 +157,7 @@
                     }
                 });
             });
-    
+
             cancelButton.addEventListener('click', function () {
                 dots.forEach(dot => {
                     dot.classList.remove('active');
@@ -275,7 +166,7 @@
                 updateHiddenPassword();
                 toggleModifierMdpBtn();
             });
-    
+
             function updateSelectedOrder(index) {
                 if (selectedOrder.includes(index)) {
                     // Si l'index est déjà présent, le retirer
@@ -286,11 +177,11 @@
                 }
                 updateHiddenPassword();
             }
-    
+
             function updateHiddenPassword() {
                 motDePasseHidden.value = selectedOrder.join('');
             }
-    
+
             function toggleModifierMdpBtn() {
                 if (selectedOrder.length === 4) {
                     modifierMdpBtn.classList.remove('hidden');
