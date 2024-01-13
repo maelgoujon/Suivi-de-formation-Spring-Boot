@@ -1,323 +1,141 @@
 <!DOCTYPE html>
 <html lang="fr">
-
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Accueil Super Admin</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      height: 100vh;
-    }
-
-    .bandeau {
-      background-color: #bbdefb;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 80px;
-      border-bottom: 1px solid black;
-    }
-
-    .bandeau img {
-      max-width: 60px;
-      height: auto;
-    }
-
-    .bandeau h1 {
-      color: black;
-      margin: 0;
-    }
-
-    .conteneur {
-      margin-top: 50px;
-      width: 100%;
-      max-width: 1200px;
-      margin-top: 100px;
-      background-color: white;
-      border: 1px solid black;
-      text-align: center;
-      padding: 20px;
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-      overflow: hidden;
-      height: auto;
-      /* Ajustez la hauteur selon vos besoins */
-    }
-
-    .titre {
-      font-size: 20px;
-      margin-bottom: 20px;
-    }
-
-    .profils {
-      display: flex;
-      transition: transform 0.3s;
-      /* Animation de transition fluide */
-    }
-
-    .profil {
-      border: 1px solid black;
-      padding: 10px;
-      margin: 10px;
-      flex: 0 0 calc(30% - 20px);
-      text-align: center;
-      cursor: pointer;
-    }
-
-    .profil.selected {
-      border: 5px solid #72bb53;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    }
-
-
-    .ajouter {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 20px;
-      height: auto;
-      /* Ajustez la hauteur selon vos besoins */
-      position: relative;
-    }
-
-    .ajouter button {
-      position: absolute;
-      top: 0;
-      right: 0;
-      display: none;
-    }
-
-    .ajouter.selected button {
-      display: block;
-    }
-
-    .ajouter img {
-      max-width: 80px;
-      height: auto;
-    }
-
-    .ajouter p {
-      margin-left: 10px;
-    }
-
-    .nom {
-      font-weight: bold;
-    }
-
-    .prenom {
-      font-style: italic;
-    }
-
-    .profil img {
-      max-height: 10vh;
-    }
-
-
-
-    .button-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 10px;
-    }
-
-    #profil_apprenti {
-      background-color: #72bb53;
-      border-radius: 10px;
-      color: black;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-
-    .centered {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .profils {
-      display: flex;
-      transition: transform 1s ease;
-      /* Ajoutez une transition de 0.3 secondes avec une fonction de facilité */
-    }
-
-    .carousel {
-      display: block;
-      width: 100%;
-      /* Ajustez la hauteur en fonction de vos besoins */
-      height: 30vh;
-      /* Vous pouvez ajuster cette valeur selon vos préférences */
-      background: white;
-      overflow-x: scroll;
-      padding: 10px;
-      margin: 0;
-      border-top: 2px solid rgba(0, 0, 0, 0.1);
-      border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-    }
-
-    @media (min-width: 1600px) {
-      .conteneur {
-        width: 100%;
-        max-width: 1500px;
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Ajoutez les liens vers les fichiers CSS Bootstrap ici -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/accueil.css" rel="stylesheet" />
+    <!-- Ajoutez les liens vers les fichiers JavaScript Bootstrap et jQuery ici -->
+    <script src="/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <title>Accueil Super Admin</title>
+    <style>
+      #profil_apprenti {
+        background-color: #72bb53;
+        border-radius: 10px;
+        color: black;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        margin-bottom: 10px;
       }
 
-      .carousel {
-        height: 25vh;
+      .profil.selected {
+        border: 5px solid #72bb53;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
       }
+
+      .card-img-top {
+        max-width: 100%; /* Set maximum width to 100% */
+        max-height: 210px; /* Set maximum height to your desired value */
+        object-fit: cover; /* Ensure the image covers the specified dimensions */
     }
-
-    @media (max-width: 1200px) {
-      .conteneur {
-        width: 100%;
-        max-width: 800px;
-        /* Vous pouvez ajuster cette valeur selon vos préférences */
-        height: auto;
-      }
-
-      .carousel {
-        height: 25vh;
-        /* Ajustez la hauteur selon vos préférences */
-      }
-    }
-
-    @media (max-width: 600px) {
-      .conteneur {
-        width: 80%;
-        max-width: 250px;
-      }
-
-      .carousel {
-        height: 35vh;
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="bandeau">
-    <a href="log_out">
-      <img src="/images/porte.png" alt="profil" style="float: left" />
-    </a>
+    </style>
     
+  </head>
 
-    <div class="bandeau centered">
-      <a href="archive">
-        <img src="/images/archive.png" alt="archive" style="margin-left: 10px" />
+  <body>
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color" style="background-color: #bbdefb;">
+      <a href="accueil_admin" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+          <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+          <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
       </a>
-    </div>
-    <a href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing">
-      <img src="/images/aide.png" alt="aide" style="cursor: pointer; margin-left: auto" />
-    </a>
-  </div>
+  
+      <ul class="nav nav-pills">
+          <li class="nav-item"><a href="accueil_superadmin" class="nav-link active text-white fs-5" aria-current="page">Accueil</a></li>
+          <li class="nav-item"><a href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing" class="nav-link text-black fs-5">Aide</a></li>
+          <li class="nav-item"><a href="log_out" class="nav-link text-black fs-5">Se déconnecter</a></li>
+      </ul>
+    </header>
 
-  <div class="conteneur">
-    <div class="carousel">
-      <div class="profils" id="carousel">
+    <!-- Ajout de l'image cliquable et du texte "Ajouter un apprenti" -->
+    <div class="ajouter text-center d-flex flex-column align-items-center mt-5">
+      <a href="utilisateur/nouveau" class="d-flex align-items-center">
+        <img src="/images/logo_plus.png" alt="Ajouter un utilisateur" style="cursor: pointer; width: 100px; height: 100px; margin-right: 5px;" />
+        <p style="margin: 0;">Ajouter un utilisateur</p>
+      </a>
+      <div id="voir_profil_container" style="display: none; margin-top: 10px;">
+        <button id="profil_apprenti">Voir son profil</button>
+      </div>
+    </div>
+    <div class="container mt-4">
+      <div class="row row-cols-1 row-cols-md-3 g-4">
         <!-- Iteration sur chaque utilisateur -->
         <div th:each="utilisateur : ${utilisateurs}" class="profil" th:data-id="${utilisateur.id}">
-          <div th:if="${utilisateur.photoBase64 != null and not #strings.isEmpty(utilisateur.photoBase64)}">
-            <img th:src="${utilisateur.photoBase64}" alt="Photo de profil" />
+          <div class="card profil">
+            <div th:if="${utilisateur.photoBase64 != null and not #strings.isEmpty(utilisateur.photoBase64)}">
+              <img class="card-img-top" th:src="${utilisateur.photoBase64}" alt="Photo de profil" />
+            </div>
+            <div th:if="${utilisateur.photoBase64 == null or #strings.isEmpty(utilisateur.photoBase64)}">
+              <img class="card-img-top" src="/images/icone_profil.png" alt="Photo de profil par défaut" />
+            </div>
+            <div class="card-body">
+              <h5 class="card-title nom" th:text="${utilisateur.nom}">Nom de l'utilisateur</h5>
+              <p class="card-text prenom" th:text="${utilisateur.prenom}">Prénom de l'utilisateur</p>
+            </div>
           </div>
-          <div th:if="${utilisateur.photoBase64 == null or #strings.isEmpty(utilisateur.photoBase64)}">
-            <img src="/images/icone_profil.png" alt="Photo de profil par défaut" />
-          </div>
-          <p class="nom" th:text="${utilisateur.nom}">Nom de l'utilisateur</p>
-          <p class="prenom" th:text="${utilisateur.prenom}">Prénom de l'utilisateur</p>
         </div>
       </div>
-
+      <div class="button-container"></div>
     </div>
-    <div class="button-container">
 
-    </div>
-    <!-- Ajout de l'image cliquable et du texte "Ajouter un apprenti" -->
-    <div class="ajouter">
-
-      <a href="utilisateur/nouveau">
-        <img src="/images/logo_plus.png" alt="Ajouter un apprenti" style="cursor: pointer" />
-      </a>
-      <button id="profil_apprenti" style="display: none">
-        Voir son profil
-      </button>
-      <p>Ajouter un utilisateur</p>
-    </div>
-  </div>
-  <script>
-    const carousel = document.getElementById("carousel");
-    const connectButton = document.getElementById("profil_apprenti");
-
-    let currentPosition = 0;
-    const itemWidth = 33.33;
-    const itemsInView = 3;
-    const maxPosition = -itemWidth * (6 - itemsInView);
-
-    let selectedProfile = null;
-
-
-
-    function selectProfile(profile) {
-      if (selectedProfile === profile) {
-        deselectProfile();
-      } else {
-        if (selectedProfile) {
-          selectedProfile.classList.remove("selected");
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const profils = document.querySelectorAll(".profil");
+        const connectButton = document.getElementById("profil_apprenti");
+        const voirProfilContainer = document.getElementById("voir_profil_container");
+    
+        let selectedProfile = null;
+    
+        function selectProfile(profile) {
+          if (selectedProfile === profile) {
+            deselectProfile();
+          } else {
+            if (selectedProfile) {
+              selectedProfile.classList.remove("selected");
+            }
+            profile.classList.add("selected");
+            selectedProfile = profile;
+            voirProfilContainer.style.display = "block";
+            // Ajouter le défilement vers le haut ici
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
         }
-        profile.classList.add("selected");
-        selectedProfile = profile;
-        connectButton.style.display = "block";
-      }
-    }
-
-    function deselectProfile() {
-      if (selectedProfile) {
-        selectedProfile.classList.remove("selected");
-        selectedProfile = null;
-        connectButton.style.display = "none";
-      }
-    }
-
-
-
-    carousel.addEventListener("click", (event) => {
-      const profile = event.target.closest(".profil");
-      if (profile) {
-        selectProfile(profile);
-      }
-    });
-
-    connectButton.addEventListener("click", () => {
-      if (selectedProfile) {
-        // Récupérez l'id du profil sélectionné
-        const userId = selectedProfile.getAttribute("data-id");
-
-        // Redirigez vers la page "profil_apprenti" avec l'id selectionné
-        window.location.href = "profil_apprenti/" + userId;
-      }
-    });
-
-    let touchStartX = 0;
-
-    carousel.addEventListener("touchstart", (event) => {
-      touchStartX = event.touches[0].clientX;
-    });
-
-
-
-    carousel.addEventListener("touchend", () => {
-      // Réinitialiser la valeur de départ du toucher
-      touchStartX = 0;
-    });
-  </script>
-</body>
-
+    
+        function deselectProfile() {
+          if (selectedProfile) {
+            selectedProfile.classList.remove("selected");
+            selectedProfile = null;
+            voirProfilContainer.style.display = "none";
+          }
+        }
+    
+        profils.forEach((profile) => {
+          profile.addEventListener("click", (event) => {
+            selectProfile(profile);
+          });
+        });
+    
+        connectButton.addEventListener("click", () => {
+          if (selectedProfile) {
+            const userId = selectedProfile.getAttribute("data-id");
+            window.location.href = "profil_apprenti/" + userId;
+          }
+        });
+    
+        document.addEventListener("click", (event) => {
+          const isProfile = event.target.closest(".profil");
+          if (!isProfile) {
+            deselectProfile();
+          }
+        });
+      });
+    </script>
+  </body>
 </html>

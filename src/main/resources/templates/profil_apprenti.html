@@ -229,7 +229,7 @@
               />
              
           </a>
-          <p th:if="${utilisateurConnecteRole == 'ROLE_ADMIN' or utilisateurConnecteRole == 'ROLE_CIP' or utilisateurConnecteRole == 'ROLE_EDUCSIMPLE'}" th:href="@{'/liste_fiche/' + ${utilisateur.id}}">Voir ses fiches</p> 
+          <p th:if="${utilisateurConnecteRole == 'ROLE_ADMIN' or utilisateurConnecteRole == 'ROLE_CIP' or utilisateurConnecteRole == 'ROLE_EDUCSIMPLE'}" th:href="@{'/fiche/liste_fiche/' + ${utilisateur.id}}">Voir ses fiches</p> 
 
             
       </div>

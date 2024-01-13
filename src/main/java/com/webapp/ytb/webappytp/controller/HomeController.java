@@ -3,6 +3,9 @@ package com.webapp.ytb.webappytp.controller;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
+
+
+
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -10,7 +13,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
+
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -182,7 +188,7 @@ public class HomeController {
 
         return "fiche_modifier";
     }
-
+    
     @PostMapping("/updateFiche/{id}")
     public String updateFiche(@PathVariable long id,
             @RequestParam(required = false) String newNomDemandeur,
@@ -361,15 +367,16 @@ public class HomeController {
         return "redirect:/fiche/modifier/" + id;
     }
 
-    // -----------------------------------------//
-    // ------------Accueils---------------------//
-    // -----------------------------------------//
-    @GetMapping("/")
+    //-----------------------------------------//
+    //------------Accueils---------------------//
+    //-----------------------------------------//
+     @GetMapping("/")
     public String home(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
         model.addAttribute("utilisateurs", utilisateurs);
         return "accueil";
     }
+
     @GetMapping("/redirectByRole")
     public String redirectByRole() {
         String utilisateurConnecteRole = determineUserRole();
@@ -389,7 +396,6 @@ public class HomeController {
                 .map(GrantedAuthority::getAuthority)
                 .orElse("");
     }
-
     @GetMapping("/accueil")
     public String redirectToAccueil(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
