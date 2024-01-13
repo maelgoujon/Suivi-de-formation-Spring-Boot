@@ -149,9 +149,7 @@ public class HomeController {
 
         // Utiliser directement le type d'intervention de la fiche
         String typeInterventionStr = ficheIntervention.getIntervention().getTypeIntervention();
-        Intervention.TypeIntervention typeIntervention = null;
         if (typeInterventionStr != null) {
-            typeIntervention = Intervention.TypeIntervention.valueOf(typeInterventionStr);
             List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository.findByTypeIntervention(
                     Intervention.TypeIntervention.valueOf(typeInterventionStr));
 
@@ -163,7 +161,7 @@ public class HomeController {
 
         return "fiche_modifier";
     }
-
+    
     @PostMapping("/updateFiche/{id}")
     public String updateFiche(@PathVariable long id,
             @RequestParam(required = false) String newNomDemandeur,
