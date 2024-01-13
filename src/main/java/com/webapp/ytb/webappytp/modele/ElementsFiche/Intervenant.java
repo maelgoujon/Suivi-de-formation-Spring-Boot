@@ -38,5 +38,9 @@ public class Intervenant {
 
     @Column
     private String couleurPrenom;
+
+    //Images
+    @Column
+    private String imageTitreIntervenantUrl;
     
 }
