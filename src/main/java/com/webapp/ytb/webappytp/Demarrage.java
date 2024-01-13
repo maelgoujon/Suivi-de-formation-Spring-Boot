@@ -103,10 +103,25 @@ public class Demarrage implements ApplicationRunner {
             }
         }
 
+        // Creation Formation 1
+        Formation formation = new Formation();
+        formation.setNom("Agent de maintenance en bâtiment");
+        formation.setNiveau_qualif("CAP 2");
+        formation.setDescription("Description Formation1");
+        formationRepository.save(formation);
+
+        // Creation Formation 2
+        Formation formation2 = new Formation();
+        formation2.setNom("Nom Formation");
+        formation2.setNiveau_qualif("CAP 1ere Annee"); 
+        formation2.setDescription("Description Formation2");
+        formationRepository.save(formation2);
+
         // Creation de l´administrateur
         Utilisateur admin = utilisateurRepository.findUserByLogin("admin");
         if (admin == null) {
             admin = new Utilisateur();
+            admin.setFormation(formation);
             admin.setNom("Admin");
             admin.setPrenom("Admin");
             admin.setLogin("admin");
@@ -120,6 +135,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur educsimple = utilisateurRepository.findUserByLogin("educsimple");
         if (educsimple == null) {
             educsimple = new Utilisateur();
+            educsimple.setFormation(formation2);
             educsimple.setNom("Educ");
             educsimple.setPrenom("Simple");
             educsimple.setLogin("educsimple");
@@ -134,6 +150,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur superadmin = utilisateurRepository.findUserByLogin("superadmin");
         if (superadmin == null) {
             superadmin = new Utilisateur();
+            superadmin.setFormation(formation);
             superadmin.setNom("Super");
             superadmin.setPrenom("Admin");
             superadmin.setLogin("superadmin");
@@ -147,6 +164,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur CIP = utilisateurRepository.findUserByLogin("CIP");
         if (CIP == null) {
             CIP = new Utilisateur();
+            CIP.setFormation(formation);
             CIP.setNom("CIP");
             CIP.setPrenom("CIP");
             CIP.setLogin("cip");
@@ -162,6 +180,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur michel = utilisateurRepository.findUserByLogin("michelmichel");
         if (michel == null) {
             michel = new Utilisateur();
+            michel.setFormation(formation);
             michel.setNom("Michel");
             michel.setPrenom("Michel");
             michel.setLogin("michelmichel");
@@ -173,17 +192,6 @@ public class Demarrage implements ApplicationRunner {
             utilisateurRepository.save(michel);
         }
 
-        // Creation Formation 1
-        Formation formation = new Formation();
-        formation.setNom("Agent de maintenance en bâtiment");
-        formation.setDescription("Description Formation1");
-        formationRepository.save(formation);
-
-        // Creation Formation 2
-        Formation formation2 = new Formation();
-        formation2.setNom("Nom Formation");
-        formation2.setDescription("Description Formation2");
-        formationRepository.save(formation2);
 
         // Creation d'une fiche d'Intervention
         FicheIntervention ficheIntervention = ficheRepository

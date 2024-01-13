@@ -1,6 +1,5 @@
 package com.webapp.ytb.webappytp.modele;
 
-import java.util.HashSet;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -61,4 +60,7 @@ public class Utilisateur {
     @Column
     private Integer niveau;
 
+    @ManyToOne
+    @JoinColumn(name = "formation_id")
+    private Formation formation;
 }

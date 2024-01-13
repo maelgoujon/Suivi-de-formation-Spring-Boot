@@ -2,7 +2,6 @@ package com.webapp.ytb.webappytp.modele;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,8 +25,12 @@ public class Formation {
     @NotBlank(message = "Le champ 'nom' est obligatoire.")
     private String nom;
 
+    @Column(length = 50)
+    private String niveau_qualif;
+
     @Column(length = 500)
     private String description;
-    
-    
+
+    @OneToMany(mappedBy = "formation")
+    private List<Utilisateur> utilisateurs;
 }

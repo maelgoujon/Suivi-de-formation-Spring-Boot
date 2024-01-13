@@ -1,9 +1,11 @@
 package com.webapp.ytb.webappytp.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.webapp.ytb.webappytp.modele.Formation;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
@@ -29,16 +31,16 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public Utilisateur modifier(Long id, Utilisateur utilisateur) {
         return utilisateurRepository.findById(id)
-        .map(p-> {
-            p.setPrenom(utilisateur.getPrenom());
-            p.setNom(utilisateur.getNom());
-            p.setLogin(utilisateur.getLogin());
-            p.setMdp(utilisateur.getMdp());
-            p.setPhotoBase64(utilisateur.getPhotoBase64());
-            p.setRole(utilisateur.getRole());
-            p.setDescription(utilisateur.getDescription());
-            return utilisateurRepository.save(p);
-        }).orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .map(p -> {
+                    p.setPrenom(utilisateur.getPrenom());
+                    p.setNom(utilisateur.getNom());
+                    p.setLogin(utilisateur.getLogin());
+                    p.setMdp(utilisateur.getMdp());
+                    p.setPhotoBase64(utilisateur.getPhotoBase64());
+                    p.setRole(utilisateur.getRole());
+                    p.setDescription(utilisateur.getDescription());
+                    return utilisateurRepository.save(p);
+                }).orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
     }
 
@@ -81,5 +83,14 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         return utilisateurRepository.findAll();
     }
 
+    @Override
+    public List<Utilisateur> findUserByFormation(Long formationId) {
+        return utilisateurRepository.findByFormation_Id(formationId);
+    }
+
+    @Override
+    public Optional<Formation> findFormationByUtilisateur(Long utilisateurId) {
+        return utilisateurRepository.findById(utilisateurId).map(Utilisateur::getFormation);
+    }
 
 }

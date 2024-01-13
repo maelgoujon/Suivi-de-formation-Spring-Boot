@@ -521,16 +521,6 @@ public class HomeController {
         return "record";
     }
 
-    @GetMapping("/mdp_oublie")
-    public String mdp_oublie() {
-        return "mdp_oublie";
-    }
-
-    @GetMapping("/mdp_oublieformateur")
-    public String mdp_oublieformateur() {
-        return "mdp_oublieformateur";
-    }
-
     @GetMapping("/recordaffichage/{ficheId}")
     public String recordaffichage(@PathVariable Long ficheId, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(ficheId);

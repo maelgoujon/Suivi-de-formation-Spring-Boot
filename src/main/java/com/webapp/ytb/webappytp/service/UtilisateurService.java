@@ -1,8 +1,9 @@
 package com.webapp.ytb.webappytp.service;
 
-
 import java.util.List;
+import java.util.Optional;
 
+import com.webapp.ytb.webappytp.modele.Formation;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 
 public interface UtilisateurService {
@@ -22,5 +23,11 @@ public interface UtilisateurService {
     public List<Utilisateur> getUtilisateursByRole(String roleStr);
 
     Utilisateur findUserByLogin(String login);
+
     List<Utilisateur> getAllUtilisateurs();
+
+    public List<Utilisateur> findUserByFormation(Long formationId);
+
+    public Optional<Formation> findFormationByUtilisateur(Long utilisateurId);
+
 }

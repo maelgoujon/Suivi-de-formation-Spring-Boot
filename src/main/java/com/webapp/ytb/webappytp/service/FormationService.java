@@ -17,5 +17,9 @@ public interface FormationService {
 
     Formation findById(Long id);
 
-    public void generatedExcel(HttpServletResponse response) throws Exception;
+    public void generatedExcel(Long formationId, HttpServletResponse response) throws Exception;
+
+    public void ajouterUtilisateurALaFormation(Long utilisateurId, Long formationId);
+
+    public void retirerUtilisateurDeLaFormation(Long utilisateurId, Long formationId);
 }
