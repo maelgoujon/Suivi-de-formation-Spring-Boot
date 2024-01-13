@@ -113,7 +113,7 @@ public class FormationController {
 
         response.flushBuffer();
         // Suppression des éléments liés à la formation 
-        // supprimmer la formation (3), les users liés à la formation (2) ainsi que les fiches liés à l'user (1)
+        // supprimer les users liés à la formation (2) ainsi que les fiches liés à l'user (1)
         
         // Retrieve all users associated with the formation
         List<Utilisateur> utilisateurs = utilisateurService.findUserByFormation(id_formation);
@@ -131,8 +131,6 @@ public class FormationController {
             utilisateurService.supprimer(utilisateur.getId());
         }
 
-        // (3) Delete the formation
-        formationService.supprimer(id_formation);
     }
 
 }
