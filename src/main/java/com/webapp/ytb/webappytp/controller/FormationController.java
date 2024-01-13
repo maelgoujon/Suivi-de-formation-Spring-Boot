@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.Formation;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
+import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.FormationServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
 
@@ -31,6 +33,8 @@ public class FormationController {
     private FormationServiceImpl formationService;
     @Autowired
     private UtilisateurServiceImpl utilisateurService;
+    @Autowired
+    private FicheServiceImpl ficheService;
 
     @PostMapping("/ajouterFormation")
     public String ajouterFormation(@ModelAttribute Formation formation, RedirectAttributes redirectAttributes) {
@@ -89,11 +93,12 @@ public class FormationController {
         return "liste_formations";
     }
 
-    @GetMapping("/excel/{id}")
-    public void generateExcelArchive(@PathVariable Long id, HttpServletResponse response) throws Exception {
-        Formation formation = formationService.findById(id);
+    @GetMapping("/excel/{id_formation}")
+    public void generateExcelArchive(@PathVariable Long id_formation, HttpServletResponse response) throws Exception {
+        // Création du fichier excel 
+        Formation formation = formationService.findById(id_formation);
         if (formation == null) {
-            throw new RuntimeException("Formation not found with ID: " + id);
+            throw new RuntimeException("Formation not found with ID: " + id_formation);
         }
 
         response.setContentType("application/octet-stream");
@@ -104,9 +109,30 @@ public class FormationController {
 
         response.setHeader(headerKey, headerValue);
 
-        formationService.generatedExcel(id, response);
+        formationService.generatedExcel(id_formation, response);
 
         response.flushBuffer();
+        // Suppression des éléments liés à la formation 
+        // supprimmer la formation (3), les users liés à la formation (2) ainsi que les fiches liés à l'user (1)
+        
+        // Retrieve all users associated with the formation
+        List<Utilisateur> utilisateurs = utilisateurService.findUserByFormation(id_formation);
+
+        // (1) Delete fiches d'intervention for each user
+        for (Utilisateur utilisateur : utilisateurs) {
+            List<FicheIntervention> fiches = ficheService.getFichesByUserId(utilisateur.getId());
+            for (FicheIntervention fiche : fiches) {
+                ficheService.supprimer(fiche.getId());
+            }
+        }
+
+        // (2) Delete users associated with the formation
+        for (Utilisateur utilisateur : utilisateurs) {
+            utilisateurService.supprimer(utilisateur.getId());
+        }
+
+        // (3) Delete the formation
+        formationService.supprimer(id_formation);
     }
 
 }

@@ -187,6 +187,8 @@ public class FormationServiceImpl implements FormationService {
             rowFiche.createCell(55).setCellValue("Les Matériaux");
             // Continue adding cells for each column
 
+            
+            dataRowIndex++;
         }
 
         ServletOutputStream ops = response.getOutputStream();
