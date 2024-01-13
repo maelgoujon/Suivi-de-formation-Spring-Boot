@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Optional;
 
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
@@ -11,7 +12,9 @@ import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -298,14 +301,32 @@ public class HomeController {
     //-----------------------------------------//
     //------------Accueils---------------------//
     //-----------------------------------------//
-
-    @GetMapping("/")
+     @GetMapping("/")
     public String home(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
         model.addAttribute("utilisateurs", utilisateurs);
         return "accueil";
     }
 
+    @GetMapping("/redirectByRole")
+    public String redirectByRole() {
+        String utilisateurConnecteRole = determineUserRole();
+
+        if ("ROLE_SUPERADMIN".equals(utilisateurConnecteRole)) {
+            return "redirect:/accueil_superadmin";
+        } else if ("ROLE_ADMIN".equals(utilisateurConnecteRole) || "ROLE_CIP".equals(utilisateurConnecteRole) || "ROLE_EDUCSIMPLE".equals(utilisateurConnecteRole)) {
+            return "redirect:/accueil_admin";
+        } else {
+            return "redirect:/select_fiche";
+        }
+    }
+
+    private String determineUserRole() {
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("");
+    }
     @GetMapping("/accueil")
     public String redirectToAccueil(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");

@@ -22,24 +22,25 @@ public class SecurityConfig {
         };
 
         http
-                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers(staticResources).permitAll()
-                        .requestMatchers("/", "/accueil").permitAll()
-                        .requestMatchers("/login").permitAll()
-                        .anyRequest().authenticated())
-                .formLogin(formLogin -> formLogin
-                        .loginPage("/accueil")
-                        .loginProcessingUrl("/login") // This should match the action in your form
-                        .defaultSuccessUrl("/presentation")
-                        .permitAll())
-
-                .logout(logout -> logout
-                        .logoutSuccessUrl("/log_out") // specify the URL to redirect after logout
-                        .permitAll());
+        .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                .requestMatchers(staticResources).permitAll()
+                .requestMatchers("/", "/accueil").permitAll()
+                .requestMatchers("/login").permitAll()
+                .anyRequest().authenticated())
+        .formLogin(formLogin -> formLogin
+                .loginPage("/accueil")
+                .loginProcessingUrl("/login") // This should match the action in your form
+                .defaultSuccessUrl("/redirectByRole")
+                .permitAll())
+        .logout(logout -> logout
+                .logoutSuccessUrl("/log_out") // specify the URL to redirect after logout
+                .permitAll());
 
         return http.build();
 
-    }
+        }
+
+    
 
     @SuppressWarnings("deprecation")
     @Bean
