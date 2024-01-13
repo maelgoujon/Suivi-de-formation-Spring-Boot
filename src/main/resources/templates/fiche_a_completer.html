@@ -16,9 +16,35 @@
 
 
     <style>
+        .card-block {
+            padding: 10px;
+        }
+
+        .scrollcards {
+            background-color: #fff;
+            overflow: auto;
+            white-space: nowrap;
+        }
+
+
+        div.scrollcards .card {
+            display: inline-block;
+            padding: 14px;
+            text-decoration: none;
+            height: auto;
+            margin-bottom: 1rem;
+
+        }
+
         .logo {
             width: 1.5rem;
             height: 1.5rem;
+        }
+
+        .imageSlider {
+            max-height: 10vh;
+            max-width: 100%;
+            object-fit: contain;
         }
 
         .imageListe {
@@ -76,6 +102,7 @@
             <!--------------------------Intervenant--------------------------------------->
             <hr />
 
+
             <legend>
                 <div class="row align-items-center">
                     <div class="col-auto d-flex align-items-center">
@@ -96,7 +123,7 @@
 
                                             <fieldset>
                                                 <div>
-                                                    <div class="titre">Niveau Titre Intervenant</div>
+                                                    <div class="titre">Niveau Titre</div>
                                                     <div class="test">
                                                         <select class="selectTitreIcTxt" id="niveauTitreIntervenant"
                                                             name="niveauTitreIntervenant"
@@ -104,10 +131,10 @@
                                                             onchange="updateTitre('Intervenant')">
                                                             <option value="0">Icone</option>
                                                             <option value="1" selected>Icone et texte</option>
-                                                            <!-- Sélection par défaut -->
                                                             <option value="2">Texte</option>
                                                         </select>
                                                     </div>
+
                                                 </div>
                                             </fieldset>
                                         </div>
@@ -118,12 +145,48 @@
                                                 th:field="*{Intervenant.couleurTitreIntervenant}" />
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div class="row">
+                                                    <div class="scrollcards">
+                                                        <div class="card"
+                                                            th:each="imageTitre, stat : ${imagesTitreIntervenant}">
+                                                            <input class="form-check-input" type="radio"
+                                                                name="selectedImageIntervenant"
+                                                                th:id="${imageTitre.nomImage}"
+                                                                th:value="${imageTitre.nomImage}"
+                                                                th:checked="${stat.first}"
+                                                                onchange="actualiserImageTitre('Intervenant')">
+                                                            <label class="form-check-label"
+                                                                th:for="${imageTitre.nomImage}">
+                                                                <img class="imageSlider"
+                                                                    th:src="@{'/' + ${imageTitre.imageUrl}}"
+                                                                    alt="Image Titre" oncontextmenu="return false;"
+                                                                    draggable="false" />
+                                                                <div class="text-wrap" style="width: min-content;">
+                                                                    <h6 th:text="${imageTitre.nomImage}"></h6>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <input type="hidden" id="imageHiddenIntervenant"
+                                                    class="imageHiddenIntervenant"
+                                                    th:field="*{Intervenant.imageTitreIntervenantUrl}"
+                                                    value="/images/eleve.png" />
+                                            </section>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </legend>
+
 
             <div class="row">
                 <div class="col-md-6 mb-3">
@@ -184,7 +247,7 @@
 
                                             <fieldset>
                                                 <div>
-                                                    <div class="titre">Niveau Titre Demande</div>
+                                                    <div class="titre">Niveau Titre</div>
                                                     <div class="test">
                                                         <select class="selectTitreIcTxt" id="niveauTitreDemande"
                                                             name="niveauTitreDemande"
@@ -204,6 +267,37 @@
                                             <input type="color" class="colorPicker" value="#000000">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Demande.couleurTitreDemande}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div class="row">
+                                                    <div class="scrollcards">
+                                                        <div class="card" th:each="imageTitre, stat : ${imagesTitreDemande}">
+                                                            <input class="form-check-input" type="radio"
+                                                                name="selectedImageDemande"
+                                                                th:id="${imageTitre.nomImage}"
+                                                                th:value="${imageTitre.nomImage}"
+                                                                th:checked="${stat.first}"
+                                                                onchange="actualiserImageTitre('Demande')">
+                                                            <label class="form-check-label"
+                                                                th:for="${imageTitre.nomImage}">
+                                                                <img class="imageSlider"
+                                                                    th:src="@{'/' + ${imageTitre.imageUrl}}"
+                                                                    alt="Image Titre" oncontextmenu="return false;"
+                                                                    draggable="false" />
+                                                                <div class="text-wrap" style="width: min-content;">
+                                                                    <h6 th:text="${imageTitre.nomImage}"></h6>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" id="imageHiddenDemande" class="imageHiddenDemande"
+                                                    th:field="*{Demande.imageTitreDemandeUrl}" />
+                                            </section>
                                         </div>
                                     </div>
                                 </div>
@@ -259,10 +353,9 @@
                                 <div class="card card-body">
                                     <div class="row">
                                         <div class="col">
-
                                             <fieldset>
                                                 <div>
-                                                    <div class="titre">Niveau Titre Intervention</div>
+                                                    <div class="titre">Niveau Titre</div>
                                                     <div class="test">
                                                         <select class="selectTitreIcTxt" id="niveauTitreIntervention"
                                                             name="niveauTitreIntervention"
@@ -282,6 +375,37 @@
                                             <input type="color" class="colorPicker" value="#000000">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Intervention.couleurTitreIntervention}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div class="row">
+                                                    <div class="scrollcards">
+                                                        <div class="card" th:each="imageTitre, stat : ${imagesTitreIntervention}">
+                                                            <input class="form-check-input" type="radio"
+                                                                name="selectedImageIntervention"
+                                                                th:id="${imageTitre.nomImage}"
+                                                                th:value="${imageTitre.nomImage}"
+                                                                th:checked="${stat.first}"
+                                                                onchange="actualiserImageTitre('Intervention')">
+                                                            <label class="form-check-label"
+                                                                th:for="${imageTitre.nomImage}">
+                                                                <img class="imageSlider"
+                                                                    th:src="@{'/' + ${imageTitre.imageUrl}}"
+                                                                    alt="Image Titre" oncontextmenu="return false;"
+                                                                    draggable="false" />
+                                                                <div class="text-wrap" style="width: min-content;">
+                                                                    <h6 th:text="${imageTitre.nomImage}"></h6>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" id="imageHiddenIntervention" class="imageHiddenIntervention"
+                                                    th:field="*{Intervention.imageTitreInterventionUrl}" />
+                                            </section>
                                         </div>
                                     </div>
                                 </div>
@@ -349,27 +473,27 @@
                 <div class="row align-items-center">
                     <div class="col-auto d-flex align-items-center">
                         <button class="btn d-flex align-items-center" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#imageNiveauTravaux" aria-expanded="false"
-                            aria-controls="imageNiveauTravaux">
-                            <img id="ImageAAfficherOuNonTravaux" class="display-5 imageIcon" src="/images/check.png"
+                            data-bs-target="#imageNiveauTravauxRealises" aria-expanded="false"
+                            aria-controls="imageNiveauTravauxRealises">
+                            <img id="ImageAAfficherOuNonTravauxRealises" class="display-5 imageIcon" src="/images/check.png"
                                 alt="Fait" style="height: 1em;" />
-                            <h2 id="TitreSAAfficherOuNonTravaux" class="display-5 TitreSection">Travaux réalisés</h2>
+                            <h2 id="TitreSAAfficherOuNonTravauxRealises" class="display-5 TitreSection">Travaux réalisés</h2>
                         </button>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <div class="collapse multi-collapse" id="imageNiveauTravaux">
+                            <div class="collapse multi-collapse" id="imageNiveauTravauxRealises">
                                 <div class="card card-body">
                                     <div class="row">
                                         <div class="col">
                                             <fieldset>
                                                 <div>
-                                                    <div class="titre">Niveau Titre Travaux réalisés</div>
+                                                    <div class="titre">Niveau Titre</div>
                                                     <div class="test">
-                                                        <select class="selectTitreIcTxt" id="niveauTitreTravaux"
-                                                            name="niveauTitreTravaux"
+                                                        <select class="selectTitreIcTxt" id="niveauTitreTravauxRealises"
+                                                            name="niveauTitreTravauxRealises"
                                                             th:field="${fiche.niveauTravauxRealises}"
-                                                            onchange="updateTitre('Travaux')">
+                                                            onchange="updateTitre('TravauxRealises')">
                                                             <option value="0">Icone</option>
                                                             <option value="1">Icone et texte</option>
                                                             <option value="2">Texte</option>
@@ -385,10 +509,42 @@
                                                 th:field="*{couleurTravauxRealises}" />
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div class="row">
+                                                    <div class="scrollcards">
+                                                        <div class="card" th:each="imageTitre, stat : ${imagesTitreTravauxRealises}">
+                                                            <input class="form-check-input" type="radio"
+                                                                name="selectedImageTravauxRealises"
+                                                                th:id="${imageTitre.nomImage}"
+                                                                th:value="${imageTitre.nomImage}"
+                                                                th:checked="${stat.first}"
+                                                                onchange="actualiserImageTitre('TravauxRealises')">
+                                                            <label class="form-check-label"
+                                                                th:for="${imageTitre.nomImage}">
+                                                                <img class="imageSlider"
+                                                                    th:src="@{'/' + ${imageTitre.imageUrl}}"
+                                                                    alt="Image Titre" oncontextmenu="return false;"
+                                                                    draggable="false" />
+                                                                <div class="text-wrap" style="width: min-content;">
+                                                                    <h6 th:text="${imageTitre.nomImage}"></h6>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" id="imageHiddenTravauxRealises" class="imageHiddenTravauxRealises"
+                                                    th:field="*{imageTitreTravauxRealisesUrl}" />
+                                            </section>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    
                     <div class="form-group">
                         <textarea rows="10" id="newTravauxRealises" class="form-control" name="newTravauxRealises"
                             onkeydown="handleDescriptionKeyDown(event)"></textarea>
@@ -401,28 +557,28 @@
                 <div class="row align-items-center">
                     <div class="col-auto d-flex align-items-center">
                         <button class="btn d-flex align-items-center" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#imageNiveauTravauxNon" aria-expanded="false"
-                            aria-controls="imageNiveauTravauxNon">
-                            <img id="ImageAAfficherOuNonTravauxNon" class="display-5 imageIcon" src="/images/check.png"
+                            data-bs-target="#imageNiveauTravauxNonRealises" aria-expanded="false"
+                            aria-controls="imageNiveauTravauxNonRealises">
+                            <img id="ImageAAfficherOuNonTravauxNonRealises" class="display-5 imageIcon" src="/images/check.png"
                                 alt="Fait" style="height: 1em;" />
-                            <h2 id="TitreSAAfficherOuNonTravauxNon" class="display-5 TitreSection">Travaux non réalisés
+                            <h2 id="TitreSAAfficherOuNonTravauxNonRealises" class="display-5 TitreSection">Travaux non réalisés
                             </h2>
                         </button>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <div class="collapse multi-collapse" id="imageNiveauTravauxNon">
+                            <div class="collapse multi-collapse" id="imageNiveauTravauxNonRealises">
                                 <div class="card card-body">
                                     <div class="row">
                                         <div class="col">
                                             <fieldset>
                                                 <div>
-                                                    <div class="titre">Niveau Titre Travaux non réalisés</div>
+                                                    <div class="titre">Niveau Titre</div>
                                                     <div class="test">
-                                                        <select class="selectTitreIcTxt" id="niveauTitreTravauxNon"
-                                                            name="niveauTitreTravauxNon"
+                                                        <select class="selectTitreIcTxt" id="niveauTitreTravauxNonRealises"
+                                                            name="niveauTitreTravauxNonRealises"
                                                             th:field="${fiche.niveauTravauxNonRealises}"
-                                                            onchange="updateTitre('TravauxNon')">
+                                                            onchange="updateTitre('TravauxNonRealises')">
                                                             <option value="0">Icone</option>
                                                             <option value="1">Icone et texte</option>
                                                             <option value="2">Texte</option>
@@ -438,12 +594,43 @@
                                                 th:field="*{couleurTravauxNonRealises}" />
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div class="row">
+                                                    <div class="scrollcards">
+                                                        <div class="card" th:each="imageTitre, stat : ${imagesTitreTravauxNonRealises}">
+                                                            <input class="form-check-input" type="radio"
+                                                                name="selectedImageTravauxNonRealises"
+                                                                th:id="${imageTitre.nomImage}"
+                                                                th:value="${imageTitre.nomImage}"
+                                                                th:checked="${stat.first}"
+                                                                onchange="actualiserImageTitre('TravauxNonRealises')">
+                                                            <label class="form-check-label"
+                                                                th:for="${imageTitre.nomImage}">
+                                                                <img class="imageSlider"
+                                                                    th:src="@{'/' + ${imageTitre.imageUrl}}"
+                                                                    alt="Image Titre" oncontextmenu="return false;"
+                                                                    draggable="false" />
+                                                                <div class="text-wrap" style="width: min-content;">
+                                                                    <h6 th:text="${imageTitre.nomImage}"></h6>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" id="imageHiddenTravauxNonRealises" class="imageHiddenTravauxNonRealises"
+                                                    th:field="*{imageTitreTravauxNonRealisesUrl}" />
+                                            </section>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <textarea rows="10" id="newTravauxRealises" class="form-control" name="newTravauxRealises"
+                        <textarea rows="10" id="newTravauxNonRealises" class="form-control" name="newTravauxNonRealises"
                             onkeydown="handleDescriptionKeyDown(event)"></textarea>
                     </div>
                 </div>
@@ -472,7 +659,7 @@
                                         <div class="col">
                                             <fieldset>
                                                 <div>
-                                                    <div class="titre">Niveau Titre Matériaux utilisés</div>
+                                                    <div class="titre">Niveau Titre</div>
                                                     <div class="test">
                                                         <select class="selectTitreIcTxt"
                                                             id="niveauTitreMateriauxUtilises"
@@ -492,6 +679,37 @@
                                             <input type="color" class="colorPicker" value="#000000">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{couleurMateriauxUtilises}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div class="row">
+                                                    <div class="scrollcards">
+                                                        <div class="card" th:each="imageTitre, stat : ${imagesTitreMateriauxUtilises}">
+                                                            <input class="form-check-input" type="radio"
+                                                                name="selectedImageMateriauxUtilises"
+                                                                th:id="${imageTitre.nomImage}"
+                                                                th:value="${imageTitre.nomImage}"
+                                                                th:checked="${stat.first}"
+                                                                onchange="actualiserImageTitre('MateriauxUtilises')">
+                                                            <label class="form-check-label"
+                                                                th:for="${imageTitre.nomImage}">
+                                                                <img class="imageSlider"
+                                                                    th:src="@{'/' + ${imageTitre.imageUrl}}"
+                                                                    alt="Image Titre" oncontextmenu="return false;"
+                                                                    draggable="false" />
+                                                                <div class="text-wrap" style="width: min-content;">
+                                                                    <h6 th:text="${imageTitre.nomImage}"></h6>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" id="imageHiddenMateriauxUtilises" class="imageHiddenMateriauxUtilises"
+                                                    th:field="*{imageTitreMateriauxUtilisesUrl}" />
+                                            </section>
                                         </div>
                                     </div>
                                 </div>
@@ -537,6 +755,22 @@
     </div>
 </body>
 <script>
+    function actualiserImageTitre(suffixe) {
+        // Récupérer l'image sélectionnée
+        var selectedImage = document.querySelector('input[name="selectedImage' + suffixe + '"]:checked');
+        var imagehidden = document.getElementById('imageHidden' + suffixe);
+        if (selectedImage) {
+            var selectedImageLabel = document.querySelector('label[for="' + selectedImage.id + '"]');
+            var selectedImageSrc = selectedImageLabel.querySelector('img').getAttribute('src');
+
+            // Remplacer l'image ImageAAfficherOuNonSuffixe
+            var imageAAfficherOuNonIntervenant = document.getElementById('ImageAAfficherOuNon' + suffixe);
+            imageAAfficherOuNonIntervenant.src = selectedImageSrc;
+            imagehidden.value = selectedImageSrc;
+        }
+    }
+
+
 
     function updateTitre(prefix) {
         var selectTitreIcTxt = document.getElementById('niveauTitre' + prefix);
@@ -589,6 +823,14 @@
         if (niveauTitreMateriauxUtilises) {
             niveauTitreMateriauxUtilises.value = '1';
         }
+        var niveauTitreTravauxRealises = document.getElementById('niveauTitreTravauxRealises');
+        if (niveauTitreTravauxRealises) {
+            niveauTitreTravauxRealises.value = '1';
+        }
+        var niveauTitreTravauxNonRealises = document.getElementById('niveauTitreTravauxNonRealises');
+        if (niveauTitreTravauxNonRealises) {
+            niveauTitreTravauxNonRealises.value = '1';
+        }
 
 
         var colorPickers = Array.from(document.getElementsByClassName('colorPicker'));
@@ -601,6 +843,15 @@
                 titresSection[index].style.color = this.value;
             });
         });
+
+        //On check la premiere image de chaque section
+        actualiserImageTitre('Intervenant');
+        actualiserImageTitre('Demande');
+        actualiserImageTitre('Intervention');
+        actualiserImageTitre('Materiaux');
+        actualiserImageTitre('TravauxRealises');
+        actualiserImageTitre('TravauxNonRealises');
+        actualiserImageTitre('MateriauxUtilises')
 
 
 

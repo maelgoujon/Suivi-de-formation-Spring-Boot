@@ -3,12 +3,20 @@ package com.webapp.ytb.webappytp.controller;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
+
+
+
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
+
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +29,12 @@ import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.ImagesTitres;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervenant;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Materiaux;
+import com.webapp.ytb.webappytp.repository.ImagesTitresRepository;
 import com.webapp.ytb.webappytp.repository.MateriauxAmenagementRepository;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
@@ -36,12 +46,14 @@ public class HomeController {
     MateriauxAmenagementRepository materiauxAmenagementRepository;
     UtilisateurServiceImpl userServ;
     FicheServiceImpl ficheServ;
+    ImagesTitresRepository imagesTitresRepository;
 
     public HomeController(UtilisateurServiceImpl userServ, FicheServiceImpl ficheServ,
-            MateriauxAmenagementRepository materiauxAmenagementRepository) {
+            MateriauxAmenagementRepository materiauxAmenagementRepository, ImagesTitresRepository imagesTitresRepository ) {
         this.userServ = userServ;
         this.ficheServ = ficheServ;
         this.materiauxAmenagementRepository = materiauxAmenagementRepository;
+        this.imagesTitresRepository = imagesTitresRepository;
     }
 
     // -----------------------------------------//
@@ -52,6 +64,20 @@ public class HomeController {
     @GetMapping("/ajout_fiche")
     public String ajout_fiche(Model model) {
         FicheIntervention fiche = new FicheIntervention();
+        List<ImagesTitres> imagesTitreIntervenant = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.INTERVENANT);
+        List<ImagesTitres> imagesTitreDemande = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.DEMANDE);
+        List<ImagesTitres> imagesTitreIntervention = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.INTERVENTION);
+        List<ImagesTitres> imagesTitreTravauxRealises = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_REALISES);
+        List<ImagesTitres> imagesTitreTravauxNonRealises = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_NON_REALISES);
+        List<ImagesTitres> imagesTitreMateriauxUtilises = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.MATERIAUX_UTILISES);
+        model.addAttribute("imagesTitreIntervenant", imagesTitreIntervenant);
+        model.addAttribute("imagesTitreDemande", imagesTitreDemande);
+        model.addAttribute("imagesTitreIntervention", imagesTitreIntervention);
+        model.addAttribute("imagesTitreTravauxRealises", imagesTitreTravauxRealises);
+        model.addAttribute("imagesTitreTravauxNonRealises", imagesTitreTravauxNonRealises);
+        model.addAttribute("imagesTitreMateriauxUtilises", imagesTitreMateriauxUtilises);
+
+
         model.addAttribute("fiche", fiche);
         model.addAttribute("users", userServ.lire());
         return "fiche_a_completer";
@@ -77,6 +103,7 @@ public class HomeController {
             demande.setCouleurTitreDemande("#000000");
         }
         demande.setNiveauTitreDemande(fiche.getDemande().getNiveauTitreDemande());
+        demande.setImageTitreDemandeUrl(fiche.getDemande().getImageTitreDemandeUrl());
         // intervention
         intervention.setNiveauTitreIntervention(fiche.getIntervention().getNiveauTitreIntervention());
         intervention.setCouleurTitreIntervention(fiche.getIntervention().getCouleurTitreIntervention());
@@ -92,6 +119,7 @@ public class HomeController {
                 intervention.setDureeIntervention(fiche.getIntervention().getDureeIntervention());
             }
         }
+        intervention.setImageTitreInterventionUrl(fiche.getIntervention().getImageTitreInterventionUrl());
         // maintenance
         if (fiche.getMaintenance() != null && fiche.getMaintenance().getMaintenanceType() != null) {
             maintenance.setMaintenanceType(fiche.getMaintenance().getMaintenanceType());
@@ -101,15 +129,22 @@ public class HomeController {
         intervenant.setCouleurPrenom(fiche.getIntervenant().getCouleurPrenom());
         intervenant.setCouleurTitreIntervenant(fiche.getIntervenant().getCouleurTitreIntervenant());
         intervenant.setNiveauTitreIntervenant(fiche.getIntervenant().getNiveauTitreIntervenant());  
+        intervenant.setImageTitreIntervenantUrl(fiche.getIntervenant().getImageTitreIntervenantUrl());
         //Travaux
         fiche.setNiveauTravauxRealises(fiche.getNiveauTravauxRealises());
         fiche.setNiveauTravauxNonRealises(fiche.getNiveauTravauxNonRealises());
+        fiche.setImageTitreTravauxRealisesUrl(fiche.getImageTitreTravauxRealisesUrl());
+        //Materiaux
+        fiche.setNiveauMateriauxUtilises(fiche.getNiveauMateriauxUtilises());
+        fiche.setImageTitreMateriauxUtilisesUrl(fiche.getImageTitreMateriauxUtilisesUrl());
+
+
+        // on mets les objets dans la fiche
         fiche.setDemande(demande);
         fiche.setIntervenant(intervenant);
         fiche.setIntervention(intervention);
         fiche.setMaintenance(maintenance);
         // on mets tous les niveaux a 1
-        fiche.setNiveauIntervenant(1);
         fiche.setNiveauNatureIntervention(1);
         FicheIntervention createdFiche = ficheServ
                 .creer(fiche);
@@ -141,9 +176,7 @@ public class HomeController {
 
         // Utiliser directement le type d'intervention de la fiche
         String typeInterventionStr = ficheIntervention.getIntervention().getTypeIntervention();
-        Intervention.TypeIntervention typeIntervention = null;
         if (typeInterventionStr != null) {
-            typeIntervention = Intervention.TypeIntervention.valueOf(typeInterventionStr);
             List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository.findByTypeIntervention(
                     Intervention.TypeIntervention.valueOf(typeInterventionStr));
 
@@ -155,7 +188,7 @@ public class HomeController {
 
         return "fiche_modifier";
     }
-
+    
     @PostMapping("/updateFiche/{id}")
     public String updateFiche(@PathVariable long id,
             @RequestParam(required = false) String newNomDemandeur,
@@ -334,17 +367,35 @@ public class HomeController {
         return "redirect:/fiche/modifier/" + id;
     }
 
-    // -----------------------------------------//
-    // ------------Accueils---------------------//
-    // -----------------------------------------//
-
-    @GetMapping("/")
+    //-----------------------------------------//
+    //------------Accueils---------------------//
+    //-----------------------------------------//
+     @GetMapping("/")
     public String home(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
         model.addAttribute("utilisateurs", utilisateurs);
         return "accueil";
     }
 
+    @GetMapping("/redirectByRole")
+    public String redirectByRole() {
+        String utilisateurConnecteRole = determineUserRole();
+
+        if ("ROLE_SUPERADMIN".equals(utilisateurConnecteRole)) {
+            return "redirect:/accueil_superadmin";
+        } else if ("ROLE_ADMIN".equals(utilisateurConnecteRole) || "ROLE_CIP".equals(utilisateurConnecteRole) || "ROLE_EDUCSIMPLE".equals(utilisateurConnecteRole)) {
+            return "redirect:/accueil_admin";
+        } else {
+            return "redirect:/select_fiche";
+        }
+    }
+
+    private String determineUserRole() {
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("");
+    }
     @GetMapping("/accueil")
     public String redirectToAccueil(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");

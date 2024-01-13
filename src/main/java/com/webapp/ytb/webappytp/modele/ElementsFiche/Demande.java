@@ -74,4 +74,8 @@ public class Demande {
     @Column
     private String couleurDegreUrgence;
 
+    //Images
+    @Column
+    private String imageTitreDemandeUrl;
+
 }

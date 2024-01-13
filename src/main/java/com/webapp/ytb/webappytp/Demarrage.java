@@ -14,12 +14,14 @@ import com.webapp.ytb.webappytp.modele.Formation;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.ImagesTitres;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervenant;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Materiaux;
 import com.webapp.ytb.webappytp.repository.FicheRepository;
 import com.webapp.ytb.webappytp.repository.FormationRepository;
+import com.webapp.ytb.webappytp.repository.ImagesTitresRepository;
 import com.webapp.ytb.webappytp.repository.MateriauxRepository;
 import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
 
@@ -37,6 +39,9 @@ public class Demarrage implements ApplicationRunner {
 
     @Autowired
     private FormationRepository formationRepository;
+
+    @Autowired
+    private ImagesTitresRepository imagesTitresRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -211,6 +216,7 @@ public class Demarrage implements ApplicationRunner {
             intervenant.setCouleurTitreIntervenant("#FF00FF");
             intervenant.setCouleurNom("#F00");
             intervenant.setCouleurPrenom("#00FFFF");
+            intervenant.setImageTitreIntervenantUrl("/images/accueil.png");
             // Définir les attributs de l'intervention
             intervention.setTypeIntervention(Intervention.TypeIntervention.AMENAGEMENT.toString());
             intervention.setDateIntervention(LocalDate.now());
@@ -222,6 +228,7 @@ public class Demarrage implements ApplicationRunner {
             intervention.setCouleurDureeIntervention("#F00");
             intervention.setCouleurTypeIntervention("#00FFFF");
             intervention.setCouleurDateIntervention("#FF00FF");
+            intervention.setImageTitreInterventionUrl("/images/accueil.png");
             // Définir les attributs de la maintenance
             maintenance.setMaintenanceType(Maintenance.MaintenanceType.AMELIORATIVE);
             maintenance.setNiveauMaintenanceType(1);
@@ -244,6 +251,21 @@ public class Demarrage implements ApplicationRunner {
             demande.setCouleurLocalisation("#FF00FF");
             demande.setCouleurDescription("#F00");
             demande.setCouleurDegreUrgence("#00FFFF");
+            demande.setImageTitreDemandeUrl("/images/accueil.png");
+            // Définir les attributs des travaux réalisés
+            nouvelleFiche.setNiveauTravauxRealises(1);
+            nouvelleFiche.setCouleurTravauxRealises("#FF00FF");
+            nouvelleFiche.setImageTitreTravauxRealisesUrl("/images/accueil.png");
+            nouvelleFiche.setTravauxRealises("Travaux réalisés par Michel Michel");
+            // Définir les attributs des travaux non réalisés
+            nouvelleFiche.setNiveauTravauxNonRealises(1);
+            nouvelleFiche.setCouleurTravauxNonRealises("#FF00FF");
+            nouvelleFiche.setImageTitreTravauxNonRealisesUrl("/images/accueil.png");
+            nouvelleFiche.setTravauxNonRealises("Travaux non réalisés par Michel Michel");
+            // Définir les attributs des materiaux utilisés
+            nouvelleFiche.setNiveauMateriauxUtilises(1);
+            nouvelleFiche.setCouleurMateriauxUtilises("#00FFFF");
+            nouvelleFiche.setImageTitreMateriauxUtilisesUrl("/images/accueil.png");
             // Définir les attributs de la fiche d'intervention
             nouvelleFiche.setIntervenant(intervenant);
             nouvelleFiche.setDemande(demande);
@@ -253,14 +275,8 @@ public class Demarrage implements ApplicationRunner {
             nouvelleFiche.setEtatFicheFinie(false);
             nouvelleFiche.setNouvelleIntervention(true);
             nouvelleFiche.setUtilisateur(michel);
-            nouvelleFiche.setNiveauIntervenant(1);
-            nouvelleFiche.setTravauxRealises("Travaux réalisés par Michel Michel");
-            nouvelleFiche.setTravauxNonRealises("Travaux non réalisés par Michel Michel");
-            nouvelleFiche.setNiveauTravauxRealises(1);
-            nouvelleFiche.setCouleurTravauxRealises("#FF00FF");
-            nouvelleFiche.setCouleurTravauxNonRealises("#F00");
-            nouvelleFiche.setNiveauMateriauxUtilises(1);
-            nouvelleFiche.setCouleurMateriauxUtilises("#00FFFF");
+            
+
             // Ajouter les materiaux de type amenagement
             // On ajoute 4 materiaux et rien dans les deux derniers
             List<String> materiauxAmenagement = new ArrayList<>();
@@ -273,6 +289,25 @@ public class Demarrage implements ApplicationRunner {
             nouvelleFiche.setMateriauxOptions(materiauxAmenagement);
             ficheRepository.save(nouvelleFiche);
         }
+
+        // Creation des images pour la fiche d intervention
+        String[] types = { "INTERVENANT", "DEMANDE", "INTERVENTION", "MATERIAUX_UTILISES","TRAVAUX_REALISES", "TRAVAUX_NON_REALISES" };
+        String[] nomImages = { "Image1", "ADMIN", "Image2", "FICHES1", "FICHES2", "FICHES3", "FICHES4" };
+        String[] imageUrls = { "images/accueil.png", "images/admin.png", "images/archive.png", "images/eleve.png",
+                "images/eleve.png", "images/eleve.png", "images/eleve.png" };
+
+        for (String type : types) {
+            for (int i = 0; i < nomImages.length; i++) {
+
+                ImagesTitres imagesTitres = new ImagesTitres();
+                imagesTitres.setNomImage(nomImages[i] + ' ' + type);
+                imagesTitres.setImageUrl(imageUrls[i]);
+                imagesTitres.setType(type);
+                imagesTitresRepository.save(imagesTitres);
+
+            }
+        }
+
     }
 
     // Champs trop longs et inutiles pour être mis en haut

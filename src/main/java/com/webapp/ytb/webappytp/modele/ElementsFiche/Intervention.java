@@ -67,4 +67,8 @@ public class Intervention {
     @Column
     private String couleurDateIntervention;
 
+    //Images
+    @Column
+    private String imageTitreInterventionUrl;
+
 }

@@ -71,10 +71,12 @@
          <hr />
 
          <legend th:switch="${ficheIntervention.Intervenant.niveauTitreIntervenant}">
-            <img th:case="0" class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
+            <img th:case="0" class="display-5" th:src="@{${ficheIntervention.Intervenant.imageTitreIntervenantUrl}}"
+               alt="Image Titre" style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
-                  <img class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
+                  <img class="display-5" th:src="@{${ficheIntervention.Intervenant.imageTitreIntervenantUrl}}"
+                     alt="Image Titre" oncontextmenu="return false;" draggable="false" style="height: 1em;" />
                </div>
                <div class="col-auto">
                   <h2 class="display-5" th:style="'color: ' + ${ficheIntervention.Intervenant.couleurTitreIntervenant}">
@@ -112,10 +114,12 @@
          <hr />
 
          <legend th:switch="${ficheIntervention.demande.niveauTitreDemande}">
-            <img th:case="0" class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
+            <img th:case="0" class="display-5" th:src="@{${ficheIntervention.Demande.ImageTitreDemandeUrl}}" alt="Fait"
+               style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
-                  <img class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
+                  <img class="display-5" th:src="@{${ficheIntervention.Demande.ImageTitreDemandeUrl}}" alt="Fait"
+                     style="height: 1em;" />
                </div>
                <div class="col-auto">
                   <h2 class="display-5" th:style="'color: ' + ${ficheIntervention.Demande.couleurTitreDemande}">Demande
@@ -164,10 +168,12 @@
          <hr />
 
          <legend th:switch="${ficheIntervention.intervention.niveauTitreIntervention}">
-            <img th:case="0" class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
+            <img th:case="0" class="display-5" th:src="@{${ficheIntervention.Intervention.imageTitreInterventionUrl}}"
+               alt="Fait" style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
-                  <img class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
+                  <img class="display-5" th:src="@{${ficheIntervention.Intervention.imageTitreInterventionUrl}}"
+                     alt="Fait" style="height: 1em;" />
                </div>
                <div class="col-auto">
                   <h2 class="display-5"
@@ -244,13 +250,13 @@
 
          <!--------------------------Travaux réalisés--------------------------------------->
          <hr />
-
-
          <legend th:switch="${ficheIntervention.NiveauTravauxRealises}">
-            <img th:case="0" class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
+            <img th:case="0" class="display-5" th:src="@{${ficheIntervention.imageTitreTravauxRealisesUrl}}" alt="Fait"
+               style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
-                  <img class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
+                  <img class="display-5" th:src="@{${ficheIntervention.imageTitreTravauxRealisesUrl}}" alt="Fait"
+                     style="height: 1em;" />
                </div>
                <div class="col-auto">
                   <h2 class="display-5" th:style="'color: ' + ${ficheIntervention.couleurTravauxRealises}">Travaux
@@ -268,12 +274,14 @@
 
          <!--------------------------Travaux NON réalisés--------------------------------------->
          <hr />
-         <legend th:switch="${ficheIntervention.NiveauTravauxRealises}">
-            <img th:case="0" class="display-5" src="/images/notchecked.png" alt="Pas Fait" style="height: 1em;" />
+         <legend th:switch="${ficheIntervention.NiveauTravauxNonRealises}">
+            <img th:case="0" class="display-5" th:src="@{${ficheIntervention.imageTitreTravauxNonRealisesUrl}}"
+               alt="Pas Fait" style="height: 1em;" />
 
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
-                  <img class="display-5" src="/images/notchecked.png" alt="Pas fait" style="height: 1em;" />
+                  <img class="display-5" th:src="@{${ficheIntervention.imageTitreTravauxNonRealisesUrl}}" alt="Pas fait"
+                     style="height: 1em;" />
                </div>
                <div class="col-auto">
                   <h2 class="display-5" th:style="'color: ' + ${ficheIntervention.couleurTravauxNonRealises}">Travaux
@@ -296,10 +304,12 @@
          <hr />
 
          <legend th:switch="${ficheIntervention.NiveauMateriauxUtilises}">
-            <img th:case="0" class="display-5" src="/images/materiaux.png" alt="Materiaux" style="height: 1em;" />
+            <img th:case="0" class="display-5" th:src="@{${ficheIntervention.imageTitreMateriauxUtilisesUrl}}"
+               alt="Materiaux" style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
-                  <img class="display-5" src="/images/materiaux.png" alt="Materiaux" style="height: 1em;" />
+                  <img class="display-5" th:src="@{${ficheIntervention.imageTitreMateriauxUtilisesUrl}}" alt="Materiaux"
+                     style="height: 1em;" />
                </div>
                <div class="col-auto">
                   <h2 class="display-5" th:style="'color: ' + ${ficheIntervention.couleurMateriauxUtilises}">Materiaux
@@ -318,18 +328,19 @@
             <div class="row">
                <div th:each="i : ${#numbers.sequence(0,5)}" class="form-group">
                   <div class="col">
-                     <label for="exampleFormControlSelect1" class="form-label">Materiau</label>
+                     <label for="'exampleFormControlSelect' + ${i}" class="form-label">Materiau</label>
                      <span th:text="${i}+1"></span>
                      <select th:id="'exampleFormControlSelect' + ${i}" name="materiauxUtilises" class="form-control"
-                        th:attr="onchange='updateHiddenInput(' + ${i} + ', this.value)'">
+                        th:attr="onchange='updateHiddenField(this, \'newMateriau\' + ' + ${i} + ')'">
                         <option value=""></option>
                         <option th:each="element, status : ${materiauxAmenagementList}" th:value="${element.nomImage}"
                            th:text="${element.nomImage}"
                            th:selected="${ficheIntervention.materiauxOptions != null and ficheIntervention.materiauxOptions.size() > i and ficheIntervention.materiauxOptions[i] == element.nomImage}">
                         </option>
                      </select>
-                     <input type="hidden" th:id="'newMateriau' + ${i}" th:name="'newMateriau' + ${i}"
-                        th:value="${ficheIntervention.materiauxOptions != null and ficheIntervention.materiauxOptions.size() > i ? ficheIntervention.materiauxOptions[i] : ''}">
+                     <input type="hidden" class="form-control mx-auto d-block" aria-describedby="basic-addon2"
+                        th:value="${ficheIntervention.materiauxOptions != null and ficheIntervention.materiauxOptions.size() > i ? ficheIntervention.materiauxOptions[i] : ''}"
+                        th:id="'newMateriau' + ${i}" th:name="'newMateriau' + ${i}">
                   </div>
                </div>
             </div>
@@ -535,13 +546,10 @@
    <script th:inline="javascript">
       /* <![CDATA[ */
 
-      //mettre a jour le champ caché de materiau niveau 2
-      function updateHiddenInput(i, value) {
-         //si value est null, mettre le champ caché à vide
-         if (value == null) {
-            value = '';
-         }
-         document.getElementById('newMateriau' + i).value = value;
+      function updateHiddenField(selectElement, textFieldId) {
+         var selectedValue = selectElement.value;
+         var index = selectElement.id.replace('exampleFormControlSelect', '');
+         document.getElementById(textFieldId).value = selectedValue;
       }
 
       function updateTypeIntervention() {

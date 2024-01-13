@@ -10,5 +10,5 @@ import com.webapp.ytb.webappytp.modele.ElementsFiche.Materiaux;
 
 @Repository
 public interface MateriauxAmenagementRepository extends JpaRepository<Materiaux, Long> {
-public List<Materiaux> findByTypeIntervention(TypeIntervention type);
+    public List<Materiaux> findByTypeIntervention(TypeIntervention type);
 }

@@ -57,7 +57,7 @@ public class FicheIntervention {
     private boolean etatFicheFinie;
 
     @Column(length = 250)
-    private String travauxRealises;;
+    private String travauxRealises;
 
     @Column(length = 250)
     private String travauxNonRealises;
@@ -101,6 +101,16 @@ public class FicheIntervention {
 
     @Column
     private String couleurMateriauxUtilises;
+
+    //Images
+    @Column
+    private String imageTitreTravauxRealisesUrl;
+
+    @Column
+    private String imageTitreTravauxNonRealisesUrl;
+
+    @Column
+    private String imageTitreMateriauxUtilisesUrl;
 
     // getters
     public String getNomDemandeur() {

@@ -209,7 +209,7 @@
         
     </head>
 
-<body>
+<body onsubmit="setInitialRole();">
 
   <div class="bandeau">
     <a href="/log_out">
@@ -263,7 +263,10 @@
             </div>
 
             
-            <input type="hidden" id="motdepasse" name="motdepasse" th:value="${utilisateur.mdp}"    th:field="*{mdp}" required>
+            <div class="col-md-6 form-group" id="passwordField">
+              <label for="motdepasse">Mot de passe:</label>
+              <input type="text" id="motdepasse" name="motdepasse" th:value="${utilisateur.mdp}" th:field="*{mdp}" required>
+          </div>
             
 
             <div class="col-md-6 form-group">
@@ -276,30 +279,24 @@
             </div>
             
             <div class="col-md-6 form-group">
-            <label for="role">Role:</label>
-            <select id="role" name="role" th:field="*{role}" required>
-              <option th:each="role : ${roles}" th:value="${role}" th:text="${role}"></option>
-            </select>
-          
-          
-          
-        </div>
-            <div class="col-md-6 form-group">
-            <label for="niveau">Niveau:</label>
-            <select class="form-control" th:field="*{niveau}" id="niveau">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+              <label for="role">Role:</label>
+              <select id="role" name="role" th:field="*{role}" required>
+                  <option th:each="role : ${roles}" th:value="${role.name()}" th:text="${role}" th:selected="${role.name() eq initialRole}"></option>
               </select>
-        </div>
-        <div class="col-md-6 form-group">
-          <label for="description">Description:</label>
-          <div class="descriptiontext">
-              <textarea id="description" name="description" th:field="*{description}" ></textarea>
           </div>
-        </div>
-
+          
+          
+          
+          <div class="col-md-6 form-group" id="niveauField">
+              <label for="niveau">Niveau:</label>
+              <select class="form-control" th:field="*{niveau}" id="niveau">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+              </select>
+          </div>
+          
           <button type="submit">Modifier Utilisateur</button>
       </div>
     </form>
@@ -319,6 +316,51 @@
   </div>
   </div>  
     <script>
+      var initialRole = '${utilisateur.role.name()}';
+
+    function setInitialRole() {
+        var roleSelect = document.getElementById("role");
+        for (var i = 0; i < roleSelect.options.length; i++) {
+            if (roleSelect.options[i].value === initialRole) {
+                roleSelect.options[i].selected = true;
+                break;
+            }
+        }
+
+        // Appel de la fonction pour masquer/afficher les champs en fonction du rôle initial
+        handleRoleChange();
+    }
+
+    function handleRoleChange() {
+        var selectedRole = document.getElementById("role").value;
+        var passwordField = document.getElementById("passwordField");
+        var niveauField = document.getElementById("niveauField");
+
+        // Réinitialisez l'affichage des champs
+        passwordField.style.display = "block";
+        niveauField.style.display = "block";
+        mdpButton.style.display = "block";
+        // Vérifiez le rôle sélectionné et masquez/affichez les champs en conséquence
+        if (selectedRole === "USER") {
+            // Masquer le champ mot de passe si le role est user
+            passwordField.style.display = "none";
+            
+        }else{
+          // Masquer la liste déroulante de niveau si pass un user
+          niveauField.style.display = "none";
+          // Masquer le bouton "Modifier Mot de passe" si le rôle n'est pas "USER"
+          mdpButton.style.display = "none";
+
+        }
+    }
+
+    window.onload = function () {
+        // Appel de setInitialRole au chargement initial de la page
+        setInitialRole();
+        
+        // Ajout d'un écouteur pour gérer le changement de rôle
+        document.getElementById("role").addEventListener("change", handleRoleChange);
+    };
       function encodeImageToBase64() {
         var input = document.getElementById('photo'); // Change 'photo' to the actual ID of your file input
         var file = input.files[0];

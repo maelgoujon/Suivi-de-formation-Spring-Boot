@@ -5,44 +5,42 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
-public class Materiaux {
-
+public class ImagesTitres {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    public enum TypeImage {
+        INTERVENANT,
+        DEMANDE,
+        INTERVENTION,
+        TRAVAUX_REALISES,
+        TRAVAUX_NON_REALISES,
+        MATERIAUX_UTILISES
+        
+    }
+
     @Column(unique = true)
     private String nomImage;
 
-    @Column(nullable = true)
+    @Column
     private String imageUrl;
 
-    @Enumerated(EnumType.STRING)
     @Column
-    private Intervention.TypeIntervention typeIntervention;
+    private TypeImage typeImage;
 
     public void setType(String type) {
-        this.typeIntervention = Intervention.TypeIntervention.valueOf(type);
+        this.typeImage = TypeImage.valueOf(type);
     }
 
     public void setNomImage(String nomImage) {
         this.nomImage = nomImage;
-    }
-
-    @Override
-    public String toString() {
-        return "Materiaux{" +
-                "nomImage='" + nomImage + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", typeIntervention=" + typeIntervention +
-                '}';
     }
 }
