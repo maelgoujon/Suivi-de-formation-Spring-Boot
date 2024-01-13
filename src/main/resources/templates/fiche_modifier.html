@@ -65,11 +65,12 @@
          </div>
       </section>
 
-      <form method="post" th:action="@{/updateFiche/{id}(id=${ficheIntervention.id})}" th:object="${ficheIntervention}" id="ficheForm">
+      <form method="post" th:action="@{/updateFiche/{id}(id=${ficheIntervention.id})}" th:object="${ficheIntervention}"
+         id="ficheForm">
          <!--------------------------Intervenant--------------------------------------->
          <hr />
 
-         <legend th:switch="${ficheIntervention.niveauIntervenant}">
+         <legend th:switch="${ficheIntervention.Intervenant.niveauTitreIntervenant}">
             <img th:case="0" class="display-5" src="/images/check.png" alt="Fait" style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
@@ -80,7 +81,8 @@
                      Intervenant</h2>
                </div>
             </div>
-            <h2 class="display-5" th:case="2" th:style="'color: ' + ${color}">Intervenant</h2>
+            <h2 class="display-5" th:case="2"
+               th:style="'color: ' + ${ficheIntervention.Intervenant.couleurTitreIntervenant}">Intervenant</h2>
          </legend>
 
 
@@ -301,12 +303,13 @@
                </div>
                <div class="col-auto">
                   <h2 class="display-5" th:style="'color: ' + ${ficheIntervention.couleurMateriauxUtilises}">Materiaux
+                     utilisés
                   </h2>
                </div>
             </div>
 
             <h2 class="display-5" th:case="2" th:style="'color: ' + ${ficheIntervention.couleurMateriauxUtilises}">
-               Materiaux
+               Materiaux utilisés
             </h2>
          </legend>
 
@@ -314,17 +317,19 @@
          <div th:if="${ficheIntervention.NiveauMateriauxUtilises == 2}">
             <div class="row">
                <div th:each="i : ${#numbers.sequence(0,5)}" class="form-group">
-
                   <div class="col">
                      <label for="exampleFormControlSelect1" class="form-label">Materiau</label>
                      <span th:text="${i}+1"></span>
-                     <select th:id="'exampleFormControlSelect' + ${i}" name="materiauxUtilises" class="form-control">
+                     <select th:id="'exampleFormControlSelect' + ${i}" name="materiauxUtilises" class="form-control"
+                        th:attr="onchange='updateHiddenInput(' + ${i} + ', this.value)'">
                         <option value=""></option>
                         <option th:each="element, status : ${materiauxAmenagementList}" th:value="${element.nomImage}"
                            th:text="${element.nomImage}"
                            th:selected="${ficheIntervention.materiauxOptions != null and ficheIntervention.materiauxOptions.size() > i and ficheIntervention.materiauxOptions[i] == element.nomImage}">
                         </option>
                      </select>
+                     <input type="hidden" th:id="'newMateriau' + ${i}" th:name="'newMateriau' + ${i}"
+                        th:value="${ficheIntervention.materiauxOptions != null and ficheIntervention.materiauxOptions.size() > i ? ficheIntervention.materiauxOptions[i] : ''}">
                   </div>
                </div>
             </div>
@@ -517,9 +522,8 @@
          <div class="submit-container" style="height: 10vh;width: 100%;margin-bottom: calc(var(--bs-gutter-x) * .5);">
             <button class="btn btn-dark" type="submit" style="height: inherit;width: inherit;">Terminer</button>
          </div>
-            
-            <input type="hidden" id="url"
-            th:value="@{/fiche/updateTypeIntervention/{id}(id=${ficheIntervention.id})}" />
+
+         <input type="hidden" id="url" th:value="@{/fiche/updateTypeIntervention/{id}(id=${ficheIntervention.id})}" />
 
 
 
@@ -530,6 +534,15 @@
 
    <script th:inline="javascript">
       /* <![CDATA[ */
+
+      //mettre a jour le champ caché de materiau niveau 2
+      function updateHiddenInput(i, value) {
+         //si value est null, mettre le champ caché à vide
+         if (value == null) {
+            value = '';
+         }
+         document.getElementById('newMateriau' + i).value = value;
+      }
 
       function updateTypeIntervention() {
          var form = document.getElementById('ficheForm');
