@@ -297,12 +297,14 @@
                 </div>
                 
                 <div class="col-md-6 form-group">
-            
                 <label for="role">Role:</label>
                 <select id="role" name="role" th:field="*{role}" required>
                     <option th:each="role : ${roles}" th:value="${role}" th:text="${role}"></option>
                 </select>
                 </div>
+
+                
+
                 <div class="col-md-6 form-group">
                 <label for="niveau" id="niveauLabel">Niveau:</label>
                 <select class="form-control" th:field="*{niveau}" id="niveauSelect">
@@ -317,7 +319,6 @@
                     <label for="description">Description:</label>
                     <div class="descriptiontext">
                         <textarea id="description" name="description" th:field="*{description}" ></textarea>
-                        
                     </div>
                 </div>
                 
@@ -338,14 +339,19 @@
         // Récupérer la liste déroulante Niveau et le label Niveau
         var niveauSelect = document.getElementById("niveauSelect");
         var niveauLabel = document.getElementById("niveauLabel");
-
+        var formationLabel = document.getElementById("formationLabel");
+        var formationSelect = document.getElementById("formationSelect");
         // Condition pour cacher le label et la liste déroulante Niveau si le rôle n'est pas USER
         if (selectedRole !== "USER") {
             niveauSelect.style.display = "none";
             niveauLabel.style.display = "none";
+            formationLabel.style.display="none";
+            formationSelect.style.display="none";
         } else {
             niveauSelect.style.display = "block";
             niveauLabel.style.display = "block";
+            formationLabel.style.display ="block";
+            formationSelect.style.display ="block";
         }
     }
 
