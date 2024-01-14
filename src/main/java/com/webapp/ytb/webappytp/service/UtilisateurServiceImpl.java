@@ -205,9 +205,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             dataRowFiche.createCell(14).setCellValue(fiche.getNiveauMaintenanceType());
             dataRowFiche.createCell(15).setCellValue(fiche.getNiveauMateriauxUtilises());
             dataRowFiche.createCell(16).setCellValue(fiche.getNiveauNatureIntervention());
-            dataRowFiche.createCell(17).setCellValue(fiche.getIntervenant().getNiveauNom());
+            dataRowFiche.createCell(17).setCellValue(fiche.getIntervenant().getNiveauTitreIntervenantNom());
             dataRowFiche.createCell(18).setCellValue(fiche.getDemande().getNiveauNomDemandeur());
-            dataRowFiche.createCell(19).setCellValue(fiche.getIntervenant().getNiveauPrenom());
+            dataRowFiche.createCell(19).setCellValue(fiche.getIntervenant().getNiveauTitreIntervenantPrenom());
             dataRowFiche.createCell(20).setCellValue(fiche.getDemande().getNiveauTitreDemande());
             dataRowFiche.createCell(21).setCellValue(fiche.getIntervenant().getNiveauTitreIntervenant());
             dataRowFiche.createCell(22).setCellValue(fiche.getIntervention().getNiveauTitreIntervention());
