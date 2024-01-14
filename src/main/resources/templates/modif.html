@@ -5,315 +5,110 @@
     <meta charset="UTF-8" />
       <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Modifier Apprenti</title>
-      <style>
-        body {
-          margin: 0;
-          padding: 0;
-          font-family: Arial, sans-serif;
-          background-color: #f0f0f0;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-start;
-          min-height: 100vh;
-        }
-
-        .bandeau {
-          background-color: #bbdefb;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 100%;
-          height: 80px;
-          border-bottom: 1px solid black;
-        }
-
-        .bandeau img {
-          max-width: 60px;
-          height: auto;
-        }
-
-        .bandeau h1 {
-          color: black;
-          margin: 0;
-        }
-
-        .apprenti-form {
-          width: 80%;
-          max-width: 400px;
-          margin: 20px auto;
-          background-color: white;
-          padding: 20px;
-          border-radius: 8px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .apprenti-form label {
-          display: block;
-          margin-top: 10px;
-        }
-
-        .apprenti-form input,
-        .apprenti-form select,
-        .apprenti-form textarea {
-          width: 100%;
-          padding: 10px;
-          margin-top: 5px;
-          box-sizing: border-box;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
-
-        .apprenti-form textarea {
-          resize: none;
-        }
-        button[type="submit"] {
-          margin-top: 20px;
-          background-color: #72bb53;
-          border-radius: 10px;
-          color: black;
-          border: none;
-          padding: 10px 20px;
-          cursor: pointer;
-        }
-
-        .apprenti-form input[type="button"] {
-          background-color: #e70f0f;
-          color: white;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          margin-top: 10px;
-        }
-
-        /* Style pour les messages d'erreur */
-        #errorMessages {
-          color: red;
-          margin-top: 10px;
-        }
-
-        .preview-image {
-          max-width: 100%;
-          height: auto;
-          margin-top: 10px;
-        }
-        #mdp {
-          background-color: #72bb53;
-          border-radius: 10px;
-          color: black;
-          border: none;
-          padding: 10px 20px;
-          cursor: pointer;
-        }
-
-        .boutonmdp{
-          position: left;
+      <!-- Ajoutez les liens vers les fichiers CSS Bootstrap ici -->
+      <link href="/css/bootstrap.min.css" rel="stylesheet" />
+      <link href="/css/accueil.css" rel="stylesheet" />
+      <!-- Ajoutez les liens vers les fichiers JavaScript Bootstrap et jQuery ici -->
+      <script src="/js/jquery-3.2.1.slim.min.js"></script>
+      <script src="/js/popper.min.js"></script>
+      <script src="/js/bootstrap.bundle.min.js"></script>      
+      <title>Modifier</title>
           
-        }
-        
-        .encadre{
-          border: 2px solid #000000; /* Couleur et épaisseur de la bordure */
-          border-radius: 10px;
-          padding: 10px; /* Espace à l'intérieur de la bordure */
-          width: 300px; /* Largeur de la division */
-          margin: 20px; /* Marge autour de la division */
-         
-
-        }
-        .encadre * {
-          margin-bottom: 10px;
-        }
-        
-        .imagemodif img{
-          height: 40px;
-          position: center;
-        }
-
-        @media screen and (max-width: 1920px) and (max-height: 1200px) {
-          .encadre {
-            width: 80%; /* Ajustez la largeur selon vos besoins pour une meilleure adaptation à la tablette */
-            align-items: center;
-          }
-          h2,
-          input,
-          select,
-          label{
-            font-size: 40px;
-          }
-
-          button[type="submit"] {
-            font-size: 30px;
-          }
-          .imagemodif img{
-            height: 150px;
-          }
-          #mdp{
-            font-size: 30px;
-          }
-        }
-
-        @media screen and (max-width: 1200px) and (max-height: 1920px) {
-          .encadre {
-              width:70%; /* Ajustez la largeur selon vos besoins pour une meilleure adaptation à la tablette */
-              align-items: center;
-              
-          }
-          h2,
-          input,
-          select,
-          button,
-          label{
-            font-size: 40px;
-          }
-          
-          button[type="submit"] {
-            font-size: 40px;
-          }
-          .imagemodif img{
-            height: 100px;
-          }
-          #mdp{
-            font-size: 30px;
-          }
-        }
-
-        @media (min-width: 1200px){
-          .encadre {
-              width: 50%; /* Ajustez la largeur selon vos besoins pour une meilleure adaptation à l'ordinateur */
-          }
-      
-          h2{
-            font-size:30px;
-          }
-          label,
-          input,
-          select,
-          button {
-            font-size: 20px;
-          }
-          #mdp{
-            font-size: 20px;
-          }
-          button[type="submit"] {
-            font-size: 20px;
-          }
-      
-          .imagemodif img {
-              height: 70px;
-          }
-        }
-      
-      </style>
-        
     </head>
 
 <body onsubmit="setInitialRole();">
 
-  <div class="bandeau">
-    <a href="/log_out">
-      <img src="/images/porte.png" alt="logout" style="float: left" />
-    </a>
-    <a href="/archive">
-        <img src="/images/archive.png" alt="archive" style="margin-left: 10px" />
+  <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color" style="background-color: #bbdefb;">
+    <a href="accueil_admin" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+        <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
     </a>
 
-    <div class="bandeau centered">
-        <a href="/accueil_admin">
-            <img src="/images/accueil.png" alt="accueil"/>
-        </a>
-    </div>
-    <a
-      href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
-    >
-      <img
-        src="/images/aide.png"
-        alt="aide"
-        style="cursor: pointer; margin-right: 10px"
-      />
-    </a>
-  </div>
+    <ul class="nav nav-pills">
+        <li class="nav-item"><a href="../accueil_superadmin" class="nav-link active text-white fs-5" aria-current="page">Accueil</a></li>
+        <li class="nav-item"><a href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing" class="nav-link text-black fs-5">Aide</a></li>
+        <li class="nav-item"><a href="../log_out" class="nav-link text-black fs-5">Se déconnecter</a></li>
+    </ul>
+</header>
+
+<div class="container mt-5">
+  <h2>Modifier l'utilisateur :</h2>
+  <div class=" encadre p-4 bg-light d-flex justify-content-center align-items-center">
+      <div class="encadre">
+          <!-- Afficher un message de succès si l'utilisateur a été créé avec succès -->
+          <div th:if="${success}">
+            <p style="color: green;">Utilisateur modifié avec succès!</p>
+        </div>
+
+          <!-- Formulaire de création d'utilisateur -->
+          <form class="formulaire" th:action="@{/utilisateur/modifier/{id}(id=${utilisateur.id})}" th:object="${utilisateur}" method="post" enctype="multipart/form-data" onsubmit="encodeImageToBase64();">
+              <div class="form-group row">
+                  <label for="nom" class="col-md-2 col-form-label">Nom:</label>
+                  <div class="col-md-4">
+                      <input type="text" id="nom" name="nom" th:field="*{nom}" class="form-control" required>
+                  </div>
+
+                  <label for="prenom" class="col-md-2 col-form-label">Prénom:</label>
+                  <div class="col-md-4">
+                      <input type="text" id="prenom" name="prenom" th:field="*{prenom}" class="form-control" required>
+                  </div>
+
+                  <label for="login" class="col-md-2 col-form-label">Login:</label>
+                  <div class="col-md-4">
+                      <input type="text" id="login" name="login" th:field="*{login}" class="form-control" required>
+                  </div>
+
+                  <label for="mdp" class="col-md-2 col-form-label">Mot de passe:</label>
+                  <div class="col-md-4">
+                      <input type="text" id="motdepasse" name="motdepasse" th:value="${utilisateur.mdp}" th:field="*{mdp}" required>
+                  </div>
+
+                  <label for="photo" class="col-md-2 col-form-label">Sélectionner une photo:</label>
+                  <div class="col-md-4">
+                      <input type="file" id="photo" name="photo" onchange="encodeImageToBase64()" accept="image/*"
+                          class="form-control">
+                  </div>
+                  <input type="hidden" id="photoBase64" name="photoBase64" th:field="*{photoBase64}" />
+
+                  <label for="role" class="col-md-2 col-form-label">Role:</label>
+                  <div class="col-md-4">
+                      <select id="role" name="role" th:field="*{role}" class="form-control" required>
+                          <option th:each="role : ${roles}" th:value="${role}" th:text="${role}"></option>
+                      </select>
+                  </div>
+
+                  <label for="niveau" id="niveauLabel" class="col-md-2 col-form-label">Niveau:</label>
+                  <div class="col-md-4">
+                      <select class="form-control" th:field="*{niveau}" id="niveauSelect">
+                          <option value="0">0</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                      </select>
+                  </div>
+
+                  <label for="description" class="col-md-2 col-form-label">Description:</label>
+                  <div class="col-md-4">
+                      <textarea id="description" name="description" th:field="*{description}" ></textarea>
+                  </div>
 
 
+                  <div class="col-md-6 offset-md-3">
+                      <button type="submit" class="btn btn-primary">Modifier l'utilisateur</button>
+                  </div>
+              </div>
 
-    <h2>Modifier un utilisateur</h2>
-  <div class="encadre">
-    <!-- Afficher un message de succès si l'utilisateur a été modifier avec succès -->
-    <div th:if="${success}">
-        <p style="color: green;">Utilisateur modifié avec succès!</p>
-    </div>
-    <!-- Formulaire de modif d'utilisateur -->
-    <form class="formulaire" th:action="@{/utilisateur/modifier/{id}(id=${utilisateur.id})}" th:object="${utilisateur}" method="post">
-      <!-- ... autres champs du formulaire ... -->
-        <div class="form-row">
-            <div class="col-md-6 form-group">
-                <label for="nom">Nom:</label>
-                <input type="text" id="nom" name="nom" th:field="*{nom}" required>
-            </div>
-
-            <div class="col-md-6 form-group">
-                <label for="prenom">Prénom:</label>
-                <input type="text" id="prenom" name="prenom" th:field="*{prenom}" required>
-            </div>
-
-            <div class="col-md-6 form-group">
-                <label for="login">Login:</label>
-                <input type="text" id="login" name="login" th:field="*{login}" required>
-            </div>
-
-            
-            <div class="col-md-6 form-group" id="passwordField">
-              <label for="motdepasse">Mot de passe:</label>
-              <input type="text" id="motdepasse" name="motdepasse" th:value="${utilisateur.mdp}" th:field="*{mdp}" required>
-          </div>
-            
-
-            <div class="col-md-6 form-group">
-                <label for="photo">Sélectionner une photo:</label>
-                <input type="file" id="photo" name="photo" onchange="encodeImageToBase64()" accept="image/*">
-            </div>
-
-            <div class="col-md-6 form-group">
-                <input hidden="true" type="text" id="photoBase64" name="photoBase64" th:field="*{photoBase64}">
-            </div>
-            
-            <div class="col-md-6 form-group">
-              <label for="role">Role:</label>
-              <select id="role" name="role" th:field="*{role}" required>
-                  <option th:each="role : ${roles}" th:value="${role.name()}" th:text="${role}" th:selected="${role.name() eq initialRole}"></option>
-              </select>
-          </div>
-          
-          
-          
-          <div class="col-md-6 form-group" id="niveauField">
-              <label for="niveau">Niveau:</label>
-              <select class="form-control" th:field="*{niveau}" id="niveau">
-                  <option value="0">0</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-              </select>
-          </div>
-          
-          <button type="submit">Modifier Utilisateur</button>
+          </form>
       </div>
-    </form>
-    <div class="boutonmdp">
-      <button id="mdp" th:attr="data-userid=${utilisateur.id}">Modifier Mot de passe</button>
-    </div>
-    <div class="imagemodif">
-      <div class="imagemodif">
-        <a th:href="@{'/profil_apprenti/' + ${utilisateur.id}}">
-            <img
-            src="/images/return.png"
-            alt="Modifier un apprenti"
-            style="cursor: pointer"
-            />
-        </a>
-     </div>
   </div>
+</div>
+    <div class="text-center mt-3">
+      <button id="mdp" class="btn btn-primary" th:attr="data-userid=${utilisateur.id}">Modifier Mot de passe</button>
+    </div>
+    <div class="mt-3 d-flex justify-content-center ">
+      <a th:href="@{'/profil_apprenti/' + ${utilisateur.id}}">
+          <img src="/images/return.png" alt="Modifier un apprenti" style="cursor: pointer" class="img-fluid w-25" />
+      </a>
   </div>  
     <script>
       var initialRole = '${utilisateur.role.name()}';

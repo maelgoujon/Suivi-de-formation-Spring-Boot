@@ -5,125 +5,84 @@
       <meta charset="UTF-8" />
       <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <!-- Ajoutez les liens vers les fichiers CSS Bootstrap ici -->
+      <link href="/css/bootstrap.min.css" rel="stylesheet" />
+      <link href="/css/accueil.css" rel="stylesheet">
+      <!-- Ajoutez les liens vers les fichiers JavaScript Bootstrap et jQuery ici -->
+      <script src="/js/jquery-3.2.1.slim.min.js"></script>
+      <script src="/js/popper.min.js"></script>
+      <script src="/js/bootstrap.bundle.min.js"></script>      
       <title>Choisir fiche d'intervention</title>
-      <style>
-        body {
-          margin: 0;
-          padding: 0;
-          font-family: Arial, sans-serif;
-          background-color: #f0f0f0;
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-start;
-          height: 100vh;
-        }
 
-        .top-bar {
-          background-color: #bbdefb;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          width: 100%;
-          height: 80px;
-          border-bottom: 1px solid black;
-        }
-        .image {
-          width: 80px;
-          height: 80px;
-        }
-        .image1 {
-          width: 62px;
-          height: 62px;
-        }
-
-        .adm {
-          margin-right: 25px;
-          display: flex;
-          align-items: center;
-        }
-        .admTXT {
-          margin-left: 5px;
-        }
-
-        .container {
-          width: 80%;
-          max-width: 800px;
-          margin: 100px auto;
-          background-color: none;
-          border: 1px solid black;
-          text-align: center;
-          padding: 20px;
-          overflow: hidden;
-        }
-
-        .title {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          font-size: 20px;
-          margin-bottom: 40px;
-        }
-        .image2 {
-          margin-left: 10px;
-          width: 50px;
-          height: 50px;
-        }
-
-        .fInters {
-          display: inline-block;
-        }
-        .fInter {
-          display: inline-block;
-          border: 1px solid black;
-          padding: 10px;
-          margin: 10px;
-          width: 125px;
-          height: 175px;
-          cursor: pointer;
-        }
-
-        .fInter.static {
-          text-anchor: middle;
-        }
-        .fInter.selected {
-          border: 5px solid #72bb53;
-          box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        }
-        .name {
-          font-weight: bolder;
-        }
-
-        .buttonADD {
-          display: inline-block;
-          justify-content: center;
-          border: none;
-          background-color: none;
-          box-shadow: none;
-        }
-        #add {
-          display: none;
-          background-color: none;
-          border-radius: 10px;
-          color: black;
-          border: none;
-          padding: 10px 20px;
-          cursor: pointer;
-        }
-      </style>
     </head>
     <body>
-      <div class="top-bar">
-        <a href="accueil">
-          <img class="image" src="/images/accueil.png" />
-        </a>
-        <div>
-          <a id="suivi" href="suivi_progression"><img src="/images/suivi.png" class="image" /></a>
-        </div> 
-        <a class="adm" href="accueil_admin">
-          <img class="image1" src="/images/logo.png" />
-          <h3 class="admTXT">Admin</h3>
-        </a>
+
+          <!-- Barre de navigation Bootstrap -->
+    <nav class="navbar bg-body-tertiary">
+      <div class="container d-flex justify-content-between align-items-center">
+          <!-- Bouton gauche pour le mot de passe oublié -->
+          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modalMdpOublie">
+              <img src="/images/mdp_oublie.png" alt="Mot de Passe Oublié?" width="50" height="50">
+          </button>
+
+          <!-- Logo accueil au centre -->
+          <a class="navbar-brand mx-auto" href="/">
+              <img src="/images/accueil.png" alt="Accueil" width="50" height="50">
+          </a>
+
+          <!-- Bouton droit pour l'admin -->
+          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modalConnexionAdmin">
+              <img src="/images/admin.png" alt="Connexion Admin" width="50" height="50">
+              Admin
+          </button>
       </div>
+  </nav>
+  <div class="modal fade" id="modalMdpOublie" tabindex="-1" aria-labelledby="modalMdpOublieLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalMdpOublieLabel">Réinitialisation du mot de passe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <p>Demander de l'aide à un formateur <img type="button" src="/images/son.png" alt="Lire le nom"
+                        onclick="lireTexte('Demander de l\'aide à un formateur')" style="width: 20px;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalConnexionAdmin" tabindex="-1" aria-labelledby="modalConnexionAdminLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalConnexionAdminLabel">Connexion Admin</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <form id="adminLoginForm" th:action="@{/login}" method="post">
+                    <div class="mb-3">
+                        <label for="adminUsername" class="form-label">Nom d'utilisateur</label>
+                        <input type="text" class="form-control" id="adminUsername" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="adminPassword" class="form-label">Mot de passe</label>
+                        <input type="password" class="form-control" id="adminPassword" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Se Connecter</button>
+                    <button type="button" class="btn btn-secondary" data-bs-container="body"
+                        data-bs-toggle="popover" data-bs-placement="bottom"
+                        data-bs-content="Demander de l'aide au SUPERADMIN">
+                        Mot de Passe Oublié ?
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
       <div class="container">
         <div class="title">
