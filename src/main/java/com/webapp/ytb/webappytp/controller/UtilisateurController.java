@@ -10,10 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.webapp.ytb.webappytp.modele.FicheIntervention;
+import com.webapp.ytb.webappytp.modele.Formation;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
+import com.webapp.ytb.webappytp.service.FicheService;
 import com.webapp.ytb.webappytp.service.UtilisateurService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
@@ -27,6 +31,7 @@ import org.springframework.validation.BindingResult;
 public class UtilisateurController {
 
     private final UtilisateurService utilisateurService;
+    private final FicheService ficheService;
 
     // Page de création de nouvel utilisateur
     @GetMapping("/nouveau")
@@ -142,4 +147,30 @@ public class UtilisateurController {
         return "tousLesUtilisateurs"; // Assurez-vous que le fichier tousLesUtilisateurs.html existe
     }
 
+    @GetMapping("/excel/{userId}")
+    public void generateUserExcelArchive(@PathVariable Long userId, HttpServletResponse response) throws Exception {
+        Utilisateur utilisateur = utilisateurService.findById(userId);
+        if (utilisateur == null) {
+            throw new RuntimeException("User not found with ID: " + userId);
+        }
+    
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String userNameForFile = utilisateur.getNom().replace(" ", "_");
+        String headerValue = "attachment; filename=archive_user_" + userNameForFile + ".xls";
+        response.setHeader(headerKey, headerValue);
+    
+        utilisateurService.generatedExcelForUser(userId, response);
+    
+        response.flushBuffer();
+    
+        // Delete fiches d'intervention for the user
+        List<FicheIntervention> fiches = ficheService.getFichesByUserId(userId);
+        for (FicheIntervention fiche : fiches) {
+            ficheService.supprimer(fiche.getId());
+        }
+    
+        // Delete the user
+        utilisateurService.supprimer(userId);
+    }
 }

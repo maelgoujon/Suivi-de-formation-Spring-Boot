@@ -6,6 +6,8 @@ import java.util.Optional;
 import com.webapp.ytb.webappytp.modele.Formation;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 public interface UtilisateurService {
     Utilisateur creer(Utilisateur utilisateur);
 
@@ -30,4 +32,5 @@ public interface UtilisateurService {
 
     public Optional<Formation> findFormationByUtilisateur(Long utilisateurId);
 
+    public void generatedExcelForUser(Long userId, HttpServletResponse response) throws Exception;
 }
