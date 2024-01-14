@@ -211,15 +211,16 @@
 
                     dots.forEach(dot => {
                         dot.addEventListener('click', function () {
-                            if (!this.classList.contains('selected') && password.length < 4) {
+                            const dotNumber = this.getAttribute('data-number');
+                            if (this.classList.contains('selected') && password[password.length - 1] === dotNumber) {
+                                this.classList.remove('selected');
+                                password.pop();
+                            } else if (!this.classList.contains('selected') && password.length < 4) {
                                 this.classList.add('selected');
-                                password.push(this.getAttribute('data-number'));
-                                passwordField.value = password.join('');
-
-                                if (password.length === 4) {
-                                    connectButton.style.display = 'block';
-                                }
+                                password.push(dotNumber);
                             }
+                            passwordField.value = password.join('');
+                            connectButton.style.display = password.length === 4 ? 'block' : 'none';
                         });
                     });
 
