@@ -118,7 +118,7 @@ public class Demarrage implements ApplicationRunner {
         // Creation Formation 2
         Formation formation2 = new Formation();
         formation2.setNom("Nom Formation");
-        formation2.setNiveau_qualif("CAP 1ere Annee"); 
+        formation2.setNiveau_qualif("CAP 1ere Annee");
         formation2.setDescription("Description Formation2");
         formationRepository.save(formation2);
 
@@ -181,7 +181,7 @@ public class Demarrage implements ApplicationRunner {
             utilisateurRepository.save(CIP);
         }
 
-        // Création d'un utilisateur
+        // Création d'un utilisateur michel
         Utilisateur michel = utilisateurRepository.findUserByLogin("michelmichel");
         if (michel == null) {
             michel = new Utilisateur();
@@ -197,6 +197,101 @@ public class Demarrage implements ApplicationRunner {
             utilisateurRepository.save(michel);
         }
 
+        // Création d'un utilisateur johnSmith
+        Utilisateur johnSmith = utilisateurRepository.findUserByLogin("johnsmith");
+        if (johnSmith == null) {
+            johnSmith = new Utilisateur();
+            johnSmith.setFormation(formation);
+            johnSmith.setNom("Smith");
+            johnSmith.setPrenom("John");
+            johnSmith.setLogin("johnsmith");
+            johnSmith.setMdp("9876");
+            johnSmith.setRole(UserRole.USER);
+            johnSmith.setNiveau(1);
+            johnSmith.setPhotoBase64(photoBase64);
+            johnSmith.setDescription("Description de John Smith");
+            utilisateurRepository.save(johnSmith);
+        }
+
+        // Création d'un utilisateur janeDoe
+        Utilisateur janeDoe = utilisateurRepository.findUserByLogin("janedoe");
+        if (janeDoe == null) {
+            janeDoe = new Utilisateur();
+            janeDoe.setFormation(formation);
+            janeDoe.setNom("Doe");
+            janeDoe.setPrenom("Jane");
+            janeDoe.setLogin("janedoe");
+            janeDoe.setMdp("4321");
+            janeDoe.setRole(UserRole.USER);
+            janeDoe.setNiveau(1);
+            janeDoe.setPhotoBase64(photoBase64);
+            janeDoe.setDescription("Description de Jane Doe");
+            utilisateurRepository.save(janeDoe);
+        }
+
+        // Création d'un utilisateur aliceJohnson
+        Utilisateur aliceJohnson = utilisateurRepository.findUserByLogin("alicejohnson");
+        if (aliceJohnson == null) {
+            aliceJohnson = new Utilisateur();
+            aliceJohnson.setFormation(formation);
+            aliceJohnson.setNom("Johnson");
+            aliceJohnson.setPrenom("Alice");
+            aliceJohnson.setLogin("alicejohnson");
+            aliceJohnson.setMdp("2468"); // Mot de passe à 4 chiffres
+            aliceJohnson.setRole(UserRole.USER);
+            aliceJohnson.setNiveau(1);
+            aliceJohnson.setPhotoBase64(photoBase64);
+            aliceJohnson.setDescription("Description d'Alice Johnson");
+            utilisateurRepository.save(aliceJohnson);
+        }
+
+        // Création d'un utilisateur paulWilliams
+        Utilisateur paulWilliams = utilisateurRepository.findUserByLogin("paulwilliams");
+        if (paulWilliams == null) {
+            paulWilliams = new Utilisateur();
+            paulWilliams.setFormation(formation);
+            paulWilliams.setNom("Williams");
+            paulWilliams.setPrenom("Paul");
+            paulWilliams.setLogin("paulwilliams");
+            paulWilliams.setMdp("1357"); // Mot de passe à 4 chiffres
+            paulWilliams.setRole(UserRole.USER);
+            paulWilliams.setNiveau(1);
+            paulWilliams.setPhotoBase64(photoBase64);
+            paulWilliams.setDescription("Description de Paul Williams");
+            utilisateurRepository.save(paulWilliams);
+        }
+
+        // Création d'un utilisateur emilyBrown
+        Utilisateur emilyBrown = utilisateurRepository.findUserByLogin("emilybrown");
+        if (emilyBrown == null) {
+            emilyBrown = new Utilisateur();
+            emilyBrown.setFormation(formation);
+            emilyBrown.setNom("Brown");
+            emilyBrown.setPrenom("Emily");
+            emilyBrown.setLogin("emilybrown");
+            emilyBrown.setMdp("9876"); // Mot de passe à 4 chiffres
+            emilyBrown.setRole(UserRole.USER);
+            emilyBrown.setNiveau(1);
+            emilyBrown.setPhotoBase64(photoBase64);
+            emilyBrown.setDescription("Description d'Emily Brown");
+            utilisateurRepository.save(emilyBrown);
+        }
+
+        // Création d'un utilisateur pierreDupont
+        Utilisateur pierreDupont = utilisateurRepository.findUserByLogin("pierredupont");
+        if (pierreDupont == null) {
+            pierreDupont = new Utilisateur();
+            pierreDupont.setFormation(formation);
+            pierreDupont.setNom("Dupont");
+            pierreDupont.setPrenom("Pierre");
+            pierreDupont.setLogin("pierredupont");
+            pierreDupont.setMdp("7462"); // Mot de passe à 4 chiffres
+            pierreDupont.setRole(UserRole.USER);
+            pierreDupont.setNiveau(1);
+            pierreDupont.setPhotoBase64(photoBase64);
+            pierreDupont.setDescription("Description de Pierre Dupont");
+            utilisateurRepository.save(pierreDupont);
+        }
 
         // Creation d'une fiche d'Intervention
         FicheIntervention ficheIntervention = ficheRepository
@@ -275,7 +370,6 @@ public class Demarrage implements ApplicationRunner {
             nouvelleFiche.setEtatFicheFinie(false);
             nouvelleFiche.setNouvelleIntervention(true);
             nouvelleFiche.setUtilisateur(michel);
-            
 
             // Ajouter les materiaux de type amenagement
             // On ajoute 4 materiaux et rien dans les deux derniers
@@ -291,7 +385,8 @@ public class Demarrage implements ApplicationRunner {
         }
 
         // Creation des images pour la fiche d intervention
-        String[] types = { "INTERVENANT", "DEMANDE", "INTERVENTION", "MATERIAUX_UTILISES","TRAVAUX_REALISES", "TRAVAUX_NON_REALISES" };
+        String[] types = { "INTERVENANT", "DEMANDE", "INTERVENTION", "MATERIAUX_UTILISES", "TRAVAUX_REALISES",
+                "TRAVAUX_NON_REALISES" };
         String[] nomImages = { "Image1", "ADMIN", "Image2", "FICHES1", "FICHES2", "FICHES3", "FICHES4" };
         String[] imageUrls = { "images/accueil.png", "images/admin.png", "images/archive.png", "images/eleve.png",
                 "images/eleve.png", "images/eleve.png", "images/eleve.png" };
