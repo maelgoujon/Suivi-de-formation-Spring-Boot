@@ -55,6 +55,21 @@ public class Demande {
     @Column
     private int niveauDegreUrgence;
 
+    @Column
+    private int niveauTitreDemandeNom;
+
+    @Column
+    private int niveauTitreDemandeDate;
+
+    @Column
+    private int niveauTitreDemandeLocalisation;
+
+    @Column
+    private int niveauTitreDemandeDescription;
+
+    @Column
+    private int niveauTitreDemandeDegreUrgence;
+
     //Couleurs
     @Column
     private String couleurTitreDemande;
@@ -77,5 +92,21 @@ public class Demande {
     //Images
     @Column
     private String imageTitreDemandeUrl;
+
+    @Column
+    private String imageTitreDemandeNomUrl;
+
+    @Column
+    private String imageTitreDemandeDateUrl;
+
+    @Column
+    private String imageTitreDemandeLocalisationUrl;
+
+    @Column
+    private String imageTitreDemandeDescriptionUrl;
+
+    @Column
+    private String imageTitreDemandeDegreUrgenceUrl;
+
 
 }

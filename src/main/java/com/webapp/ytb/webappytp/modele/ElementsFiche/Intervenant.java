@@ -24,10 +24,10 @@ public class Intervenant {
     private int niveauTitreIntervenant;
     
     @Column
-    private int niveauNom;
+    private int niveauTitreIntervenantNom;
 
     @Column
-    private int niveauPrenom;
+    private int niveauTitreIntervenantPrenom;    
 
     //Couleurs
     @Column
@@ -42,5 +42,11 @@ public class Intervenant {
     //Images
     @Column
     private String imageTitreIntervenantUrl;
+
+    @Column
+    private String imageTitreIntervenantPrenomUrl;
+
+    @Column
+    private String imageTitreIntervenantNomUrl;
     
 }

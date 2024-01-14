@@ -71,4 +71,14 @@ public class Intervention {
     @Column
     private String imageTitreInterventionUrl;
 
+    @Column
+    private String imageDureeInterventionUrl;
+
+    @Column
+    private String imageTypeInterventionUrl;
+
+    @Column
+    private String imageDateInterventionUrl;
+
+
 }

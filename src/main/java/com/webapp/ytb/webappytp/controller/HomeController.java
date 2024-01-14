@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 
-
-
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -13,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -39,7 +36,6 @@ import com.webapp.ytb.webappytp.repository.MateriauxAmenagementRepository;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
 
-
 @Controller
 public class HomeController {
 
@@ -49,7 +45,8 @@ public class HomeController {
     ImagesTitresRepository imagesTitresRepository;
 
     public HomeController(UtilisateurServiceImpl userServ, FicheServiceImpl ficheServ,
-            MateriauxAmenagementRepository materiauxAmenagementRepository, ImagesTitresRepository imagesTitresRepository ) {
+            MateriauxAmenagementRepository materiauxAmenagementRepository,
+            ImagesTitresRepository imagesTitresRepository) {
         this.userServ = userServ;
         this.ficheServ = ficheServ;
         this.materiauxAmenagementRepository = materiauxAmenagementRepository;
@@ -64,19 +61,57 @@ public class HomeController {
     @GetMapping("/ajout_fiche")
     public String ajout_fiche(Model model) {
         FicheIntervention fiche = new FicheIntervention();
-        List<ImagesTitres> imagesTitreIntervenant = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.INTERVENANT);
+        List<ImagesTitres> imagesTitreIntervenant = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT);
         List<ImagesTitres> imagesTitreDemande = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.DEMANDE);
-        List<ImagesTitres> imagesTitreIntervention = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.INTERVENTION);
-        List<ImagesTitres> imagesTitreTravauxRealises = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_REALISES);
-        List<ImagesTitres> imagesTitreTravauxNonRealises = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_NON_REALISES);
-        List<ImagesTitres> imagesTitreMateriauxUtilises = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.MATERIAUX_UTILISES);
+        List<ImagesTitres> imagesTitreIntervention = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION);
+        List<ImagesTitres> imagesTitreTravauxRealises = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_REALISES);
+        List<ImagesTitres> imagesTitreTravauxNonRealises = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_NON_REALISES);
+        List<ImagesTitres> imagesTitreMateriauxUtilises = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.MATERIAUX_UTILISES);
+        List<ImagesTitres> imagesTitreIntervenantPrenom = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT_PRENOM);
+        List<ImagesTitres> imagesTitreIntervenantNom = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT_NOM);
+        List<ImagesTitres> imagesTitreDemandeNom = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_NOM);
+        List<ImagesTitres> imagesTitreDemandeDegreUrgence = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_DEGRE_URGENCE);
+        List<ImagesTitres> imagesTitreDemandeDate = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_DATE);
+        List<ImagesTitres> imagesTitreDemandeLocalisation = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_LOCALISATION);
+        List<ImagesTitres> imagesTitreDemandeDescription = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_DESCRIPTION);
+        List<ImagesTitres> imagesTitreInterventionDate = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION_DATE);
+        List<ImagesTitres> imagesTitreInterventionDuree = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION_DUREE);
+        List<ImagesTitres> imagesTitreInterventionType = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION_TYPE);
+        List<ImagesTitres> imagesTitreMaintenanceType = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.MAINTENANCE_TYPE);
+
         model.addAttribute("imagesTitreIntervenant", imagesTitreIntervenant);
         model.addAttribute("imagesTitreDemande", imagesTitreDemande);
         model.addAttribute("imagesTitreIntervention", imagesTitreIntervention);
         model.addAttribute("imagesTitreTravauxRealises", imagesTitreTravauxRealises);
         model.addAttribute("imagesTitreTravauxNonRealises", imagesTitreTravauxNonRealises);
         model.addAttribute("imagesTitreMateriauxUtilises", imagesTitreMateriauxUtilises);
-
+        model.addAttribute("imagesTitreIntervenantPrenom", imagesTitreIntervenantPrenom);
+        model.addAttribute("imagesTitreIntervenantNom", imagesTitreIntervenantNom);
+        model.addAttribute("imagesTitreDemandeNom", imagesTitreDemandeNom);
+        model.addAttribute("imagesTitreDemandeDegreUrgence", imagesTitreDemandeDegreUrgence);
+        model.addAttribute("imagesTitreDemandeDate", imagesTitreDemandeDate);
+        model.addAttribute("imagesTitreDemandeLocalisation", imagesTitreDemandeLocalisation);
+        model.addAttribute("imagesTitreDemandeDescription", imagesTitreDemandeDescription);
+        model.addAttribute("imagesTitreInterventionDate", imagesTitreInterventionDate);
+        model.addAttribute("imagesTitreInterventionDuree", imagesTitreInterventionDuree);
+        model.addAttribute("imagesTitreInterventionType", imagesTitreInterventionType);
+        model.addAttribute("imagesTitreMaintenanceType", imagesTitreMaintenanceType);
 
         model.addAttribute("fiche", fiche);
         model.addAttribute("users", userServ.lire());
@@ -97,29 +132,50 @@ public class HomeController {
         demande.setLocalisation(fiche.getDemande().getLocalisation());
         demande.setDescription(fiche.getDemande().getDescription());
         demande.setDegreUrgence(fiche.getDemande().getDegreUrgence());
-        if (fiche.getDemande().getCouleurTitreDemande() != null) {
-            demande.setCouleurTitreDemande(fiche.getDemande().getCouleurTitreDemande());
-        } else {
-            demande.setCouleurTitreDemande("#000000");
-        }
+        demande.setCouleurTitreDemande(fiche.getDemande().getCouleurTitreDemande());
         demande.setNiveauTitreDemande(fiche.getDemande().getNiveauTitreDemande());
         demande.setImageTitreDemandeUrl(fiche.getDemande().getImageTitreDemandeUrl());
+        demande.setNiveauTitreDemandeNom(fiche.getDemande().getNiveauTitreDemandeNom());
+        demande.setImageTitreDemandeNomUrl(fiche.getDemande().getImageTitreDemandeNomUrl());
+        demande.setCouleurNomDemandeur(fiche.getDemande().getCouleurNomDemandeur());
+        demande.setCouleurDegreUrgence(fiche.getDemande().getCouleurDegreUrgence());
+        demande.setCouleurDateDemande(fiche.getDemande().getCouleurDateDemande());
+        demande.setCouleurLocalisation(fiche.getDemande().getCouleurLocalisation());
+        demande.setCouleurDescription(fiche.getDemande().getCouleurDescription());
+        demande.setNiveauNomDemandeur(fiche.getDemande().getNiveauNomDemandeur());
+        demande.setNiveauDateDemande(fiche.getDemande().getNiveauDateDemande());
+        demande.setNiveauLocalisation(fiche.getDemande().getNiveauLocalisation());
+        demande.setNiveauDescription(fiche.getDemande().getNiveauDescription());
+        demande.setNiveauDegreUrgence(fiche.getDemande().getNiveauDegreUrgence());
+        demande.setNiveauTitreDemandeDegreUrgence(fiche.getDemande().getNiveauTitreDemandeDegreUrgence());
+        demande.setNiveauTitreDemandeDate(fiche.getDemande().getNiveauTitreDemandeDate());
+        demande.setNiveauTitreDemandeLocalisation(fiche.getDemande().getNiveauTitreDemandeLocalisation());
+        demande.setNiveauTitreDemandeDescription(fiche.getDemande().getNiveauTitreDemandeDescription());
+        demande.setImageTitreDemandeDegreUrgenceUrl(fiche.getDemande().getImageTitreDemandeDegreUrgenceUrl());
+        demande.setImageTitreDemandeDateUrl(fiche.getDemande().getImageTitreDemandeDateUrl());
+        demande.setImageTitreDemandeLocalisationUrl(fiche.getDemande().getImageTitreDemandeLocalisationUrl());
+        demande.setImageTitreDemandeDescriptionUrl(fiche.getDemande().getImageTitreDemandeDescriptionUrl());
+        //maintenance
+        maintenance.setMaintenanceType(fiche.getMaintenance().getMaintenanceType());
+        maintenance.setNiveauMaintenanceType(fiche.getMaintenance().getNiveauMaintenanceType());
+        maintenance.setCouleurMaintenanceType(fiche.getMaintenance().getCouleurMaintenanceType());
+        maintenance.setImageTypeMaintenanceUrl(fiche.getMaintenance().getImageTypeMaintenanceUrl());
+        
+
         // intervention
         intervention.setNiveauTitreIntervention(fiche.getIntervention().getNiveauTitreIntervention());
         intervention.setCouleurTitreIntervention(fiche.getIntervention().getCouleurTitreIntervention());
-        if (fiche.getIntervention() != null)
-        {
-            if (fiche.getIntervention().getTypeIntervention() != null) {
-                intervention.setTypeIntervention(fiche.getIntervention().getTypeIntervention());
-            }
-            if (fiche.getIntervention().getDateIntervention() != null) {
-                intervention.setDateIntervention(fiche.getIntervention().getDateIntervention());
-            }
-            if (fiche.getIntervention().getDureeIntervention() != 0) {
-                intervention.setDureeIntervention(fiche.getIntervention().getDureeIntervention());
-            }
-        }
         intervention.setImageTitreInterventionUrl(fiche.getIntervention().getImageTitreInterventionUrl());
+        intervention.setNiveauDateIntervention(fiche.getIntervention().getNiveauDateIntervention());
+        intervention.setCouleurDateIntervention(fiche.getIntervention().getCouleurDateIntervention());
+        intervention.setImageDateInterventionUrl(fiche.getIntervention().getImageDateInterventionUrl());
+        intervention.setNiveauDureeIntervention(fiche.getIntervention().getNiveauDureeIntervention());
+        intervention.setCouleurDureeIntervention(fiche.getIntervention().getCouleurDureeIntervention());
+        intervention.setImageDureeInterventionUrl(fiche.getIntervention().getImageDureeInterventionUrl());
+        intervention.setNiveauTypeIntervention(fiche.getIntervention().getNiveauTypeIntervention());
+        intervention.setCouleurTypeIntervention(fiche.getIntervention().getCouleurTypeIntervention());
+        intervention.setImageTypeInterventionUrl(fiche.getIntervention().getImageTypeInterventionUrl());
+
         // maintenance
         if (fiche.getMaintenance() != null && fiche.getMaintenance().getMaintenanceType() != null) {
             maintenance.setMaintenanceType(fiche.getMaintenance().getMaintenanceType());
@@ -128,24 +184,25 @@ public class HomeController {
         intervenant.setCouleurNom(fiche.getIntervenant().getCouleurNom());
         intervenant.setCouleurPrenom(fiche.getIntervenant().getCouleurPrenom());
         intervenant.setCouleurTitreIntervenant(fiche.getIntervenant().getCouleurTitreIntervenant());
-        intervenant.setNiveauTitreIntervenant(fiche.getIntervenant().getNiveauTitreIntervenant());  
+        intervenant.setNiveauTitreIntervenant(fiche.getIntervenant().getNiveauTitreIntervenant());
         intervenant.setImageTitreIntervenantUrl(fiche.getIntervenant().getImageTitreIntervenantUrl());
-        //Travaux
+        intervenant.setNiveauTitreIntervenantNom(fiche.getIntervenant().getNiveauTitreIntervenantNom());
+        intervenant.setNiveauTitreIntervenantPrenom(fiche.getIntervenant().getNiveauTitreIntervenantPrenom());
+        intervenant.setImageTitreIntervenantNomUrl(fiche.getIntervenant().getImageTitreIntervenantNomUrl());
+        intervenant.setImageTitreIntervenantPrenomUrl(fiche.getIntervenant().getImageTitreIntervenantPrenomUrl());
+        // Travaux
         fiche.setNiveauTravauxRealises(fiche.getNiveauTravauxRealises());
         fiche.setNiveauTravauxNonRealises(fiche.getNiveauTravauxNonRealises());
         fiche.setImageTitreTravauxRealisesUrl(fiche.getImageTitreTravauxRealisesUrl());
-        //Materiaux
+        // Materiaux
         fiche.setNiveauMateriauxUtilises(fiche.getNiveauMateriauxUtilises());
         fiche.setImageTitreMateriauxUtilisesUrl(fiche.getImageTitreMateriauxUtilisesUrl());
-
 
         // on mets les objets dans la fiche
         fiche.setDemande(demande);
         fiche.setIntervenant(intervenant);
         fiche.setIntervention(intervention);
         fiche.setMaintenance(maintenance);
-        // on mets tous les niveaux a 1
-        fiche.setNiveauNatureIntervention(1);
         FicheIntervention createdFiche = ficheServ
                 .creer(fiche);
         model.addAttribute("createdFiche", createdFiche);
@@ -188,7 +245,7 @@ public class HomeController {
 
         return "fiche_modifier";
     }
-    
+
     @PostMapping("/updateFiche/{id}")
     public String updateFiche(@PathVariable long id,
             @RequestParam(required = false) String newNomDemandeur,
@@ -367,10 +424,10 @@ public class HomeController {
         return "redirect:/fiche/modifier/" + id;
     }
 
-    //-----------------------------------------//
-    //------------Accueils---------------------//
-    //-----------------------------------------//
-     @GetMapping("/")
+    // -----------------------------------------//
+    // ------------Accueils---------------------//
+    // -----------------------------------------//
+    @GetMapping("/")
     public String home(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
         model.addAttribute("utilisateurs", utilisateurs);
@@ -383,7 +440,8 @@ public class HomeController {
 
         if ("ROLE_SUPERADMIN".equals(utilisateurConnecteRole)) {
             return "redirect:/accueil_superadmin";
-        } else if ("ROLE_ADMIN".equals(utilisateurConnecteRole) || "ROLE_CIP".equals(utilisateurConnecteRole) || "ROLE_EDUCSIMPLE".equals(utilisateurConnecteRole)) {
+        } else if ("ROLE_ADMIN".equals(utilisateurConnecteRole) || "ROLE_CIP".equals(utilisateurConnecteRole)
+                || "ROLE_EDUCSIMPLE".equals(utilisateurConnecteRole)) {
             return "redirect:/accueil_admin";
         } else {
             return "redirect:/select_fiche";
@@ -396,16 +454,18 @@ public class HomeController {
                 .map(GrantedAuthority::getAuthority)
                 .orElse("");
     }
+
     @GetMapping("/accueil")
     public String redirectToAccueil(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
         model.addAttribute("utilisateurs", utilisateurs);
         return "accueil";
     }
+
     @GetMapping("/accueil_admin")
     public String admin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
-        
+
         if ("ROLE_SUPERADMIN".equals(role)) {
             return "redirect:/accueil_superadmin";
         } else if ("ROLE_ADMIN".equals(role) || "ROLE_CIP".equals(role) || "ROLE_EDUCSIMPLE".equals(role)) {
@@ -423,7 +483,8 @@ public class HomeController {
         String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
 
         if ("ROLE_SUPERADMIN".equals(role)) {
-            // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle "SUPERADMIN"
+            // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle
+            // "SUPERADMIN"
             List<Utilisateur> utilisateurs = userServ.getAllUtilisateurs();
             model.addAttribute("utilisateurs", utilisateurs);
             return "/accueil_superadmin";
@@ -433,14 +494,15 @@ public class HomeController {
     }
 
     @GetMapping("/ancienaccueil")
-        public String redirectToAncienAccueil(Model model) {
-            List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
-            model.addAttribute("utilisateurs", utilisateurs);
-            return "ancienaccueil";
-        }
+    public String redirectToAncienAccueil(Model model) {
+        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
+        model.addAttribute("utilisateurs", utilisateurs);
+        return "ancienaccueil";
+    }
 
     @GetMapping("/profil_apprenti/{id}")
-    public String redirectToprofil(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String redirectToprofil(@PathVariable Long id, Model model,
+            @AuthenticationPrincipal UserDetails userDetails) {
         String role = userDetails.getAuthorities().iterator().next().getAuthority();
         // Placer le rôle dans le modèle
         model.addAttribute("utilisateurConnecteRole", role);
@@ -455,8 +517,10 @@ public class HomeController {
         Utilisateur utilisateur;
 
         // Vérifiez le rôle de l'utilisateur
-        if ("ROLE_ADMIN".equals(role) || "ROLE_SUPERADMIN".equals(role) || "ROLE_CIP".equals(role) || "ROLE_EDUCSIMPLE".equals(role)) {
-            // Si l'utilisateur a le rôle d'admin, récupérez les informations de l'utilisateur connecté
+        if ("ROLE_ADMIN".equals(role) || "ROLE_SUPERADMIN".equals(role) || "ROLE_CIP".equals(role)
+                || "ROLE_EDUCSIMPLE".equals(role)) {
+            // Si l'utilisateur a le rôle d'admin, récupérez les informations de
+            // l'utilisateur connecté
             String login = userDetails.getUsername();
             utilisateur = userServ.findUserByLogin(login);
 
@@ -471,34 +535,31 @@ public class HomeController {
         }
     }
 
-
-
     @GetMapping("/modif/{id}")
     public String modif(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         // Vérifiez si l'utilisateur connecté a le rôle de superadmin
         if (isUserSuperAdmin(userDetails)) {
             Utilisateur utilisateur = userServ.findById(id);
             model.addAttribute("utilisateur", utilisateur);
-    
+
             // Récupérez les rôles définis dans l'enum UserRole
             UserRole[] roles = UserRole.values();
             model.addAttribute("roles", roles);
-    
+
             // Vérifiez si le rôle du compte sélectionné est USER
             if (utilisateur.getRole() == UserRole.USER) {
                 return "/modif";
             } else {
-                // Si le rôle du compte sélectionné n'est pas USER, redirigez-le vers modif_admin
+                // Si le rôle du compte sélectionné n'est pas USER, redirigez-le vers
+                // modif_admin
                 return "redirect:/modif_admin/" + id;
             }
         } else {
-            // Si l'utilisateur connecté n'est pas superadmin, redirigez-le vers la page d'accueil
+            // Si l'utilisateur connecté n'est pas superadmin, redirigez-le vers la page
+            // d'accueil
             return "redirect:/accueil";
         }
     }
-    
-
-
 
     @GetMapping("/modif_admin/{id}")
     public String modifadmin(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
@@ -520,17 +581,16 @@ public class HomeController {
                 return "/modif_admin";
             }
         } else {
-            // Si l'utilisateur connecté n'est pas superadmin, redirigez-le vers la page d'accueil
+            // Si l'utilisateur connecté n'est pas superadmin, redirigez-le vers la page
+            // d'accueil
             return "redirect:/accueil";
         }
     }
-
 
     private boolean isUserSuperAdmin(UserDetails userDetails) {
         return userDetails.getAuthorities().stream()
                 .anyMatch(role -> role.getAuthority().equals("ROLE_SUPERADMIN"));
     }
-
 
     @GetMapping("/mdpmodif/{id}")
     public String mdpmodif(@PathVariable Long id, Model model) {
@@ -538,7 +598,7 @@ public class HomeController {
         model.addAttribute("utilisateur", utilisateur);
         return "mdpmodif";
     }
-    
+
     // deconnection
     @GetMapping("/log_out")
     public String log_out() {

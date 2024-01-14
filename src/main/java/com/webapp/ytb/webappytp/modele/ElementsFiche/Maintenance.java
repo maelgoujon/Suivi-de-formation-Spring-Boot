@@ -43,4 +43,7 @@ public class Maintenance {
     @Column
     private String CouleurMaintenanceType;
 
+    @Column
+    private String imageTypeMaintenanceUrl;
+
 }

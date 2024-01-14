@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <!-- Fragment pour le nom ou le prénom de l'intervenant -->
+    <div th:fragment="header">
+        <h1>Thymeleaf Fragments sample</h1>
+    </div>
+
+
+    <div th:fragment="intervenantFragment (field)">
+        <div class="test">
+            <select class="selectTitreIcTxt" th:id="'fragmentNiveauTitre' + ${field}"
+                th:name="'fragmentNiveauTitre' + ${field}"
+                th:attr="onchange='updateHiddenNiveau(\'' + ${field} + '\')'">
+                <option value="0">Icone</option>
+                <option value="1" selected>Icone et texte</option>
+                <option value="2">Texte</option>
+            </select>
+        </div>
+    </div>
+
+    <div th:fragment="scrollcards (field)">
+        <div class="row">
+            <div class="scrollcards">
+                <div class="card" th:each="imageTitre, stat : ${imagesTitre__${field}__}">
+                    <input class="form-check-input" type="radio" th:name="'selectedImage' + ${field}"
+                        th:id="${imageTitre.nomImage}"
+                        th:value="${imageTitre.nomImage}" th:checked="${stat.first}"
+                        th:attr="onclick='actualiserImageTitre(\'' + ${field} + '\')'">
+                    <label class="form-check-label" th:for="${imageTitre.nomImage}">
+                        <img class="imageSlider" th:src="@{'/' + ${imageTitre.imageUrl}}" alt="Image Titre"
+                            oncontextmenu="return false;" draggable="false" />
+                        <div class="text-wrap" style="width: min-content;">
+                            <h6 th:text="${imageTitre.nomImage}"></h6>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

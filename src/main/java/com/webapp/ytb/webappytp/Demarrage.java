@@ -210,8 +210,8 @@ public class Demarrage implements ApplicationRunner {
             // Définir les attributs de l'intervenant
             intervenant.setNom("Michel");
             intervenant.setPrenom("Michel");
-            intervenant.setNiveauNom(1);
-            intervenant.setNiveauPrenom(1);
+            intervenant.setNiveauTitreIntervenantNom(1);
+            intervenant.setNiveauTitreIntervenantPrenom(1);
             intervenant.setNiveauTitreIntervenant(1);
             intervenant.setCouleurTitreIntervenant("#FF00FF");
             intervenant.setCouleurNom("#F00");
@@ -291,7 +291,7 @@ public class Demarrage implements ApplicationRunner {
         }
 
         // Creation des images pour la fiche d intervention
-        String[] types = { "INTERVENANT", "DEMANDE", "INTERVENTION", "MATERIAUX_UTILISES","TRAVAUX_REALISES", "TRAVAUX_NON_REALISES" };
+        String[] types = { "INTERVENANT", "DEMANDE", "INTERVENTION", "MATERIAUX_UTILISES","TRAVAUX_REALISES", "TRAVAUX_NON_REALISES", "INTERVENANT_PRENOM", "INTERVENANT_NOM", "DEMANDE_NOM", "DEMANDE_DATE", "DEMANDE_LOCALISATION", "DEMANDE_DESCRIPTION", "DEMANDE_DEGRE_URGENCE", "MAINTENANCE_TYPE", "INTERVENTION_DATE", "INTERVENTION_DUREE", "INTERVENTION_TYPE" };
         String[] nomImages = { "Image1", "ADMIN", "Image2", "FICHES1", "FICHES2", "FICHES3", "FICHES4" };
         String[] imageUrls = { "images/accueil.png", "images/admin.png", "images/archive.png", "images/eleve.png",
                 "images/eleve.png", "images/eleve.png", "images/eleve.png" };
