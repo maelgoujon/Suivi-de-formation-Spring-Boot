@@ -65,10 +65,12 @@
          </div>
       </section>
 
+
       <form method="post" th:action="@{/updateFiche/{id}(id=${ficheIntervention.id})}" th:object="${ficheIntervention}"
          id="ficheForm">
          <!--------------------------Intervenant--------------------------------------->
-         <hr />
+         <hr th:if="${ficheIntervention.Intervenant.niveauTitreIntervenant != 4}" />
+
 
          <legend th:switch="${ficheIntervention.Intervenant.niveauTitreIntervenant}">
             <img th:case="0" class="display-5" th:src="@{${ficheIntervention.Intervenant.imageTitreIntervenantUrl}}"
@@ -89,7 +91,7 @@
 
 
 
-         <div class="row">
+         <div class="row" th:if="${ficheIntervention.Intervenant.niveauTitreIntervenant != 4}">
             <div class="col-md-6 mb-3">
                <div th:switch="${ficheIntervention.Intervenant.niveauTitreIntervenantPrenom}">
                   <img th:case="0" th:src="@{${ficheIntervention.Intervenant.imageTitreIntervenantPrenomUrl}}"
@@ -140,12 +142,13 @@
                   Un nom est requis.
                </div>
             </div>
+
          </div>
 
 
          <!--------------------------Demande--------------------------------------->
-         <hr />
 
+         <hr th:if="${ficheIntervention.demande.niveauTitreDemande != 4}"/>
          <legend th:switch="${ficheIntervention.demande.niveauTitreDemande}">
             <img th:case="0" class="display-5" th:src="@{${ficheIntervention.Demande.ImageTitreDemandeUrl}}" alt="Fait"
                style="height: 1em;" />
@@ -163,9 +166,9 @@
                Demande</h2>
          </legend>
 
-         <div class="row">
+         <div class="row" th:if="${ficheIntervention.demande.niveauTitreDemande != 4}">
             <div class="col-md-6 mb-3">
-               <div th:switch="${ficheIntervention.Demande.niveauTitreDemandeNom}">
+               <div th:switch="${ficheIntervention.demande.niveauTitreDemande}">
                   <img th:case="0" th:src="@{${ficheIntervention.Demande.imageTitreDemandeNomUrl}}" class="display-8"
                      alt="Image Demandeur" oncontextmenu="return false;" draggable="false" style="height: 1em;" />
                   <div th:case="1" class="row align-items-center">
@@ -255,7 +258,7 @@
 
             </div>
          </div>
-         <div>
+         <div th:if="${ficheIntervention.demande.niveauTitreDemande != 4}">
             <div class="form-group">
 
                <div th:switch="${ficheIntervention.demande.niveauTitreDemandeDescription}">
@@ -283,7 +286,7 @@
 
 
          <!--------------------------Intervention--------------------------------------->
-         <hr />
+         <hr th:if="${ficheIntervention.intervention.niveauTitreIntervention != 4}" />
 
          <legend th:switch="${ficheIntervention.intervention.niveauTitreIntervention}">
             <img th:case="0" class="display-5" th:src="@{${ficheIntervention.Intervention.imageTitreInterventionUrl}}"
@@ -302,7 +305,7 @@
                th:style="'color: ' + ${ficheIntervention.Intervention.couleurTitreIntervention}">Intervention</h2>
          </legend>
 
-         <div class="row">
+         <div class="row" th:if="${ficheIntervention.intervention.niveauTitreIntervention != 4}">
             <div class="col-md-4 mb-3">
 
 
@@ -451,7 +454,7 @@
          </div>
 
          <!--------------------------Travaux réalisés--------------------------------------->
-         <hr />
+         <hr th:if="${ficheIntervention.NiveauTravauxRealises != 4}"/>
          <legend th:switch="${ficheIntervention.NiveauTravauxRealises}">
             <img th:case="0" class="display-5" th:src="@{${ficheIntervention.imageTitreTravauxRealisesUrl}}" alt="Fait"
                style="height: 1em;" />
@@ -469,13 +472,13 @@
             <h2 class="display-5" th:case="2" th:style="'color: ' + ${ficheIntervention.couleurTravauxRealises}">Travaux
                réalisés</h2>
          </legend>
-         <div class="form-group">
+         <div class="form-group" th:if="${ficheIntervention.NiveauTravauxRealises != 4}">
             <textarea rows="10" id="newTravauxRealises" class="form-control" name="newTravauxRealises"
                th:text="${ficheIntervention.travauxRealises}" onkeydown="handleDescriptionKeyDown(event)"></textarea>
          </div>
 
          <!--------------------------Travaux NON réalisés--------------------------------------->
-         <hr />
+         <hr th:if="${ficheIntervention.NiveauTravauxNonRealises != 4}"/>
          <legend th:switch="${ficheIntervention.NiveauTravauxNonRealises}">
             <img th:case="0" class="display-5" th:src="@{${ficheIntervention.imageTitreTravauxNonRealisesUrl}}"
                alt="Pas Fait" style="height: 1em;" />
@@ -497,13 +500,13 @@
                Travaux
                non réalisés</h2>
          </legend>
-         <div class="form-group">
+         <div class="form-group" th:if="${ficheIntervention.NiveauTravauxNonRealises != 4}">
             <textarea rows="10" class="form-control" id="newTravauxNonRealises" name="newTravauxNonRealises"
                onkeydown="handleDescriptionKeyDown(event)" th:text="${ficheIntervention.travauxNonRealises}"></textarea>
          </div>
 
          <!--------------------------Matériaux--------------------------------------->
-         <hr />
+         <hr th:if="${ficheIntervention.NiveauMateriauxUtilises != 4}" />
 
          <legend th:switch="${ficheIntervention.NiveauMateriauxUtilises}">
             <img th:case="0" class="display-5" th:src="@{${ficheIntervention.imageTitreMateriauxUtilisesUrl}}"

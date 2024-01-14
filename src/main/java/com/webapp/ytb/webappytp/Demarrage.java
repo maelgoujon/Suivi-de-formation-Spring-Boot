@@ -312,22 +312,28 @@ public class Demarrage implements ApplicationRunner {
             intervenant.setCouleurNom("#F00");
             intervenant.setCouleurPrenom("#00FFFF");
             intervenant.setImageTitreIntervenantUrl("/images/accueil.png");
+            intervenant.setImageTitreIntervenantNomUrl("/images/accueil.png");
+            intervenant.setImageTitreIntervenantPrenomUrl("/images/accueil.png");
+
             // Définir les attributs de l'intervention
-            intervention.setTypeIntervention(Intervention.TypeIntervention.AMENAGEMENT.toString());
-            intervention.setDateIntervention(LocalDate.now());
-            intervention.setNiveauDateIntervention(1);
-            intervention.setDureeIntervention(1);
-            intervention.setNiveauDureeIntervention(1);
             intervention.setNiveauTitreIntervention(1);
+            intervention.setNiveauDateIntervention(1);
+            intervention.setNiveauDureeIntervention(1);
+            intervention.setNiveauTypeIntervention(1);
             intervention.setCouleurTitreIntervention("#FF00FF");
-            intervention.setCouleurDureeIntervention("#F00");
-            intervention.setCouleurTypeIntervention("#00FFFF");
-            intervention.setCouleurDateIntervention("#FF00FF");
+            intervention.setCouleurDateIntervention("#F00");
+            intervention.setCouleurDureeIntervention("#00FFFF");
+            intervention.setCouleurTypeIntervention("#F00");
             intervention.setImageTitreInterventionUrl("/images/accueil.png");
+            intervention.setImageDureeInterventionUrl("/images/accueil.png");
+            intervention.setImageTypeInterventionUrl("/images/accueil.png");
+            intervention.setImageDateInterventionUrl("/images/accueil.png");
+            intervention.setTypeIntervention(Intervention.TypeIntervention.AMENAGEMENT.toString());
             // Définir les attributs de la maintenance
             maintenance.setMaintenanceType(Maintenance.MaintenanceType.AMELIORATIVE);
             maintenance.setNiveauMaintenanceType(1);
             maintenance.setCouleurMaintenanceType("#FF00FF");
+            maintenance.setImageTypeMaintenanceUrl("/images/accueil.png");
             // Définir les attributs de la demande
             demande.setNomDemandeur("Nom du demandeur");
             demande.setDateDemande(LocalDate.now());
@@ -349,9 +355,9 @@ public class Demarrage implements ApplicationRunner {
             demande.setImageTitreDemandeUrl("/images/accueil.png");
             // Définir les attributs des travaux réalisés
             nouvelleFiche.setNiveauTravauxRealises(1);
-            nouvelleFiche.setCouleurTravauxRealises("#FF00FF");
+            nouvelleFiche.setCouleurTravauxRealises("#aef800");
             nouvelleFiche.setImageTitreTravauxRealisesUrl("/images/accueil.png");
-            nouvelleFiche.setTravauxRealises("Travaux réalisés par Michel Michel");
+            nouvelleFiche.setTravauxRealises("Travaux réalisés par \nMichel Michel \n      Ligne 3");
             // Définir les attributs des travaux non réalisés
             nouvelleFiche.setNiveauTravauxNonRealises(1);
             nouvelleFiche.setCouleurTravauxNonRealises("#FF00FF");

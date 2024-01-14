@@ -127,6 +127,7 @@
                                                             name="niveauTitreIntervenant"
                                                             th:field="${fiche.Intervenant.niveauTitreIntervenant}"
                                                             onchange="updateTitre('Intervenant')">
+                                                            <option value="4">Caché</option>
                                                             <option value="0">Icone</option>
                                                             <option value="1" selected>Icone et texte</option>
                                                             <option value="2">Texte</option>
@@ -328,6 +329,7 @@
                                                             name="niveauTitreDemande"
                                                             th:field="${fiche.Demande.niveauTitreDemande}"
                                                             onchange="updateTitre('Demande')">
+                                                            <option value="4">Caché</option>
                                                             <option value="0">Icone</option>
                                                             <option value="1">Icone et texte</option>
                                                             <option value="2">Texte</option>
@@ -687,6 +689,7 @@
                                                             name="niveauTitreIntervention"
                                                             th:field="${fiche.intervention.niveauTitreIntervention}"
                                                             onchange="updateTitre('Intervention')">
+                                                            <option value="4">Caché</option>
                                                             <option value="0">Icone</option>
                                                             <option value="1" selected>Icone et texte</option>
                                                             <option value="2">Texte</option>
@@ -1037,6 +1040,7 @@
                                                             name="niveauTitreTravauxRealises"
                                                             th:field="${fiche.niveauTravauxRealises}"
                                                             onchange="updateTitre('TravauxRealises')">
+                                                            <option value="4">Caché</option>
                                                             <option value="0">Icone</option>
                                                             <option value="1">Icone et texte</option>
                                                             <option value="2">Texte</option>
@@ -1126,6 +1130,7 @@
                                                             name="niveauTitreTravauxNonRealises"
                                                             th:field="${fiche.niveauTravauxNonRealises}"
                                                             onchange="updateTitre('TravauxNonRealises')">
+                                                            <option value="4">Caché</option>
                                                             <option value="0">Icone</option>
                                                             <option value="1">Icone et texte</option>
                                                             <option value="2">Texte</option>
@@ -1215,6 +1220,7 @@
                                                             name="niveauTitreMateriauxUtilises"
                                                             th:field="${fiche.niveauMateriauxUtilises}"
                                                             onchange="updateTitre('MateriauxUtilises')">
+                                                            <option value="4">Caché</option>
                                                             <option value="0">Icone</option>
                                                             <option value="1">Icone et texte</option>
                                                             <option value="2">Texte</option>
@@ -1297,8 +1303,11 @@
 
             </legend>
 
+            <div class="submit-container" style="height: 10vh;width: 100%;margin-bottom: calc(var(--bs-gutter-x) * .5);">
+                <button class="btn btn-dark" type="submit" style="height: inherit;width: inherit;">Terminer</button>
+             </div>
 
-            <button type="submit">Submit</button>
+
 
         </form>
         </main>

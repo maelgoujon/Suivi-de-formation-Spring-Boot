@@ -65,10 +65,12 @@
          </div>
       </section>
 
+
       <form method="post" th:action="@{/updateFiche/{id}(id=${ficheIntervention.id})}" th:object="${ficheIntervention}"
          id="ficheForm">
          <!--------------------------Intervenant--------------------------------------->
-         <hr />
+         <hr th:if="${ficheIntervention.Intervenant.niveauTitreIntervenant != 4}" />
+
 
          <legend th:switch="${ficheIntervention.Intervenant.niveauTitreIntervenant}">
             <img th:case="0" class="display-5" th:src="@{${ficheIntervention.Intervenant.imageTitreIntervenantUrl}}"
@@ -89,30 +91,64 @@
 
 
 
-         <div class="row">
+         <div class="row" th:if="${ficheIntervention.Intervenant.niveauTitreIntervenant != 4}">
             <div class="col-md-6 mb-3">
-               <label for="firstName"
-                  th:style="'color: ' + ${ficheIntervention.Intervenant.couleurPrenom}">Prénom</label>
+               <div th:switch="${ficheIntervention.Intervenant.niveauTitreIntervenantPrenom}">
+                  <img th:case="0" th:src="@{${ficheIntervention.Intervenant.imageTitreIntervenantPrenomUrl}}"
+                     class="display-8" alt="Image Intervenant" oncontextmenu="return false;" draggable="false"
+                     style="height: 1em;" />
+                  <div th:case="1" class="row align-items-center">
+                     <div class="col-auto">
+                        <img th:src="@{${ficheIntervention.Intervenant.imageTitreIntervenantPrenomUrl}}"
+                           class="display-8" alt="Image Intervenant" oncontextmenu="return false;" draggable="false"
+                           style="height: 1em;" />
+                     </div>
+                     <div class="col-auto">
+                        <label for="firstName"
+                           th:style="'color: ' + ${ficheIntervention.Intervenant.couleurPrenom}">Prénom</label>
+                     </div>
+                  </div>
+                  <label th:case="2" for="firstName"
+                     th:style="'color: ' + ${ficheIntervention.Intervenant.couleurPrenom}">Prénom</label>
+               </div>
                <input type="text" class="form-control" id="firstName" placeholder=""
                   th:value="${ficheIntervention.utilisateur.nom}" required="">
                <div class="invalid-feedback">
-                  Un prénom valide est requis.
+                  Un prénom est requis.
                </div>
             </div>
             <div class="col-md-6 mb-3">
-               <label for="lastName" th:style="'color: ' + ${ficheIntervention.Intervenant.couleurNom}">Nom</label>
+               <div th:switch="${ficheIntervention.Intervenant.niveauTitreIntervenantNom}">
+                  <img th:case="0" th:src="@{${ficheIntervention.Intervenant.imageTitreIntervenantNomUrl}}"
+                     class="display-8" alt="Image Intervenant" oncontextmenu="return false;" draggable="false"
+                     style="height: 1em;" />
+                  <div th:case="1" class="row align-items-center">
+                     <div class="col-auto">
+                        <img th:src="@{${ficheIntervention.Intervenant.imageTitreIntervenantNomUrl}}" class="display-8"
+                           alt="Image Intervenant" oncontextmenu="return false;" draggable="false"
+                           style="height: 1em;" />
+                     </div>
+                     <div class="col-auto">
+                        <label for="lastName"
+                           th:style="'color: ' + ${ficheIntervention.Intervenant.couleurNom}">Nom</label>
+                     </div>
+                  </div>
+                  <label th:case="2" for="lastName"
+                     th:style="'color: ' + ${ficheIntervention.Intervenant.couleurNom}">Nom</label>
+               </div>
                <input type="text" class="form-control" id="lastName" placeholder=""
                   th:value="${ficheIntervention.utilisateur.prenom}" required="">
                <div class="invalid-feedback">
-                  Un nom valide est requis.
+                  Un nom est requis.
                </div>
             </div>
+
          </div>
 
 
          <!--------------------------Demande--------------------------------------->
-         <hr />
 
+         <hr th:if="${ficheIntervention.demande.niveauTitreDemande != 4}"/>
          <legend th:switch="${ficheIntervention.demande.niveauTitreDemande}">
             <img th:case="0" class="display-5" th:src="@{${ficheIntervention.Demande.ImageTitreDemandeUrl}}" alt="Fait"
                style="height: 1em;" />
@@ -130,34 +166,119 @@
                Demande</h2>
          </legend>
 
-         <div class="row">
+         <div class="row" th:if="${ficheIntervention.demande.niveauTitreDemande != 4}">
             <div class="col-md-6 mb-3">
-               <label for="disabledNomDemandeur"
-                  th:style="'color: ' + ${ficheIntervention.Demande.couleurNomDemandeur}">Nom du demandeur</label>
-               <input type="text" id="disabledNomDemandeur" class="form-control"
-                  th:placeholder="${ficheIntervention.demande.NomDemandeur}" disabled>
-               <label for="disabledDegreUrgence"
-                  th:style="'color: ' + ${ficheIntervention.Demande.couleurDegreUrgence}">Degré d'urgence</label>
-               <input type="text" id="disabledDegreUrgence" class="form-control"
-                  th:placeholder="${ficheIntervention.degreUrgence}" disabled>
-            </div>
-            <div class="col-md-6 mb-3">
-               <label for="disabledDateDemande"
-                  th:style="'color: ' + ${ficheIntervention.Demande.couleurDateDemande}">Date de la demande</label>
-               <input type="date" id="disabledDateDemande" name="disabledDateDemande" class="form-control"
-                  th:value="${#temporals.format(ficheIntervention.dateDemande, 'yyyy-MM-dd')}" disabled />
+               <div th:switch="${ficheIntervention.demande.niveauTitreDemande}">
+                  <img th:case="0" th:src="@{${ficheIntervention.Demande.imageTitreDemandeNomUrl}}" class="display-8"
+                     alt="Image Demandeur" oncontextmenu="return false;" draggable="false" style="height: 1em;" />
+                  <div th:case="1" class="row align-items-center">
+                     <div class="col-auto">
+                        <img th:src="@{${ficheIntervention.Demande.imageTitreDemandeNomUrl}}" class="display-8"
+                           alt="Image Demandeur" oncontextmenu="return false;" draggable="false" style="height: 1em;" />
+                     </div>
+                     <div class="col-auto">
+                        <label for="disabledNomDemandeur"
+                           th:style="'color: ' + ${ficheIntervention.Demande.couleurNomDemandeur}">Nom du
+                           demandeur</label>
+                     </div>
+                  </div>
+                  <label th:case="2" for="disabledNomDemandeur"
+                     th:style="'color: ' + ${ficheIntervention.Demande.couleurNomDemandeur}">Nom du demandeur</label>
+               </div>
+               <input type="text" class="form-control" id="disabledNomDemandeur" placeholder=""
+                  th:value="${ficheIntervention.demande.NomDemandeur}" disabled>
 
-               <label for="disabledLocalisation"
-                  th:style="'color: ' + ${ficheIntervention.Demande.couleurLocalisation}">Localisation</label>
-               <input type="text" id="disabledLocalisation" class="form-control"
-                  th:placeholder="${ficheIntervention.localisation}" disabled>
+
+               <div th:switch="${ficheIntervention.demande.niveauTitreDemandeDegreUrgence}">
+                  <img th:case="0" th:src="@{${ficheIntervention.demande.imageTitreDemandeDegreUrgenceUrl}}"
+                     class="display-8" alt="Image Urgence" oncontextmenu="return false;" draggable="false"
+                     style="height: 1em;" />
+                  <div th:case="1" class="row align-items-center">
+                     <div class="col-auto">
+                        <img th:src="@{${ficheIntervention.demande.imageTitreDemandeDegreUrgenceUrl}}" class="display-8"
+                           alt="Image Urgence" oncontextmenu="return false;" draggable="false" style="height: 1em;" />
+                     </div>
+                     <div class="col-auto">
+                        <label for="disabledDegreUrgence"
+                           th:style="'color: ' + ${ficheIntervention.demande.couleurDegreUrgence}">Degré
+                           d'urgence</label>
+                     </div>
+                  </div>
+                  <label th:case="2" for="disabledDegreUrgence"
+                     th:style="'color: ' + ${ficheIntervention.demande.couleurDegreUrgence}">Degré d'urgence</label>
+               </div>
+               <input type="text" class="form-control" id="disabledDegreUrgence" placeholder=""
+                  th:value="${ficheIntervention.demande.degreUrgence}" disabled>
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+               <div th:switch="${ficheIntervention.demande.niveauTitreDemandeDate}">
+                  <img th:case="0" th:src="@{${ficheIntervention.demande.imageTitreDemandeDateUrl}}" class="display-8"
+                     alt="Image Date" oncontextmenu="return false;" draggable="false" style="height: 1em;" />
+                  <div th:case="1" class="row align-items-center">
+                     <div class="col-auto">
+                        <img th:src="@{${ficheIntervention.demande.imageTitreDemandeDateUrl}}" class="display-8"
+                           alt="Image Date" oncontextmenu="return false;" draggable="false" style="height: 1em;" />
+                     </div>
+                     <div class="col-auto">
+                        <label for="disabledDateDemande"
+                           th:style="'color: ' + ${ficheIntervention.demande.couleurDateDemande}">Date de la
+                           demande</label>
+                     </div>
+                  </div>
+                  <label th:case="2" for="disabledDateDemande"
+                     th:style="'color: ' + ${ficheIntervention.demande.couleurDateDemande}">Date de la demande</label>
+               </div>
+               <input type="date" class="form-control" id="disabledDateDemande" placeholder=""
+                  th:value="${ficheIntervention.demande.dateDemande}" disabled>
+
+               <div class="col-md-6 mb-3">
+                  <div th:switch="${ficheIntervention.demande.niveauTitreDemandeLocalisation}">
+                     <img th:case="0" th:src="@{${ficheIntervention.demande.imageTitreDemandeLocalisationUrl}}"
+                        class="display-8" alt="Image Localisation" oncontextmenu="return false;" draggable="false"
+                        style="height: 1em;" />
+                     <div th:case="1" class="row align-items-center">
+                        <div class="col-auto">
+                           <img th:src="@{${ficheIntervention.demande.imageTitreDemandeLocalisationUrl}}"
+                              class="display-8" alt="Image Localisation" oncontextmenu="return false;" draggable="false"
+                              style="height: 1em;" />
+                        </div>
+                        <div class="col-auto">
+                           <label for="disabledLocalisation"
+                              th:style="'color: ' + ${ficheIntervention.demande.couleurLocalisation}">Localisation</label>
+                        </div>
+                     </div>
+                     <label th:case="2" for="disabledLocalisation"
+                        th:style="'color: ' + ${ficheIntervention.demande.couleurLocalisation}">Localisation</label>
+                  </div>
+                  <input type="text" class="form-control" id="disabledLocalisation" placeholder=""
+                     th:value="${ficheIntervention.demande.localisation}" disabled>
+               </div>
+
             </div>
          </div>
-         <div>
+         <div th:if="${ficheIntervention.demande.niveauTitreDemande != 4}">
             <div class="form-group">
 
-               <label for="disabledDescription"
-                  th:style="'color: ' + ${ficheIntervention.Demande.couleurDescription}">Description</label>
+               <div th:switch="${ficheIntervention.demande.niveauTitreDemandeDescription}">
+                  <img th:case="0" th:src="@{${ficheIntervention.demande.imageTitreDemandeDescriptionUrl}}"
+                     class="display-8" alt="Image Description" oncontextmenu="return false;" draggable="false"
+                     style="height: 1em;" />
+                  <div th:case="1" class="row align-items-center">
+                     <div class="col-auto">
+                        <img th:src="@{${ficheIntervention.demande.imageTitreDemandeDescriptionUrl}}" class="display-8"
+                           alt="Image Description" oncontextmenu="return false;" draggable="false"
+                           style="height: 1em;" />
+                     </div>
+                     <div class="col-auto">
+                        <label for="disabledDescription"
+                           th:style="'color: ' + ${ficheIntervention.demande.couleurDescription}">Description</label>
+                     </div>
+                  </div>
+                  <label th:case="2" for="disabledDescription"
+                     th:style="'color: ' + ${ficheIntervention.demande.couleurDescription}">Description</label>
+               </div>
                <textarea rows="10" id="disabledDescription" class="form-control"
                   th:placeholder="${ficheIntervention.demande.Description}" disabled></textarea>
             </div>
@@ -165,7 +286,7 @@
 
 
          <!--------------------------Intervention--------------------------------------->
-         <hr />
+         <hr th:if="${ficheIntervention.intervention.niveauTitreIntervention != 4}" />
 
          <legend th:switch="${ficheIntervention.intervention.niveauTitreIntervention}">
             <img th:case="0" class="display-5" th:src="@{${ficheIntervention.Intervention.imageTitreInterventionUrl}}"
@@ -184,25 +305,88 @@
                th:style="'color: ' + ${ficheIntervention.Intervention.couleurTitreIntervention}">Intervention</h2>
          </legend>
 
-         <div class="row">
+         <div class="row" th:if="${ficheIntervention.intervention.niveauTitreIntervention != 4}">
             <div class="col-md-4 mb-3">
-               <label for="newDateIntervention"
-                  th:style="'color: ' + ${ficheIntervention.Intervention.couleurDateIntervention}">Date de
-                  l'intervention</label>
+
+
+               <div th:switch="${ficheIntervention.intervention.niveauDateIntervention}">
+                  <img th:case="0" th:src="@{${ficheIntervention.intervention.imageDateInterventionUrl}}"
+                     class="display-8" alt="Image Date Intervention" oncontextmenu="return false;" draggable="false"
+                     style="height: 1em;" />
+                  <div th:case="1" class="row align-items-center">
+                     <div class="col-auto">
+                        <img th:src="@{${ficheIntervention.intervention.imageDateInterventionUrl}}" class="display-8"
+                           alt="Image Date Intervention" oncontextmenu="return false;" draggable="false"
+                           style="height: 1em;" />
+                     </div>
+                     <div class="col-auto">
+                        <label for="newDateIntervention"
+                           th:style="'color: ' + ${ficheIntervention.intervention.couleurDateIntervention}">Date de
+                           l'intervention</label>
+                     </div>
+                  </div>
+                  <label th:case="2" for="newDateIntervention"
+                     th:style="'color: ' + ${ficheIntervention.intervention.couleurDateIntervention}">Date de
+                     l'intervention</label>
+               </div>
                <input type="date" id="newDateIntervention" name="newDateIntervention" class="form-control"
-                  th:value="${#temporals.format(ficheIntervention.dateIntervention, 'yyyy-MM-dd')}" />
-               <label for="newDureeIntervention"
-                  th:style="'color: ' + ${ficheIntervention.Intervention.couleurDureeIntervention}">Durée de
-                  l'intervention</label>
+                  th:value="${#temporals.format(ficheIntervention.intervention.dateIntervention, 'yyyy-MM-dd')}" />
+
+
+
+               <div th:switch="${ficheIntervention.intervention.niveauDureeIntervention}">
+                  <img th:case="0" th:src="@{${ficheIntervention.intervention.imageDureeInterventionUrl}}"
+                     class="display-8" alt="Image Duree Intervention" oncontextmenu="return false;" draggable="false"
+                     style="height: 1em;" />
+                  <div th:case="1" class="row align-items-center">
+                     <div class="col-auto">
+                        <img th:src="@{${ficheIntervention.intervention.imageDureeInterventionUrl}}" class="display-8"
+                           alt="Image Duree Intervention" oncontextmenu="return false;" draggable="false"
+                           style="height: 1em;" />
+                     </div>
+                     <div class="col-auto">
+                        <label for="newDureeIntervention"
+                           th:style="'color: ' + ${ficheIntervention.intervention.couleurDureeIntervention}">Durée de
+                           l'intervention</label>
+                     </div>
+                  </div>
+                  <label th:case="2" for="newDureeIntervention"
+                     th:style="'color: ' + ${ficheIntervention.intervention.couleurDureeIntervention}">Durée de
+                     l'intervention</label>
+               </div>
                <input type="text" id="newDureeIntervention" name="newDureeIntervention" class="form-control"
-                  th:value="${ficheIntervention.dureeIntervention}">
+                  th:value="${ficheIntervention.intervention.dureeIntervention}" />
+
+
+
+
             </div>
 
 
             <div class="col-md-4 mb-3">
-               <label for="disabledTypeIntervention"
-                  th:style="'color: ' + ${ficheIntervention.Intervention.couleurTypeIntervention}">Type
-                  d'intervention</label>
+               <div th:switch="${ficheIntervention.intervention.niveauTypeIntervention}">
+                  <img th:case="0" th:src="@{${ficheIntervention.intervention.imageTypeInterventionUrl}}"
+                     class="display-8" alt="Image Type Intervention" oncontextmenu="return false;" draggable="false"
+                     style="height: 1em;" />
+                  <div th:case="1" class="row align-items-center">
+                     <div class="col-auto">
+                        <img th:src="@{${ficheIntervention.intervention.imageTypeInterventionUrl}}" class="display-8"
+                           alt="Image Type Intervention" oncontextmenu="return false;" draggable="false"
+                           style="height: 1em;" />
+                     </div>
+                     <div class="col-auto">
+                        <label for="newTypeIntervention"
+                           th:style="'color: ' + ${ficheIntervention.intervention.couleurTypeIntervention}">Type
+                           d'intervention</label>
+                     </div>
+                  </div>
+                  <label th:case="2" for="newTypeIntervention"
+                     th:style="'color: ' + ${ficheIntervention.intervention.couleurTypeIntervention}">Type
+                     d'intervention</label>
+               </div>
+
+
+
                <div id="disabledTypeIntervention"
                   th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}">
                   <div class="media form-check">
@@ -223,9 +407,30 @@
 
 
             <div class="col-md-4 mb-3">
-               <label for="newMaintenanceType"
-                  th:style="'color: ' + ${ficheIntervention.Maintenance.CouleurMaintenanceType}">Type de
-                  maintenance</label>
+
+
+               <div th:switch="${ficheIntervention.maintenance.NiveauMaintenanceType}">
+                  <img th:case="0" th:src="@{${ficheIntervention.maintenance.imageTypeMaintenanceUrl}}"
+                     class="display-8" alt="Image Type Intervention" oncontextmenu="return false;" draggable="false"
+                     style="height: 1em;" />
+                  <div th:case="1" class="row align-items-center">
+                     <div class="col-auto">
+                        <img th:src="@{${ficheIntervention.maintenance.imageTypeMaintenanceUrl}}" class="display-8"
+                           alt="Image Type Intervention" oncontextmenu="return false;" draggable="false"
+                           style="height: 1em;" />
+                     </div>
+                     <div class="col-auto">
+                        <label for="newMaintenanceType"
+                           th:style="'color: ' + ${ficheIntervention.Maintenance.CouleurMaintenanceType}">Type de
+                           maintenance</label>
+                     </div>
+                  </div>
+                  <label th:case="2" for="newMaintenanceType"
+                     th:style="'color: ' + ${ficheIntervention.Maintenance.CouleurMaintenanceType}">Type de
+                     maintenance</label>
+               </div>
+
+
                <div id="newMaintenanceType"
                   th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance.MaintenanceType).values()}">
                   <div class="media form-check">
@@ -249,7 +454,7 @@
          </div>
 
          <!--------------------------Travaux réalisés--------------------------------------->
-         <hr />
+         <hr th:if="${ficheIntervention.NiveauTravauxRealises != 4}"/>
          <legend th:switch="${ficheIntervention.NiveauTravauxRealises}">
             <img th:case="0" class="display-5" th:src="@{${ficheIntervention.imageTitreTravauxRealisesUrl}}" alt="Fait"
                style="height: 1em;" />
@@ -267,13 +472,13 @@
             <h2 class="display-5" th:case="2" th:style="'color: ' + ${ficheIntervention.couleurTravauxRealises}">Travaux
                réalisés</h2>
          </legend>
-         <div class="form-group">
+         <div class="form-group" th:if="${ficheIntervention.NiveauTravauxRealises != 4}">
             <textarea rows="10" id="newTravauxRealises" class="form-control" name="newTravauxRealises"
                th:text="${ficheIntervention.travauxRealises}" onkeydown="handleDescriptionKeyDown(event)"></textarea>
          </div>
 
          <!--------------------------Travaux NON réalisés--------------------------------------->
-         <hr />
+         <hr th:if="${ficheIntervention.NiveauTravauxNonRealises != 4}"/>
          <legend th:switch="${ficheIntervention.NiveauTravauxNonRealises}">
             <img th:case="0" class="display-5" th:src="@{${ficheIntervention.imageTitreTravauxNonRealisesUrl}}"
                alt="Pas Fait" style="height: 1em;" />
@@ -295,13 +500,13 @@
                Travaux
                non réalisés</h2>
          </legend>
-         <div class="form-group">
+         <div class="form-group" th:if="${ficheIntervention.NiveauTravauxNonRealises != 4}">
             <textarea rows="10" class="form-control" id="newTravauxNonRealises" name="newTravauxNonRealises"
                onkeydown="handleDescriptionKeyDown(event)" th:text="${ficheIntervention.travauxNonRealises}"></textarea>
          </div>
 
          <!--------------------------Matériaux--------------------------------------->
-         <hr />
+         <hr th:if="${ficheIntervention.NiveauMateriauxUtilises != 4}" />
 
          <legend th:switch="${ficheIntervention.NiveauMateriauxUtilises}">
             <img th:case="0" class="display-5" th:src="@{${ficheIntervention.imageTitreMateriauxUtilisesUrl}}"
