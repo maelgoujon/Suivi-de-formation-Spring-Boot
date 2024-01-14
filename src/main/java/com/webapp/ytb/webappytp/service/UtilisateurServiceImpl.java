@@ -1,5 +1,6 @@
 package com.webapp.ytb.webappytp.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -105,7 +106,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public void generatedExcelForUser(Long userId, HttpServletResponse response) throws Exception {
         Utilisateur utilisateur = utilisateurRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
-        List<FicheIntervention> fiches = ficheRepository.findByUtilisateurId(userId);
+        List<FicheIntervention> ficheInterventions = ficheRepository.findByUtilisateurId(userId);
 
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("User Archive");
@@ -121,7 +122,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         dataRowUserDetails.createCell(0).setCellValue(utilisateur.getNom());
         dataRowUserDetails.createCell(1).setCellValue(utilisateur.getDescription());
         dataRowUserDetails.createCell(2).setCellValue(utilisateur.getRole().toString());
-        
+
         dataRowIndex++;
         // Add headers for Fiche Intervention
         HSSFRow rowFiche = sheet.createRow(dataRowIndex++);
@@ -179,17 +180,69 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         rowFiche.createCell(51).setCellValue("Le Nom");
         rowFiche.createCell(52).setCellValue("Le Prénom");
         rowFiche.createCell(53).setCellValue("Le Type d'Intervention");
-        rowFiche.createCell(54).setCellValue("L'Évaluation");
-        rowFiche.createCell(55).setCellValue("Les Matériaux");
+        rowFiche.createCell(54).setCellValue("Les Matériaux");
         // Continue adding cells for each column
 
         dataRowIndex++;
 
         // Loop through each FicheIntervention and add to sheet
-        for (FicheIntervention fiche : fiches) {
+        for (FicheIntervention fiche : ficheInterventions) {
             HSSFRow dataRowFiche = sheet.createRow(dataRowIndex++);
-            // Add fiche details to the row
-            // ... ça arrive quand les getters seront fait
+            dataRowFiche.createCell(0).setCellValue(fiche.getDateCreation().toString());
+            dataRowFiche.createCell(1).setCellValue(fiche.getDateDemande().toString());
+            dataRowFiche.createCell(2).setCellValue(fiche.getDateIntervention().toString());
+            dataRowFiche.createCell(3).setCellValue(fiche.getDegreUrgence());
+            dataRowFiche.createCell(4).setCellValue(fiche.getDureeIntervention());
+            dataRowFiche.createCell(5).setCellValue(fiche.isEtatFicheFinie());
+            dataRowFiche.createCell(6).setCellValue(fiche.getMaintenance().getNiveauMaintenanceType());
+            dataRowFiche.createCell(7).setCellValue(fiche.getDemande().getNiveauDateDemande());
+            dataRowFiche.createCell(8).setCellValue(fiche.getNiveauDateIntervention());
+            dataRowFiche.createCell(9).setCellValue(fiche.getDemande().getNiveauDegreUrgence());
+            dataRowFiche.createCell(10).setCellValue(fiche.getDemande().getNiveauDescription());
+            dataRowFiche.createCell(11).setCellValue(fiche.getNiveauDureeIntervention());
+            dataRowFiche.createCell(12).setCellValue(fiche.getNiveauIntervenant());
+            dataRowFiche.createCell(13).setCellValue(fiche.getDemande().getNiveauLocalisation());
+            dataRowFiche.createCell(14).setCellValue(fiche.getNiveauMaintenanceType());
+            dataRowFiche.createCell(15).setCellValue(fiche.getNiveauMateriauxUtilises());
+            dataRowFiche.createCell(16).setCellValue(fiche.getNiveauNatureIntervention());
+            dataRowFiche.createCell(17).setCellValue(fiche.getIntervenant().getNiveauNom());
+            dataRowFiche.createCell(18).setCellValue(fiche.getDemande().getNiveauNomDemandeur());
+            dataRowFiche.createCell(19).setCellValue(fiche.getIntervenant().getNiveauPrenom());
+            dataRowFiche.createCell(20).setCellValue(fiche.getDemande().getNiveauTitreDemande());
+            dataRowFiche.createCell(21).setCellValue(fiche.getIntervenant().getNiveauTitreIntervenant());
+            dataRowFiche.createCell(22).setCellValue(fiche.getIntervention().getNiveauTitreIntervention());
+            dataRowFiche.createCell(23).setCellValue(fiche.getNiveauTravauxNonRealises());
+            dataRowFiche.createCell(24).setCellValue(fiche.getNiveauTravauxRealises());
+            dataRowFiche.createCell(25).setCellValue(fiche.getIntervention().getNiveauTypeIntervention());
+            dataRowFiche.createCell(26).setCellValue(fiche.isNouvelleIntervention());
+            dataRowFiche.createCell(27).setCellValue(fiche.getId());
+            dataRowFiche.createCell(28).setCellValue(utilisateur.getId());
+            dataRowFiche.createCell(29).setCellValue(fiche.getNomDemandeur());
+            dataRowFiche.createCell(30).setCellValue(fiche.getTravauxNonRealises());
+            dataRowFiche.createCell(31).setCellValue(fiche.getTravauxRealises());
+            dataRowFiche.createCell(32).setCellValue(fiche.getDemande().getCouleurDateDemande());
+            dataRowFiche.createCell(33).setCellValue(fiche.getIntervention().getCouleurDateIntervention());
+            dataRowFiche.createCell(34).setCellValue(fiche.getDemande().getCouleurDegreUrgence());
+            dataRowFiche.createCell(35).setCellValue(fiche.getDemande().getCouleurDescription());
+            dataRowFiche.createCell(36).setCellValue(fiche.getIntervention().getCouleurDureeIntervention());
+            dataRowFiche.createCell(37).setCellValue(fiche.getDemande().getCouleurLocalisation());
+            dataRowFiche.createCell(38).setCellValue(fiche.getMaintenance().getCouleurMaintenanceType());
+            dataRowFiche.createCell(39).setCellValue(fiche.getCouleurMateriauxUtilises());
+            dataRowFiche.createCell(40).setCellValue(fiche.getIntervenant().getCouleurNom());
+            dataRowFiche.createCell(41).setCellValue(fiche.getDemande().getCouleurNomDemandeur());
+            dataRowFiche.createCell(42).setCellValue(fiche.getIntervenant().getCouleurPrenom());
+            dataRowFiche.createCell(43).setCellValue(fiche.getDemande().getCouleurTitreDemande());
+            dataRowFiche.createCell(44).setCellValue(fiche.getIntervenant().getCouleurTitreIntervenant());
+            dataRowFiche.createCell(45).setCellValue(fiche.getIntervention().getCouleurTitreIntervention());
+            dataRowFiche.createCell(46).setCellValue(fiche.getCouleurTravauxNonRealises());
+            dataRowFiche.createCell(47).setCellValue(fiche.getCouleurTravauxRealises());
+            dataRowFiche.createCell(48).setCellValue(fiche.getIntervention().getCouleurTypeIntervention());
+            dataRowFiche.createCell(49).setCellValue(fiche.getDescription());
+            dataRowFiche.createCell(50).setCellValue(fiche.getLocalisation());
+            dataRowFiche.createCell(51).setCellValue(fiche.getIntervenant().getNom());
+            dataRowFiche.createCell(52).setCellValue(fiche.getIntervenant().getPrenom());
+            dataRowFiche.createCell(53).setCellValue(fiche.getTypeIntervention());
+            dataRowFiche.createCell(54).setCellValue(String.join(", ", fiche.getMateriauxOptions()));
         }
 
         ServletOutputStream outputStream = response.getOutputStream();

@@ -3,6 +3,10 @@ package com.webapp.ytb.webappytp.service;
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.Formation;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervenant;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
+import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 import com.webapp.ytb.webappytp.repository.FicheRepository;
 import com.webapp.ytb.webappytp.repository.FormationRepository;
 import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
@@ -16,6 +20,8 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -90,7 +96,12 @@ public class FormationServiceImpl implements FormationService {
     public void generatedExcel(Long formationId, HttpServletResponse response) throws Exception {
 
         List<Utilisateur> utilisateurs = utilisateurRepository.findByFormation_Id(formationId);
-        List<FicheIntervention> ficheIntervention = ficheRepository.findByUtilisateurId(formationId);
+        List<FicheIntervention> ficheInterventions = new ArrayList<>();
+
+        for (Utilisateur utilisateur : utilisateurs) {
+            List<FicheIntervention> utilisateurFiches = ficheRepository.findByUtilisateurId(utilisateur.getId());
+            ficheInterventions.addAll(utilisateurFiches);
+        }
 
         Formation formation = formationRepository.findById(formationId)
                 .orElseThrow(() -> new RuntimeException("Formation not found with ID: " + formationId));
@@ -118,9 +129,10 @@ public class FormationServiceImpl implements FormationService {
         rowUser.createCell(2).setCellValue("Description de l'apprenti");
         rowUser.createCell(3).setCellValue("Role de l'apprentis");
 
-        dataRowIndex++;
+        dataRowIndex = dataRowIndex + 2 ;
 
         for (Utilisateur utilisateur : utilisateurs) {
+            dataRowIndex++;
             HSSFRow dataRowUser = sheet.createRow(dataRowIndex);
             dataRowUser.createCell(0).setCellValue(utilisateur.getNom());
             dataRowUser.createCell(1).setCellValue(utilisateur.getPrenom());
@@ -183,12 +195,67 @@ public class FormationServiceImpl implements FormationService {
             rowFiche.createCell(51).setCellValue("Le Nom");
             rowFiche.createCell(52).setCellValue("Le Prénom");
             rowFiche.createCell(53).setCellValue("Le Type d'Intervention");
-            rowFiche.createCell(54).setCellValue("L'Évaluation");
-            rowFiche.createCell(55).setCellValue("Les Matériaux");
-            // Continue adding cells for each column
+            rowFiche.createCell(54).setCellValue("Les Matériaux");
 
-            
-            dataRowIndex++;
+            // Fiche Intervention Data
+            for (FicheIntervention fiche : ficheInterventions) {
+                HSSFRow dataRowFiche = sheet.createRow(dataRowIndex++);
+                dataRowFiche.createCell(0).setCellValue(fiche.getDateCreation().toString());
+                dataRowFiche.createCell(1).setCellValue(fiche.getDateDemande().toString());
+                dataRowFiche.createCell(2).setCellValue(fiche.getDateIntervention().toString());
+                dataRowFiche.createCell(3).setCellValue(fiche.getDegreUrgence());
+                dataRowFiche.createCell(4).setCellValue(fiche.getDureeIntervention());
+                dataRowFiche.createCell(5).setCellValue(fiche.isEtatFicheFinie());
+                dataRowFiche.createCell(6).setCellValue(fiche.getMaintenance().getNiveauMaintenanceType());
+                dataRowFiche.createCell(7).setCellValue(fiche.getDemande().getNiveauDateDemande());
+                dataRowFiche.createCell(8).setCellValue(fiche.getNiveauDateIntervention());
+                dataRowFiche.createCell(9).setCellValue(fiche.getDemande().getNiveauDegreUrgence());
+                dataRowFiche.createCell(10).setCellValue(fiche.getDemande().getNiveauDescription());
+                dataRowFiche.createCell(11).setCellValue(fiche.getNiveauDureeIntervention());
+                dataRowFiche.createCell(12).setCellValue(fiche.getNiveauIntervenant());
+                dataRowFiche.createCell(13).setCellValue(fiche.getDemande().getNiveauLocalisation());
+                dataRowFiche.createCell(14).setCellValue(fiche.getNiveauMaintenanceType());
+                dataRowFiche.createCell(15).setCellValue(fiche.getNiveauMateriauxUtilises());
+                dataRowFiche.createCell(16).setCellValue(fiche.getNiveauNatureIntervention());
+                dataRowFiche.createCell(17).setCellValue(fiche.getIntervenant().getNiveauNom());
+                dataRowFiche.createCell(18).setCellValue(fiche.getDemande().getNiveauNomDemandeur());
+                dataRowFiche.createCell(19).setCellValue(fiche.getIntervenant().getNiveauPrenom());
+                dataRowFiche.createCell(20).setCellValue(fiche.getDemande().getNiveauTitreDemande());
+                dataRowFiche.createCell(21).setCellValue(fiche.getIntervenant().getNiveauTitreIntervenant());
+                dataRowFiche.createCell(22).setCellValue(fiche.getIntervention().getNiveauTitreIntervention());
+                dataRowFiche.createCell(23).setCellValue(fiche.getNiveauTravauxNonRealises());
+                dataRowFiche.createCell(24).setCellValue(fiche.getNiveauTravauxRealises());
+                dataRowFiche.createCell(25).setCellValue(fiche.getIntervention().getNiveauTypeIntervention());
+                dataRowFiche.createCell(26).setCellValue(fiche.isNouvelleIntervention());
+                dataRowFiche.createCell(27).setCellValue(fiche.getId());
+                dataRowFiche.createCell(28).setCellValue(utilisateur.getId());
+                dataRowFiche.createCell(29).setCellValue(fiche.getNomDemandeur());
+                dataRowFiche.createCell(30).setCellValue(fiche.getTravauxNonRealises());
+                dataRowFiche.createCell(31).setCellValue(fiche.getTravauxRealises());
+                dataRowFiche.createCell(32).setCellValue(fiche.getDemande().getCouleurDateDemande());
+                dataRowFiche.createCell(33).setCellValue(fiche.getIntervention().getCouleurDateIntervention());
+                dataRowFiche.createCell(34).setCellValue(fiche.getDemande().getCouleurDegreUrgence());
+                dataRowFiche.createCell(35).setCellValue(fiche.getDemande().getCouleurDescription());
+                dataRowFiche.createCell(36).setCellValue(fiche.getIntervention().getCouleurDureeIntervention());
+                dataRowFiche.createCell(37).setCellValue(fiche.getDemande().getCouleurLocalisation());
+                dataRowFiche.createCell(38).setCellValue(fiche.getMaintenance().getCouleurMaintenanceType());
+                dataRowFiche.createCell(39).setCellValue(fiche.getCouleurMateriauxUtilises());
+                dataRowFiche.createCell(40).setCellValue(fiche.getIntervenant().getCouleurNom());
+                dataRowFiche.createCell(41).setCellValue(fiche.getDemande().getCouleurNomDemandeur());
+                dataRowFiche.createCell(42).setCellValue(fiche.getIntervenant().getCouleurPrenom());
+                dataRowFiche.createCell(43).setCellValue(fiche.getDemande().getCouleurTitreDemande());
+                dataRowFiche.createCell(44).setCellValue(fiche.getIntervenant().getCouleurTitreIntervenant());
+                dataRowFiche.createCell(45).setCellValue(fiche.getIntervention().getCouleurTitreIntervention());
+                dataRowFiche.createCell(46).setCellValue(fiche.getCouleurTravauxNonRealises());
+                dataRowFiche.createCell(47).setCellValue(fiche.getCouleurTravauxRealises());
+                dataRowFiche.createCell(48).setCellValue(fiche.getIntervention().getCouleurTypeIntervention());
+                dataRowFiche.createCell(49).setCellValue(fiche.getDescription());
+                dataRowFiche.createCell(50).setCellValue(fiche.getLocalisation());
+                dataRowFiche.createCell(51).setCellValue(fiche.getIntervenant().getNom());
+                dataRowFiche.createCell(52).setCellValue(fiche.getIntervenant().getPrenom());
+                dataRowFiche.createCell(53).setCellValue(fiche.getTypeIntervention());
+                dataRowFiche.createCell(54).setCellValue(String.join(", ", fiche.getMateriauxOptions()));
+            }
         }
 
         ServletOutputStream ops = response.getOutputStream();

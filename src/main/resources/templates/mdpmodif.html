@@ -15,7 +15,6 @@
     <title>Modifier mot de passe </title>
     <style>
         .unlock-container {
-            width: 300px;
             text-align: center;
             border: none;
         }
@@ -98,7 +97,10 @@
     </header>
 
     <div class="container mt-4">
-        <h2>Rentrer un nouveau modèle </h2>
+        <div class="text-center">
+            <h2>Rentrer un nouveau modèle </h2>
+            <br>
+        </div>
         <div class="encadr">
             <!-- Afficher un message de succès si le mdp à été modifié avec succès -->
             <div th:if="${success}" class="alert alert-success">
@@ -113,26 +115,29 @@
                 <!-- ... autres champs ... -->
 
                 <!-- Intégration du modèle de déverrouillage -->
-                <div class="unlock-container">
-                    <div class="pattern" id="patern" name="motdepasse">
-                        <!-- 9 points du modèle -->
-                        <div class="dot" data-index="1"></div>
-                        <div class="dot" data-index="2"></div>
-                        <div class="dot" data-index="3"></div>
-                        <div class="dot" data-index="4"></div>
-                        <div class="dot" data-index="5"></div>
-                        <div class="dot" data-index="6"></div>
-                        <div class="dot" data-index="7"></div>
-                        <div class="dot" data-index="8"></div>
-                        <div class="dot" data-index="9"></div>
-                    </div>
-                    <input type="hidden" th:field="*{mdp}" id="motDePasseHidden" />
-                    <button type="submit" id="modifierMdpBtn" class="hidden btn btn-primary">Modifier le mot de passe</button>
-                    <div id="cancelButton" class="btn btn-danger">Annuler la sélection</div>
-                    <div class="imagemodif mt-3">
-                        <a th:href="@{'/modif/' + ${utilisateur.id}}">
-                            <img src="/images/return.png" alt="Modifier un apprenti" style="cursor: pointer" class="img-fluid">
-                        </a>
+                <div class="d-flex justify-content-center"> <!-- Centering div added -->
+                    <div class="unlock-container">
+                        <div class="pattern" id="patern" name="motdepasse">
+                            <!-- 9 points du modèle -->
+                            <div class="dot" data-index="1"></div>
+                            <div class="dot" data-index="2"></div>
+                            <div class="dot" data-index="3"></div>
+                            <div class="dot" data-index="4"></div>
+                            <div class="dot" data-index="5"></div>
+                            <div class="dot" data-index="6"></div>
+                            <div class="dot" data-index="7"></div>
+                            <div class="dot" data-index="8"></div>
+                            <div class="dot" data-index="9"></div>
+                        </div>
+                        <input type="hidden" th:field="*{mdp}" id="motDePasseHidden" />
+                        <button type="submit" id="modifierMdpBtn" class="hidden btn btn-primary">Modifier le mot de passe</button>
+                        <br>
+                        <div id="cancelButton" class="btn btn-danger">Annuler la sélection</div>
+                        <div class="imagemodif mt-3">
+                            <a th:href="@{'/modif/' + ${utilisateur.id}}">
+                                <img src="/images/return.png" alt="Modifier un apprenti" style="cursor: pointer" class="img-fluid">
+                            </a>
+                        </div>
                     </div>
                 </div>
             </form>
