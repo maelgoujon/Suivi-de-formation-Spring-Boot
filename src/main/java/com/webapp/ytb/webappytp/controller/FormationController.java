@@ -90,6 +90,11 @@ public class FormationController {
         model.addAttribute("formations", formations);
         model.addAttribute("utilisateurs", utilisateurs);
         model.addAttribute("newFormation", new Formation());
+
+        // Ajouter la liste des formations pour le formulaire de création d'utilisateur
+        List<Formation> allFormations = formationService.lire();
+        model.addAttribute("allFormations", allFormations);
+
         return "liste_formations";
     }
 

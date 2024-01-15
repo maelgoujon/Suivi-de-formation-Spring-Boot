@@ -77,6 +77,13 @@
                       </select>
                   </div>
 
+                  <label for="formationID" class="col-md-2 col-form-label">Formation:</label>
+                  <div class="col-md-4">
+                      <select id="formationID" name="formationID" th:field="*{formation.id}" class="form-control">
+                          <option th:each="formation : ${allFormations}" th:value="${formation.id}" th:text="${formation.nom}"></option>
+                      </select>
+                  </div>
+
                   <label for="niveau" id="niveauLabel" class="col-md-2 col-form-label">Niveau:</label>
                   <div class="col-md-4">
                       <select class="form-control" th:field="*{niveau}" id="niveauSelect">
@@ -101,18 +108,19 @@
           </form>
       </div>
   </div>
+  <div class="text-center mt-3">
+    <button id="mdp" class="btn btn-primary" th:attr="data-userid=${utilisateur.id}">Modifier Mot de passe</button>
+  </div>
 </div>
-    <div class="text-center mt-3">
-      <button id="mdp" class="btn btn-primary" th:attr="data-userid=${utilisateur.id}">Modifier Mot de passe</button>
-    </div>
+    
     <div class="mt-3 d-flex justify-content-center ">
       <a th:href="@{'/profil_apprenti/' + ${utilisateur.id}}">
           <img src="/images/return.png" alt="Modifier un apprenti" style="cursor: pointer" class="img-fluid w-25" />
       </a>
   </div>  
-    <script>
-      var initialRole = '${utilisateur.role.name()}';
-
+  <script>
+    var initialRole = '${utilisateur.role.name()}';
+  
     function setInitialRole() {
         var roleSelect = document.getElementById("role");
         for (var i = 0; i < roleSelect.options.length; i++) {
@@ -121,34 +129,35 @@
                 break;
             }
         }
-
+  
         // Appel de la fonction pour masquer/afficher les champs en fonction du rôle initial
         handleRoleChange();
     }
-
+  
     function handleRoleChange() {
         var selectedRole = document.getElementById("role").value;
-        var passwordField = document.getElementById("passwordField");
-        var niveauField = document.getElementById("niveauField");
-
+        var passwordField = document.getElementById("motdepasse");
+        var niveauField = document.getElementById("niveauSelect");
+        var mdpButton = document.getElementById("mdp");
+    
         // Réinitialisez l'affichage des champs
         passwordField.style.display = "block";
         niveauField.style.display = "block";
         mdpButton.style.display = "block";
+    
         // Vérifiez le rôle sélectionné et masquez/affichez les champs en conséquence
         if (selectedRole === "USER") {
-            // Masquer le champ mot de passe si le role est user
+            // Masquer le champ mot de passe si le rôle est USER
             passwordField.style.display = "none";
-            
-        }else{
-          // Masquer la liste déroulante de niveau si pass un user
-          niveauField.style.display = "none";
-          // Masquer le bouton "Modifier Mot de passe" si le rôle n'est pas "USER"
-          mdpButton.style.display = "none";
-
+            // Masquer le bouton "Modifier Mot de passe" si le rôle est USER
+            mdpButton.style.display = "block";
+        } else {
+            // Masquer la liste déroulante de niveau si le rôle n'est pas USER
+            niveauField.style.display = "none";
+            mdpButton.style.display = "none";
         }
     }
-
+  
     window.onload = function () {
         // Appel de setInitialRole au chargement initial de la page
         setInitialRole();
@@ -156,10 +165,11 @@
         // Ajout d'un écouteur pour gérer le changement de rôle
         document.getElementById("role").addEventListener("change", handleRoleChange);
     };
-      function encodeImageToBase64() {
-        var input = document.getElementById('photo'); // Change 'photo' to the actual ID of your file input
+  
+    function encodeImageToBase64() {
+        var input = document.getElementById('photo');
         var file = input.files[0];
-
+  
         if (file) {
             var reader = new FileReader();
             reader.onload = function (e) {
@@ -169,17 +179,14 @@
             reader.readAsDataURL(file);
         }
     }
+  
     const mdpButton = document.getElementById("mdp");
     mdpButton.addEventListener("click", () => {
-      const userId = document.getElementById("mdp").getAttribute("data-userid");
-
-
+        const userId = document.getElementById("mdp").getAttribute("data-userid");
+  
         // Utilisez la syntaxe @{/} pour construire l'URL avec Thymeleaf
         window.location.href = "/mdpmodif/" + userId;
-
     });
-    
-    
   </script>
 </body>
 

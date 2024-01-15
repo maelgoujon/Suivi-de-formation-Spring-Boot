@@ -1,5 +1,6 @@
 package com.webapp.ytb.webappytp.controller;
 
+
 import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import com.webapp.ytb.webappytp.modele.Formation;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.service.FicheService;
+import com.webapp.ytb.webappytp.service.FormationService;
 import com.webapp.ytb.webappytp.service.UtilisateurService;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,13 +34,19 @@ public class UtilisateurController {
 
     private final UtilisateurService utilisateurService;
     private final FicheService ficheService;
+    private final FormationService formationService;
 
     // Page de création de nouvel utilisateur
     @GetMapping("/nouveau")
     public String afficherFormulaireCreationUtilisateur(Model model) {
         // Récupérez les rôles définis dans l'enum UserRole
         UserRole[] roles = UserRole.values();
+
+        // Récupérez la liste des formations depuis la base de données en utilisant le service
+        List<Formation> allFormations = formationService.lire();
+
         model.addAttribute("roles", roles);
+        model.addAttribute("allFormations", allFormations); 
         model.addAttribute("utilisateur", new Utilisateur());
         return "nouvelUtilisateur";
     }
@@ -93,6 +101,7 @@ public class UtilisateurController {
     @GetMapping("/modifier/{id}")
     public String afficherFormulaireModificationUtilisateur(@PathVariable Long id, Model model) {
         Utilisateur utilisateur = utilisateurService.findById(id);
+        
         model.addAttribute("utilisateur", utilisateur);
         return "modif";
     }

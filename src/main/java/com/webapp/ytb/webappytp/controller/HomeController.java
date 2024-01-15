@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
+import com.webapp.ytb.webappytp.modele.Formation;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
@@ -35,15 +37,15 @@ import com.webapp.ytb.webappytp.repository.ImagesTitresRepository;
 import com.webapp.ytb.webappytp.repository.MateriauxAmenagementRepository;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
-
+import com.webapp.ytb.webappytp.service.FormationService;
 @Controller
 public class HomeController {
-
+    
     MateriauxAmenagementRepository materiauxAmenagementRepository;
     UtilisateurServiceImpl userServ;
     FicheServiceImpl ficheServ;
     ImagesTitresRepository imagesTitresRepository;
-
+    
     public HomeController(UtilisateurServiceImpl userServ, FicheServiceImpl ficheServ,
             MateriauxAmenagementRepository materiauxAmenagementRepository,
             ImagesTitresRepository imagesTitresRepository) {
@@ -545,7 +547,8 @@ public class HomeController {
             // Récupérez les rôles définis dans l'enum UserRole
             UserRole[] roles = UserRole.values();
             model.addAttribute("roles", roles);
-
+            List<Formation> allFormations = formationService.lire();
+            model.addAttribute("allFormations", allFormations);
             // Vérifiez si le rôle du compte sélectionné est USER
             if (utilisateur.getRole() == UserRole.USER) {
                 return "/modif";
@@ -560,13 +563,15 @@ public class HomeController {
             return "redirect:/accueil";
         }
     }
-
+    @Autowired
+    private FormationService formationService;
     @GetMapping("/modif_admin/{id}")
     public String modifadmin(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         // Récupérez les rôles définis dans l'enum UserRole
         UserRole[] roles = UserRole.values();
         model.addAttribute("roles", roles);
-
+        List<Formation> allFormations = formationService.lire();
+        model.addAttribute("allFormations", allFormations);
         // Vérifiez si l'utilisateur connecté a le rôle de superadmin
         if (isUserSuperAdmin(userDetails)) {
             Utilisateur utilisateur = userServ.findById(id);

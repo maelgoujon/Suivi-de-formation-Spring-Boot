@@ -73,12 +73,12 @@
                             <input type="text" id="prenom" name="prenom" th:field="*{prenom}" class="form-control" required>
                         </div>
     
-                        <label for="prenom" class="col-md-2 col-form-label">Login:</label>
+                        <label for="login" class="col-md-2 col-form-label">Login:</label>
                         <div class="col-md-4">
                             <input type="text" id="login" name="login" th:field="*{login}" class="form-control" required>
                         </div>
     
-                        <label for="prenom" class="col-md-2 col-form-label">Mot de passe:</label>
+                        <label for="mdp" class="col-md-2 col-form-label">Mot de passe:</label>
                         <div class="col-md-4">
                             <input type="password" id="mdp" name="mdp" th:field="*{mdp}" class="form-control" required>
                         </div>
@@ -95,8 +95,15 @@
                                 <option th:each="role : ${roles}" th:value="${role}" th:text="${role}"></option>
                             </select>
                         </div>
+                        
+                        <label for="formationID" class="col-md-2 col-form-label">Formation:</label>
+                        <div class="col-md-4">
+                            <select id="formationID" name="formationID" th:field="*{formation.id}" class="form-control">
+                                <option th:each="formation : ${allFormations}" th:value="${formation.id}" th:text="${formation.nom}"></option>
+                            </select>
+                        </div>
 
-                        <label for="niveau" id="niveauLabel" class="col-md-2 col-form-label">Niveau:</label>
+                        <label for="niveauSelect" id="niveauLabel" class="col-md-2 col-form-label">Niveau:</label>
                         <div class="col-md-4">
                             <select class="form-control" th:field="*{niveau}" id="niveauSelect">
                                 <option value="0">0</option>
@@ -105,7 +112,7 @@
                                 <option value="3">3</option>
                             </select>
                         </div>
-
+                      
                         <label for="description" class="col-md-2 col-form-label">Description:</label>
                         <div class="col-md-4">
                             <textarea id="description" name="description" th:field="*{description}" ></textarea>
@@ -129,25 +136,21 @@
 <script>
     // Fonction pour gérer les changements dans la sélection du rôle
     function handleRoleChange() {
-        // Récupérer la sélection du rôle
         var selectedRole = document.getElementById("role").value;
-
-        // Récupérer la liste déroulante Niveau et le label Niveau
         var niveauSelect = document.getElementById("niveauSelect");
-        var niveauLabel = document.getElementById("niveauLabel");
-        var formationLabel = document.getElementById("formationLabel");
-        var formationSelect = document.getElementById("formationSelect");
-        // Condition pour cacher le label et la liste déroulante Niveau si le rôle n'est pas USER
-        if (selectedRole !== "USER") {
-            niveauSelect.style.display = "none";
-            niveauLabel.style.display = "none";
-            formationLabel.style.display="none";
-            formationSelect.style.display="none";
-        } else {
-            niveauSelect.style.display = "block";
-            niveauLabel.style.display = "block";
-            formationLabel.style.display ="block";
-            formationSelect.style.display ="block";
+        
+        var niveauLabel = document.getElementById("niveauLabel");  // Assurez-vous que l'ID est correct
+
+        if (niveauLabel) {
+            if (selectedRole !== "USER") {
+                niveauSelect.style.display = "none";
+                
+                niveauLabel.style.display = "none";
+            } else {
+                niveauSelect.style.display = "block";
+                
+                niveauLabel.style.display = "block";
+            }
         }
     }
 
