@@ -657,6 +657,13 @@ public class HomeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    @GetMapping("/fiche/liste_fiche/{id}")
+    public String showCreateInterventionForm(Model model , @PathVariable Long id) {
+        List<FicheIntervention> fiches = ficheServ.getFichesByUserId(id); // Ajout de la liste des fiches
+        model.addAttribute("fiche", new FicheIntervention());
+        model.addAttribute("fiches", fiches); // Ajout de la liste des fiches
+        return "liste_fiche_id";
+    }
 
     @GetMapping("/fiche/liste_fiche")
     public String showCreateInterventionForm(Model model) {

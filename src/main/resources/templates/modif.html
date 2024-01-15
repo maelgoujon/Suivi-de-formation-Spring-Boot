@@ -95,21 +95,17 @@
 
                   <div class="col-md-6 offset-md-3">
                       <button type="submit" class="btn btn-primary">Modifier l'utilisateur</button>
+                      <button type="button" id="mdp" class="btn btn-primary" th:attr="data-userid=${utilisateur.id}">Modifier Mot de passe</button>
+                      <a th:href="@{'/profil_apprenti/' + ${utilisateur.id}}">
+                        <img src="/images/return.png" alt="Modifier un apprenti" style="cursor: pointer" class="img-fluid" height="50" width="50"/>
+                      </a>
                   </div>
               </div>
 
           </form>
       </div>
   </div>
-</div>
-    <div class="text-center mt-3">
-      <button id="mdp" class="btn btn-primary" th:attr="data-userid=${utilisateur.id}">Modifier Mot de passe</button>
-    </div>
-    <div class="mt-3 d-flex justify-content-center ">
-      <a th:href="@{'/profil_apprenti/' + ${utilisateur.id}}">
-          <img src="/images/return.png" alt="Modifier un apprenti" style="cursor: pointer" class="img-fluid w-25" />
-      </a>
-  </div>  
+</div>  
     <script>
       var initialRole = '${utilisateur.role.name()}';
 
