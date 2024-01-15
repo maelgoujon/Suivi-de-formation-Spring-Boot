@@ -51,6 +51,14 @@
       </ul>
     </header>
 
+    <form class="d-flex align-items-center">
+      <input class="form-control me-2" type="search" placeholder="Rechercher un apprenti" aria-label="Search" id="searchInput">
+    </form>
+  
+    <div id="noResultsMessage" style="display: none; color: red; margin-top: 10px;">
+      Aucun résultat trouvé.
+    </div>
+
     <!-- Ajout de l'image cliquable et du texte "Ajouter un apprenti" -->
     <div class="ajouter text-center d-flex flex-column align-items-center mt-5">
       <a href="utilisateur/nouveau" class="d-flex align-items-center">
@@ -85,11 +93,12 @@
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const profils = document.querySelectorAll(".profil");
-        const connectButton = document.getElementById("profil_apprenti");
+        const searchInput = document.getElementById("searchInput");
         const voirProfilContainer = document.getElementById("voir_profil_container");
-    
+        const noResultsMessage = document.getElementById("noResultsMessage");
+  
         let selectedProfile = null;
-    
+  
         function selectProfile(profile) {
           if (selectedProfile === profile) {
             deselectProfile();
@@ -100,14 +109,13 @@
             profile.classList.add("selected");
             selectedProfile = profile;
             voirProfilContainer.style.display = "block";
-            // Ajouter le défilement vers le haut ici
             window.scrollTo({
               top: 0,
               behavior: "smooth"
             });
           }
         }
-    
+  
         function deselectProfile() {
           if (selectedProfile) {
             selectedProfile.classList.remove("selected");
@@ -115,26 +123,57 @@
             voirProfilContainer.style.display = "none";
           }
         }
-    
+  
+        function searchProfiles() {
+          const searchTerms = searchInput.value.toLowerCase().split(" ");
+          let hasResults = false;
+  
+          profils.forEach((profile) => {
+            const nom = profile.querySelector(".nom").innerText.toLowerCase();
+            const prenom = profile.querySelector(".prenom").innerText.toLowerCase();
+  
+            const isVisible = searchTerms.every(term => nom.includes(term) || prenom.includes(term));
+  
+            if (isVisible) {
+              hasResults = true;
+            }
+  
+            profile.style.display = isVisible ? "block" : "none";
+          });
+  
+          deselectProfile();
+  
+          // Afficher le message d'erreur si aucun résultat n'est trouvé
+          noResultsMessage.style.display = hasResults ? "none" : "block";
+        }
+  
         profils.forEach((profile) => {
           profile.addEventListener("click", (event) => {
             selectProfile(profile);
           });
         });
-    
-        connectButton.addEventListener("click", () => {
+  
+        searchInput.addEventListener("input", () => {
+          searchProfiles();
+        });
+  
+  
+        const voirProfilButton = document.getElementById("profil_apprenti");
+  
+        voirProfilButton.addEventListener("click", () => {
           if (selectedProfile) {
             const userId = selectedProfile.getAttribute("data-id");
             window.location.href = "profil_apprenti/" + userId;
           }
         });
-    
+  
         document.addEventListener("click", (event) => {
           const isProfile = event.target.closest(".profil");
           if (!isProfile) {
             deselectProfile();
           }
         });
+  
       });
     </script>
   </body>

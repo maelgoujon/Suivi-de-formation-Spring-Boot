@@ -1,24 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-  <head>
+<head>
     <meta charset="UTF-8" />
-      <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <!-- Ajoutez les liens vers les fichiers CSS Bootstrap ici -->
-      <link href="/css/bootstrap.min.css" rel="stylesheet" />
-      <link href="/css/accueil.css" rel="stylesheet" />
-      <!-- Ajoutez les liens vers les fichiers JavaScript Bootstrap et jQuery ici -->
-      <script src="/js/jquery-3.2.1.slim.min.js"></script>
-      <script src="/js/popper.min.js"></script>
-      <script src="/js/bootstrap.bundle.min.js"></script>      
-      <title>Modifier</title>
-          
-    </head>
+    <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/accueil.css" rel="stylesheet" />
+    <script src="/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <title>Modifier</title>
+</head>
 
 <body onsubmit="setInitialRole();">
 
-  <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color" style="background-color: #bbdefb;">
+<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color" style="background-color: #bbdefb;">
     <a href="accueil_admin" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
         <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
         <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
@@ -32,87 +29,89 @@
 </header>
 
 <div class="container mt-5">
-  <h2>Modifier l'utilisateur :</h2>
-  <div class=" encadre p-4 bg-light d-flex justify-content-center align-items-center">
-      <div class="encadre">
-          <!-- Afficher un message de succès si l'utilisateur a été créé avec succès -->
-          <div th:if="${success}">
+    <h2>Modifier l'utilisateur :</h2>
+    <div class="encadre p-4 bg-light d-flex justify-content-center align-items-center">
+        <!-- Afficher un message de succès si l'utilisateur a été créé avec succès -->
+        <div th:if="${success}">
             <p style="color: green;">Utilisateur modifié avec succès!</p>
         </div>
 
-          <!-- Formulaire de création d'utilisateur -->
-          <form class="formulaire" th:action="@{/utilisateur/modifier/{id}(id=${utilisateur.id})}" th:object="${utilisateur}" method="post" enctype="multipart/form-data" onsubmit="encodeImageToBase64();">
-              <div class="form-group row">
-                  <label for="nom" class="col-md-2 col-form-label">Nom:</label>
-                  <div class="col-md-4">
-                      <input type="text" id="nom" name="nom" th:field="*{nom}" class="form-control" required>
-                  </div>
+        <!-- Formulaire de création d'utilisateur -->
+        <form class="formulaire" th:action="@{/utilisateur/modifier/{id}(id=${utilisateur.id})}" th:object="${utilisateur}" method="post" enctype="multipart/form-data" onsubmit="encodeImageToBase64();">
+            <div class="form-group row">
+                <label for="nom" class="col-md-2 col-form-label">Nom:</label>
+                <div class="col-md-4">
+                    <input type="text" id="nom" name="nom" th:field="*{nom}" class="form-control" required>
+                </div>
 
-                  <label for="prenom" class="col-md-2 col-form-label">Prénom:</label>
-                  <div class="col-md-4">
-                      <input type="text" id="prenom" name="prenom" th:field="*{prenom}" class="form-control" required>
-                  </div>
+                <label for="prenom" class="col-md-2 col-form-label">Prénom:</label>
+                <div class="col-md-4">
+                    <input type="text" id="prenom" name="prenom" th:field="*{prenom}" class="form-control" required>
+                </div>
 
-                  <label for="login" class="col-md-2 col-form-label">Login:</label>
-                  <div class="col-md-4">
-                      <input type="text" id="login" name="login" th:field="*{login}" class="form-control" required>
-                  </div>
+                <label for="login" class="col-md-2 col-form-label">Login:</label>
+                <div class="col-md-4">
+                    <input type="text" id="login" name="login" th:field="*{login}" class="form-control" required>
+                </div>
 
-                  <label for="mdp" class="col-md-2 col-form-label">Mot de passe:</label>
-                  <div class="col-md-4">
-                      <input type="text" id="motdepasse" name="motdepasse" th:value="${utilisateur.mdp}" th:field="*{mdp}" required>
-                  </div>
+                <label for="mdp" class="col-md-2 col-form-label">Mot de passe:</label>
+                <div class="col-md-4">
+                    <input type="text" id="motdepasse" name="motdepasse" th:value="${utilisateur.mdp}" th:field="*{mdp}" required>
+                </div>
 
-                  <label for="photo" class="col-md-2 col-form-label">Sélectionner une photo:</label>
-                  <div class="col-md-4">
-                      <input type="file" id="photo" name="photo" onchange="encodeImageToBase64()" accept="image/*"
-                          class="form-control">
-                  </div>
-                  <input type="hidden" id="photoBase64" name="photoBase64" th:field="*{photoBase64}" />
+                <label for="photo" class="col-md-2 col-form-label">Sélectionner une photo:</label>
+                <div class="col-md-4">
+                    <input type="file" id="photo" name="photo" onchange="encodeImageToBase64()" accept="image/*" class="form-control">
+                </div>
+                <input type="hidden" id="photoBase64" name="photoBase64" th:field="*{photoBase64}" />
 
-                  <label for="role" class="col-md-2 col-form-label">Role:</label>
-                  <div class="col-md-4">
-                      <select id="role" name="role" th:field="*{role}" class="form-control" required>
-                          <option th:each="role : ${roles}" th:value="${role}" th:text="${role}"></option>
-                      </select>
-                  </div>
+                <label for="role" class="col-md-2 col-form-label">Role:</label>
+                <div class="col-md-4">
+                    <select id="role" name="role" th:field="*{role}" class="form-control" required>
+                        <option th:each="role : ${roles}" th:value="${role}" th:text="${role}"></option>
+                    </select>
+                </div>
 
-                  <label for="niveau" id="niveauLabel" class="col-md-2 col-form-label">Niveau:</label>
-                  <div class="col-md-4">
-                      <select class="form-control" th:field="*{niveau}" id="niveauSelect">
-                          <option value="0">0</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                      </select>
-                  </div>
+                <label for="formationID" class="col-md-2 col-form-label">Formation:</label>
+                <div class="col-md-4">
+                    <select id="formationID" name="formationID" th:field="*{formation.id}" class="form-control">
+                        <option th:each="formation : ${allFormations}" th:value="${formation.id}" th:text="${formation.nom}"></option>
+                    </select>
+                </div>
 
-                  <label for="description" class="col-md-2 col-form-label">Description:</label>
-                  <div class="col-md-4">
-                      <textarea id="description" name="description" th:field="*{description}" ></textarea>
-                  </div>
+                <label for="niveauSelect" id="niveauLabel" class="col-md-2 col-form-label">Niveau:</label>
+                <div class="col-md-4">
+                    <select class="form-control" th:field="*{niveau}" id="niveauSelect">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
 
+                <label for="description" class="col-md-2 col-form-label">Description:</label>
+                <div class="col-md-4">
+                    <textarea id="description" name="description" th:field="*{description}" ></textarea>
+                </div>
 
-                  <div class="col-md-6 offset-md-3">
-                      <button type="submit" class="btn btn-primary">Modifier l'utilisateur</button>
-                  </div>
-              </div>
-
-          </form>
-      </div>
-  </div>
+                <div class="col-md-6 offset-md-3">
+                    <button type="submit" class="btn btn-primary">Modifier l'utilisateur</button>
+                    <a th:href="@{'/profil_apprenti/' + ${utilisateur.id}}">
+                        <img src="/images/return.png" alt="Modifier un apprenti" style="cursor: pointer" class="img-fluid" height="50" width="50" />
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="text-center mt-3">
+        <button id="mdp" class="btn btn-primary" th:attr="data-userid=${utilisateur.id}">Modifier Mot de passe</button>
+    </div>
 </div>
 
 
-      <div class="imagemodif mt-3 d-flex justify-content-center ">
-          <a th:href="@{'/profil_apprenti/' + ${utilisateur.id}}">
-              <img src="/images/return.png" alt="Modifier un apprenti" style="cursor: pointer" class="img-fluid w-25" />
-          </a>
-      </div>
-  </div>
-</div>  
-    <script>
-      var initialRole = '${utilisateur.role.name()}';
+
+<script>
+    var initialRole = '${utilisateur.role.name()}';
 
     function setInitialRole() {
         var roleSelect = document.getElementById("role");
@@ -122,67 +121,63 @@
                 break;
             }
         }
-
         // Appel de la fonction pour masquer/afficher les champs en fonction du rôle initial
         handleRoleChange();
     }
 
     function handleRoleChange() {
         var selectedRole = document.getElementById("role").value;
-        var passwordField = document.getElementById("passwordField");
-        var niveauField = document.getElementById("niveauField");
+        var passwordField = document.getElementById("motdepasse");
+        var niveauField = document.getElementById("niveauSelect");
+        var mdpButton = document.getElementById("mdp");
 
         // Réinitialisez l'affichage des champs
         passwordField.style.display = "block";
         niveauField.style.display = "block";
         mdpButton.style.display = "block";
+
         // Vérifiez le rôle sélectionné et masquez/affichez les champs en conséquence
         if (selectedRole === "USER") {
-            // Masquer le champ mot de passe si le role est user
+            // Masquer le champ mot de passe si le rôle est USER
             passwordField.style.display = "none";
-            
-        }else{
-          // Masquer la liste déroulante de niveau si pass un user
-          niveauField.style.display = "none";
-          // Masquer le bouton "Modifier Mot de passe" si le rôle n'est pas "USER"
-          mdpButton.style.display = "none";
-
+            // Masquer le bouton "Modifier Mot de passe" si le rôle est USER
+            mdpButton.style.display = "block";
+        } else {
+            // Masquer la liste déroulante de niveau si le rôle n'est pas USER
+            niveauField.style.display = "none";
+            mdpButton.style.display = "none";
         }
     }
 
     window.onload = function () {
         // Appel de setInitialRole au chargement initial de la page
         setInitialRole();
-        
         // Ajout d'un écouteur pour gérer le changement de rôle
         document.getElementById("role").addEventListener("change", handleRoleChange);
     };
-    function encodeImageToBase64() {
-      var input = document.getElementById('photo');
-      var file = input.files[0];
 
-      if (file) {
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            var base64Image = e.target.result;
-            document.getElementById('photoBase64').value = base64Image;
-          };
-          reader.readAsDataURL(file);
-      }
+    function encodeImageToBase64() {
+        var input = document.getElementById('photo');
+        var file = input.files[0];
+
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var base64Image = e.target.result;
+                document.getElementById('photoBase64').value = base64Image;
+            };
+            reader.readAsDataURL(file);
+        }
     }
 
     const mdpButton = document.getElementById("mdp");
     mdpButton.addEventListener("click", () => {
-      const userId = document.getElementById("mdp").getAttribute("data-userid");
-
-
+        const userId = document.getElementById("mdp").getAttribute("data-userid");
         // Utilisez la syntaxe @{/} pour construire l'URL avec Thymeleaf
         window.location.href = "/mdpmodif/" + userId;
-
     });
-    
-    
-  </script>
+</script>
+
 </body>
 
 </html>

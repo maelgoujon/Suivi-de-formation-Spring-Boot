@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
+import com.webapp.ytb.webappytp.modele.Formation;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
@@ -41,21 +43,21 @@ import com.webapp.ytb.webappytp.repository.ImagesTitresRepository;
 import com.webapp.ytb.webappytp.repository.MateriauxAmenagementRepository;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
-
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import com.webapp.ytb.webappytp.service.FormationService;
 
 @Controller
 public class HomeController {
-
+    
     MateriauxAmenagementRepository materiauxAmenagementRepository;
     UtilisateurServiceImpl userServ;
     FicheServiceImpl ficheServ;
     ImagesTitresRepository imagesTitresRepository;
-
+    
     public HomeController(UtilisateurServiceImpl userServ, FicheServiceImpl ficheServ,
             MateriauxAmenagementRepository materiauxAmenagementRepository,
             ImagesTitresRepository imagesTitresRepository) {
@@ -601,7 +603,8 @@ public class HomeController {
             // Récupérez les rôles définis dans l'enum UserRole
             UserRole[] roles = UserRole.values();
             model.addAttribute("roles", roles);
-
+            List<Formation> allFormations = formationService.lire();
+            model.addAttribute("allFormations", allFormations);
             // Vérifiez si le rôle du compte sélectionné est USER
             if (utilisateur.getRole() == UserRole.USER) {
                 return "/modif";
@@ -616,13 +619,15 @@ public class HomeController {
             return "redirect:/accueil";
         }
     }
-
+    @Autowired
+    private FormationService formationService;
     @GetMapping("/modif_admin/{id}")
     public String modifadmin(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         // Récupérez les rôles définis dans l'enum UserRole
         UserRole[] roles = UserRole.values();
         model.addAttribute("roles", roles);
-
+        List<Formation> allFormations = formationService.lire();
+        model.addAttribute("allFormations", allFormations);
         // Vérifiez si l'utilisateur connecté a le rôle de superadmin
         if (isUserSuperAdmin(userDetails)) {
             Utilisateur utilisateur = userServ.findById(id);
@@ -712,6 +717,13 @@ public class HomeController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+    @GetMapping("/fiche/liste_fiche/{id}")
+    public String showCreateInterventionForm(Model model , @PathVariable Long id) {
+        List<FicheIntervention> fiches = ficheServ.getFichesByUserId(id); // Ajout de la liste des fiches
+        model.addAttribute("fiche", new FicheIntervention());
+        model.addAttribute("fiches", fiches); // Ajout de la liste des fiches
+        return "liste_fiche_id";
     }
 
     @GetMapping("/fiche/liste_fiche")
