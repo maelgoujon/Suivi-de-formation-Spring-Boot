@@ -23,6 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -106,12 +107,20 @@ public class UtilisateurController {
         return "modif";
     }
 
-    // ToDo: Fix the update method
+    
     @PostMapping("/modifier/{id}")
     public String modifierUtilisateur(@PathVariable Long id, @ModelAttribute Utilisateur utilisateur,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes, Model model) {
         utilisateurService.modifier(id, utilisateur);
+        // Récupérez les rôles définis dans l'enum UserRole
+        UserRole[] roles = UserRole.values();
+        model.addAttribute("roles", roles);
+        List<Formation> allFormations = formationService.lire();
+        model.addAttribute("allFormations", allFormations);
         redirectAttributes.addFlashAttribute("success", true);
+        // Ajoutez également les modèles aux attributs flash pour les rendre disponibles après la redirection
+        redirectAttributes.addFlashAttribute("roles", roles);
+        redirectAttributes.addFlashAttribute("allFormations", allFormations);
         return "redirect:/utilisateur/modifier/" + id;
     }
 
