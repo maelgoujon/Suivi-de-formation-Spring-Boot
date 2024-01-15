@@ -1,5 +1,8 @@
 package com.webapp.ytb.webappytp.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
@@ -22,6 +25,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
@@ -35,6 +41,12 @@ import com.webapp.ytb.webappytp.repository.ImagesTitresRepository;
 import com.webapp.ytb.webappytp.repository.MateriauxAmenagementRepository;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
+
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Controller
 public class HomeController {
@@ -56,6 +68,51 @@ public class HomeController {
     // -----------------------------------------//
     // ------------Fiche Intervention-----------//
     // -----------------------------------------//
+
+    // ajouter des icones à une categorie de la fiche
+    @GetMapping("/fiche/icones/{categorie}")
+    public String showIcones(@PathVariable String categorie, Model model) {
+        List<ImagesTitres> imagesTitres = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.INTERVENANT);
+
+        model.addAttribute("imagesTitres", imagesTitres);
+        model.addAttribute("image", new ImagesTitres()); // Ajout d'une instance d'image pour le formulaire
+        return "icones_ficheintervention";
+    }
+
+    @PostMapping("/fiche/icones/upload")
+    public String handleFileUpload(@ModelAttribute("image") ImagesTitres image,
+            @RequestParam("imageFile") MultipartFile file,
+            RedirectAttributes redirectAttributes,
+            HttpServletRequest request) {
+        if (file.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message", "Veuillez sélectionner un fichier à uploader");
+            return "redirect:/fiche/icones/upload";
+        }
+
+        try {
+            // Obtenir le chemin réel du répertoire /images/icones/
+            ServletContext context = request.getServletContext();
+            String realPath = context.getRealPath("/images/icones/");
+            Path path = Paths.get(realPath + File.separator + file.getOriginalFilename());
+
+            // Assurez-vous que le répertoire existe
+            Files.createDirectories(path.getParent());
+
+            // Sauvegarder le fichier
+            Files.write(path, file.getBytes());
+
+            // Mettez à jour l'URL de l'image dans la base de données
+            image.setImageUrl("/images/icones/" + file.getOriginalFilename());
+
+            redirectAttributes.addFlashAttribute("message",
+                    "Vous avez réussi à uploader '" + file.getOriginalFilename() + "'");
+        } catch (IOException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("message", "Erreur lors de l'upload du fichier");
+        }
+
+        return "redirect:/fiche/icones/upload";
+    }
 
     // Ajouter une fiche
     @GetMapping("/ajout_fiche")
@@ -155,12 +212,11 @@ public class HomeController {
         demande.setImageTitreDemandeDateUrl(fiche.getDemande().getImageTitreDemandeDateUrl());
         demande.setImageTitreDemandeLocalisationUrl(fiche.getDemande().getImageTitreDemandeLocalisationUrl());
         demande.setImageTitreDemandeDescriptionUrl(fiche.getDemande().getImageTitreDemandeDescriptionUrl());
-        //maintenance
+        // maintenance
         maintenance.setMaintenanceType(fiche.getMaintenance().getMaintenanceType());
         maintenance.setNiveauMaintenanceType(fiche.getMaintenance().getNiveauMaintenanceType());
         maintenance.setCouleurMaintenanceType(fiche.getMaintenance().getCouleurMaintenanceType());
         maintenance.setImageTypeMaintenanceUrl(fiche.getMaintenance().getImageTypeMaintenanceUrl());
-        
 
         // intervention
         intervention.setNiveauTitreIntervention(fiche.getIntervention().getNiveauTitreIntervention());

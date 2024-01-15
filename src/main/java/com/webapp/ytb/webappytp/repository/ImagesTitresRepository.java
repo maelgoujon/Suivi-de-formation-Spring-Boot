@@ -11,6 +11,7 @@ import com.webapp.ytb.webappytp.modele.ElementsFiche.ImagesTitres;
 public interface ImagesTitresRepository extends JpaRepository<ImagesTitres, Long> {
     
         List<ImagesTitres> findByTypeImage(ImagesTitres.TypeImage typeImage);
+
     
         ImagesTitres findByNomImage(String nomImage);
 

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Icones Fiche Intervention</title>
+    <script src="/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/css/font-awesome.min.css" />
+    <style>
+        .max-width-10vh img {
+            max-width: 10vh;
+        }
+
+        .succes {
+            color: green;
+            font-size: 1.5em;
+        }
+
+        .error {
+            color: red;
+            font-size: 1.5em;
+        }
+    </style>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function editImage(imageId) {
+            // Afficher le formulaire d'édition
+            document.getElementById('editForm').style.display = 'block';
+
+            // Mettre à jour l'action du formulaire avec l'ID de l'image
+            var editForm = document.getElementById('editForm');
+            editForm.action = /*[[@{/materiaux/modifier/}]]*/ + imageId;
+
+            // Récupérer les détails de l'image sélectionnée et mettre à jour le formulaire
+            var imageDetails = document.getElementById('imageDetails_' + imageId);
+            document.getElementById('nomImage').value = imageDetails.getAttribute('data-nomImage');
+            document.getElementById('currentImageData').src = imageDetails.getAttribute('data-imageData');
+        }
+
+        function handleFileSelect(input) {
+            var file = input.files[0];
+            /*<![CDATA[*/
+            var maxFileSize = [[${ maxFileSize }]];
+            /*]]>*/
+
+            // Vérifier si la taille de l'image ne dépasse pas la limite
+            var isFileSizeValid = file.size <= maxFileSize;
+
+            // Cacher le bouton Uploader si la taille de l'image est trop grande
+            document.getElementById('uploadButton').disabled = !isFileSizeValid;
+
+            // Afficher une alerte si la taille n'est pas valide
+            if (!isFileSizeValid) {
+                alert('La taille du fichier dépasse la limite autorisée (' + (maxFileSize / 1024 / 1024) + ' Mo). Veuillez sélectionner un fichier plus petit.');
+            }
+        }
+
+        // Afficher le bouton Uploader au chargement de la page
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('uploadButton').style.display = 'block';
+        });
+        /*]]>*/
+    </script>
+
+</head>
+
+<body>
+    <div class="container">
+        <form th:action="@{/imagestitres/uploadImagesTitres}" method="post" enctype="multipart/form-data"
+            th:object="${imageTitre}">
+            <label for="nomImage">Nom de l'image :</label>
+            <input type="text" id="nomImage" name="nomImage" th:field="*{nomImage}" required>
+
+            <br>
+
+            <label for="typeImage">Type d'image :</label>
+            <select id="typeImage" name="typeImage" th:field="*{typeImage}" required>
+                <option
+                    th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.ImagesTitres.TypeImage).values()}"
+                    th:value="${type.name()}" th:text="${type.name()}"></option>
+            </select>
+            <br>
+            <label for="imageFile">Fichier Image :</label>
+            <input type="file" id="imageFile" name="imageFile" accept="image/*" required
+                onchange="handleFileSelect(this)">
+
+            <!-- Afficher un message si l'image est enregistrée avec succès -->
+            <p class="succes" th:if="${message}" th:text="${message}" style="color: green;"></p>
+
+            <!-- Afficher un message d'erreur si l'enregistrement de l'image échoue -->
+            <p class="error" th:if="${error}" th:text="${error}" style="color: red;"></p>
+
+            <!-- Afficher le bouton Uploader -->
+            <input type="submit" id="uploadButton" value="Ajouter">
+        </form>
+
+    </div>
+</body>
+
+</html>
