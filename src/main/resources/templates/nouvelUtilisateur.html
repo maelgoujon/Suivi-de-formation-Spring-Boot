@@ -118,7 +118,8 @@
                             <textarea id="description" name="description" th:field="*{description}" ></textarea>
                         </div>
 
-
+                        <!-- Ajouter cette ligne avant le bouton de soumission -->
+                        <input type="hidden" id="photoBase64" name="photoBase64" th:field="*{photoBase64}" />
                         <div class="col-md-6 offset-md-3">
                             <button type="submit" class="btn btn-primary">Créer Utilisateur</button>
                         </div>
