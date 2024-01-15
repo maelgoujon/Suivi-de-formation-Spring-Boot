@@ -88,16 +88,36 @@
         </section>
 
 
+
         <form th:action="@{/ajouter_fiche}" th:object="${fiche}" method="post" id="ficheForm" class="fiche-form">
 
-
-            <div class="titre">Selectionner l'intervenant</div>
-            <div class="test">
-                <select class="form-select" id="utilisateur" name="utilisateur.id" th:field="*{utilisateur.id}">
-                    <option th:each="user : ${users}" th:value="${user.id}"
-                        th:text="${user.nom} + ' ' + ${user.prenom}"></option>
-                </select>
+            <hr />
+            
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="titre">Selectionner l'intervenant</div>
+                    <div class="test">
+                        <select class="form-select" id="utilisateur" name="utilisateur.id" th:field="*{utilisateur.id}">
+                            <option th:each="user : ${users}" th:value="${user.id}"
+                                th:text="${user.nom} + ' ' + ${user.prenom}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col">
+                            <div class="titre">&nbsp;</div>
+                            <a href="/imagestitres/liste" class="btn btn-dark">Modifier les images des titres</a>
+                        </div>
+                        <div class="col">
+                            <div class="titre">&nbsp;</div>
+                            <a href="/materiaux/liste" class="btn btn-dark">Modifier les materiaux</a>
+                        </div>
+                    </div>
+                </div>
             </div>
+
 
             <!--------------------------Intervenant--------------------------------------->
             <hr />
@@ -212,14 +232,14 @@
                                                     </div>
                                                 </div>
                                             </fieldset>
-                                            <input type="text" id="niveauTitreHiddenIntervenantPrenom"
+                                            <input type="hidden" id="niveauTitreHiddenIntervenantPrenom"
                                                 name="niveauTitreHiddenIntervenantPrenom"
                                                 th:field="${fiche.Intervenant.niveauTitreIntervenantPrenom}" />
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
                                             <input type="color" class="colorPicker" value="#000000">
-                                            <input type="text" id="titlehidden" class="titlehidden"
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Intervenant.couleurPrenom}" />
                                         </div>
                                     </div>
@@ -231,7 +251,7 @@
                                                     th:replace="intervenant_fragment.html::scrollcards(field='IntervenantPrenom')">
                                             </section>
                                         </div>
-                                        <input type="text" id="imageHiddenIntervenantPrenom"
+                                        <input type="hidden" id="imageHiddenIntervenantPrenom"
                                             class="imageHiddenIntervenantPrenom"
                                             th:field="*{Intervenant.imageTitreIntervenantPrenomUrl}"
                                             value="/images/eleve.png" />
@@ -270,14 +290,14 @@
                                                     </div>
                                                 </div>
                                             </fieldset>
-                                            <input type="text" id="niveauTitreHiddenIntervenantNom"
+                                            <input type="hidden" id="niveauTitreHiddenIntervenantNom"
                                                 name="niveauTitreHiddenIntervenantNom"
                                                 th:field="${fiche.Intervenant.niveauTitreIntervenantNom}" />
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
                                             <input type="color" class="colorPicker" value="#000000">
-                                            <input type="text" id="titlehidden" class="titlehidden"
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Intervenant.couleurNom}" />
                                         </div>
                                     </div>
@@ -289,7 +309,7 @@
                                                     th:replace="intervenant_fragment.html::scrollcards(field='IntervenantNom')">
                                             </section>
                                         </div>
-                                        <input type="text" id="imageHiddenIntervenantNom"
+                                        <input type="hidden" id="imageHiddenIntervenantNom"
                                             class="imageHiddenIntervenantNom"
                                             th:field="*{Intervenant.imageTitreIntervenantNomUrl}"
                                             value="/images/eleve.png" />
@@ -409,14 +429,14 @@
                                                     </div>
                                                 </div>
                                             </fieldset>
-                                            <input type="text" id="niveauTitreHiddenDemandeNom"
+                                            <input type="hidden" id="niveauTitreHiddenDemandeNom"
                                                 name="niveauTitreHiddenDemandeNom"
                                                 th:field="${fiche.Demande.niveauTitreDemandeNom}" />
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
                                             <input type="color" class="colorPicker" value="#000000">
-                                            <input type="text" id="titlehidden" class="titlehidden"
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Demande.couleurNomDemandeur}" />
                                         </div>
                                     </div>
@@ -428,7 +448,7 @@
                                                     th:replace="intervenant_fragment.html::scrollcards(field='DemandeNom')">
                                             </section>
                                         </div>
-                                        <input type="text" id="imageHiddenDemandeNom" class="imageHiddenDemandeNom"
+                                        <input type="hidden" id="imageHiddenDemandeNom" class="imageHiddenDemandeNom"
                                             th:field="*{Demande.imageTitreDemandeNomUrl}" value="/images/eleve.png" />
                                     </div>
                                 </div>
@@ -462,14 +482,14 @@
                                                     </div>
                                                 </div>
                                             </fieldset>
-                                            <input type="text" id="niveauTitreHiddenDemandeDegreUrgence"
+                                            <input type="hidden" id="niveauTitreHiddenDemandeDegreUrgence"
                                                 name="niveauTitreHiddenDemandeDegreUrgence"
                                                 th:field="${fiche.Demande.niveauTitreDemandeDegreUrgence}" />
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
                                             <input type="color" class="colorPicker" value="#000000">
-                                            <input type="text" id="titlehidden" class="titlehidden"
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Demande.couleurDegreUrgence}" />
                                         </div>
                                     </div>
@@ -481,7 +501,7 @@
                                                     th:replace="intervenant_fragment.html::scrollcards(field='DemandeDegreUrgence')">
                                             </section>
                                         </div>
-                                        <input type="text" id="imageHiddenDemandeDegreUrgence"
+                                        <input type="hidden" id="imageHiddenDemandeDegreUrgence"
                                             class="imageHiddenDemandeDegreUrgence"
                                             th:field="*{Demande.imageTitreDemandeDegreUrgenceUrl}"
                                             value="/images/eleve.png" />
@@ -517,14 +537,14 @@
                                                     </div>
                                                 </div>
                                             </fieldset>
-                                            <input type="text" id="niveauTitreHiddenDemandeDate"
+                                            <input type="hidden" id="niveauTitreHiddenDemandeDate"
                                                 name="niveauTitreHiddenDemandeDate"
                                                 th:field="${fiche.demande.niveauTitreDemandeDate}" />
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
                                             <input type="color" class="colorPicker" value="#000000">
-                                            <input type="text" id="titlehidden" class="titlehidden"
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{demande.couleurDateDemande}" />
                                         </div>
                                     </div>
@@ -536,7 +556,7 @@
                                                     th:replace="intervenant_fragment.html::scrollcards(field='DemandeDate')">
                                             </section>
                                         </div>
-                                        <input type="text" id="imageHiddenDemandeDate" class="imageHiddenDemandeDate"
+                                        <input type="hidden" id="imageHiddenDemandeDate" class="imageHiddenDemandeDate"
                                             th:field="*{demande.imageTitreDemandeDateUrl}" value="/images/eleve.png" />
                                     </div>
                                 </div>
@@ -572,14 +592,14 @@
                                                     </div>
                                                 </div>
                                             </fieldset>
-                                            <input type="text" id="niveauTitreHiddenDemandeLocalisation"
+                                            <input type="hidden" id="niveauTitreHiddenDemandeLocalisation"
                                                 name="niveauTitreHiddenDemandeLocalisation"
                                                 th:field="${fiche.demande.niveauTitreDemandeLocalisation}" />
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
                                             <input type="color" class="colorPicker" value="#000000">
-                                            <input type="text" id="titlehidden" class="titlehidden"
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{demande.couleurLocalisation}" />
                                         </div>
                                     </div>
@@ -591,7 +611,7 @@
                                                     th:replace="intervenant_fragment.html::scrollcards(field='DemandeLocalisation')">
                                             </section>
                                         </div>
-                                        <input type="text" id="imageHiddenDemandeLocalisation"
+                                        <input type="hidden" id="imageHiddenDemandeLocalisation"
                                             class="imageHiddenDemandeLocalisation"
                                             th:field="*{demande.imageTitreDemandeLocalisationUrl}"
                                             value="/images/eleve.png" />
@@ -630,14 +650,14 @@
                                                     </div>
                                                 </div>
                                             </fieldset>
-                                            <input type="text" id="niveauTitreHiddenDemandeDescription"
+                                            <input type="hidden" id="niveauTitreHiddenDemandeDescription"
                                                 name="niveauTitreHiddenDemandeDescription"
                                                 th:field="${fiche.demande.niveauTitreDemandeDescription}" />
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
                                             <input type="color" class="colorPicker" value="#000000">
-                                            <input type="text" id="titlehidden" class="titlehidden"
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{demande.couleurDescription}" />
                                         </div>
                                     </div>
@@ -649,7 +669,7 @@
                                                     th:replace="intervenant_fragment.html::scrollcards(field='DemandeDescription')">
                                             </section>
                                         </div>
-                                        <input type="text" id="imageHiddenDemandeDescription"
+                                        <input type="hidden" id="imageHiddenDemandeDescription"
                                             class="imageHiddenDemandeDescription"
                                             th:field="*{demande.imageTitreDemandeDescriptionUrl}"
                                             value="/images/eleve.png" />
@@ -774,7 +794,7 @@
                                                     <div
                                                         th:replace="intervenant_fragment.html::intervenantFragment(field='InterventionDate')">
                                                     </div>
-                                                    <input type="text" id="niveauTitreHiddenInterventionDate"
+                                                    <input type="hidden" id="niveauTitreHiddenInterventionDate"
                                                         name="niveauTitreHiddenInterventionDate"
                                                         th:field="${fiche.intervention.niveauDateIntervention}" />
                                                 </div>
@@ -783,7 +803,7 @@
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
                                             <input type="color" class="colorPicker" value="#000000">
-                                            <input type="text" id="titlehidden" class="titlehidden"
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{intervention.couleurDateIntervention}" />
                                         </div>
                                     </div>
@@ -795,7 +815,7 @@
                                                     th:replace="intervenant_fragment.html::scrollcards(field='InterventionDate')">
                                             </section>
                                         </div>
-                                        <input type="text" id="imageHiddenInterventionDate"
+                                        <input type="hidden" id="imageHiddenInterventionDate"
                                             class="imageHiddenInterventionDate"
                                             th:field="*{Intervention.imageDateInterventionUrl}"
                                             value="/images/eleve.png" />
@@ -831,7 +851,7 @@
                                                     <div
                                                         th:replace="intervenant_fragment.html::intervenantFragment(field='InterventionDuree')">
                                                     </div>
-                                                    <input type="text" id="niveauTitreHiddenInterventionDuree"
+                                                    <input type="hidden" id="niveauTitreHiddenInterventionDuree"
                                                         name="niveauTitreHiddenInterventionDuree"
                                                         th:field="${fiche.intervention.niveauDureeIntervention}" />
                                                 </div>
@@ -840,7 +860,7 @@
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
                                             <input type="color" class="colorPicker" value="#000000">
-                                            <input type="text" id="titlehidden" class="titlehidden"
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{intervention.couleurDureeIntervention}" />
                                         </div>
                                     </div>
@@ -852,7 +872,7 @@
                                                     th:replace="intervenant_fragment.html::scrollcards(field='InterventionDuree')">
                                             </section>
                                         </div>
-                                        <input type="text" id="imageHiddenInterventionDuree"
+                                        <input type="hidden" id="imageHiddenInterventionDuree"
                                             class="imageHiddenInterventionDuree"
                                             th:field="*{Intervention.imageDureeInterventionUrl}"
                                             value="/images/eleve.png" />
@@ -889,7 +909,7 @@
                                                     <div
                                                         th:replace="intervenant_fragment.html::intervenantFragment(field='InterventionType')">
                                                     </div>
-                                                    <input type="text" id="niveauTitreHiddenInterventionType"
+                                                    <input type="hidden" id="niveauTitreHiddenInterventionType"
                                                         name="niveauTitreHiddenInterventionType"
                                                         th:field="${fiche.intervention.niveauTypeIntervention}" />
                                                 </div>
@@ -898,7 +918,7 @@
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
                                             <input type="color" class="colorPicker" value="#000000">
-                                            <input type="text" id="titlehidden" class="titlehidden"
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{intervention.couleurTypeIntervention}" />
                                         </div>
                                     </div>
@@ -910,7 +930,7 @@
                                                     th:replace="intervenant_fragment.html::scrollcards(field='InterventionType')">
                                             </section>
                                         </div>
-                                        <input type="text" id="imageHiddenInterventionType"
+                                        <input type="hidden" id="imageHiddenInterventionType"
                                             class="imageHiddenInterventionType"
                                             th:field="*{Intervention.imageTypeInterventionUrl}"
                                             value="/images/eleve.png" />
@@ -959,7 +979,7 @@
                                                     <div
                                                         th:replace="intervenant_fragment.html::intervenantFragment(field='MaintenanceType')">
                                                     </div>
-                                                    <input type="text" id="niveauTitreHiddenMaintenanceType"
+                                                    <input type="hidden" id="niveauTitreHiddenMaintenanceType"
                                                         name="niveauTitreHiddenMaintenanceType"
                                                         th:field="${fiche.maintenance.NiveauMaintenanceType}" />
                                                 </div>
@@ -968,7 +988,7 @@
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
                                             <input type="color" class="colorPicker" value="#000000">
-                                            <input type="text" id="titlehidden" class="titlehidden"
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{maintenance.CouleurMaintenanceType}" />
                                         </div>
                                     </div>
@@ -980,7 +1000,7 @@
                                                     th:replace="intervenant_fragment.html::scrollcards(field='MaintenanceType')">
                                             </section>
                                         </div>
-                                        <input type="text" id="imageHiddenMaintenanceType"
+                                        <input type="hidden" id="imageHiddenMaintenanceType"
                                             class="imageHiddenMaintenanceType"
                                             th:field="*{Maintenance.imageTypeMaintenanceUrl}"
                                             value="/images/eleve.png" />
