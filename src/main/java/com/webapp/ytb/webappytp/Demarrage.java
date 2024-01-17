@@ -126,7 +126,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur admin = utilisateurRepository.findUserByLogin("admin");
         if (admin == null) {
             admin = new Utilisateur();
-            admin.setFormation(formation);
+            admin.setFormations(List.of(formation));
             admin.setNom("Admin");
             admin.setPrenom("Admin");
             admin.setLogin("admin");
@@ -140,7 +140,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur educsimple = utilisateurRepository.findUserByLogin("educsimple");
         if (educsimple == null) {
             educsimple = new Utilisateur();
-            educsimple.setFormation(formation2);
+            educsimple.setFormations(List.of(formation2));
             educsimple.setNom("Educ");
             educsimple.setPrenom("Simple");
             educsimple.setLogin("educsimple");
@@ -155,7 +155,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur superadmin = utilisateurRepository.findUserByLogin("superadmin");
         if (superadmin == null) {
             superadmin = new Utilisateur();
-            superadmin.setFormation(formation);
+            superadmin.setFormations(List.of(formation));
             superadmin.setNom("Super");
             superadmin.setPrenom("Admin");
             superadmin.setLogin("superadmin");
@@ -169,7 +169,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur CIP = utilisateurRepository.findUserByLogin("CIP");
         if (CIP == null) {
             CIP = new Utilisateur();
-            CIP.setFormation(formation);
+            CIP.setFormations(List.of(formation));
             CIP.setNom("CIP");
             CIP.setPrenom("CIP");
             CIP.setLogin("cip");
@@ -185,7 +185,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur michel = utilisateurRepository.findUserByLogin("michelmichel");
         if (michel == null) {
             michel = new Utilisateur();
-            michel.setFormation(formation);
+            michel.setFormations(List.of(formation));
             michel.setNom("Michel");
             michel.setPrenom("Michel");
             michel.setLogin("michelmichel");
@@ -201,7 +201,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur johnSmith = utilisateurRepository.findUserByLogin("johnsmith");
         if (johnSmith == null) {
             johnSmith = new Utilisateur();
-            johnSmith.setFormation(formation);
+            johnSmith.setFormations(List.of(formation));
             johnSmith.setNom("Smith");
             johnSmith.setPrenom("John");
             johnSmith.setLogin("johnsmith");
@@ -217,7 +217,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur janeDoe = utilisateurRepository.findUserByLogin("janedoe");
         if (janeDoe == null) {
             janeDoe = new Utilisateur();
-            janeDoe.setFormation(formation);
+            janeDoe.setFormations(List.of(formation));
             janeDoe.setNom("Doe");
             janeDoe.setPrenom("Jane");
             janeDoe.setLogin("janedoe");
@@ -233,7 +233,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur aliceJohnson = utilisateurRepository.findUserByLogin("alicejohnson");
         if (aliceJohnson == null) {
             aliceJohnson = new Utilisateur();
-            aliceJohnson.setFormation(formation);
+            aliceJohnson.setFormations(List.of(formation));
             aliceJohnson.setNom("Johnson");
             aliceJohnson.setPrenom("Alice");
             aliceJohnson.setLogin("alicejohnson");
@@ -249,7 +249,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur paulWilliams = utilisateurRepository.findUserByLogin("paulwilliams");
         if (paulWilliams == null) {
             paulWilliams = new Utilisateur();
-            paulWilliams.setFormation(formation);
+            paulWilliams.setFormations(List.of(formation));
             paulWilliams.setNom("Williams");
             paulWilliams.setPrenom("Paul");
             paulWilliams.setLogin("paulwilliams");
@@ -265,7 +265,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur emilyBrown = utilisateurRepository.findUserByLogin("emilybrown");
         if (emilyBrown == null) {
             emilyBrown = new Utilisateur();
-            emilyBrown.setFormation(formation);
+            emilyBrown.setFormations(List.of(formation));
             emilyBrown.setNom("Brown");
             emilyBrown.setPrenom("Emily");
             emilyBrown.setLogin("emilybrown");
@@ -281,7 +281,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur pierreDupont = utilisateurRepository.findUserByLogin("pierredupont");
         if (pierreDupont == null) {
             pierreDupont = new Utilisateur();
-            pierreDupont.setFormation(formation);
+            pierreDupont.setFormations(List.of(formation));
             pierreDupont.setNom("Dupont");
             pierreDupont.setPrenom("Pierre");
             pierreDupont.setLogin("pierredupont");

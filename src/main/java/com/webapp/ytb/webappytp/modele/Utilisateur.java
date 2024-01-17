@@ -60,7 +60,7 @@ public class Utilisateur {
     @Column
     private Integer niveau;
 
-    @ManyToOne
-    @JoinColumn(name = "formation_id")
-    private Formation formation;
+    @ManyToMany
+    @JoinTable(name = "utilisateur_formation", joinColumns = @JoinColumn(name = "utilisateur_id"), inverseJoinColumns = @JoinColumn(name = "formation_id"))
+    private List<Formation> formations;
 }

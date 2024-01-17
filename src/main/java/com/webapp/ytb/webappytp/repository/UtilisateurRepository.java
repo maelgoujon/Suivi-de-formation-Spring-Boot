@@ -22,5 +22,4 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> 
 
     List<Utilisateur> findByRole(UserRole role);
 
-    List<Utilisateur> findByFormation_Id(Long formationId);
 }

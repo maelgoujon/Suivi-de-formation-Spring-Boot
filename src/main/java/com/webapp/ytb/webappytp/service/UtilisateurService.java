@@ -30,7 +30,5 @@ public interface UtilisateurService {
 
     public List<Utilisateur> findUserByFormation(Long formationId);
 
-    public Optional<Formation> findFormationByUtilisateur(Long utilisateurId);
-
     public void generatedExcelForUser(Long userId, HttpServletResponse response) throws Exception;
 }
