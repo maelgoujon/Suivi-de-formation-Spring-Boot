@@ -54,13 +54,13 @@ import com.webapp.ytb.webappytp.service.FormationService;
 
 @Controller
 public class HomeController {
-    
+
     MateriauxAmenagementRepository materiauxAmenagementRepository;
     UtilisateurServiceImpl userServ;
     FicheServiceImpl ficheServ;
     ImagesTitresRepository imagesTitresRepository;
     FicheRepository ficheRepository;
-    
+
     public HomeController(UtilisateurServiceImpl userServ, FicheServiceImpl ficheServ,
             MateriauxAmenagementRepository materiauxAmenagementRepository,
             ImagesTitresRepository imagesTitresRepository, FicheRepository ficheRepository) {
@@ -183,7 +183,7 @@ public class HomeController {
 
     // Ajouter une fiche avec id utilisateur
     @GetMapping("/ajout_fiche/{id}")
-    public String ajout_fiche_id(Model model , @PathVariable Long id) {
+    public String ajout_fiche_id(Model model, @PathVariable Long id) {
         FicheIntervention fiche = new FicheIntervention();
         List<ImagesTitres> imagesTitreIntervenant = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT);
@@ -573,7 +573,20 @@ public class HomeController {
                 || "ROLE_EDUCSIMPLE".equals(utilisateurConnecteRole)) {
             return "redirect:/accueil_admin";
         } else {
-            return "redirect:/select_fiche";
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+            String username;
+            if (principal instanceof UserDetails) {
+                username = ((UserDetails) principal).getUsername();
+            } else {
+                username = principal.toString();
+            }
+
+            // Utilisez le nom d'utilisateur pour obtenir l'ID de l'utilisateur à partir de
+            // votre service d'utilisateur
+            long userId = userServ.findUserByLogin(username).getId();
+
+            return "redirect:/select_fiche/" + userId;
         }
     }
 
@@ -690,8 +703,10 @@ public class HomeController {
             return "redirect:/accueil";
         }
     }
+
     @Autowired
     private FormationService formationService;
+
     @GetMapping("/modif_admin/{id}")
     public String modifadmin(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         // Récupérez les rôles définis dans l'enum UserRole
@@ -739,9 +754,10 @@ public class HomeController {
 
     @GetMapping("/select_fiche/{userId}")
     public String select_fiche(Model model, @PathVariable Long userId) {
-        List<FicheIntervention> fiches = ficheServ.lireTout(); // Ajout de la liste des fiches
+        // List<FicheIntervention> fiches = ficheServ.lireTout(); // Ajout de la liste
+        // des fiches
 
-        //List<FicheIntervention> fiches = ficheServ.getFichesByUserId(id); // Ajout de la liste des fiches
+        List<FicheIntervention> fiches = ficheServ.getFichesByUserId(userId); // Ajout de la liste des fiches
         Utilisateur userrr = userServ.findById(userId);
         model.addAttribute("userrr", userrr);
         model.addAttribute("fiche", new FicheIntervention());
@@ -796,12 +812,14 @@ public class HomeController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
     @GetMapping("/fiche/liste_fiche_id/{id}")
-    public String showCreateInterventionFormId(Model model , @PathVariable Long id) {
+    public String showCreateInterventionFormId(Model model, @PathVariable Long id) {
 
         List<FicheIntervention> fiches = ficheServ.lireTout(); // Ajout de la liste des fiches
 
-        //List<FicheIntervention> fiches = ficheServ.getFichesByUserId(id); // Ajout de la liste des fiches
+        // List<FicheIntervention> fiches = ficheServ.getFichesByUserId(id); // Ajout de
+        // la liste des fiches
         Utilisateur userrr = userServ.findById(id);
         model.addAttribute("userrr", userrr);
         model.addAttribute("fiche", new FicheIntervention());
