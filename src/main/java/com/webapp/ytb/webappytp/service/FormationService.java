@@ -22,4 +22,6 @@ public interface FormationService {
     public void ajouterUtilisateurALaFormation(Long utilisateurId, Long formationId);
 
     public void retirerUtilisateurDeLaFormation(Long utilisateurId, Long formationId);
+
+    public void supprimerFormationAvecUtilisateurs(Long formationId);
 }

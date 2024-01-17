@@ -50,7 +50,7 @@ public class FormationController {
     @PostMapping("/supprimerFormation")
     public String supprimerFormation(@RequestParam Long formationId, RedirectAttributes redirectAttributes) {
         try {
-            formationService.supprimer(formationId);
+            formationService.supprimerFormationAvecUtilisateurs(formationId);
             redirectAttributes.addFlashAttribute("success", "Formation supprimée avec succès");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error",
