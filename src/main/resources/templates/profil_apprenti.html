@@ -50,7 +50,7 @@
       </a>
 
       <!-- Header admin -->
-      <a th:if="${utilisateurConnecteRole == 'ROLE_ADMIN'}">
+      <a th:if="${utilisateurConnecteRole == 'ROLE_ADMIN' or utilisateurConnecteRole == 'ROLE_CIP' or utilisateurConnecteRole == 'ROLE_EDUCSIMPLE'}">
           <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color" style="background-color: #bbdefb;">
               <a href="accueil_admin" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
                   <svg class="bi me-2" width="40" height="32">
@@ -104,6 +104,11 @@
                                   <img src="/images/yeux.png" alt="Voir fiche" class="modifimg me-2 small-img" />
                                   Voir ses fiches
                               </a>
+                              <!-- S'affiche que si on est en cip -->
+                              <a th:if="${utilisateurConnecteRole == 'ROLE_CIP'}" th:href="@{'/suivi_progression/' + ${utilisateur.id}}" class="btn btn-success small-btn">
+                                <img src="/images/yeux.png" alt="Suivi parcours" class="modifimg me-2 small-img" />
+                                Suivi parcours
+                            </a>
                           </div>
                       </div>
                   </div>

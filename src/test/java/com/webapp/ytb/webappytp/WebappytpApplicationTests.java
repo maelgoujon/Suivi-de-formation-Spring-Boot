@@ -24,15 +24,17 @@ class WebappytpApplicationTests {
 	// ------Tests UserRole-------//
 	// ---------------------------//
 
-	// Valeurs possibles : ADMIN SUPERADMIN USER
+	// Valeurs possibles : ADMIN SUPERADMIN USER CIP EDUCSIMPLE
 	@Test
     public void UserRoleValues() {
         UserRole[] roles = UserRole.values();
-        assertEquals(3, roles.length, "UserRole doit avoir exactement trois valeurs");
+        assertEquals(5, roles.length, "UserRole doit avoir exactement 5 valeurs");
         assertTrue(Arrays.asList(roles).contains(UserRole.ADMIN), "UserRole doit contenir ADMIN");
         assertTrue(Arrays.asList(roles).contains(UserRole.SUPERADMIN), "UserRole doit contenir SUPERADMIN");
         assertTrue(Arrays.asList(roles).contains(UserRole.USER), "UserRole doit contenir USER");
-    }
+		assertTrue(Arrays.asList(roles).contains(UserRole.CIP), "UserRole doit contenir CIP");
+		assertTrue(Arrays.asList(roles).contains(UserRole.EDUCSIMPLE), "UserRole doit contenir EDUCSIMPLE");
+	}
 
 	// ---------------------------//
 	// ----Tests Utilisateurs-----//
