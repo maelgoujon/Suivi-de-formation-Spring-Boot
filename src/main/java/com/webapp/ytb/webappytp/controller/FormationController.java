@@ -106,7 +106,7 @@ public class FormationController {
             throw new RuntimeException("Formation not found with ID: " + id_formation);
         }
 
-        response.setContentType("application/vnd.ms-excel"); // Change the content type to Excel
+        response.setContentType("application/vnd.ms-excel");
         String headerKey = "Content-Disposition";
         String formationNameForFile = formation.getNom().replace(" ", "_");
         String headerValue = "attachment; filename=archive_formation_" + formationNameForFile + ".xls";

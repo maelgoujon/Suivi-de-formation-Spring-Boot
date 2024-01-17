@@ -172,10 +172,11 @@ public class UtilisateurController {
             throw new RuntimeException("User not found with ID: " + userId);
         }
     
-        response.setContentType("application/octet-stream");
+        response.setContentType("application/vnd.ms-excel");
         String headerKey = "Content-Disposition";
         String userNameForFile = utilisateur.getNom().replace(" ", "_");
-        String headerValue = "attachment; filename=archive_user_" + userNameForFile + ".xls";
+        String userFirstNameForFile = utilisateur.getPrenom().replace(" ", "_");
+        String headerValue = "attachment; filename=archive_apprenti_" + userNameForFile + userFirstNameForFile + ".xls";
         response.setHeader(headerKey, headerValue);
     
         utilisateurService.generatedExcelForUser(userId, response);
