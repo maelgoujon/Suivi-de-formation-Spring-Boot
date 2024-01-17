@@ -1,209 +1,151 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
-  <html>
-    <head>
-      <meta charset="UTF-8" />
-      <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <!-- Ajoutez les liens vers les fichiers CSS Bootstrap ici -->
-      <link href="/css/bootstrap.min.css" rel="stylesheet" />
-      <link href="/css/accueil.css" rel="stylesheet">
-      <!-- Ajoutez les liens vers les fichiers JavaScript Bootstrap et jQuery ici -->
-      <script src="/js/jquery-3.2.1.slim.min.js"></script>
-      <script src="/js/popper.min.js"></script>
-      <script src="/js/bootstrap.bundle.min.js"></script>      
-      <title>Choisir fiche d'intervention</title>
+<html>
 
-    </head>
-    <body>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Ajoutez les liens vers les fichiers CSS Bootstrap ici -->
+  <link href="/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/css/accueil.css" rel="stylesheet">
+  <!-- Ajoutez les liens vers les fichiers JavaScript Bootstrap et jQuery ici -->
+  <script src="/js/jquery-3.2.1.slim.min.js"></script>
+  <script src="/js/popper.min.js"></script>
+  <script src="/js/bootstrap.bundle.min.js"></script>
+  <title>Choisir fiche d'intervention</title>
 
-          <!-- Barre de navigation Bootstrap -->
-    <nav class="navbar bg-body-tertiary">
-      <div class="container d-flex justify-content-between align-items-center">
-          <!-- Bouton gauche pour le mot de passe oublié -->
-          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modalMdpOublie">
-              <img src="/images/mdp_oublie.png" alt="Mot de Passe Oublié?" width="50" height="50">
-          </button>
+</head>
 
-          <!-- Logo accueil au centre -->
-          <a class="navbar-brand mx-auto" href="/">
-              <img src="/images/accueil.png" alt="Accueil" width="50" height="50">
-          </a>
+<body>
 
-          <!-- Bouton droit pour l'admin -->
-          <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modalConnexionAdmin">
-              <img src="/images/admin.png" alt="Connexion Admin" width="50" height="50">
-              Admin
-          </button>
-      </div>
+  <!-- Barre de navigation Bootstrap -->
+  <nav class="navbar bg-body-tertiary">
+    <div class="container d-flex justify-content-between align-items-center">
+      <!-- Bouton gauche pour le mot de passe oublié -->
+      <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modalMdpOublie">
+        <img src="/images/mdp_oublie.png" alt="Mot de Passe Oublié?" width="50" height="50">
+      </button>
+
+      <!-- Logo accueil au centre -->
+      <a class="navbar-brand mx-auto" href="/">
+        <img src="/images/accueil.png" alt="Accueil" width="50" height="50">
+      </a>
+
+      <!-- Bouton droit pour l'admin -->
+      <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modalConnexionAdmin">
+        <img src="/images/admin.png" alt="Connexion Admin" width="50" height="50">
+        Admin
+      </button>
+    </div>
   </nav>
   <div class="modal fade" id="modalMdpOublie" tabindex="-1" aria-labelledby="modalMdpOublieLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalMdpOublieLabel">Réinitialisation du mot de passe</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-            </div>
-            <div class="modal-body">
-                <p>Demander de l'aide à un formateur <img type="button" src="/images/son.png" alt="Lire le nom"
-                        onclick="lireTexte('Demander de l\'aide à un formateur')" style="width: 20px;"></p>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalMdpOublieLabel">Réinitialisation du mot de passe</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
         </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modalConnexionAdmin" tabindex="-1" aria-labelledby="modalConnexionAdminLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalConnexionAdminLabel">Connexion Admin</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-            </div>
-            <div class="modal-body">
-                <form id="adminLoginForm" th:action="@{/login}" method="post">
-                    <div class="mb-3">
-                        <label for="adminUsername" class="form-label">Nom d'utilisateur</label>
-                        <input type="text" class="form-control" id="adminUsername" name="username" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="adminPassword" class="form-label">Mot de passe</label>
-                        <input type="password" class="form-control" id="adminPassword" name="password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Se Connecter</button>
-                    <button type="button" class="btn btn-secondary" data-bs-container="body"
-                        data-bs-toggle="popover" data-bs-placement="bottom"
-                        data-bs-content="Demander de l'aide au SUPERADMIN">
-                        Mot de Passe Oublié ?
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-      <div class="container">
-        <div class="title">
-          <h4>
-            Choisir une fiche d'intervention<img
-              src="/images/son.png"
-              alt="Lire le nom"
-              onclick="lireTexte('Choisir une fiche d intervention')"
-              style="width: 20px; margin: 5px"
-            />
-          </h4>
-          <img class="image2" src="/images/assignment_icon.png" />
-        </div>
-
-        <div class="fInters" id="Inters ">
-          <div class="fInter" th:classappend="${selectedPaper == 'Plomberie' ? 'fInter selected' : ''}" th:onclick="selectPaper('Plomberie')">
-            <p class="name" th:href="@{/index(sujet='Plomberie')}">
-              Plomberie<img
-                src="/images/son.png"
-                alt="Lire le nom"
-                onclick="lireTexte('Plomberie')"
-                style="width: 20px; margin: 5px"
-              />
-            </p>
-          </div>
-          <div class="fInter" th:classappend="${selectedPaper == 'Finition' ? 'fInter selected' : ''}" th:onclick="selectPaper('Finition')">
-            <p class="name" th:href="@{/index(sujet='Finition')}">
-              Finition<img
-                src="/images/son.png"
-                alt="Lire le nom"
-                onclick="lireTexte('Finition')"
-                style="width: 20px; margin: 5px"
-              />
-            </p>
-          </div>
-          <div class="fInter" th:classappend="${selectedPaper == 'Serruerie' ? 'fInter selected' : ''}" th:onclick="selectPaper('Serruerie')">
-            <p class="name" th:href="@{/index(sujet='Serruerie')}">
-              Serruerie<img
-                src="/images/son.png"
-                alt="Lire le nom"
-                onclick="lireTexte('Serruerie')"
-                style="width: 20px; margin: 5px"
-              />
-            </p>
-          </div>
-          <div class="fInter">
-            <div class="static" th:classappend="${selectedPaper == 'Aménagement' ? 'fInter selected' : ''}" th:onclick="selectPaper('Aménagement')">
-              <p class="name" th:href="@{/index(sujet='Aménagement')}">
-                Aménagement<img
-                  src="/images/son.png"
-                  alt="Lire le nom"
-                  onclick="lireTexte('Aménagement')"
-                  style="width: 20px; margin: 5px"
-                >
-              </p>
-            </div>
-          </div>
-          <div class="fInter" th:classappend="${selectedPaper == 'Electricité' ? 'fInter selected' : ''}" th:onclick="selectPaper('Electricité')">
-            <p class="name" th:href="@{/index(sujet='Electricité')}">
-              Électricité<img
-                src="/images/son.png"
-                alt="Lire le nom"
-                onclick="lireTexte('Electricité')"
-                style="width: 20px; margin: 5px"
-              />
-            </p>
-          </div>
-        </div>
-        <div class="buttonADD" th:if="${selectedPaper != null}">
-          <button id="add">Se connecter</button>
-          <!--<a id="add" href="/fiche/creer_intervention"><img src="/images/logo_plus.png" class="image" /></a>-->
+        <div class="modal-body">
+          <p>Demander de l'aide à un formateur <img type="button" src="/images/son.png" alt="Lire le nom"
+              onclick="lireTexte('Demander de l\'aide à un formateur')" style="width: 20px;"></p>
         </div>
       </div>
-    </body>
-    <script>
-      const Inters = document.getElementById('Inters');
-      const addButton = document.getElementById("add");
+    </div>
+  </div>
 
-      let selectedPaper = null;
+  <div class="modal fade" id="modalConnexionAdmin" tabindex="-1" aria-labelledby="modalConnexionAdminLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalConnexionAdminLabel">Connexion Admin</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+        </div>
+        <div class="modal-body">
+          <form id="adminLoginForm" th:action="@{/login}" method="post">
+            <div class="mb-3">
+              <label for="adminUsername" class="form-label">Nom d'utilisateur</label>
+              <input type="text" class="form-control" id="adminUsername" name="username" required>
+            </div>
+            <div class="mb-3">
+              <label for="adminPassword" class="form-label">Mot de passe</label>
+              <input type="password" class="form-control" id="adminPassword" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Se Connecter</button>
+            <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover"
+              data-bs-placement="bottom" data-bs-content="Demander de l'aide au SUPERADMIN">
+              Mot de Passe Oublié ?
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    function selectPaper(sujet) {
-      if (selectedPaper === sujet) {
-        deselectPaper();
-      } else {
-        if (selectedPaper) {
-            Inters.querySelector(`[th:onclick*="${selectedPaper}"]`).classList.remove('selected');
-        }
-        const paper = Inters.querySelector(`[th:onclick*="${sujet}"]`);
-        paper.classList.add('selected');
-        selectedPaper = sujet;
-        addButton.style.display = 'block';
-      }
-    }
+  <div class="row">
+    <div th:each="fiche : ${fiches}" class="col-4 d-flex flex-column align-items-center"
+      th:onclick="'window.location.href=\'/fiche/modifier/' + ${fiche.id} + '\''">
+      <img class="image2" src="/images/assignment_icon.png" style="height: 20rem;">
+      <h2 th:text="${#temporals.format(fiche.Demande.dateDemande, 'dd/MM/yyyy')}"></h2>
+        </div>
+  </div>
 
-    function deselectPaper() {
+</body>
+<script>
+  const Inters = document.getElementById('Inters');
+  const addButton = document.getElementById("add");
+
+  let selectedPaper = null;
+
+  function formatDate(date) {
+    var parts = date.split('-');
+    return parts[2] + '/' + parts[1] + '/' + parts[0];
+  }
+
+  function selectPaper(sujet) {
+    if (selectedPaper === sujet) {
+      deselectPaper();
+    } else {
       if (selectedPaper) {
         Inters.querySelector(`[th:onclick*="${selectedPaper}"]`).classList.remove('selected');
-        selectedPaper = null;
-        addButton.style.display = 'none';
       }
+      const paper = Inters.querySelector(`[th:onclick*="${sujet}"]`);
+      paper.classList.add('selected');
+      selectedPaper = sujet;
+      addButton.style.display = 'block';
     }
+  }
 
-    Inters.addEventListener('click', (event) => {
-      const paper = event.target.closest('.fInter');
-      if (paper) {
-        selectPaper(paper);
-      }
-    });
-
-    addButton.addEventListener("click", () => {
-      if (selectedPaper) {
-        window.location.href = 'index.html';
-      }
-    });
-
-    function lireTexte(texte) {
-      const syntheseVocale = window.speechSynthesis;
-      const message = new SpeechSynthesisUtterance(texte);
-      syntheseVocale.speak(message);
+  function deselectPaper() {
+    if (selectedPaper) {
+      Inters.querySelector(`[th:onclick*="${selectedPaper}"]`).classList.remove('selected');
+      selectedPaper = null;
+      addButton.style.display = 'none';
     }
+  }
 
-    </script>
-  </html>
+  Inters.addEventListener('click', (event) => {
+    const paper = event.target.closest('.fInter');
+    if (paper) {
+      selectPaper(paper);
+    }
+  });
+
+  addButton.addEventListener("click", () => {
+    if (selectedPaper) {
+      window.location.href = 'index.html';
+    }
+  });
+
+  function lireTexte(texte) {
+    const syntheseVocale = window.speechSynthesis;
+    const message = new SpeechSynthesisUtterance(texte);
+    syntheseVocale.speak(message);
+  }
+
+</script>
+
+</html>
+
 </html>

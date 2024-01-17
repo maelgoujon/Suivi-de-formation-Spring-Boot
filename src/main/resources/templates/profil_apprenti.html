@@ -1,122 +1,154 @@
 <!DOCTYPE html>
 <div lang="fr" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Ajoutez les liens vers les fichiers CSS Bootstrap ici -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/css/accueil.css" rel="stylesheet" />
-    <!-- Ajoutez les liens vers les fichiers JavaScript Bootstrap et jQuery ici -->
-    <script src="/js/jquery-3.2.1.slim.min.js"></script>
-    <script src="/js/popper.min.js"></script>
-    <script src="/js/bootstrap.bundle.min.js"></script>
-    <style>
-      .small-btn {
-          padding: 0.2rem 0.5rem;
-          font-size: 0.8rem;
-      }
-      .small-img {
-          max-width: 40px;
-          max-height: 40px;
-      }
-    </style>
+        <!-- Ajoutez les liens vers les fichiers CSS Bootstrap ici -->
+        <link href="/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="/css/accueil.css" rel="stylesheet" />
+        <!-- Ajoutez les liens vers les fichiers JavaScript Bootstrap et jQuery ici -->
+        <script src="/js/jquery-3.2.1.slim.min.js"></script>
+        <script src="/js/popper.min.js"></script>
+        <script src="/js/bootstrap.bundle.min.js"></script>
+        <style>
 
-    <title>Profil apprenti</title>
+            .small-btn {
+                padding: 0.2rem 0.5rem;
+                font-size: 0.8rem;
+            }
 
-</head>
+            .small-img {
+                max-width: 40px;
+                max-height: 40px;
+            }
+        </style>
 
-<body>
-  <div>
+        <title>Profil apprenti</title>
 
-      <!-- Header super admin -->
-      <a th:if="${utilisateurConnecteRole == 'ROLE_SUPERADMIN'}">
-          <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color" style="background-color: #bbdefb;">
-              <!-- Fond du header en #2596be -->
-              <a href="accueil_admin" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-                  <svg class="bi me-2" width="40" height="32">
-                      <use xlink:href="#bootstrap"></use>
-                  </svg>
-                  <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
-              </a>
+    </head>
 
-              <ul class="nav nav-pills">
-                  <li class="nav-item"><a href="../../accueil_superadmin" class="nav-link active text-white fs-5" aria-current="page">Accueil</a></li>
-                  <li class="nav-item"><a href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing" class="nav-link text-black fs-5">Aide</a></li>
-                  <li class="nav-item"><a href="../log_out" class="nav-link text-black fs-5">Se déconnecter</a></li>
-              </ul>
-          </header>
-      </a>
+    <body>
+        <div>
 
-      <!-- Header admin -->
-      <a th:if="${utilisateurConnecteRole == 'ROLE_ADMIN' or utilisateurConnecteRole == 'ROLE_CIP' or utilisateurConnecteRole == 'ROLE_EDUCSIMPLE'}">
-          <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color" style="background-color: #bbdefb;">
-              <a href="accueil_admin" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-                  <svg class="bi me-2" width="40" height="32">
-                      <use xlink:href="#bootstrap"></use>
-                  </svg>
-                  <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
-              </a>
+            <!-- Header super admin -->
+            <a th:if="${utilisateurConnecteRole == 'ROLE_SUPERADMIN'}">
+                <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color"
+                    style="background-color: #bbdefb;">
+                    <!-- Fond du header en #2596be -->
+                    <a href="accueil_admin"
+                        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32">
+                            <use xlink:href="#bootstrap"></use>
+                        </svg>
+                        <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
+                    </a>
 
-              <ul class="nav nav-pills">
-                  <li class="nav-item"><a href="../accueil_admin" class="nav-link text-white fs-5 active" aria-current="page">Accueil</a></li>
-                  <li class="nav-item"><a href="../fiche/liste_fiche" class="nav-link text-black fs-5 ">Voir les fiches</a></li>
-                  <li class="nav-item"><a href="../profil_admin" class="nav-link text-black fs-5">Votre profil</a></li>
-                  <li class="nav-item"><a href="../archive" class="nav-link text-black fs-5">Archive</a></li>
-                  <li class="nav-item"><a href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing" class="nav-link text-black fs-5">Aide</a></li>
-                  <li class="nav-item"><a href="../log_out" class="nav-link text-black fs-5">Se déconnecter</a></li>
-              </ul>
-          </header>
-      </a>
+                    <ul class="nav nav-pills">
+                        <li class="nav-item"><a href="../../accueil_superadmin" class="nav-link active text-white fs-5"
+                                aria-current="page">Accueil</a></li>
+                        <li class="nav-item"><a
+                                href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
+                                class="nav-link text-black fs-5">Aide</a></li>
+                        <li class="nav-item"><a href="../log_out" class="nav-link text-black fs-5">Se déconnecter</a>
+                        </li>
+                    </ul>
+                </header>
+            </a>
 
-      <div class="encadre p-4 bg-light">
-          <div class="container mt-5">
-              <h2>Profil de : <span th:text="${utilisateur.nom}"></span> <span th:text="${utilisateur.prenom}"></span></h2>
-              <div class="card mt-3">
-                  <div class="card-body">
-                      <p class="card-text"><strong>Login: </strong> <span th:text="${utilisateur.login}"></span></p>
-                      <p class="card-text"><strong>Photo: </strong></p>
-                      <img th:src="${utilisateur.photoBase64}" alt="Photo de l'utilisateur" class="img-fluid rounded" style="max-width: 200px; max-height: 200px;">
-                      <p th:if="${utilisateur.description != null and not #strings.isEmpty(utilisateur.description)}" class="mt-3">
-                          <strong>Description: </strong><span th:text="${utilisateur.description}"></span>
-                      </p>
+            <!-- Header admin -->
+            <a
+                th:if="${utilisateurConnecteRole == 'ROLE_ADMIN' or utilisateurConnecteRole == 'ROLE_CIP' or utilisateurConnecteRole == 'ROLE_EDUCSIMPLE'}">
+                <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color"
+                    style="background-color: #bbdefb;">
+                    <a href="accueil_admin"
+                        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32">
+                            <use xlink:href="#bootstrap"></use>
+                        </svg>
+                        <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
+                    </a>
 
-                      <div class="text-center">
-                          <div class="modifier">
-                              <a th:if="${utilisateurConnecteRole == 'ROLE_SUPERADMIN'}" th:href="@{'/modif/' + ${utilisateur.id}}" class="btn btn-primary small-btn">
-                                  <img src="/images/modif.png" alt="Modifier un apprenti" class="modifimg me-2 small-img" />
-                                  Modifier profil
-                              </a>
+                    <ul class="nav nav-pills">
+                        <li class="nav-item"><a href="../accueil_admin" class="nav-link text-white fs-5 active"
+                                aria-current="page">Accueil</a></li>
+                        <li class="nav-item"><a href="../fiche/liste_fiche" class="nav-link text-black fs-5 ">Voir les
+                                fiches</a></li>
+                        <li class="nav-item"><a href="../profil_admin" class="nav-link text-black fs-5">Votre profil</a>
+                        </li>
+                        <li class="nav-item"><a href="../archive" class="nav-link text-black fs-5">Archive</a></li>
+                        <li class="nav-item"><a
+                                href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
+                                class="nav-link text-black fs-5">Aide</a></li>
+                        <li class="nav-item"><a href="../log_out" class="nav-link text-black fs-5">Se déconnecter</a>
+                        </li>
+                    </ul>
+                </header>
+            </a>
 
-                              <a th:if="${utilisateurConnecteRole == 'ROLE_SUPERADMIN'}" href="utilisateur/supprimer" class="btn btn-danger small-btn">
-                                  <img src="/images/archive.png" alt="Archiver un apprenti" class="archiveimg me-2 small-img" />
-                                  Archiver le profil
-                              </a>
+            <div class="encadre p-4 bg-light">
+                <div class="container mt-5">
+                    <h2>Profil de : <span th:text="${utilisateur.nom}"></span> <span
+                            th:text="${utilisateur.prenom}"></span></h2>
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <p class="card-text"><strong>Login: </strong> <span th:text="${utilisateur.login}"></span>
+                            </p>
+                            <p class="card-text"><strong>Photo: </strong></p>
+                            <img th:src="${utilisateur.photoBase64}" alt="Photo de l'utilisateur"
+                                class="img-fluid rounded" style="max-width: 200px; max-height: 200px;">
+                            <p th:if="${utilisateur.description != null and not #strings.isEmpty(utilisateur.description)}"
+                                class="mt-3">
+                                <strong>Description: </strong><span th:text="${utilisateur.description}"></span>
+                            </p>
 
-                              <!-- S'affiche que si on est en admin -->
-                              <a th:if="${utilisateurConnecteRole == 'ROLE_ADMIN'}" href="/ajout_fiche" class="btn btn-success small-btn">
-                                  <img src="/images/plus.png" alt="Ajouter une fiche" class="modifimg me-2 small-img" />
-                                  Ajouter une fiche
-                              </a>
+                            <div class="text-center">
+                                <div class="modifier">
+                                    <a th:if="${utilisateurConnecteRole == 'ROLE_SUPERADMIN'}"
+                                        th:href="@{'/modif/' + ${utilisateur.id}}" class="btn btn-primary small-btn">
+                                        <img src="/images/modif.png" alt="Modifier un apprenti"
+                                            class="modifimg me-2 small-img" />
+                                        Modifier profil
+                                    </a>
 
-                              <a th:if="${utilisateurConnecteRole == 'ROLE_ADMIN' or utilisateurConnecteRole == 'ROLE_CIP' or utilisateurConnecteRole == 'ROLE_EDUCSIMPLE'}" th:href="@{'/liste_fiche/' + ${utilisateur.id}}" class="btn btn-info small-btn">
-                                  <img src="/images/yeux.png" alt="Voir fiche" class="modifimg me-2 small-img" />
-                                  Voir ses fiches
-                              </a>
-                              <!-- S'affiche que si on est en cip -->
-                              <a th:if="${utilisateurConnecteRole == 'ROLE_CIP'}" th:href="@{'/suivi_progression/' + ${utilisateur.id}}" class="btn btn-success small-btn">
-                                <img src="/images/yeux.png" alt="Suivi parcours" class="modifimg me-2 small-img" />
-                                Suivi parcours
-                            </a>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-    </div>
+                                    <a th:if="${utilisateurConnecteRole == 'ROLE_SUPERADMIN'}"
+                                        href="utilisateur/supprimer" class="btn btn-danger small-btn">
+                                        <img src="/images/archive.png" alt="Archiver un apprenti"
+                                            class="archiveimg me-2 small-img" />
+                                        Archiver le profil
+                                    </a>
 
-</body>
+                                    <!-- S'affiche que si on est en admin -->
+                                    <a th:if="${utilisateurConnecteRole == 'ROLE_ADMIN'}"
+                                        th:href="@{/ajout_fiche/{id}(id=${utilisateur.id})}"
+                                        class="btn btn-outline-primary small-btn">
+                                        <img src="/images/plus.png" alt="Ajouter une fiche"
+                                            class="modifimg me-2 small-img" />
+                                        Ajouter une fiche
+                                    </a>
 
-</html>
+                                    <a th:if="${utilisateurConnecteRole == 'ROLE_ADMIN' or utilisateurConnecteRole == 'ROLE_CIP' or utilisateurConnecteRole == 'ROLE_EDUCSIMPLE'}"
+                                        th:href="@{'/fiche/liste_fiche_id/' + ${utilisateur.id}}" class="btn btn-outline-primary small-btn">
+                                        <img src="/images/yeux.png" alt="Voir fiche" class="modifimg me-2 small-img" />
+                                        Voir ses fiches
+                                    </a>
+                                    <!-- S'affiche que si on est en cip -->
+                                    <a th:if="${utilisateurConnecteRole == 'ROLE_CIP'}"
+                                        th:href="@{'/suivi_progression/' + ${utilisateur.id}}"
+                                        class="btn btn-outline-primary small-btn">
+                                        <img src="/images/yeux.png" alt="Suivi parcours"
+                                            class="modifimg me-2 small-img" />
+                                        Suivi parcours
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+    </html>

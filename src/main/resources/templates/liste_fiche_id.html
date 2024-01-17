@@ -70,12 +70,12 @@
     </a>
 
     <ul class="nav nav-pills">
-        <li class="nav-item"><a href="../accueil_admin" class="nav-link text-black fs-5" aria-current="page">Accueil</a></li>
-        <li class="nav-item"><a href="fiche/liste_fiche" class="nav-link text-white fs-5 active">Voir les fiches</a></li>
-        <li class="nav-item"><a href="../profil_admin" class="nav-link text-black fs-5">Votre profil</a></li>
-        <li class="nav-item"><a href="../archive" class="nav-link text-black fs-5">Archive</a></li>
+        <li class="nav-item"><a href="../../accueil_admin" class="nav-link text-black fs-5" aria-current="page">Accueil</a></li>
+        <li class="nav-item"><a href="../fiche/liste_fiche" class="nav-link text-white fs-5 active">Voir les fiches</a></li>
+        <li class="nav-item"><a href="../../profil_admin" class="nav-link text-black fs-5">Votre profil</a></li>
+        <li class="nav-item"><a href="../../archive" class="nav-link text-black fs-5">Archive</a></li>
         <li class="nav-item"><a href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing" class="nav-link text-black fs-5">Aide</a></li>
-        <li class="nav-item"><a href="../log_out" class="nav-link text-black fs-5">Se déconnecter</a></li>
+        <li class="nav-item"><a href="../../log_out" class="nav-link text-black fs-5">Se déconnecter</a></li>
     </ul>
 </header>
 
@@ -223,7 +223,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr th:each="fiche : ${fiches}">
+          <tr th:each="fiche : ${fiches}" th:if="${fiche.utilisateur.nom == userrr.nom}">
+            <td id="tdNomIntervenant" th:text="${fiche.utilisateur.nom} + ' ' + ${fiche.utilisateur.prenom}"></td>
             <td id="tdNomDemandeur" th:text="${fiche.nomDemandeur}"></td>
             <td id="tdDateDemande" th:text="${fiche.dateDemande}" style="display: none"></td>
             <td id="tdDateIntervention" th:text="${fiche.DateIntervention}"></td>
