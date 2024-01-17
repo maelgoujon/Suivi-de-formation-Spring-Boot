@@ -173,7 +173,7 @@ public class HomeController {
         model.addAttribute("imagesTitreMaintenanceType", imagesTitreMaintenanceType);
 
         model.addAttribute("fiche", fiche);
-        model.addAttribute("users", userServ.lire());
+        model.addAttribute("users", userServ.getUtilisateursByRole("USER"));
         return "fiche_a_completer";
     }
 
