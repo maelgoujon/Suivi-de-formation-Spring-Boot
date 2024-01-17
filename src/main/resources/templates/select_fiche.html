@@ -84,6 +84,34 @@
 
 
 
+
+<tbody>
+  <tr th:each="fiche : ${fiches}" th:if="${fiche.utilisateur.nom == userrr.nom}">
+    <td id="tdNomIntervenant" th:text="${fiche.utilisateur.nom} + ' ' + ${fiche.utilisateur.prenom}"></td>
+    <td id="tdNomDemandeur" th:text="${fiche.nomDemandeur}"></td>
+    <td id="tdDateDemande" th:text="${fiche.dateDemande}" style="display: none"></td>
+    <td id="tdDateIntervention" th:text="${fiche.DateIntervention}"></td>
+    <td id="tdDateCreation" th:text="${fiche.dateCreation}"></td>
+    <td id="tdDegreUrgence" th:text="${fiche.DegreUrgence}" style="display: none"></td>
+    <td id="tdTypeIntervention" th:text="${fiche.maintenanceType}"></td>
+    <td id="tdNatureIntervention" th:text="${fiche.typeIntervention}"></td>
+    <td id="tdEtatFicheFinie" th:text="${fiche.etatFicheFinie ? 'Oui' : 'Non'}"></td>
+    <td id="tdNouvelleIntervention" th:text="${fiche.nouvelleIntervention ? 'Oui' : 'Non'}"></td>
+    <td id="tdDureeIntervention" style="display: none" th:text="${fiche.dureeIntervention}"></td>
+    <td id="tdLocalisation" style="display: none" th:text="${fiche.localisation}"></td>
+    <td id="tdDescriptionDemande" style="display: none" th:text="${fiche.description}"></td>
+    <td id="tdTravauxRealises" style="display: none" th:text="${fiche.travauxRealises}"></td>
+    <td id="tdTravauxNonRealises" style="display: none" th:text="${fiche.travauxNonRealises}"></td>
+    <td id="tdFiche">
+      <a th:href="@{/fiche/{id}(id=${fiche.id})}">Voir détails</a>
+    </td>
+    <td id="tdEvaluation">
+      <a th:href="@{/record/{id}(id=${fiche.id})}">Laisser une évaluation</a>
+      <a th:href="@{/recordaffichage/{id}(id=${fiche.id})}">Ecouter l'évaluation</a>
+    </td>
+  </tr>
+</tbody>
+
       <div class="container">
         <div class="title">
           <h4>

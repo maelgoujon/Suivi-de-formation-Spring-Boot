@@ -737,8 +737,15 @@ public class HomeController {
         return "log_out";
     }
 
-    @GetMapping("/select_fiche")
-    public String select_fiche() {
+    @GetMapping("/select_fiche/{userId}")
+    public String select_fiche(Model model, @PathVariable Long userId) {
+        List<FicheIntervention> fiches = ficheServ.lireTout(); // Ajout de la liste des fiches
+
+        //List<FicheIntervention> fiches = ficheServ.getFichesByUserId(id); // Ajout de la liste des fiches
+        Utilisateur userrr = userServ.findById(userId);
+        model.addAttribute("userrr", userrr);
+        model.addAttribute("fiche", new FicheIntervention());
+        model.addAttribute("fiches", fiches);
         return "select_fiche";
     }
 
