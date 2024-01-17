@@ -73,11 +73,14 @@
                 </div>
 
                 <label for="formationID" class="col-md-2 col-form-label">Formation:</label>
-                <div class="col-md-4">
-                    <select id="formationID" name="formationID" th:field="*{formation.id}" class="form-control">
-                        <option th:each="formation : ${allFormations}" th:value="${formation.id}" th:text="${formation.nom}"></option>
-                    </select>
-                </div>
+                    <div class="col-md-4">
+                        <select id="formationID" name="formationID" th:field="*{formations}" multiple
+                            class="form-control">
+                            <option th:each="formation : ${allFormations}" th:value="${formation.id}"
+                                th:text="${formation.nom}"
+                                th:selected="${#lists.contains(utilisateur.formations, formation)}"></option>
+                        </select>
+                    </div>
 
                 <label for="niveauSelect" id="niveauLabel" class="col-md-2 col-form-label">Niveau:</label>
                 <div class="col-md-4">
