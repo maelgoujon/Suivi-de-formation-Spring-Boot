@@ -117,7 +117,7 @@ public class Demarrage implements ApplicationRunner {
 
         // Creation Formation 2
         Formation formation2 = new Formation();
-        formation2.setNom("Nom Formation");
+        formation2.setNom("Formation 2");
         formation2.setNiveau_qualif("CAP 1ere Annee");
         formation2.setDescription("Description Formation2");
         formationRepository.save(formation2);
@@ -126,7 +126,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur admin = utilisateurRepository.findUserByLogin("admin");
         if (admin == null) {
             admin = new Utilisateur();
-            admin.setFormations(List.of(formation));
+            admin.setFormations(List.of(formation, formation2));
             admin.setNom("Admin");
             admin.setPrenom("Admin");
             admin.setLogin("admin");
@@ -140,7 +140,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur educsimple = utilisateurRepository.findUserByLogin("educsimple");
         if (educsimple == null) {
             educsimple = new Utilisateur();
-            educsimple.setFormations(List.of(formation2));
+            educsimple.setFormations(List.of(formation,formation2));
             educsimple.setNom("Educ");
             educsimple.setPrenom("Simple");
             educsimple.setLogin("educsimple");
@@ -155,7 +155,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur superadmin = utilisateurRepository.findUserByLogin("superadmin");
         if (superadmin == null) {
             superadmin = new Utilisateur();
-            superadmin.setFormations(List.of(formation));
+            superadmin.setFormations(List.of(formation,formation2));
             superadmin.setNom("Super");
             superadmin.setPrenom("Admin");
             superadmin.setLogin("superadmin");
@@ -169,7 +169,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur CIP = utilisateurRepository.findUserByLogin("CIP");
         if (CIP == null) {
             CIP = new Utilisateur();
-            CIP.setFormations(List.of(formation));
+            CIP.setFormations(List.of(formation,formation2));
             CIP.setNom("CIP");
             CIP.setPrenom("CIP");
             CIP.setLogin("cip");
@@ -185,7 +185,7 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur michel = utilisateurRepository.findUserByLogin("michelmichel");
         if (michel == null) {
             michel = new Utilisateur();
-            michel.setFormations(List.of(formation));
+            michel.setFormations(List.of(formation,formation2));
             michel.setNom("Michel");
             michel.setPrenom("Michel");
             michel.setLogin("michelmichel");
