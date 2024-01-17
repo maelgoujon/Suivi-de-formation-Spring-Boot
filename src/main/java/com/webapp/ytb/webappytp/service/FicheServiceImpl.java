@@ -80,12 +80,10 @@ public class FicheServiceImpl implements FicheService {
         }
     }
 
-    @Transactional
     @Override
     public List<FicheIntervention> getFichesByUserId(Long userId) {
-    List<FicheIntervention> fiches = ficheRepository.findByUtilisateurId(userId);
-    return fiches.stream()
-                 .filter(fiche -> fiche.getEvaluation() != null && fiche.getEvaluation().length > 0)
-                 .collect(Collectors.toList());
-}
+        return ficheRepository.findByUtilisateurId(userId);
+    }
+
+    
 }
