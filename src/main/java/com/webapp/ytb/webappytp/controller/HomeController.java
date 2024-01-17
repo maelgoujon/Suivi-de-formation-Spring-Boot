@@ -177,7 +177,74 @@ public class HomeController {
         model.addAttribute("imagesTitreMaintenanceType", imagesTitreMaintenanceType);
 
         model.addAttribute("fiche", fiche);
-        model.addAttribute("users", userServ.lire());
+        model.addAttribute("users", userServ.getUtilisateursByRole("USER"));
+        return "fiche_a_completer";
+    }
+
+    // Ajouter une fiche avec id utilisateur
+    @GetMapping("/ajout_fiche/{id}")
+    public String ajout_fiche_id(Model model , @PathVariable Long id) {
+        FicheIntervention fiche = new FicheIntervention();
+        List<ImagesTitres> imagesTitreIntervenant = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT);
+        List<ImagesTitres> imagesTitreDemande = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.DEMANDE);
+        List<ImagesTitres> imagesTitreIntervention = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION);
+        List<ImagesTitres> imagesTitreTravauxRealises = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_REALISES);
+        List<ImagesTitres> imagesTitreTravauxNonRealises = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_NON_REALISES);
+        List<ImagesTitres> imagesTitreMateriauxUtilises = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.MATERIAUX_UTILISES);
+        List<ImagesTitres> imagesTitreIntervenantPrenom = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT_PRENOM);
+        List<ImagesTitres> imagesTitreIntervenantNom = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT_NOM);
+        List<ImagesTitres> imagesTitreDemandeNom = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_NOM);
+        List<ImagesTitres> imagesTitreDemandeDegreUrgence = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_DEGRE_URGENCE);
+        List<ImagesTitres> imagesTitreDemandeDate = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_DATE);
+        List<ImagesTitres> imagesTitreDemandeLocalisation = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_LOCALISATION);
+        List<ImagesTitres> imagesTitreDemandeDescription = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_DESCRIPTION);
+        List<ImagesTitres> imagesTitreInterventionDate = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION_DATE);
+        List<ImagesTitres> imagesTitreInterventionDuree = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION_DUREE);
+        List<ImagesTitres> imagesTitreInterventionType = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION_TYPE);
+        List<ImagesTitres> imagesTitreMaintenanceType = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.MAINTENANCE_TYPE);
+
+        model.addAttribute("imagesTitreIntervenant", imagesTitreIntervenant);
+        model.addAttribute("imagesTitreDemande", imagesTitreDemande);
+        model.addAttribute("imagesTitreIntervention", imagesTitreIntervention);
+        model.addAttribute("imagesTitreTravauxRealises", imagesTitreTravauxRealises);
+        model.addAttribute("imagesTitreTravauxNonRealises", imagesTitreTravauxNonRealises);
+        model.addAttribute("imagesTitreMateriauxUtilises", imagesTitreMateriauxUtilises);
+        model.addAttribute("imagesTitreIntervenantPrenom", imagesTitreIntervenantPrenom);
+        model.addAttribute("imagesTitreIntervenantNom", imagesTitreIntervenantNom);
+        model.addAttribute("imagesTitreDemandeNom", imagesTitreDemandeNom);
+        model.addAttribute("imagesTitreDemandeDegreUrgence", imagesTitreDemandeDegreUrgence);
+        model.addAttribute("imagesTitreDemandeDate", imagesTitreDemandeDate);
+        model.addAttribute("imagesTitreDemandeLocalisation", imagesTitreDemandeLocalisation);
+        model.addAttribute("imagesTitreDemandeDescription", imagesTitreDemandeDescription);
+        model.addAttribute("imagesTitreInterventionDate", imagesTitreInterventionDate);
+        model.addAttribute("imagesTitreInterventionDuree", imagesTitreInterventionDuree);
+        model.addAttribute("imagesTitreInterventionType", imagesTitreInterventionType);
+        model.addAttribute("imagesTitreMaintenanceType", imagesTitreMaintenanceType);
+
+        model.addAttribute("fiche", fiche);
+        // si l id correspond a un role admin cip ou educsimple on n'affiche pas la page
+        if (userServ.findById(id).getRole().equals(UserRole.ADMIN)
+                || userServ.findById(id).getRole().equals(UserRole.CIP)
+                || userServ.findById(id).getRole().equals(UserRole.EDUCSIMPLE)) {
+            return "redirect:/accueil_admin";
+        }
+        model.addAttribute("users", userServ.findById(id));
         return "fiche_a_completer";
     }
 

@@ -233,29 +233,26 @@
                <input type="date" class="form-control" id="disabledDateDemande" placeholder=""
                   th:value="${ficheIntervention.demande.dateDemande}" disabled>
 
-               <div class="col-md-6 mb-3">
-                  <div th:switch="${ficheIntervention.demande.niveauTitreDemandeLocalisation}">
-                     <img th:case="0" th:src="@{${ficheIntervention.demande.imageTitreDemandeLocalisationUrl}}"
-                        class="display-8" alt="Image Localisation" oncontextmenu="return false;" draggable="false"
-                        style="height: 1em;" />
-                     <div th:case="1" class="row align-items-center">
-                        <div class="col-auto">
-                           <img th:src="@{${ficheIntervention.demande.imageTitreDemandeLocalisationUrl}}"
-                              class="display-8" alt="Image Localisation" oncontextmenu="return false;" draggable="false"
-                              style="height: 1em;" />
-                        </div>
-                        <div class="col-auto">
-                           <label for="disabledLocalisation"
-                              th:style="'color: ' + ${ficheIntervention.demande.couleurLocalisation}">Localisation</label>
-                        </div>
+               <div th:switch="${ficheIntervention.demande.niveauTitreDemandeLocalisation}">
+                  <img th:case="0" th:src="@{${ficheIntervention.demande.imageTitreDemandeLocalisationUrl}}"
+                     class="display-8" alt="Image Localisation" oncontextmenu="return false;" draggable="false"
+                     style="height: 1em;" />
+                  <div th:case="1" class="row align-items-center">
+                     <div class="col-auto">
+                        <img th:src="@{${ficheIntervention.demande.imageTitreDemandeLocalisationUrl}}" class="display-8"
+                           alt="Image Localisation" oncontextmenu="return false;" draggable="false"
+                           style="height: 1em;" />
                      </div>
-                     <label th:case="2" for="disabledLocalisation"
-                        th:style="'color: ' + ${ficheIntervention.demande.couleurLocalisation}">Localisation</label>
+                     <div class="col-auto">
+                        <label for="disabledLocalisation"
+                           th:style="'color: ' + ${ficheIntervention.demande.couleurLocalisation}">Localisation</label>
+                     </div>
                   </div>
-                  <input type="text" class="form-control" id="disabledLocalisation" placeholder=""
-                     th:value="${ficheIntervention.demande.localisation}" disabled>
+                  <label th:case="2" for="disabledLocalisation"
+                     th:style="'color: ' + ${ficheIntervention.demande.couleurLocalisation}">Localisation</label>
                </div>
-
+               <input type="text" class="form-control" id="disabledLocalisation" placeholder=""
+                  th:value="${ficheIntervention.demande.localisation}" disabled>
             </div>
          </div>
          <div th:if="${ficheIntervention.demande.niveauTitreDemande != 4}">
