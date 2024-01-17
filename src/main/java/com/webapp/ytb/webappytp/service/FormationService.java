@@ -24,4 +24,6 @@ public interface FormationService {
 
     public void retirerUtilisateurDeLaFormation(Long utilisateurId, Long formationId);
 
+
+    public void supprimerFormationAvecUtilisateurs(Long formationId);
 }

@@ -50,7 +50,7 @@ public class FormationController {
     @PostMapping("/supprimerFormation")
     public String supprimerFormation(@RequestParam Long formationId, RedirectAttributes redirectAttributes) {
         try {
-            formationService.supprimer(formationId);
+            formationService.supprimerFormationAvecUtilisateurs(formationId);
             redirectAttributes.addFlashAttribute("success", "Formation supprimée avec succès");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error",
@@ -100,14 +100,13 @@ public class FormationController {
 
     @GetMapping("/excel/{id_formation}")
     public void generateExcelArchive(@PathVariable Long id_formation, HttpServletResponse response) throws Exception {
-        // Création du fichier excel 
+        // Création du fichier excel
         Formation formation = formationService.findById(id_formation);
         if (formation == null) {
             throw new RuntimeException("Formation not found with ID: " + id_formation);
         }
 
-        response.setContentType("application/octet-stream");
-
+        response.setContentType("application/vnd.ms-excel");
         String headerKey = "Content-Disposition";
         String formationNameForFile = formation.getNom().replace(" ", "_");
         String headerValue = "attachment; filename=archive_formation_" + formationNameForFile + ".xls";
@@ -117,9 +116,10 @@ public class FormationController {
         formationService.generatedExcel(id_formation, response);
 
         response.flushBuffer();
-        // Suppression des éléments liés à la formation 
-        // supprimer les users liés à la formation (2) ainsi que les fiches liés à l'user (1)
-        
+        // Suppression des éléments liés à la formation
+        // supprimer les users liés à la formation (2) ainsi que les fiches liés à
+        // l'user (1)
+
         // Retrieve all users associated with the formation
         List<Utilisateur> utilisateurs = utilisateurService.findUserByFormation(id_formation);
 
@@ -135,8 +135,6 @@ public class FormationController {
         for (Utilisateur utilisateur : utilisateurs) {
             utilisateurService.supprimer(utilisateur.getId());
         }
-
     }
-    
 
 }

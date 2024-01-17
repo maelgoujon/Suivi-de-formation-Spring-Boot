@@ -5,9 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.springframework.stereotype.Service;
 
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
@@ -105,149 +111,118 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public void generatedExcelForUser(Long userId, HttpServletResponse response) throws Exception {
         Utilisateur utilisateur = utilisateurRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
         List<FicheIntervention> ficheInterventions = ficheRepository.findByUtilisateurId(userId);
 
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("User Archive");
 
-        // Add user details
+        // Define cell styles for user and fiche data
+        HSSFCellStyle userDataStyle = workbook.createCellStyle();
+        userDataStyle.setAlignment(HorizontalAlignment.CENTER);
+        userDataStyle.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+        userDataStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        HSSFCellStyle ficheDataStyle = workbook.createCellStyle();
+        ficheDataStyle.setAlignment(HorizontalAlignment.CENTER);
+        ficheDataStyle.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
+        ficheDataStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        HSSFCellStyle headerStyle = workbook.createCellStyle();
+        HSSFFont headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        headerStyle.setFont(headerFont);
+        headerStyle.setAlignment(HorizontalAlignment.CENTER);
+        headerStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        HSSFCellStyle dateStyle = workbook.createCellStyle();
+        HSSFDataFormat dataFormat = workbook.createDataFormat();
+        dateStyle.setDataFormat(dataFormat.getFormat("yyyy-MM-dd"));
+
+        // Set column widths
+        for (int i = 0; i <= 15; i++) {
+            sheet.setColumnWidth(i, 7500);
+        }
+
         int dataRowIndex = 0;
-        HSSFRow rowUserDetails = sheet.createRow(dataRowIndex++);
-        rowUserDetails.createCell(0).setCellValue("User Name");
-        rowUserDetails.createCell(1).setCellValue("User Description");
-        rowUserDetails.createCell(2).setCellValue("User Role");
 
-        HSSFRow dataRowUserDetails = sheet.createRow(dataRowIndex++);
-        dataRowUserDetails.createCell(0).setCellValue(utilisateur.getNom());
-        dataRowUserDetails.createCell(1).setCellValue(utilisateur.getDescription());
-        dataRowUserDetails.createCell(2).setCellValue(utilisateur.getRole().toString());
+        // User Information Section
+        HSSFRow rowUser = sheet.createRow(dataRowIndex);
+        rowUser.createCell(0).setCellValue("Nom de l'apprenti");
+        rowUser.createCell(1).setCellValue("Prenom de l'apprenti");
+        rowUser.createCell(2).setCellValue("Description de l'apprenti");
+        rowUser.createCell(3).setCellValue("Role de l'apprentis");
+
+        for (int i = 0; i < 4; i++) {
+            rowUser.getCell(i).setCellStyle(headerStyle);
+        }
 
         dataRowIndex++;
-        // Add headers for Fiche Intervention
+
+        HSSFRow dataRowUser = sheet.createRow(dataRowIndex);
+        dataRowUser.createCell(0).setCellValue(utilisateur.getNom());
+        dataRowUser.createCell(1).setCellValue(utilisateur.getPrenom());
+        dataRowUser.createCell(2).setCellValue(utilisateur.getDescription());
+        dataRowUser.createCell(3).setCellValue(utilisateur.getRole().toString());
+        for (int i = 0; i < 4; i++) {
+            dataRowUser.getCell(i).setCellStyle(userDataStyle);
+        }
+        dataRowIndex++;
+
+        // Headers for Fiche Intervention Information
         HSSFRow rowFiche = sheet.createRow(dataRowIndex++);
-        rowFiche.createCell(0).setCellValue("La Date de Création");
-        rowFiche.createCell(1).setCellValue("La Date de Demande");
-        rowFiche.createCell(2).setCellValue("La Date d'Intervention");
-        rowFiche.createCell(3).setCellValue("Le Degré d'Urgence");
-        rowFiche.createCell(4).setCellValue("La Durée d'Intervention");
-        rowFiche.createCell(5).setCellValue("L'État de la Fiche Finie");
-        rowFiche.createCell(6).setCellValue("Le Type de Maintenance");
-        rowFiche.createCell(7).setCellValue("Le Niveau de la Date Demande");
-        rowFiche.createCell(8).setCellValue("Le Niveau de la Date d'Intervention");
-        rowFiche.createCell(9).setCellValue("Le Niveau du Degré d'Urgence");
-        rowFiche.createCell(10).setCellValue("Le Niveau de la Description");
-        rowFiche.createCell(11).setCellValue("Le Niveau de la Durée d'Intervention");
-        rowFiche.createCell(12).setCellValue("Le Niveau de l'Intervenant");
-        rowFiche.createCell(13).setCellValue("Le Niveau de la Localisation");
-        rowFiche.createCell(14).setCellValue("Le Niveau du Type de Maintenance");
-        rowFiche.createCell(15).setCellValue("Le Niveau des Matériaux Utilisés");
-        rowFiche.createCell(16).setCellValue("Le Niveau de la Nature d'Intervention");
-        rowFiche.createCell(17).setCellValue("Le Niveau du Nom");
-        rowFiche.createCell(18).setCellValue("Le Niveau du Nom du Demandeur");
-        rowFiche.createCell(19).setCellValue("Le Niveau du Prénom");
-        rowFiche.createCell(20).setCellValue("Le Niveau du Titre de Demande");
-        rowFiche.createCell(21).setCellValue("Le Niveau du Titre de l'Intervenant");
-        rowFiche.createCell(22).setCellValue("Le Niveau du Titre de l'Intervention");
-        rowFiche.createCell(23).setCellValue("Le Niveau des Travaux Non Réalisés");
-        rowFiche.createCell(24).setCellValue("Le Niveau des Travaux Réalisés");
-        rowFiche.createCell(25).setCellValue("Le Niveau du Type d'Intervention");
-        rowFiche.createCell(26).setCellValue("La Nouvelle Intervention");
-        rowFiche.createCell(27).setCellValue("L'ID");
-        rowFiche.createCell(28).setCellValue("L'ID de l'Utilisateur");
-        rowFiche.createCell(29).setCellValue("Le Nom du Demandeur");
-        rowFiche.createCell(30).setCellValue("Les Travaux Non Réalisés");
-        rowFiche.createCell(31).setCellValue("Les Travaux Réalisés");
-        rowFiche.createCell(32).setCellValue("La Couleur de la Date de Demande");
-        rowFiche.createCell(33).setCellValue("La Couleur de la Date d'Intervention");
-        rowFiche.createCell(34).setCellValue("La Couleur du Degré d'Urgence");
-        rowFiche.createCell(35).setCellValue("La Couleur de la Description");
-        rowFiche.createCell(36).setCellValue("La Couleur de la Durée d'Intervention");
-        rowFiche.createCell(37).setCellValue("La Couleur de la Localisation");
-        rowFiche.createCell(38).setCellValue("La Couleur du Type de Maintenance");
-        rowFiche.createCell(39).setCellValue("La Couleur des Matériaux Utilisés");
-        rowFiche.createCell(40).setCellValue("La Couleur du Nom");
-        rowFiche.createCell(41).setCellValue("La Couleur du Nom du Demandeur");
-        rowFiche.createCell(42).setCellValue("La Couleur du Prénom");
-        rowFiche.createCell(43).setCellValue("La Couleur du Titre de Demande");
-        rowFiche.createCell(44).setCellValue("La Couleur du Titre de l'Intervenant");
-        rowFiche.createCell(45).setCellValue("La Couleur du Titre de l'Intervention");
-        rowFiche.createCell(46).setCellValue("La Couleur des Travaux Non Réalisés");
-        rowFiche.createCell(47).setCellValue("La Couleur des Travaux Réalisés");
-        rowFiche.createCell(48).setCellValue("La Couleur du Type d'Intervention");
-        rowFiche.createCell(49).setCellValue("La Description");
-        rowFiche.createCell(50).setCellValue("La Localisation");
-        rowFiche.createCell(51).setCellValue("Le Nom");
-        rowFiche.createCell(52).setCellValue("Le Prénom");
-        rowFiche.createCell(53).setCellValue("Le Type d'Intervention");
-        rowFiche.createCell(54).setCellValue("Les Matériaux");
-        // Continue adding cells for each column
+        rowFiche.createCell(0).setCellValue("Date de Création");
+        rowFiche.createCell(1).setCellValue("Date de Demande");
+        rowFiche.createCell(2).setCellValue("Date d'Intervention");
+        rowFiche.createCell(3).setCellValue("Degré d'Urgence");
+        rowFiche.createCell(4).setCellValue("Durée d'Intervention");
+        rowFiche.createCell(5).setCellValue("État de la Fiche Finie");
+        rowFiche.createCell(6).setCellValue("Type de Maintenance");
+        rowFiche.createCell(7).setCellValue("Nom du Demandeur");
+        rowFiche.createCell(8).setCellValue("Travaux Non Réalisés");
+        rowFiche.createCell(9).setCellValue("Travaux Réalisés");
+        rowFiche.createCell(10).setCellValue("Description");
+        rowFiche.createCell(11).setCellValue("Localisation");
+        rowFiche.createCell(12).setCellValue("Nom");
+        rowFiche.createCell(13).setCellValue("Prénom");
+        rowFiche.createCell(14).setCellValue("Type d'Intervention");
+        rowFiche.createCell(15).setCellValue("Matériaux");
 
-        dataRowIndex++;
+        for (int i = 0; i <= 15; i++) {
+            rowFiche.getCell(i).setCellStyle(headerStyle);
+        }
 
-        // Loop through each FicheIntervention and add to sheet
+        // Fiche Intervention Data
         for (FicheIntervention fiche : ficheInterventions) {
             HSSFRow dataRowFiche = sheet.createRow(dataRowIndex++);
             dataRowFiche.createCell(0).setCellValue(fiche.getDateCreation().toString());
             dataRowFiche.createCell(1).setCellValue(fiche.getDateDemande().toString());
-            dataRowFiche.createCell(2).setCellValue(fiche.getDateIntervention().toString());
+            dataRowFiche.createCell(2).setCellValue(
+                    fiche.getDateIntervention() != null ? fiche.getDateIntervention().toString() : "");
             dataRowFiche.createCell(3).setCellValue(fiche.getDegreUrgence());
             dataRowFiche.createCell(4).setCellValue(fiche.getDureeIntervention());
             dataRowFiche.createCell(5).setCellValue(fiche.isEtatFicheFinie());
             dataRowFiche.createCell(6).setCellValue(fiche.getMaintenance().getNiveauMaintenanceType());
-            dataRowFiche.createCell(7).setCellValue(fiche.getDemande().getNiveauDateDemande());
-            dataRowFiche.createCell(8).setCellValue(fiche.getNiveauDateIntervention());
-            dataRowFiche.createCell(9).setCellValue(fiche.getDemande().getNiveauDegreUrgence());
-            dataRowFiche.createCell(10).setCellValue(fiche.getDemande().getNiveauDescription());
-            dataRowFiche.createCell(11).setCellValue(fiche.getNiveauDureeIntervention());
-            dataRowFiche.createCell(12).setCellValue(fiche.getNiveauIntervenant());
-            dataRowFiche.createCell(13).setCellValue(fiche.getDemande().getNiveauLocalisation());
-            dataRowFiche.createCell(14).setCellValue(fiche.getNiveauMaintenanceType());
-            dataRowFiche.createCell(15).setCellValue(fiche.getNiveauMateriauxUtilises());
-            dataRowFiche.createCell(16).setCellValue(fiche.getNiveauNatureIntervention());
-            dataRowFiche.createCell(17).setCellValue(fiche.getIntervenant().getNiveauTitreIntervenantNom());
-            dataRowFiche.createCell(18).setCellValue(fiche.getDemande().getNiveauNomDemandeur());
-            dataRowFiche.createCell(19).setCellValue(fiche.getIntervenant().getNiveauTitreIntervenantPrenom());
-            dataRowFiche.createCell(20).setCellValue(fiche.getDemande().getNiveauTitreDemande());
-            dataRowFiche.createCell(21).setCellValue(fiche.getIntervenant().getNiveauTitreIntervenant());
-            dataRowFiche.createCell(22).setCellValue(fiche.getIntervention().getNiveauTitreIntervention());
-            dataRowFiche.createCell(23).setCellValue(fiche.getNiveauTravauxNonRealises());
-            dataRowFiche.createCell(24).setCellValue(fiche.getNiveauTravauxRealises());
-            dataRowFiche.createCell(25).setCellValue(fiche.getIntervention().getNiveauTypeIntervention());
-            dataRowFiche.createCell(26).setCellValue(fiche.isNouvelleIntervention());
-            dataRowFiche.createCell(27).setCellValue(fiche.getId());
-            dataRowFiche.createCell(28).setCellValue(utilisateur.getId());
-            dataRowFiche.createCell(29).setCellValue(fiche.getNomDemandeur());
-            dataRowFiche.createCell(30).setCellValue(fiche.getTravauxNonRealises());
-            dataRowFiche.createCell(31).setCellValue(fiche.getTravauxRealises());
-            dataRowFiche.createCell(32).setCellValue(fiche.getDemande().getCouleurDateDemande());
-            dataRowFiche.createCell(33).setCellValue(fiche.getIntervention().getCouleurDateIntervention());
-            dataRowFiche.createCell(34).setCellValue(fiche.getDemande().getCouleurDegreUrgence());
-            dataRowFiche.createCell(35).setCellValue(fiche.getDemande().getCouleurDescription());
-            dataRowFiche.createCell(36).setCellValue(fiche.getIntervention().getCouleurDureeIntervention());
-            dataRowFiche.createCell(37).setCellValue(fiche.getDemande().getCouleurLocalisation());
-            dataRowFiche.createCell(38).setCellValue(fiche.getMaintenance().getCouleurMaintenanceType());
-            dataRowFiche.createCell(39).setCellValue(fiche.getCouleurMateriauxUtilises());
-            dataRowFiche.createCell(40).setCellValue(fiche.getIntervenant().getCouleurNom());
-            dataRowFiche.createCell(41).setCellValue(fiche.getDemande().getCouleurNomDemandeur());
-            dataRowFiche.createCell(42).setCellValue(fiche.getIntervenant().getCouleurPrenom());
-            dataRowFiche.createCell(43).setCellValue(fiche.getDemande().getCouleurTitreDemande());
-            dataRowFiche.createCell(44).setCellValue(fiche.getIntervenant().getCouleurTitreIntervenant());
-            dataRowFiche.createCell(45).setCellValue(fiche.getIntervention().getCouleurTitreIntervention());
-            dataRowFiche.createCell(46).setCellValue(fiche.getCouleurTravauxNonRealises());
-            dataRowFiche.createCell(47).setCellValue(fiche.getCouleurTravauxRealises());
-            dataRowFiche.createCell(48).setCellValue(fiche.getIntervention().getCouleurTypeIntervention());
-            dataRowFiche.createCell(49).setCellValue(fiche.getDescription());
-            dataRowFiche.createCell(50).setCellValue(fiche.getLocalisation());
-            dataRowFiche.createCell(51).setCellValue(fiche.getIntervenant().getNom());
-            dataRowFiche.createCell(52).setCellValue(fiche.getIntervenant().getPrenom());
-            dataRowFiche.createCell(53).setCellValue(fiche.getTypeIntervention());
-            dataRowFiche.createCell(54).setCellValue(String.join(", ", fiche.getMateriauxOptions()));
+            dataRowFiche.createCell(7).setCellValue(fiche.getNomDemandeur());
+            dataRowFiche.createCell(8).setCellValue(fiche.getTravauxNonRealises());
+            dataRowFiche.createCell(9).setCellValue(fiche.getTravauxRealises());
+            dataRowFiche.createCell(10).setCellValue(fiche.getDescription());
+            dataRowFiche.createCell(11).setCellValue(fiche.getLocalisation());
+            dataRowFiche.createCell(12).setCellValue(fiche.getIntervenant().getNom());
+            dataRowFiche.createCell(13).setCellValue(fiche.getIntervenant().getPrenom());
+            dataRowFiche.createCell(14).setCellValue(fiche.getTypeIntervention());
+            dataRowFiche.createCell(15).setCellValue(String.join(", ", fiche.getMateriauxOptions()));
+
+            for (int i = 0; i <= 15; i++) {
+                dataRowFiche.getCell(i).setCellStyle(ficheDataStyle);
+            }
         }
 
-        ServletOutputStream outputStream = response.getOutputStream();
-        workbook.write(outputStream);
+        ServletOutputStream ops = response.getOutputStream();
+        workbook.write(ops);
         workbook.close();
-        outputStream.close();
+        ops.close();
     }
 
 }
