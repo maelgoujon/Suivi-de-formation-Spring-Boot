@@ -85,7 +85,7 @@ public class FormationServiceImpl implements FormationService {
     
     @Override
     public void supprimerFormationAvecUtilisateurs(Long formationId) {
-        List<Utilisateur> utilisateurs = utilisateurRepository.findByFormation_Id(formationId);
+        List<Utilisateur> utilisateurs = formationRepository.findById(formationId).get().getUtilisateurs();
         for (Utilisateur utilisateur : utilisateurs) {
             utilisateurRepository.delete(utilisateur);
         }
