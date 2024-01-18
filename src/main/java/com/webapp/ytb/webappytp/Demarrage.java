@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -28,20 +29,25 @@ import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
 @Component
 // Créer des objets au démarrage de l'application
 public class Demarrage implements ApplicationRunner {
-    @Autowired
-    private UtilisateurRepository utilisateurRepository;
+
+    private final UtilisateurRepository utilisateurRepository;
+    private final FicheRepository ficheRepository;
+    private final MateriauxRepository materiauxRepository;
+    private final FormationRepository formationRepository;
+    private final ImagesTitresRepository imagesTitresRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private FicheRepository ficheRepository;
-
-    @Autowired
-    private MateriauxRepository materiauxRepository;
-
-    @Autowired
-    private FormationRepository formationRepository;
-
-    @Autowired
-    private ImagesTitresRepository imagesTitresRepository;
+    public Demarrage(UtilisateurRepository utilisateurRepository, FicheRepository ficheRepository,
+            MateriauxRepository materiauxRepository, FormationRepository formationRepository,
+            ImagesTitresRepository imagesTitresRepository, PasswordEncoder passwordEncoder) {
+        this.utilisateurRepository = utilisateurRepository;
+        this.ficheRepository = ficheRepository;
+        this.materiauxRepository = materiauxRepository;
+        this.formationRepository = formationRepository;
+        this.imagesTitresRepository = imagesTitresRepository;
+        this.passwordEncoder = passwordEncoder; // Initialisez le PasswordEncoder
+    }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -130,7 +136,7 @@ public class Demarrage implements ApplicationRunner {
             admin.setNom("Admin");
             admin.setPrenom("Admin");
             admin.setLogin("admin");
-            admin.setMdp("admin");
+            admin.setMdp(passwordEncoder.encode("admin"));
             admin.setRole(UserRole.ADMIN);
             admin.setPhotoBase64(photoBase64);
             admin.setDescription("Création et modification visuelles totales, laisser des traces écrite/vocal");
@@ -140,11 +146,11 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur educsimple = utilisateurRepository.findUserByLogin("educsimple");
         if (educsimple == null) {
             educsimple = new Utilisateur();
-            educsimple.setFormations(List.of(formation,formation2));
+            educsimple.setFormations(List.of(formation, formation2));
             educsimple.setNom("Educ");
             educsimple.setPrenom("Simple");
             educsimple.setLogin("educsimple");
-            educsimple.setMdp("educsimple");
+            educsimple.setMdp(passwordEncoder.encode("educsimple"));
             educsimple.setRole(UserRole.EDUCSIMPLE);
             educsimple.setPhotoBase64(photoBase64);
             educsimple.setDescription("Utilisation des fiches, pourra laisser des traces écrite/vocal \r\n" + //
@@ -155,11 +161,11 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur superadmin = utilisateurRepository.findUserByLogin("superadmin");
         if (superadmin == null) {
             superadmin = new Utilisateur();
-            superadmin.setFormations(List.of(formation,formation2));
+            superadmin.setFormations(List.of(formation, formation2));
             superadmin.setNom("Super");
             superadmin.setPrenom("Admin");
             superadmin.setLogin("superadmin");
-            superadmin.setMdp("superadmin");
+            superadmin.setMdp(passwordEncoder.encode("superadmin"));
             superadmin.setRole(UserRole.SUPERADMIN);
             superadmin.setPhotoBase64(photoBase64);
             superadmin.setDescription("Description de l'administrateur");
@@ -169,11 +175,11 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur CIP = utilisateurRepository.findUserByLogin("CIP");
         if (CIP == null) {
             CIP = new Utilisateur();
-            CIP.setFormations(List.of(formation,formation2));
+            CIP.setFormations(List.of(formation, formation2));
             CIP.setNom("CIP");
             CIP.setPrenom("CIP");
             CIP.setLogin("cip");
-            CIP.setMdp("cip");
+            CIP.setMdp(passwordEncoder.encode("cip"));
             CIP.setRole(UserRole.CIP);
             CIP.setPhotoBase64(photoBase64);
             CIP.setDescription(
@@ -185,11 +191,11 @@ public class Demarrage implements ApplicationRunner {
         Utilisateur michel = utilisateurRepository.findUserByLogin("michelmichel");
         if (michel == null) {
             michel = new Utilisateur();
-            michel.setFormations(List.of(formation,formation2));
+            michel.setFormations(List.of(formation, formation2));
             michel.setNom("Michel");
             michel.setPrenom("Michel");
             michel.setLogin("michelmichel");
-            michel.setMdp("1234");
+            michel.setMdp(passwordEncoder.encode("1234"));
             michel.setRole(UserRole.USER);
             michel.setNiveau(1);
             michel.setPhotoBase64(apprenti);
@@ -205,7 +211,7 @@ public class Demarrage implements ApplicationRunner {
             johnSmith.setNom("Smith");
             johnSmith.setPrenom("John");
             johnSmith.setLogin("johnsmith");
-            johnSmith.setMdp("9876");
+            johnSmith.setMdp(passwordEncoder.encode("9876"));
             johnSmith.setRole(UserRole.USER);
             johnSmith.setNiveau(1);
             johnSmith.setPhotoBase64(apprenti);
@@ -221,7 +227,7 @@ public class Demarrage implements ApplicationRunner {
             janeDoe.setNom("Doe");
             janeDoe.setPrenom("Jane");
             janeDoe.setLogin("janedoe");
-            janeDoe.setMdp("4321");
+            janeDoe.setMdp(passwordEncoder.encode("4321"));
             janeDoe.setRole(UserRole.USER);
             janeDoe.setNiveau(1);
             janeDoe.setPhotoBase64(apprentie);
@@ -237,7 +243,7 @@ public class Demarrage implements ApplicationRunner {
             aliceJohnson.setNom("Johnson");
             aliceJohnson.setPrenom("Alice");
             aliceJohnson.setLogin("alicejohnson");
-            aliceJohnson.setMdp("2468"); // Mot de passe à 4 chiffres
+            aliceJohnson.setMdp(passwordEncoder.encode("2468")); // Mot de passe à 4 chiffres
             aliceJohnson.setRole(UserRole.USER);
             aliceJohnson.setNiveau(1);
             aliceJohnson.setPhotoBase64(apprentie);
@@ -253,7 +259,7 @@ public class Demarrage implements ApplicationRunner {
             paulWilliams.setNom("Williams");
             paulWilliams.setPrenom("Paul");
             paulWilliams.setLogin("paulwilliams");
-            paulWilliams.setMdp("1357"); // Mot de passe à 4 chiffres
+            paulWilliams.setMdp(passwordEncoder.encode("1357")); // Mot de passe à 4 chiffres
             paulWilliams.setRole(UserRole.USER);
             paulWilliams.setNiveau(1);
             paulWilliams.setPhotoBase64(apprenti);
@@ -269,7 +275,7 @@ public class Demarrage implements ApplicationRunner {
             emilyBrown.setNom("Brown");
             emilyBrown.setPrenom("Emily");
             emilyBrown.setLogin("emilybrown");
-            emilyBrown.setMdp("9876"); // Mot de passe à 4 chiffres
+            emilyBrown.setMdp(passwordEncoder.encode("9876")); // Mot de passe à 4 chiffres
             emilyBrown.setRole(UserRole.USER);
             emilyBrown.setNiveau(1);
             emilyBrown.setPhotoBase64(apprentie);
@@ -285,7 +291,7 @@ public class Demarrage implements ApplicationRunner {
             pierreDupont.setNom("Dupont");
             pierreDupont.setPrenom("Pierre");
             pierreDupont.setLogin("pierredupont");
-            pierreDupont.setMdp("7462"); // Mot de passe à 4 chiffres
+            pierreDupont.setMdp(passwordEncoder.encode("7462")); // Mot de passe à 4 chiffres
             pierreDupont.setRole(UserRole.USER);
             pierreDupont.setNiveau(1);
             pierreDupont.setPhotoBase64(apprenti);
@@ -391,7 +397,10 @@ public class Demarrage implements ApplicationRunner {
         }
 
         // Creation des images pour la fiche d intervention
-        String[] types = { "INTERVENANT", "DEMANDE", "INTERVENTION", "MATERIAUX_UTILISES","TRAVAUX_REALISES", "TRAVAUX_NON_REALISES", "INTERVENANT_PRENOM", "INTERVENANT_NOM", "DEMANDE_NOM", "DEMANDE_DATE", "DEMANDE_LOCALISATION", "DEMANDE_DESCRIPTION", "DEMANDE_DEGRE_URGENCE", "MAINTENANCE_TYPE", "INTERVENTION_DATE", "INTERVENTION_DUREE", "INTERVENTION_TYPE" };
+        String[] types = { "INTERVENANT", "DEMANDE", "INTERVENTION", "MATERIAUX_UTILISES", "TRAVAUX_REALISES",
+                "TRAVAUX_NON_REALISES", "INTERVENANT_PRENOM", "INTERVENANT_NOM", "DEMANDE_NOM", "DEMANDE_DATE",
+                "DEMANDE_LOCALISATION", "DEMANDE_DESCRIPTION", "DEMANDE_DEGRE_URGENCE", "MAINTENANCE_TYPE",
+                "INTERVENTION_DATE", "INTERVENTION_DUREE", "INTERVENTION_TYPE" };
         String[] nomImages = { "Image1", "ADMIN", "Image2", "FICHES1", "FICHES2", "FICHES3", "FICHES4" };
         String[] imageUrls = { "images/accueil.png", "images/admin.png", "images/archive.png", "images/eleve.png",
                 "images/eleve.png", "images/eleve.png", "images/eleve.png" };

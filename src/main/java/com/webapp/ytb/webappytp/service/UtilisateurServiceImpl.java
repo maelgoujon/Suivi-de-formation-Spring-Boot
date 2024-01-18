@@ -14,6 +14,8 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
@@ -36,8 +38,13 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     private final FicheRepository ficheRepository;
     private final FormationRepository formationRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
-    public Utilisateur creer(Utilisateur utilisateur ) {
+    public Utilisateur creer(Utilisateur utilisateur) {
+        // Encodez le mot de passe avant de sauvegarder l'utilisateur
+        utilisateur.setMdp(passwordEncoder.encode(utilisateur.getMdp()));
         return utilisateurRepository.save(utilisateur);
     }
 
@@ -53,13 +60,12 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                     p.setPrenom(utilisateur.getPrenom());
                     p.setNom(utilisateur.getNom());
                     p.setLogin(utilisateur.getLogin());
-                    p.setMdp(utilisateur.getMdp());
+                    p.setMdp(passwordEncoder.encode(utilisateur.getMdp()));
                     p.setPhotoBase64(utilisateur.getPhotoBase64());
                     p.setRole(utilisateur.getRole());
                     p.setDescription(utilisateur.getDescription());
                     return utilisateurRepository.save(p);
                 }).orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
-
     }
 
     @Override
@@ -77,11 +83,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public void modifierMotDePasse(Long id, String nouveauMotDePasse) {
         Utilisateur utilisateur = utilisateurRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé avec l'ID : " + id));
-
-        // Mettez à jour le mot de passe de l'utilisateur
-        utilisateur.setMdp(nouveauMotDePasse);
-
-        // Enregistrez les modifications dans la base de données
+        // Encodez le nouveau mot de passe avant de le sauvegarder
+        utilisateur.setMdp(passwordEncoder.encode(nouveauMotDePasse));
         utilisateurRepository.save(utilisateur);
     }
 
@@ -100,8 +103,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public List<Utilisateur> getAllUtilisateurs() {
         return utilisateurRepository.findAll();
     }
- 
-    //retourne la liste des utilisateurs d'une formation
+
+    // retourne la liste des utilisateurs d'une formation
     @Override
     public List<Utilisateur> findUserByFormation(Long formationId) {
         return formationRepository.findById(formationId).get().getUtilisateurs();
