@@ -3,10 +3,21 @@
 
 <head>
     <title>Créer une nouvelle session</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Ajoutez les liens vers les fichiers CSS Bootstrap ici -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/accueil.css" rel="stylesheet">
+    <!-- Ajoutez les liens vers les fichiers JavaScript Bootstrap et jQuery ici -->
+    <script src="/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
+    <div th:replace="fragments/header :: header"></div>
+
     <div class="container">
         <h1>Créer une nouvelle session</h1>
         <form th:action="@{/session/creer}" th:object="${session}" method="post">

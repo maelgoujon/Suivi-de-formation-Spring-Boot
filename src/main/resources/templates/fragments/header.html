@@ -1,0 +1,41 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color"
+    style="background-color: #bbdefb;">
+    <a href="accueil_admin"
+        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+        <svg class="bi me-2" width="40" height="32">
+            <use xlink:href="#bootstrap"></use>
+        </svg>
+        <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
+        <div th:if="${currentUserRole}" class="user-info">
+            <p>Votre role : <span th:text="${currentUserRole}"></span> !</p>
+        </div>
+    </a>
+    <ul class="nav nav-pills">
+        <li class="nav-item"><a href="/accueil_admin" class="nav-link active text-white fs-5"
+                aria-current="page">Accueil</a></li>
+
+        <li class="nav-item"
+            th:if="${currentUserRole == 'EDUCSIMPLE' || currentUserRole == 'CIP' || currentUserRole == 'CIP'}">
+            <a href="/fiche/liste_fiche" class="nav-link text-black fs-5">Voir les fiches</a>
+        </li>
+
+        <li class="nav-item" th:if="${currentUserRole == 'SUPERADMIN'}">
+            <a href="/formation/list" class="nav-link text-black fs-5" aria-current="page">Formations</a>
+        </li>
+
+        <li class="nav-item"><a href="profil_admin" class="nav-link text-black fs-5">Votre profil</a></li>
+
+        <li class="nav-item" th:if="${currentUserRole == 'EDUCSIMPLE'}">
+            <a href="/session/creer" class="nav-link text-black fs-5">Créer une session</a>
+        </li>
+        <li class="nav-item"><a
+                href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
+                class="nav-link text-black fs-5">Aide</a></li>
+        <li class="nav-item"><a href="log_out" class="nav-link text-black fs-5">Se déconnecter</a></li>
+    </ul>
+</header>
+
+</html>

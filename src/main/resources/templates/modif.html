@@ -15,19 +15,8 @@
 
 <body onsubmit="setInitialRole();">
 
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color" style="background-color: #bbdefb;">
-        <a href="accueil_admin" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-            <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
-        </a>
-    
-        <ul class="nav nav-pills">
-            <li class="nav-item"><a href="/accueil_superadmin" class="nav-link active text-white fs-5" aria-current="page">Accueil</a></li>
-            <li class="nav-item"><a href="/formation/list" class="nav-link text-black fs-5" aria-current="page">Formations</a></li>
-            <li class="nav-item"><a href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing" class="nav-link text-black fs-5">Aide</a></li>
-            <li class="nav-item"><a href="../log_out" class="nav-link text-black fs-5">Se déconnecter</a></li>
-        </ul>
-      </header>
+    <div th:replace="fragments/header :: header"></div>
+
 
     <div class="container mt-5">
         <div th:if="${success}">

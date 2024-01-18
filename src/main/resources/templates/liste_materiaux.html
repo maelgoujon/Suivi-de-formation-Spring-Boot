@@ -31,35 +31,12 @@
 </head>
 
 <body>
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color"
-                    style="background-color: #bbdefb;">
-                    <a href="accueil_admin"
-                        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-                        <svg class="bi me-2" width="40" height="32">
-                            <use xlink:href="#bootstrap"></use>
-                        </svg>
-                        <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
-                    </a>
+    <div th:replace="fragments/header :: header"></div>
 
-                    <ul class="nav nav-pills">
-                        <li class="nav-item"><a href="../accueil_admin" class="nav-link text-white fs-5 active"
-                                aria-current="page">Accueil</a></li>
-                        <li class="nav-item"><a href="../fiche/liste_fiche" class="nav-link text-black fs-5 ">Voir les
-                                fiches</a></li>
-                        <li class="nav-item"><a href="../profil_admin" class="nav-link text-black fs-5">Votre profil</a>
-                        </li>
-                        <li class="nav-item"><a href="../archive" class="nav-link text-black fs-5">Archive</a></li>
-                        <li class="nav-item"><a
-                                href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
-                                class="nav-link text-black fs-5">Aide</a></li>
-                        <li class="nav-item"><a href="../log_out" class="nav-link text-black fs-5">Se déconnecter</a>
-                        </li>
-                    </ul>
-                </header>
     <div class="container mt-5">
 
         <h1 class="display-1">Liste des materiaux</h1>
-    
+
         <!-- afficher les messages de succès ou d'erreur -->
         <div th:if="${successMessage}" class="alert alert-success">
             <p th:text="${successMessage}"></p>
@@ -67,25 +44,29 @@
         <div th:if="${errorMessage}" class="alert alert-danger">
             <p th:text="${errorMessage}"></p>
         </div>
-    
+
         <!-- Champs de recherche -->
         <div class="row mb-3">
             <div class="col-md-4">
-                <input type="text" id="searchMaterial" name="searchMaterial" class="form-control" placeholder="Nom du matériau" oninput="searchMaterial()">
+                <input type="text" id="searchMaterial" name="searchMaterial" class="form-control"
+                    placeholder="Nom du matériau" oninput="searchMaterial()">
             </div>
             <div class="col-md-4">
-                <select id="typeDropdown" name="typeDropdown" class="form-control" onchange="searchMaterialByType()" title="Type de matériau">
+                <select id="typeDropdown" name="typeDropdown" class="form-control" onchange="searchMaterialByType()"
+                    title="Type de matériau">
                     <option value="">Type de matériau</option>
-                    <th:block th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention$TypeIntervention).values()}">
+                    <th:block
+                        th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention$TypeIntervention).values()}">
                         <option th:value="${type}" th:text="${type}"></option>
                     </th:block>
                 </select>
             </div>
             <div class="col-md-4">
-                <button type="button" class="btn btn-outline-primary" onclick="window.location.href='/materiaux/ajouter'">Ajouter un materiau</button>
+                <button type="button" class="btn btn-outline-primary"
+                    onclick="window.location.href='/materiaux/ajouter'">Ajouter un materiau</button>
             </div>
         </div>
-    
+
         <table class="table table-responsive table-bordered table-hover" id="myTable">
             <thead class="thead-dark">
                 <tr>
@@ -101,26 +82,29 @@
                 <tr th:each="image : ${allImages}">
                     <td th:text="${image.nomImage}"></td>
                     <td class="max-width-10vh">
-                        <img th:src="@{'/' + ${image.imageUrl}}" alt="Image" id="imageDetails_${image.id}" th:attr="data-nomImage=${image.nomImage}, data-imageUrl=${image.imageUrl}" />
+                        <img th:src="@{'/' + ${image.imageUrl}}" alt="Image" id="imageDetails_${image.id}"
+                            th:attr="data-nomImage=${image.nomImage}, data-imageUrl=${image.imageUrl}" />
                     </td>
                     <td th:text="${image.typeIntervention}"></td>
                     <td>
-                        <a th:href="@{/materiaux/modifier/{id}(id=${image.id})}" class="btn btn-sm btn-outline-secondary">Modifier</a>
-                        <a th:href="@{/materiaux/supprimer/{id}(id=${image.id})}" class="btn btn-sm btn-outline-danger">Supprimer</a>
+                        <a th:href="@{/materiaux/modifier/{id}(id=${image.id})}"
+                            class="btn btn-sm btn-outline-secondary">Modifier</a>
+                        <a th:href="@{/materiaux/supprimer/{id}(id=${image.id})}"
+                            class="btn btn-sm btn-outline-danger">Supprimer</a>
                     </td>
                 </tr>
             </tbody>
         </table>
-    
+
         <script>
-    
+
             function searchMaterial() {
                 var searchValue = document.getElementById('searchMaterial').value.toLowerCase();
                 var materialRows = document.getElementById('materialTableBody').getElementsByTagName('tr');
-    
+
                 for (var i = 0; i < materialRows.length; i++) {
                     var materialName = materialRows[i].getElementsByTagName('td')[0].innerText.toLowerCase();
-    
+
                     if (materialName.includes(searchValue)) {
                         materialRows[i].style.display = '';
                     } else {
@@ -128,14 +112,14 @@
                     }
                 }
             }
-    
+
             function searchMaterialByType() {
                 var selectedType = document.getElementById('typeDropdown').value.toLowerCase();
                 var materialRows = document.getElementById('materialTableBody').getElementsByTagName('tr');
-    
+
                 for (var i = 0; i < materialRows.length; i++) {
                     var materialType = materialRows[i].getElementsByTagName('td')[2].innerText.toLowerCase();
-    
+
                     if (selectedType === '' || materialType === selectedType) {
                         materialRows[i].style.display = '';
                     } else {
@@ -204,7 +188,7 @@
                     icon.className = "fa fa-sort-desc";
                 }
             }
-    
+
         </script>
     </div>
 </body>

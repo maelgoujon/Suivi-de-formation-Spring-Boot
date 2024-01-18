@@ -32,36 +32,13 @@
 
 <body>
 
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color"
-                    style="background-color: #bbdefb;">
-                    <a href="accueil_admin"
-                        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-                        <svg class="bi me-2" width="40" height="32">
-                            <use xlink:href="#bootstrap"></use>
-                        </svg>
-                        <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
-                    </a>
+    <div th:replace="fragments/header :: header"></div>
 
-                    <ul class="nav nav-pills">
-                        <li class="nav-item"><a href="../accueil_admin" class="nav-link text-white fs-5 active"
-                                aria-current="page">Accueil</a></li>
-                        <li class="nav-item"><a href="../fiche/liste_fiche" class="nav-link text-black fs-5 ">Voir les
-                                fiches</a></li>
-                        <li class="nav-item"><a href="../profil_admin" class="nav-link text-black fs-5">Votre profil</a>
-                        </li>
-                        <li class="nav-item"><a href="../archive" class="nav-link text-black fs-5">Archive</a></li>
-                        <li class="nav-item"><a
-                                href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
-                                class="nav-link text-black fs-5">Aide</a></li>
-                        <li class="nav-item"><a href="../log_out" class="nav-link text-black fs-5">Se déconnecter</a>
-                        </li>
-                    </ul>
-                </header>
 
     <div class="container mt-5">
 
         <h1 class="display-1">Liste des images de titres</h1>
-    
+
         <!-- afficher les messages de succès ou d'erreur -->
         <div th:if="${successMessage}" class="alert alert-success">
             <p th:text="${successMessage}"></p>
@@ -69,7 +46,7 @@
         <div th:if="${errorMessage}" class="alert alert-danger">
             <p th:text="${errorMessage}"></p>
         </div>
-    
+
         <!-- Champs de recherche -->
         <div class="row mb-3">
             <div class="col-md-4">
@@ -91,7 +68,7 @@
                     onclick="window.location.href='/imagestitres/ajouter'">Ajouter une image</button>
             </div>
         </div>
-    
+
         <table class="table table-responsive table-bordered table-hover" id="myTable">
             <thead class="thead-dark">
                 <tr>
@@ -120,16 +97,16 @@
                 </tr>
             </tbody>
         </table>
-    
+
         <script>
-    
+
             function searchImage() {
                 var searchValue = document.getElementById('searchImage').value.toLowerCase();
                 var imageRows = document.getElementById('imageTableBody').getElementsByTagName('tr');
-    
+
                 for (var i = 0; i < imageRows.length; i++) {
                     var imageName = imageRows[i].getElementsByTagName('td')[0].innerText.toLowerCase();
-    
+
                     if (imageName.includes(searchValue)) {
                         imageRows[i].style.display = '';
                     } else {
@@ -137,14 +114,14 @@
                     }
                 }
             }
-    
+
             function searchImageByType() {
                 var selectedType = document.getElementById('typeDropdown').value.toLowerCase();
                 var imageRows = document.getElementById('imageTableBody').getElementsByTagName('tr');
-    
+
                 for (var i = 0; i < imageRows.length; i++) {
                     var imageType = imageRows[i].getElementsByTagName('td')[2].innerText.toLowerCase();
-    
+
                     if (selectedType === '' || imageType === selectedType) {
                         imageRows[i].style.display = '';
                     } else {
@@ -213,7 +190,7 @@
                     icon.className = "fa fa-sort-desc";
                 }
             }
-    
+
         </script>
     </div>
 </body>

@@ -2,8 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/accueil.css" rel="stylesheet" />
+    <script src="/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
     <title>Modifier l'image</title>
 
     <script type="text/javascript">
@@ -84,6 +90,7 @@
 </head>
 
 <body>
+    <div th:replace="fragments/header :: header"></div>
 
     <h2>Modifier l'image <span th:text="${image.nomImage}"></span></h2>
     <form th:action="@{'/materiaux/modifier/' + ${id}}" th:object="${image}" method="post"
