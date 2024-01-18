@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -35,6 +37,14 @@ public class FormationController {
     private UtilisateurServiceImpl utilisateurService;
     @Autowired
     private FicheServiceImpl ficheService;
+
+    
+     private String determineUserRole() {
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("");
+    }
 
     @PostMapping("/ajouterFormation")
     public String ajouterFormation(@ModelAttribute Formation formation, RedirectAttributes redirectAttributes) {
@@ -85,6 +95,8 @@ public class FormationController {
 
     @GetMapping("/list")
     public String afficherFormulaireAjoutUtilisateur(Model model) {
+        String utilisateurConnecteRole = determineUserRole();
+        model.addAttribute("utilisateurConnecteRole", utilisateurConnecteRole);
         List<Formation> formations = formationService.lire();
         List<Utilisateur> utilisateurs = utilisateurService.lire();
         model.addAttribute("formations", formations);
