@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Créer une nouvelle session</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Créer une nouvelle session</h1>
+        <form th:action="@{/session/creer}" th:object="${session}" method="post">
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" th:field="*{date}" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="formation">Formation:</label>
+                <select id="formation" name="formation" th:field="*{formation}" class="form-control" required>
+                    <option th:each="formation : ${allFormations}" th:value="${formation.id}"
+                        th:text="${formation.nom}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="NomDemandeur">Nom du demandeur:</label>
+                <input type="text" id="NomDemandeur" name="demande.NomDemandeur" th:field="*{demande.NomDemandeur}"
+                    class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="DateDemande">Date de la demande:</label>
+                <input type="date" id="DateDemande" name="demande.DateDemande" th:field="*{demande.DateDemande}"
+                    class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="Localisation">Localisation:</label>
+                <input type="text" id="Localisation" name="demande.Localisation" th:field="*{demande.Localisation}"
+                    class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="Description">Description:</label>
+                <textarea id="Description" name="demande.Description" th:field="*{demande.Description}"
+                    class="form-control" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="DegreUrgence">Degré d'urgence:</label>
+                <input type="number" id="DegreUrgence" name="demande.DegreUrgence" th:field="*{demande.DegreUrgence}"
+                    class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="typeIntervention">Type d'intervention:</label>
+                <select id="typeIntervention" name="typeIntervention" class="form-control">
+                    <option th:each="type : ${typesIntervention}" th:value="${type}" th:text="${type}"></option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Créer Session</button>
+        </form>
+    </div>
+</body>
+
+</html>

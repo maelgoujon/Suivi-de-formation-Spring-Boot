@@ -33,4 +33,7 @@ public class Formation {
 
     @ManyToMany(mappedBy = "formations")
     private List<Utilisateur> utilisateurs;
+
+    @OneToMany(mappedBy = "formation")
+    private List<Session> sessions;
 }

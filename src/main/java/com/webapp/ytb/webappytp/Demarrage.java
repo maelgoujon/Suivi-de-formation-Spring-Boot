@@ -157,6 +157,21 @@ public class Demarrage implements ApplicationRunner {
                     "");
             utilisateurRepository.save(educsimple);
         }
+        // Creation de l´educsimple2
+        Utilisateur educsimple2 = utilisateurRepository.findUserByLogin("educsimple2");
+        if (educsimple2 == null) {
+            educsimple2 = new Utilisateur();
+            educsimple2.setFormations(List.of(formation));
+            educsimple2.setNom("Educ");
+            educsimple2.setPrenom("Simple2");
+            educsimple2.setLogin("educsimple2");
+            educsimple2.setMdp(passwordEncoder.encode("educsimple2"));
+            educsimple2.setRole(UserRole.EDUCSIMPLE);
+            educsimple2.setPhotoBase64(photoBase64);
+            educsimple2.setDescription("Utilisation des fiches, pourra laisser des traces écrite/vocal \r\n" + //
+                    "");
+            utilisateurRepository.save(educsimple2);
+        }
         // Creation du superadmin
         Utilisateur superadmin = utilisateurRepository.findUserByLogin("superadmin");
         if (superadmin == null) {

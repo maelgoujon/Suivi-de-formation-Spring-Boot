@@ -300,4 +300,19 @@ public class FormationServiceImpl implements FormationService {
         ops.close();
     }
 
+    @Override
+    public List<Formation> getFormationsByUserId(long id) {
+        List<Formation> formations = formationRepository.findAll();
+        List<Formation> formationsByUserId = new ArrayList<>();
+        for (Formation formation : formations) {
+            List<Utilisateur> utilisateurs = formation.getUtilisateurs();
+            for (Utilisateur utilisateur : utilisateurs) {
+                if (utilisateur.getId() == id) {
+                    formationsByUserId.add(formation);
+                }
+            }
+        }
+        return formationsByUserId;
+    }
+
 }
