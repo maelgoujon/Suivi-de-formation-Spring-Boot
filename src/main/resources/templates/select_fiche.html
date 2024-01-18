@@ -23,21 +23,21 @@
   <nav class="navbar bg-body-tertiary">
     <div class="container d-flex justify-content-between align-items-center">
       <!-- Bouton gauche pour le mot de passe oublié -->
-      <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modalMdpOublie">
-        <img src="/images/mdp_oublie.png" alt="Mot de Passe Oublié?" width="50" height="50">
-      </button>
-
+      <a th:href="@{'/suivi_progression/' + ${userrr.id}}">
+          <img src="/images/suivi.png" alt="Suivi de progression" width="50" height="50">
+      </a>
+      
       <!-- Logo accueil au centre -->
-      <a class="navbar-brand mx-auto" href="/">
+      <a class="navbar-brand mx-auto" href="#">
         <img src="/images/accueil.png" alt="Accueil" width="50" height="50">
       </a>
 
       <!-- Bouton droit pour l'admin -->
-      <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modalConnexionAdmin">
-        <img src="/images/admin.png" alt="Connexion Admin" width="50" height="50">
-        Admin
+      <a href="../log_out">
+        <img src="/images/porte.png" alt="Connexion Admin" width="50" height="50">
+        Se déconnecter
       </button>
-    </div>
+    </a>
   </nav>
   <div class="modal fade" id="modalMdpOublie" tabindex="-1" aria-labelledby="modalMdpOublieLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -54,34 +54,6 @@
     </div>
   </div>
 
-  <div class="modal fade" id="modalConnexionAdmin" tabindex="-1" aria-labelledby="modalConnexionAdminLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalConnexionAdminLabel">Connexion Admin</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-        </div>
-        <div class="modal-body">
-          <form id="adminLoginForm" th:action="@{/login}" method="post">
-            <div class="mb-3">
-              <label for="adminUsername" class="form-label">Nom d'utilisateur</label>
-              <input type="text" class="form-control" id="adminUsername" name="username" required>
-            </div>
-            <div class="mb-3">
-              <label for="adminPassword" class="form-label">Mot de passe</label>
-              <input type="password" class="form-control" id="adminPassword" name="password" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Se Connecter</button>
-            <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover"
-              data-bs-placement="bottom" data-bs-content="Demander de l'aide au SUPERADMIN">
-              Mot de Passe Oublié ?
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div class="row">
     <div th:each="fiche : ${fiches}" class="col-4 d-flex flex-column align-items-center"
