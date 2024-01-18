@@ -38,7 +38,7 @@ public class Utilisateur {
     @NotBlank(message = "Le champ 'login' est obligatoire.")
     private String login;
 
-    @Column(length = 50)
+    @Column(length = 250)
     @NotBlank(message = "Le champ 'mot de passe' est obligatoire.")
     private String mdp;
 
