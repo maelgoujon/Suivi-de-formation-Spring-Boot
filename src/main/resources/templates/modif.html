@@ -25,7 +25,7 @@
             <li class="nav-item"><a href="/accueil_superadmin" class="nav-link active text-white fs-5" aria-current="page">Accueil</a></li>
             <li class="nav-item"><a href="/formation/list" class="nav-link text-black fs-5" aria-current="page">Formations</a></li>
             <li class="nav-item"><a href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing" class="nav-link text-black fs-5">Aide</a></li>
-            <li class="nav-item"><a href="log_out" class="nav-link text-black fs-5">Se déconnecter</a></li>
+            <li class="nav-item"><a href="../log_out" class="nav-link text-black fs-5">Se déconnecter</a></li>
         </ul>
       </header>
 
@@ -58,10 +58,9 @@
                         <input type="text" id="login" name="login" th:field="*{login}" class="form-control" required>
                     </div>
 
-                    <label for="mdp" class="col-md-2 col-form-label">Mot de passe:</label>
+                    <label for="mdp" type="password" class="col-md-2 col-form-label">Mot de passe:</label>
                     <div class="col-md-4">
-                        <input type="text" id="motdepasse" name="motdepasse" th:value="${utilisateur.mdp}"
-                            th:field="*{mdp}" required>
+                        <input type="password" id="motdepasse" name="motdepasse" th:field="*{mdp}" required>
                     </div>
 
                     <label for="photo" class="col-md-2 col-form-label">Sélectionner une photo:</label>
