@@ -58,9 +58,11 @@
 
       <section class="h-100 p-5 text-white bg-dark rounded-3" style="margin-top: calc(var(--bs-gutter-x) * .5);">
          <div class="container">
-            <h1 class="display-4">FICHE D'INTERVENTION:&nbsp;
+            <h1 id="interventionHeader" class="display-4">FICHE D'INTERVENTION:&nbsp;
                <span th:if="${ficheIntervention.intervention != null}"
                   th:text="${ficheIntervention.intervention.typeIntervention}"></span>
+               <img type="button" src="/images/son.png" alt="Lire le texte" onclick="lireTexte('interventionHeader')"
+                  style="width: 20px;">
             </h1>
          </div>
       </section>
@@ -82,7 +84,8 @@
                </div>
                <div class="col-auto">
                   <h2 class="display-5" th:style="'color: ' + ${ficheIntervention.Intervenant.couleurTitreIntervenant}">
-                     Intervenant</h2>
+                     Intervenant <img type="button" src="/images/son.png" alt="Lire le texte"
+                        onclick="lireTexteAEcrire('Intervenant')" style="width: 20px;"></h2>
                </div>
             </div>
             <h2 class="display-5" th:case="2"
@@ -105,7 +108,9 @@
                      </div>
                      <div class="col-auto">
                         <label for="firstName"
-                           th:style="'color: ' + ${ficheIntervention.Intervenant.couleurPrenom}">Prénom</label>
+                           th:style="'color: ' + ${ficheIntervention.Intervenant.couleurPrenom}">Prénom <img
+                              type="button" src="/images/son.png" alt="Lire le texte"
+                              onclick="lireTexteAEcrire('Prénom')" style="width: 20px;"></label>
                      </div>
                   </div>
                   <label th:case="2" for="firstName"
@@ -129,8 +134,9 @@
                            style="height: 1em;" />
                      </div>
                      <div class="col-auto">
-                        <label for="lastName"
-                           th:style="'color: ' + ${ficheIntervention.Intervenant.couleurNom}">Nom</label>
+                        <label for="lastName" th:style="'color: ' + ${ficheIntervention.Intervenant.couleurNom}">Nom
+                           <img type="button" src="/images/son.png" alt="Lire le texte"
+                              onclick="lireTexteAEcrire('Nom')" style="width: 20px;"></label>
                      </div>
                   </div>
                   <label th:case="2" for="lastName"
@@ -148,7 +154,7 @@
 
          <!--------------------------Demande--------------------------------------->
 
-         <hr th:if="${ficheIntervention.demande.niveauTitreDemande != 4}"/>
+         <hr th:if="${ficheIntervention.demande.niveauTitreDemande != 4}" />
          <legend th:switch="${ficheIntervention.demande.niveauTitreDemande}">
             <img th:case="0" class="display-5" th:src="@{${ficheIntervention.Demande.ImageTitreDemandeUrl}}" alt="Fait"
                style="height: 1em;" />
@@ -159,6 +165,8 @@
                </div>
                <div class="col-auto">
                   <h2 class="display-5" th:style="'color: ' + ${ficheIntervention.Demande.couleurTitreDemande}">Demande
+                     <img type="button" src="/images/son.png" alt="Lire le texte" onclick="lireTexteAEcrire('Demande')"
+                        style="width: 20px;">
                   </h2>
                </div>
             </div>
@@ -179,14 +187,23 @@
                      <div class="col-auto">
                         <label for="disabledNomDemandeur"
                            th:style="'color: ' + ${ficheIntervention.Demande.couleurNomDemandeur}">Nom du
-                           demandeur</label>
+                           demandeur <img type="button" src="/images/son.png" alt="Lire le texte"
+                              onclick="lireTexteAEcrire('Nom du demandeur')" style="width: 20px;"></label>
                      </div>
                   </div>
                   <label th:case="2" for="disabledNomDemandeur"
                      th:style="'color: ' + ${ficheIntervention.Demande.couleurNomDemandeur}">Nom du demandeur</label>
                </div>
-               <input type="text" class="form-control" id="disabledNomDemandeur" placeholder=""
-                  th:value="${ficheIntervention.demande.NomDemandeur}" disabled>
+               <div class="input-group">
+                  <input type="text" class="form-control" id="disabledNomDemandeur" placeholder=""
+                     th:value="${ficheIntervention.demande.NomDemandeur}" disabled>
+                  <div class="input-group-append">
+                     <button class="btn btn-outline-secondary" type="button"
+                        onclick="lireTexteValue('disabledNomDemandeur')">
+                        <img src="/images/son.png" alt="Lire le nom" style="width: 20px;">
+                     </button>
+                  </div>
+               </div>
 
 
                <div th:switch="${ficheIntervention.demande.niveauTitreDemandeDegreUrgence}">
@@ -201,14 +218,25 @@
                      <div class="col-auto">
                         <label for="disabledDegreUrgence"
                            th:style="'color: ' + ${ficheIntervention.demande.couleurDegreUrgence}">Degré
-                           d'urgence</label>
+                           d'urgence </label>
                      </div>
                   </div>
                   <label th:case="2" for="disabledDegreUrgence"
                      th:style="'color: ' + ${ficheIntervention.demande.couleurDegreUrgence}">Degré d'urgence</label>
+                  <img type="button" src="/images/son.png" alt="Lire le texte"
+                     onclick="lireTexteAEcrire('Degré d\'urgence')" style="width: 20px;">
                </div>
-               <input type="text" class="form-control" id="disabledDegreUrgence" placeholder=""
-                  th:value="${ficheIntervention.demande.degreUrgence}" disabled>
+               <div class="input-group">
+                  <input type="text" class="form-control" id="disabledDegreUrgence" placeholder=""
+                     th:value="${ficheIntervention.demande.degreUrgence}" disabled>
+                  <div class="input-group-append">
+                     <button class="btn btn-outline-secondary" type="button"
+                        onclick="lireTexteArea  ('disabledDegreUrgence')">
+                        <img src="/images/son.png" alt="Lire le degré d'urgence" style="width: 20px;">
+                     </button>
+                  </div>
+               </div>
+
             </div>
 
 
@@ -229,9 +257,19 @@
                   </div>
                   <label th:case="2" for="disabledDateDemande"
                      th:style="'color: ' + ${ficheIntervention.demande.couleurDateDemande}">Date de la demande</label>
+                  <img type="button" src="/images/son.png" alt="Lire le texte"
+                     onclick="lireTexteAEcrire('Date de la demande')" style="width: 20px;">
                </div>
-               <input type="date" class="form-control" id="disabledDateDemande" placeholder=""
-                  th:value="${ficheIntervention.demande.dateDemande}" disabled>
+               <div class="input-group">
+                  <input type="date" class="form-control" id="disabledDateDemande" placeholder=""
+                     th:value="${ficheIntervention.demande.dateDemande}" disabled>
+                  <div class="input-group-append">
+                     <button class="btn btn-outline-secondary" type="button"
+                        onclick="lireTexteValue('disabledDateDemande')">
+                        <img src="/images/son.png" alt="Lire la date de la demande" style="width: 20px;">
+                     </button>
+                  </div>
+               </div>
 
                <div th:switch="${ficheIntervention.demande.niveauTitreDemandeLocalisation}">
                   <img th:case="0" th:src="@{${ficheIntervention.demande.imageTitreDemandeLocalisationUrl}}"
@@ -245,14 +283,24 @@
                      </div>
                      <div class="col-auto">
                         <label for="disabledLocalisation"
-                           th:style="'color: ' + ${ficheIntervention.demande.couleurLocalisation}">Localisation</label>
+                           th:style="'color: ' + ${ficheIntervention.demande.couleurLocalisation}">Localisation </label>
                      </div>
                   </div>
                   <label th:case="2" for="disabledLocalisation"
                      th:style="'color: ' + ${ficheIntervention.demande.couleurLocalisation}">Localisation</label>
+                  <img type="button" src="/images/son.png" alt="Lire le texte"
+                     onclick="lireTexteAEcrire('Localisation')" style="width: 20px;">
                </div>
-               <input type="text" class="form-control" id="disabledLocalisation" placeholder=""
-                  th:value="${ficheIntervention.demande.localisation}" disabled>
+               <div class="input-group">
+                  <input type="text" class="form-control" id="disabledLocalisation" placeholder=""
+                     th:value="${ficheIntervention.demande.localisation}" disabled>
+                  <div class="input-group-append">
+                     <button class="btn btn-outline-secondary" type="button"
+                        onclick="lireTexteValue('disabledLocalisation')">
+                        <img src="/images/son.png" alt="Lire la localisation" style="width: 20px;">
+                     </button>
+                  </div>
+               </div>
             </div>
          </div>
          <div th:if="${ficheIntervention.demande.niveauTitreDemande != 4}">
@@ -271,13 +319,25 @@
                      <div class="col-auto">
                         <label for="disabledDescription"
                            th:style="'color: ' + ${ficheIntervention.demande.couleurDescription}">Description</label>
+                        <img type="button" src="/images/son.png" alt="Lire le texte"
+                           onclick="lireTexteAEcrire('Nom du demandeur')" style="width: 20px;">
                      </div>
                   </div>
                   <label th:case="2" for="disabledDescription"
-                     th:style="'color: ' + ${ficheIntervention.demande.couleurDescription}">Description</label>
+                     th:style="'color: ' + ${ficheIntervention.demande.couleurDescription}">Description </label>
+                  <img type="button" src="/images/son.png" alt="Lire le texte" onclick="lireTexteAEcrire('Description')"
+                     style="width: 20px;">
                </div>
-               <textarea rows="10" id="disabledDescription" class="form-control"
-                  th:placeholder="${ficheIntervention.demande.Description}" disabled></textarea>
+               <div class="input-group">
+                  <textarea rows="10" id="disabledDescription" class="form-control"
+                     th:placeholder="${ficheIntervention.demande.Description}" disabled></textarea>
+                  <div class="input-group-append">
+                     <button class="btn btn-outline-secondary" type="button"
+                        onclick="lireTexteArea('disabledDescription')">
+                        <img src="/images/son.png" alt="Lire la description" style="width: 20px;">
+                     </button>
+                  </div>
+               </div>
             </div>
          </div>
 
@@ -295,7 +355,9 @@
                </div>
                <div class="col-auto">
                   <h2 class="display-5"
-                     th:style="'color: ' + ${ficheIntervention.Intervention.couleurTitreIntervention}">Intervention</h2>
+                     th:style="'color: ' + ${ficheIntervention.Intervention.couleurTitreIntervention}">Intervention <img
+                        type="button" src="/images/son.png" alt="Lire le texte"
+                        onclick="lireTexteAEcrire('Intervention')" style="width: 20px;"></h2>
                </div>
             </div>
             <h2 class="display-5" th:case="2"
@@ -319,7 +381,8 @@
                      <div class="col-auto">
                         <label for="newDateIntervention"
                            th:style="'color: ' + ${ficheIntervention.intervention.couleurDateIntervention}">Date de
-                           l'intervention</label>
+                           l'intervention <img type="button" src="/images/son.png" alt="Lire le texte"
+                              onclick="lireTexteAEcrire('Date de l\'intervention')" style="width: 20px;"></label>
                      </div>
                   </div>
                   <label th:case="2" for="newDateIntervention"
@@ -344,7 +407,8 @@
                      <div class="col-auto">
                         <label for="newDureeIntervention"
                            th:style="'color: ' + ${ficheIntervention.intervention.couleurDureeIntervention}">Durée de
-                           l'intervention</label>
+                           l'intervention <img type="button" src="/images/son.png" alt="Lire le texte"
+                              onclick="lireTexteAEcrire('Durée de l\'intervention')" style="width: 20px;"></label>
                      </div>
                   </div>
                   <label th:case="2" for="newDureeIntervention"
@@ -374,7 +438,8 @@
                      <div class="col-auto">
                         <label for="newTypeIntervention"
                            th:style="'color: ' + ${ficheIntervention.intervention.couleurTypeIntervention}">Type
-                           d'intervention</label>
+                           d'intervention <img type="button" src="/images/son.png" alt="Lire le texte"
+                              onclick="lireTexteAEcrire('Type d\'intervention')" style="width: 20px;"></label>
                      </div>
                   </div>
                   <label th:case="2" for="newTypeIntervention"
@@ -400,6 +465,10 @@
                <input type="hidden" name="newNatureType"
                   th:value="${ficheIntervention.intervention != null ? ficheIntervention.intervention.typeIntervention : null}"
                   id="selectedNatureType">
+               <button class="btn btn-outline-secondary" type="button" onclick="lireTexteValue('selectedNatureType')">
+                  <img src="/images/son.png" alt="Lire le type de nature" style="width: 20px;">
+               </button>
+
             </div>
 
 
@@ -419,7 +488,8 @@
                      <div class="col-auto">
                         <label for="newMaintenanceType"
                            th:style="'color: ' + ${ficheIntervention.Maintenance.CouleurMaintenanceType}">Type de
-                           maintenance</label>
+                           maintenance <img type="button" src="/images/son.png" alt="Lire le texte"
+                           onclick="lireTexteAEcrire('Type de maintenance')" style="width: 20px;"></label>
                      </div>
                   </div>
                   <label th:case="2" for="newMaintenanceType"
@@ -443,7 +513,10 @@
                <!--Champ  caché pour stocker la nouvelle valeur -->
                <input type="hidden" name="newMaintenanceType"
                   th:value="${ficheIntervention.maintenance != null ? ficheIntervention.maintenance.maintenanceType : null}"
-                  id="selectedMaintenanceType">
+                  id="selectedMaintenanceType"  >
+                  <button class="btn btn-outline-secondary" type="button" onclick="lireTexteValue('selectedMaintenanceType')">
+                     <img src="/images/son.png" alt="Lire le type de maitenance" style="width: 20px;">
+                  </button>
             </div>
 
 
@@ -451,7 +524,7 @@
          </div>
 
          <!--------------------------Travaux réalisés--------------------------------------->
-         <hr th:if="${ficheIntervention.NiveauTravauxRealises != 4}"/>
+         <hr th:if="${ficheIntervention.NiveauTravauxRealises != 4}" />
          <legend th:switch="${ficheIntervention.NiveauTravauxRealises}">
             <img th:case="0" class="display-5" th:src="@{${ficheIntervention.imageTitreTravauxRealisesUrl}}" alt="Fait"
                style="height: 1em;" />
@@ -462,7 +535,9 @@
                </div>
                <div class="col-auto">
                   <h2 class="display-5" th:style="'color: ' + ${ficheIntervention.couleurTravauxRealises}">Travaux
-                     réalisés
+                     réalisés <img
+                     type="button" src="/images/son.png" alt="Lire le texte"
+                     onclick="lireTexteAEcrire('Travaux réalisés')" style="width: 20px;">
                   </h2>
                </div>
             </div>
@@ -475,7 +550,7 @@
          </div>
 
          <!--------------------------Travaux NON réalisés--------------------------------------->
-         <hr th:if="${ficheIntervention.NiveauTravauxNonRealises != 4}"/>
+         <hr th:if="${ficheIntervention.NiveauTravauxNonRealises != 4}" />
          <legend th:switch="${ficheIntervention.NiveauTravauxNonRealises}">
             <img th:case="0" class="display-5" th:src="@{${ficheIntervention.imageTitreTravauxNonRealisesUrl}}"
                alt="Pas Fait" style="height: 1em;" />
@@ -488,7 +563,9 @@
                <div class="col-auto">
                   <h2 class="display-5" th:style="'color: ' + ${ficheIntervention.couleurTravauxNonRealises}">Travaux
                      non
-                     réalisés</h2>
+                     réalisés <img
+                     type="button" src="/images/son.png" alt="Lire le texte"
+                     onclick="lireTexteAEcrire('Travaux non réalisés')" style="width: 20px;"></h2>
                </div>
             </div>
 
@@ -515,7 +592,9 @@
                </div>
                <div class="col-auto">
                   <h2 class="display-5" th:style="'color: ' + ${ficheIntervention.couleurMateriauxUtilises}">Materiaux
-                     utilisés
+                     utilisés <img
+                     type="button" src="/images/son.png" alt="Lire le texte"
+                     onclick="lireTexteAEcrire('Matériaux utilisés')" style="width: 20px;">
                   </h2>
                </div>
             </div>
@@ -724,7 +803,9 @@
             <input class="form-check-input" type="checkbox" name="newNouvelleIntervention"
                th:checked="${ficheIntervention.nouvelleIntervention}" id="nouvelleIntervention" />
             <label class="form-check-label" for="nouvelleIntervention">
-               Nécessite une nouvelle intervention
+               Nécessite une nouvelle intervention <img
+               type="button" src="/images/son.png" alt="Lire le texte"
+               onclick="lireTexteAEcrire('Nécessite une nouvelle intervention')" style="width: 20px;">
             </label>
          </div>
 
@@ -733,7 +814,7 @@
 
          <!--------------------------Validation--------------------------------------->
          <div class="submit-container" style="height: 10vh;width: 100%;margin-bottom: calc(var(--bs-gutter-x) * .5);">
-            <button class="btn btn-dark" type="submit" style="height: inherit;width: inherit;">Terminer</button>
+            <button class="btn btn-dark" type="submit" style="height: inherit;width: inherit;">Terminer </button>
          </div>
 
          <input type="hidden" id="url" th:value="@{/fiche/updateTypeIntervention/{id}(id=${ficheIntervention.id})}" />
@@ -747,6 +828,36 @@
 
    <script th:inline="javascript">
       /* <![CDATA[ */
+
+      function lireTexteAEcrire(texte) {
+         const syntheseVocale = window.speechSynthesis;
+         const message = new SpeechSynthesisUtterance(texte);
+         syntheseVocale.speak(message);
+      }
+
+      function lireTexte(elementId) {
+         const texte = document.getElementById(elementId).textContent;
+         const syntheseVocale = window.speechSynthesis;
+         const message = new SpeechSynthesisUtterance(texte);
+         syntheseVocale.speak(message);
+      }
+
+      function lireTexteValue(elementId) {
+         const texte = document.getElementById(elementId).value;
+         const syntheseVocale = window.speechSynthesis;
+         const message = new SpeechSynthesisUtterance(texte);
+         syntheseVocale.speak(message);
+      }
+
+      function lireTexteArea(elementId) {
+         const element = document.getElementById(elementId);
+         const texte = element.value.trim() === "" ? element.placeholder : element.value;
+         const syntheseVocale = window.speechSynthesis;
+         const message = new SpeechSynthesisUtterance(texte);
+         syntheseVocale.speak(message);
+      }
+
+
 
       function updateHiddenField(selectElement, textFieldId) {
          var selectedValue = selectElement.value;
