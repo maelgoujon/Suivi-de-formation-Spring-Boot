@@ -820,8 +820,8 @@ public class HomeController {
 
         // List<FicheIntervention> fiches = ficheServ.getFichesByUserId(id); // Ajout de
         // la liste des fiches
-        Utilisateur userrr = userServ.findById(id);
-        model.addAttribute("userrr", userrr);
+        Utilisateur user = userServ.findById(id);
+        model.addAttribute("user", user);
         model.addAttribute("fiche", new FicheIntervention());
         model.addAttribute("fiches", fiches); // Ajout de la liste des fiches
 
