@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
@@ -60,15 +62,24 @@ public class HomeController {
     FicheServiceImpl ficheServ;
     ImagesTitresRepository imagesTitresRepository;
     FicheRepository ficheRepository;
+    UtilisateurRepository utilisateurRepository;
 
     public HomeController(UtilisateurServiceImpl userServ, FicheServiceImpl ficheServ,
             MateriauxAmenagementRepository materiauxAmenagementRepository,
-            ImagesTitresRepository imagesTitresRepository, FicheRepository ficheRepository) {
+            ImagesTitresRepository imagesTitresRepository, FicheRepository ficheRepository,
+            UtilisateurRepository utilisateurRepository) {
         this.userServ = userServ;
         this.ficheServ = ficheServ;
         this.materiauxAmenagementRepository = materiauxAmenagementRepository;
         this.imagesTitresRepository = imagesTitresRepository;
         this.ficheRepository = ficheRepository;
+        this.utilisateurRepository = utilisateurRepository;
+    }
+
+    public Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Utilisateur utilisateur = utilisateurRepository.findUserByLogin(authentication.getName());
+        return utilisateur.getId(); // Retourne l'id de l'utilisateur actuellement connecté
     }
 
     // -----------------------------------------//
@@ -586,7 +597,7 @@ public class HomeController {
             // votre service d'utilisateur
             long userId = userServ.findUserByLogin(username).getId();
 
-            return "redirect:/select_fiche/" + userId;
+            return "redirect:/select_fiche";
         }
     }
 
@@ -752,23 +763,44 @@ public class HomeController {
         return "log_out";
     }
 
-    @GetMapping("/select_fiche/{userId}")
-    public String select_fiche(Model model, @PathVariable Long userId) {
+    @GetMapping("/select_fiche")
+    public String select_fiche(Model model) {
         // List<FicheIntervention> fiches = ficheServ.lireTout(); // Ajout de la liste
         // des fiches
 
-        List<FicheIntervention> fiches = ficheServ.getFichesByUserId(userId); // Ajout de la liste des fiches
-        Utilisateur userrr = userServ.findById(userId);
+        List<FicheIntervention> fiches = ficheServ.getFichesByUserId(getCurrentUserId());
+        Utilisateur userrr = userServ.findById(getCurrentUserId());
         model.addAttribute("userrr", userrr);
         model.addAttribute("fiche", new FicheIntervention());
         model.addAttribute("fiches", fiches);
         return "select_fiche";
     }
 
+    public String getCurrentUserRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Utilisateur utilisateur = utilisateurRepository.findUserByLogin(authentication.getName());
+        return utilisateur.getRole().name(); // Retourne le rôle de l'utilisateur actuellement connecté
+    }
+
     @GetMapping("/suivi_progression/{userId}")
     public String suiviProgression(@PathVariable Long userId, Model model) {
-        Utilisateur utilisateur = userServ.findById(userId);
-        List<FicheIntervention> fiches = ficheServ.getFichesByUserId(userId);
+        if (getCurrentUserRole().equals(UserRole.CIP.name())) {
+
+            Utilisateur utilisateur = userServ.findById(userId);
+            List<FicheIntervention> fiches = ficheServ.getFichesByUserId(userId);
+
+            model.addAttribute("utilisateur", utilisateur);
+            model.addAttribute("fiches", fiches);
+            return "suivi_progression";
+        }else {
+            return "redirect:/accueil";
+        }
+    }
+
+    @GetMapping("/suivi_progression")
+    public String suiviProgression(Model model) {
+        Utilisateur utilisateur = userServ.findById(getCurrentUserId());
+        List<FicheIntervention> fiches = ficheServ.getFichesByUserId(getCurrentUserId());
 
         model.addAttribute("utilisateur", utilisateur);
         model.addAttribute("fiches", fiches);
