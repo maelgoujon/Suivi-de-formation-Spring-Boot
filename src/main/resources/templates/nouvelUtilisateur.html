@@ -11,40 +11,47 @@
     <script src="/js/bootstrap.bundle.min.js"></script>
     <title>Nouvel Utilisateur</title>
 
-    
-        <meta charset="UTF-8" />
-        <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Ajout utilisateur</title>
 
-        <script>
-            function encodeImageToBase64() {
-                var input = document.getElementById('photo'); // Change 'photo' to the actual ID of your file input
-                var file = input.files[0];
-    
-                if (file) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        var base64Image = e.target.result;
-                        document.getElementById('photoBase64').value = base64Image;
-                    };
-                    reader.readAsDataURL(file);
-                }
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ajout utilisateur</title>
+
+    <script>
+        function encodeImageToBase64() {
+            var input = document.getElementById('photo'); // Change 'photo' to the actual ID of your file input
+            var file = input.files[0];
+
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var base64Image = e.target.result;
+                    document.getElementById('photoBase64').value = base64Image;
+                };
+                reader.readAsDataURL(file);
             }
-        </script>
-    </head>
+        }
+    </script>
+</head>
 
 <body>
 
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color" style="background-color: #bbdefb;">
-        <a href="accueil_admin" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color"
+        style="background-color: #bbdefb;">
+        <a href="accueil_admin"
+            class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <svg class="bi me-2" width="40" height="32">
+                <use xlink:href="#bootstrap"></use>
+            </svg>
             <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
         </a>
-    
+
         <ul class="nav nav-pills">
-            <li class="nav-item"><a href="../accueil_superadmin" class="nav-link active text-white fs-5" aria-current="page">Accueil</a></li>
-            <li class="nav-item"><a href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing" class="nav-link text-black fs-5">Aide</a></li>
+            <li class="nav-item"><a href="../accueil_superadmin" class="nav-link active text-white fs-5"
+                    aria-current="page">Accueil</a></li>
+            <li class="nav-item"><a
+                    href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
+                    class="nav-link text-black fs-5">Aide</a></li>
             <li class="nav-item"><a href="../log_out" class="nav-link text-black fs-5">Se déconnecter</a></li>
         </ul>
     </header>
@@ -59,7 +66,7 @@
                 <div th:if="${param.success}">
                     <p style="color: green;">Utilisateur créé avec succès!</p>
                 </div>
-    
+
                 <!-- Formulaire de création d'utilisateur -->
                 <form th:action="@{/utilisateur/creer}" th:object="${utilisateur}" method="post">
                     <div class="form-group row">
@@ -67,17 +74,19 @@
                         <div class="col-md-4">
                             <input type="text" id="nom" name="nom" th:field="*{nom}" class="form-control" required>
                         </div>
-    
+
                         <label for="prenom" class="col-md-2 col-form-label">Prénom:</label>
                         <div class="col-md-4">
-                            <input type="text" id="prenom" name="prenom" th:field="*{prenom}" class="form-control" required>
+                            <input type="text" id="prenom" name="prenom" th:field="*{prenom}" class="form-control"
+                                required>
                         </div>
-    
+
                         <label for="login" class="col-md-2 col-form-label">Login:</label>
                         <div class="col-md-4">
-                            <input type="text" id="login" name="login" th:field="*{login}" class="form-control" required>
+                            <input type="text" id="login" name="login" th:field="*{login}" class="form-control"
+                                required>
                         </div>
-    
+
                         <label for="mdp" class="col-md-2 col-form-label">Mot de passe:</label>
                         <div class="col-md-4">
                             <input type="password" id="mdp" name="mdp" th:field="*{mdp}" class="form-control" required>
@@ -95,13 +104,8 @@
                                 <option th:each="role : ${roles}" th:value="${role}" th:text="${role}"></option>
                             </select>
                         </div>
-                        
-                        <label for="formationID" class="col-md-2 col-form-label">Formation:</label>
-                        <div class="col-md-4">
-                            <select id="formationID" name="formationID" th:field="*{formation.id}" class="form-control">
-                                <option th:each="formation : ${allFormations}" th:value="${formation.id}" th:text="${formation.nom}"></option>
-                            </select>
-                        </div>
+
+
 
                         <label for="niveauSelect" id="niveauLabel" class="col-md-2 col-form-label">Niveau:</label>
                         <div class="col-md-4">
@@ -112,10 +116,12 @@
                                 <option value="3">3</option>
                             </select>
                         </div>
-                      
-                        <label for="description" class="col-md-2 col-form-label">Description:</label>
-                        <div class="col-md-4">
-                            <textarea id="description" name="description" th:field="*{description}" ></textarea>
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="description" class="col-md-4 col-form-label">Description:</label>
+                        <div class="col-md-12">
+                            <textarea id="description" name="description" th:field="*{description}" rows="10" class="form-control"></textarea>
                         </div>
 
                         <!-- Ajouter cette ligne avant le bouton de soumission -->
@@ -129,7 +135,7 @@
             </div>
         </div>
     </div>
-    
+
 </body>
 
 </html>
@@ -139,17 +145,17 @@
     function handleRoleChange() {
         var selectedRole = document.getElementById("role").value;
         var niveauSelect = document.getElementById("niveauSelect");
-        
+
         var niveauLabel = document.getElementById("niveauLabel");  // Assurez-vous que l'ID est correct
 
         if (niveauLabel) {
             if (selectedRole !== "USER") {
                 niveauSelect.style.display = "none";
-                
+
                 niveauLabel.style.display = "none";
             } else {
                 niveauSelect.style.display = "block";
-                
+
                 niveauLabel.style.display = "block";
             }
         }
