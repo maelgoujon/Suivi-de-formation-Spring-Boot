@@ -31,6 +31,6 @@ public class Formation {
     @Column(length = 500)
     private String description;
 
-    @OneToMany(mappedBy = "formation")
+    @ManyToMany(mappedBy = "formations")
     private List<Utilisateur> utilisateurs;
 }

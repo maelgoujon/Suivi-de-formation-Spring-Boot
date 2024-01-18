@@ -35,6 +35,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.management.relation.Role;
@@ -84,7 +85,7 @@ public class FormationServiceImpl implements FormationService {
     
     @Override
     public void supprimerFormationAvecUtilisateurs(Long formationId) {
-        List<Utilisateur> utilisateurs = utilisateurRepository.findByFormation_Id(formationId);
+        List<Utilisateur> utilisateurs = formationRepository.findById(formationId).get().getUtilisateurs();
         for (Utilisateur utilisateur : utilisateurs) {
             utilisateurRepository.delete(utilisateur);
         }
@@ -103,7 +104,10 @@ public class FormationServiceImpl implements FormationService {
         Formation formation = formationRepository.findById(formationId)
                 .orElseThrow(() -> new RuntimeException("Formation non trouvée"));
 
-        utilisateur.setFormation(formation);
+        // Ajouter la formation à l'utilisateur
+        List<Formation> formations = utilisateur.getFormations();
+        formations.add(formation);
+        utilisateur.setFormations(formations);
         utilisateurRepository.save(utilisateur);
     }
 
@@ -112,18 +116,20 @@ public class FormationServiceImpl implements FormationService {
         Utilisateur utilisateur = utilisateurRepository.findById(utilisateurId)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
-        utilisateur.setFormation(null);
+
+        List<Formation> formations = utilisateur.getFormations();
+        Optional<Formation> formation = formationRepository.findById(formationId);
+        formations.remove(formation);
+        utilisateur.setFormations(formations);
+
+
         utilisateurRepository.save(utilisateur);
     }
 
     @Override
     public void generatedExcel(Long formationId, HttpServletResponse response) throws Exception {
 
-        List<Utilisateur> utilisateursFormation = utilisateurRepository.findByFormation_Id(formationId);
-        List<Utilisateur> utilisateurs = utilisateursFormation.stream()
-                .filter(u -> u.getRole().equals(UserRole.USER))
-                .collect(Collectors.toList());
-
+        List<Utilisateur> utilisateurs = formationRepository.findById(formationId).get().getUtilisateurs();
         List<FicheIntervention> ficheInterventions = new ArrayList<>();
 
         for (Utilisateur utilisateur : utilisateurs) {

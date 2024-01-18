@@ -68,36 +68,64 @@
 </head>
 
 <body>
-    <div class="container">
-        <form th:action="@{/imagestitres/uploadImagesTitres}" method="post" enctype="multipart/form-data"
-            th:object="${imageTitre}">
-            <label for="nomImage">Nom de l'image :</label>
-            <input type="text" id="nomImage" name="nomImage" th:field="*{nomImage}" required>
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color"
+                    style="background-color: #bbdefb;">
+                    <a href="accueil_admin"
+                        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32">
+                            <use xlink:href="#bootstrap"></use>
+                        </svg>
+                        <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
+                    </a>
 
-            <br>
+                    <ul class="nav nav-pills">
+                        <li class="nav-item"><a href="../accueil_admin" class="nav-link text-white fs-5 active"
+                                aria-current="page">Accueil</a></li>
+                        <li class="nav-item"><a href="../fiche/liste_fiche" class="nav-link text-black fs-5 ">Voir les
+                                fiches</a></li>
+                        <li class="nav-item"><a href="../profil_admin" class="nav-link text-black fs-5">Votre profil</a>
+                        </li>
+                        <li class="nav-item"><a href="../archive" class="nav-link text-black fs-5">Archive</a></li>
+                        <li class="nav-item"><a
+                                href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
+                                class="nav-link text-black fs-5">Aide</a></li>
+                        <li class="nav-item"><a href="../log_out" class="nav-link text-black fs-5">Se déconnecter</a>
+                        </li>
+                    </ul>
+                </header>
 
-            <label for="typeImage">Type d'image :</label>
-            <select id="typeImage" name="typeImage" th:field="*{typeImage}" required>
-                <option
-                    th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.ImagesTitres.TypeImage).values()}"
-                    th:value="${type.name()}" th:text="${type.name()}"></option>
-            </select>
-            <br>
-            <label for="imageFile">Fichier Image :</label>
-            <input type="file" id="imageFile" name="imageFile" accept="image/*" required
-                onchange="handleFileSelect(this)">
-
-            <!-- Afficher un message si l'image est enregistrée avec succès -->
-            <p class="succes" th:if="${message}" th:text="${message}" style="color: green;"></p>
-
-            <!-- Afficher un message d'erreur si l'enregistrement de l'image échoue -->
-            <p class="error" th:if="${error}" th:text="${error}" style="color: red;"></p>
-
-            <!-- Afficher le bouton Uploader -->
-            <input type="submit" id="uploadButton" value="Ajouter">
-        </form>
-
-    </div>
+                <div class="container mt-4">
+                    <form th:action="@{/imagestitres/uploadImagesTitres}" method="post" enctype="multipart/form-data"
+                        th:object="${imageTitre}" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="nomImage" class="form-label">Nom de l'image :</label>
+                            <input type="text" id="nomImage" name="nomImage" th:field="*{nomImage}" class="form-control" required>
+                        </div>
+            
+                        <div class="mb-3">
+                            <label for="typeImage" class="form-label">Type d'image :</label>
+                            <select id="typeImage" name="typeImage" th:field="*{typeImage}" class="form-select" required>
+                                <option th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.ImagesTitres.TypeImage).values()}"
+                                    th:value="${type.name()}" th:text="${type.name()}"></option>
+                            </select>
+                        </div>
+            
+                        <div class="mb-3">
+                            <label for="imageFile" class="form-label">Fichier Image :</label>
+                            <input type="file" id="imageFile" name="imageFile" accept="image/*" class="form-control" required
+                                onchange="handleFileSelect(this)">
+                        </div>
+            
+                        <!-- Afficher un message si l'image est enregistrée avec succès -->
+                        <p class="succes" th:if="${message}" th:text="${message}" style="color: green;"></p>
+            
+                        <!-- Afficher un message d'erreur si l'enregistrement de l'image échoue -->
+                        <p class="error" th:if="${error}" th:text="${error}" style="color: red;"></p>
+            
+                        <!-- Afficher le bouton Uploader -->
+                        <button type="submit" id="uploadButton" class="btn btn-primary">Ajouter</button>
+                    </form>
+                </div>
 </body>
 
 </html>

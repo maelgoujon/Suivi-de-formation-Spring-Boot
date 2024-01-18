@@ -1,5 +1,6 @@
 package com.webapp.ytb.webappytp.service;
 
+import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,7 @@ import com.webapp.ytb.webappytp.modele.Formation;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.repository.FicheRepository;
+import com.webapp.ytb.webappytp.repository.FormationRepository;
 import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
 
 import jakarta.servlet.ServletOutputStream;
@@ -32,9 +34,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     private final UtilisateurRepository utilisateurRepository;
     private final FicheRepository ficheRepository;
+    private final FormationRepository formationRepository;
 
     @Override
-    public Utilisateur creer(Utilisateur utilisateur) {
+    public Utilisateur creer(Utilisateur utilisateur ) {
         return utilisateurRepository.save(utilisateur);
     }
 
@@ -97,15 +100,11 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public List<Utilisateur> getAllUtilisateurs() {
         return utilisateurRepository.findAll();
     }
-
+ 
+    //retourne la liste des utilisateurs d'une formation
     @Override
     public List<Utilisateur> findUserByFormation(Long formationId) {
-        return utilisateurRepository.findByFormation_Id(formationId);
-    }
-
-    @Override
-    public Optional<Formation> findFormationByUtilisateur(Long utilisateurId) {
-        return utilisateurRepository.findById(utilisateurId).map(Utilisateur::getFormation);
+        return formationRepository.findById(formationId).get().getUtilisateurs();
     }
 
     @Override
