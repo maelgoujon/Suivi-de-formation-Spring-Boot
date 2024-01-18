@@ -4,91 +4,171 @@
 <head>
     <meta charset="UTF-8">
     <title>Ajouter un Utilisateur à une Formation</title>
-    <!-- Ajoutez ici vos références CSS -->
+    <!-- Ajout des liens vers les fichiers CSS de Bootstrap -->
+    <script src="/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="/js/bootstrap.bundle.min.js"></script>
+
 </head>
 
 <body>
-    <h2>Liste des Formations et Utilisateurs</h2>
 
-    <!-- Affichage des messages de succès ou d'erreur -->
-    <div th:if="${success}">
-        <p th:text="${success}" style="color: green;"></p>
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color"
+                    style="background-color: #bbdefb;">
+                    <!-- Fond du header en #2596be -->
+                    <a href="accueil_admin"
+                        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32">
+                            <use xlink:href="#bootstrap"></use>
+                        </svg>
+                        <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
+                    </a>
+
+                    <ul class="nav nav-pills">
+                        <li class="nav-item"><a href="../../accueil_superadmin" class="nav-link text-black fs-5" aria-current="page">Accueil</a></li>
+                        <li class="nav-item"><a href="" class="nav-link text-white fs-5 active">Formations</a>
+                        <li class="nav-item"><a href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing" class="nav-link text-black fs-5">Aide</a></li>
+                        <li class="nav-item"><a href="../log_out" class="nav-link text-black fs-5">Se déconnecter</a>
+                        </li>
+                    </ul>
+                </header>
+
+    <div class="container mt-4">
+        <h2>Liste des Formations et Utilisateurs</h2>
+
+        <!-- Affichage des messages de succès ou d'erreur -->
+        <div th:if="${success}">
+            <p th:text="${success}" style="color: green;"></p>
+        </div>
+        <div th:if="${error}">
+            <p th:text="${error}" style="color: red;"></p>
+        </div>
+
+        <!-- Boucle sur les formations -->
+        <div class="container mt-4">
+            <div class="row">
+                <div th:each="formation, iterStat : ${formations}" class="col-md-4 mb-4">
+                    <!-- Utilisation de la classe col-md-4 pour afficher 3 formations par ligne sur les écrans moyens -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${formation.nom}"></h5>
+                            <h6 class="card-subtitle mb-2 text-muted" th:text="${formation.niveau_qualif}"></h6>
+                            <p class="card-text" th:text="${formation.description}"></p>
+                            <ul>
+                                <li th:each="utilisateur : ${formation.utilisateurs}" th:text="${utilisateur.nom} + ' ' + ${utilisateur.prenom}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-4">
+            <div class="row">
+                <!-- Colonne pour le formulaire "Ajouter un Utilisateur d'une Formation" -->
+                <div class="col-md-6">
+                    <h3 class="mb-4">Ajouter un Utilisateur d'une Formation</h3>
+                    <form action="/formation/ajouterUtilisateur" method="post" class="needs-validation" novalidate>
+        
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        
+                        <div class="form-group">
+                            <label for="formationId">Formation:</label>
+                            <select id="formationId" name="formationId" class="form-control">
+                                <option th:each="formation : ${formations}" th:value="${formation.id}" th:text="${formation.nom}"></option>
+                            </select>
+                        </div>
+        
+                        <div class="form-group">
+                            <label for="utilisateurId">Utilisateur:</label>
+                            <select id="utilisateurId" name="utilisateurId" class="form-control">
+                                <option th:each="utilisateur : ${utilisateurs}" th:value="${utilisateur.id}"
+                                    th:text="${utilisateur.nom} + ' ' + ${utilisateur.prenom}"></option>
+                            </select>
+                        </div>
+                        <br>
+        
+                        <button type="submit" class="btn btn-primary">Ajouter Utilisateur à la Formation</button>
+                    </form>
+                </div>
+        
+                <!-- Colonne pour le formulaire "Retirer un Utilisateur d'une Formation" -->
+                <div class="col-md-6">
+                    <h3 class="mb-4">Retirer un Utilisateur d'une Formation</h3>
+                    <form action="/formation/retirerUtilisateur" method="post">
+        
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        
+                        <div class="form-group">
+                            <label for="formationIdRetirer">Formation:</label>
+                            <select id="formationIdRetirer" name="formationId" class="form-control">
+                                <option th:each="formation : ${formations}" th:value="${formation.id}" th:text="${formation.nom}"></option>
+                            </select>
+                        </div>
+        
+                        <div class="form-group">
+                            <label for="utilisateurIdRetirer">Utilisateur:</label>
+                            <select id="utilisateurIdRetirer" name="utilisateurId" class="form-control">
+                                <option th:each="utilisateur : ${utilisateurs}" th:value="${utilisateur.id}"
+                                    th:text="${utilisateur.nom} + ' ' + ${utilisateur.prenom}"></option>
+                            </select>
+                        </div>
+                        <br>
+        
+                        <button type="submit" class="btn btn-danger">Retirer Utilisateur</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-4">
+            <div class="row">
+        
+                <!-- Colonne pour "Ajouter une Formation" -->
+                <div class="col-md-6">
+                    <h3 class="mb-4">Ajouter une Formation</h3>
+                    <form action="/formation/ajouterFormation" method="post">
+        
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        
+                        <div class="form-group">
+                            <label for="nom">Nom:</label>
+                            <input type="text" id="nom" name="nom" class="form-control" required>
+                        </div>
+        
+                        <div class="form-group">
+                            <label for="niveau_qualif">Niveau Qualification:</label>
+                            <input type="text" id="niveau_qualif" name="niveau_qualif" class="form-control" required>
+                        </div>
+        
+                        <div class="form-group">
+                            <label for="description">Description:</label>
+                            <input type="text" id="description" name="description" class="form-control">
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                    </form>
+                </div>
+        
+                <!-- Colonne pour "Liste des Formations Pour Supprimer" -->
+                <div class="col-md-6">
+                    <h3 class="mb-4">Liste des Formations Pour Supprimer</h3>
+                    <ul>
+                        <li th:each="formation : ${formations}" class="mb-2">
+                            <span th:text="${formation.nom}"></span>
+                            <form th:action="@{/formation/supprimerFormation}" method="post" class="d-inline-block ml-2">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                <input type="hidden" name="formationId" th:value="${formation.id}">
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+        
+            </div>
+        </div>
     </div>
-    <div th:if="${error}">
-        <p th:text="${error}" style="color: red;"></p>
-    </div>
-
-    <!-- Boucle sur les formations -->
-    <div th:each="formation : ${formations}">
-        <p>
-            <span th:text="${formation.nom}"></span> : <span th:text="${formation.niveau_qualif}"></span> : <span th:text="${formation.description}"></span>
-        </p>
-        <ul>
-            <li th:each="utilisateur : ${formation.utilisateurs}"
-                th:text="${utilisateur.nom} + ' ' + ${utilisateur.prenom}"></li>
-        </ul>
-    </div>
-
-    <h3>Ajouter un Utilisateur d'une Formation</h3>
-    <form action="/formation/ajouterUtilisateur" method="post">
-
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-
-        <select name="formationId">
-            <option th:each="formation : ${formations}" th:value="${formation.id}" th:text="${formation.nom}"></option>
-        </select>
-        <select name="utilisateurId">
-            <option th:each="utilisateur : ${utilisateurs}" th:value="${utilisateur.id}"
-                th:text="${utilisateur.nom} + ' ' + ${utilisateur.prenom}"></option>
-        </select>
-        <button type="submit">Ajouter Utilisateur à la Formation</button>
-    </form>
-
-    <h3>Retirer un Utilisateur d'une Formation</h3>
-    <form action="/formation/retirerUtilisateur" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-
-        <label for="formationIdRetirer">Formation:</label>
-        <select id="formationIdRetirer" name="formationId">
-            <option th:each="formation : ${formations}" th:value="${formation.id}" th:text="${formation.nom}"></option>
-        </select>
-
-        <label for="utilisateurIdRetirer">Utilisateur:</label>
-        <select id="utilisateurIdRetirer" name="utilisateurId">
-            <option th:each="utilisateur : ${utilisateurs}" th:value="${utilisateur.id}"
-                th:text="${utilisateur.nom} + ' ' + ${utilisateur.prenom}"></option>
-        </select>
-
-        <button type="submit">Retirer Utilisateur</button>
-    </form>
-
-    <h3>Ajouter une Formation</h3>
-    <form action="/formation/ajouterFormation" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <label for="nom">Nom:</label>
-        <input type="text" id="nom" name="nom" required>
-
-        <label for="niveau_qualif">Niveau Qualification:</label>
-        <input type=text id="niveau_qualif" name="niveau_qualif" required></input>
-
-        <label for="description">Description:</label>
-        <input type=text id="description" name="description"></input>
-
-        <button type="submit">Ajouter</button>
-    </form>
-
-    <!-- List of formations with delete option -->
-    <h3>Liste des Formations Pour Supprimer</h3>
-    <ul>
-        <li th:each="formation : ${formations}">
-            <span th:text="${formation.nom}"></span>
-            <form th:action="@{/formation/supprimerFormation}" method="post">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <input type="hidden" name="formationId" th:value="${formation.id}">
-                <button type="submit">Supprimer</button>
-            </form>
-        </li>
-    </ul>
 </body>
 
 </html>
