@@ -214,7 +214,7 @@
           <tr th:each="fiche : ${fiches}">
             <td>
               <a th:href="@{/fiche/modifier/{id}(id=${fiche.id})}">
-                <img src="/Images/modif.png" width="50" height="50"/>
+                <img th:if="${utilisateurConnecteRole == 'ROLE_ADMIN'}"src="/Images/modif.png" width="50" height="50"/>
               </a>
             </td>
             <td id="tdNomIntervenant" th:text="${fiche.utilisateur.nom} + ' ' + ${fiche.utilisateur.prenom}"></td>
