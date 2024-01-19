@@ -577,6 +577,7 @@ public class HomeController {
     @GetMapping("/redirectByRole")
     public String redirectByRole() {
         String utilisateurConnecteRole = determineUserRole();
+        System.out.println(utilisateurConnecteRole);
 
         if ("ROLE_SUPERADMIN".equals(utilisateurConnecteRole)) {
             return "redirect:/accueil_superadmin";
@@ -763,6 +764,7 @@ public class HomeController {
         // Effectuez ici toutes les opérations de déconnexion nécessaires
         return "log_out";
     }
+
 
     @GetMapping("/select_fiche")
     public String select_fiche(Model model) {

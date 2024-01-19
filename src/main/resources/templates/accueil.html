@@ -81,6 +81,7 @@
                             data-bs-content="Demander de l'aide au SUPERADMIN">
                             Mot de Passe Oublié ?
                         </button>
+                        
                     </form>
                 </div>
             </div>
@@ -105,7 +106,6 @@
                 <div class="col-12 d-flex justify-content-center">
                     <!-- Message de succès -->
                     <div th:if="${param.logout}" class="alert alert-success d-flex align-items-center" role="alert">
-                        <img src="/images/success.png" alt="Déconnexion Réussie" width="30" height="30" class="me-3">
                         <div>
                             Vous avez été déconnecté.
                         </div>
@@ -252,6 +252,8 @@
             });
 
         </script>
+
+
 
 </body>
 
