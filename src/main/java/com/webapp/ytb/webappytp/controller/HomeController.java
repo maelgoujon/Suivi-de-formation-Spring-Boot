@@ -196,6 +196,7 @@ public class HomeController {
     // Ajouter une fiche avec id utilisateur
     @GetMapping("/niveauxFiche/{id}")
     public String ajout_fiche_id(Model model, @PathVariable Long id) {
+        FicheIntervention ficheExistante = ficheServ.lire(id);
         FicheIntervention fiche = new FicheIntervention();
         List<ImagesTitres> imagesTitreIntervenant = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT);
@@ -250,6 +251,7 @@ public class HomeController {
         model.addAttribute("imagesTitreMaintenanceType", imagesTitreMaintenanceType);
 
         fiche.setId(id);
+        fiche.setDemande(ficheExistante.getDemande());
         model.addAttribute("fiche", fiche);
         model.addAttribute("user", ficheServ.lire(id).getIntervenant());
         return "fiche_a_completer";
