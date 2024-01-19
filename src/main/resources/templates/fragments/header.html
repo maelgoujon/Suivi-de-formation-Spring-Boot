@@ -42,6 +42,16 @@
                 th:class="${currentUrl == '/session/creer'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'">Créer
                 une session</a>
         </li>
+
+        
+        <li class="nav-item" th:if="${currentUserRole == 'ADMIN'}">
+            <a href="/materiaux/liste"
+                th:class="${currentUrl == '/materiaux/liste'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'">Matériaux</a>
+        </li>
+        <li class="nav-item" th:if="${currentUserRole == 'ADMIN'}">
+            <a href="/imagestitres/liste"
+                th:class="${currentUrl == '/imagestitres/liste'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'">Icônes</a>
+        </li>
         <li class="nav-item"><a
                 href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
                 class="nav-link text-black fs-5">Aide</a></li>
