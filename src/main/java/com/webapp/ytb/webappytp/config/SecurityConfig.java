@@ -43,12 +43,12 @@ public class SecurityConfig {
                                                                               // form
                                                 .defaultSuccessUrl("/redirectByRole")
                                                 .permitAll())
+                                .logout((logout) -> logout.logoutUrl("/log_out"))
                                 .logout(logout -> logout
-                                                .logoutSuccessUrl("/log_out") // specify the URL to redirect after
-                                                                              // logout
+                                                .logoutSuccessUrl("/log_out")
                                                 .permitAll())
-                                .userDetailsService(userDetailsService) 
-                                .authenticationProvider(authenticationProvider()); 
+                                .userDetailsService(userDetailsService)
+                                .authenticationProvider(authenticationProvider());
 
                 return http.build();
 

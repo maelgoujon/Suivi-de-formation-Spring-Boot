@@ -17,27 +17,43 @@
     <ul class="nav nav-pills">
 
         <li class="nav-item">
-            <a href="/accueil_admin" th:class="${currentUrl == '/accueil_admin' || currentUrl == '/accueil_superadmin'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'" aria-current="page">Accueil</a>
+            <a href="/accueil_admin"
+                th:class="${currentUrl == '/accueil_admin' || currentUrl == '/accueil_superadmin'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'"
+                aria-current="page">Accueil</a>
         </li>
 
 
 
         <li class="nav-item"
             th:if="${currentUserRole == 'EDUCSIMPLE' || currentUserRole == 'CIP' || currentUserRole == 'ADMIN'}">
-            <a href="/fiche/liste_fiche" th:class="${currentUrl == '/fiche/liste_fiche'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'" >Voir les fiches</a>
+            <a href="/fiche/liste_fiche"
+                th:class="${currentUrl == '/fiche/liste_fiche'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'">Voir
+                les fiches</a>
         </li>
-        
+
         <li class="nav-item" th:if="${currentUserRole == 'SUPERADMIN'}">
-            <a href="/formation/list" th:class="${currentUrl == '/formation/list'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'"  aria-current="page">Formations</a>
+            <a href="/formation/list"
+                th:class="${currentUrl == '/formation/list'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'"
+                aria-current="page">Formations</a>
         </li>
 
         <li class="nav-item" th:if="${currentUserRole == 'EDUCSIMPLE' || currentUserRole == 'ADMIN'}">
-            <a href="/session/creer" th:class="${currentUrl == '/session/creer'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'" >Créer une session</a>
+            <a href="/session/creer"
+                th:class="${currentUrl == '/session/creer'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'">Créer
+                une session</a>
         </li>
         <li class="nav-item"><a
                 href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
                 class="nav-link text-black fs-5">Aide</a></li>
-        <li class="nav-item"><a href="/log_out" class="nav-link text-black fs-5">Se déconnecter</a></li>
+                <li class="nav-item">
+                    <form th:action="@{/log_out}" method="post" class="d-inline">
+                        <!-- Ajoutez le jeton CSRF si nécessaire -->
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <a href="#" onclick="this.closest('form').submit()" class="nav-link text-black fs-5">Se déconnecter</a>
+                    </form>
+                </li>
+
+
     </ul>
 </header>
 

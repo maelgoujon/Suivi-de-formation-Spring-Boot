@@ -758,8 +758,9 @@ public class HomeController {
     }
 
     // deconnection
-    @GetMapping("/log_out")
-    public String log_out() {
+    @PostMapping("/log_out")
+    public String logOut() {
+        // Effectuez ici toutes les opérations de déconnexion nécessaires
         return "log_out";
     }
 
