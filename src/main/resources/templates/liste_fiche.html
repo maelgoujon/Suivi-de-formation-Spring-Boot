@@ -213,8 +213,8 @@
         <tbody>
           <tr th:each="fiche : ${fiches}">
             <td>
-              <a th:href="@{/niveauxFiche/{id}(id=${fiche.id})}">
-                <img src="/images/modif.png" width="50" height="50"/>
+              <a th:href="@{/fiche/modifier/{id}(id=${fiche.id})}">
+                <img th:if="${utilisateurConnecteRole == 'ROLE_ADMIN'}"src="/images/modif.png" width="50" height="50"/>
               </a>
             </td>
             <td id="tdNomIntervenant" th:text="${fiche.utilisateur.nom} + ' ' + ${fiche.utilisateur.prenom}"></td>
