@@ -51,64 +51,87 @@ public class Demarrage implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        // Création des matériaux AMENAGEMENT
+        String[] amenagementImages = {
+                "gants", "chaussures", "marteau", "metre", "pantalon", "crayon"
+        };
 
-        // Création des matériaux Amenagement
-        for (int i = 1; i <= 4; i++) {
-            String nomMateriau = "AMENAGEMENT" + i;
+        for (String imageName : amenagementImages) {
+            String nomMateriau = "AMENAGEMENT_" + imageName;
             Materiaux materiaux = materiauxRepository.findByNomImage(nomMateriau);
             if (materiaux == null) {
                 materiaux = new Materiaux();
                 materiaux.setNomImage(nomMateriau);
-                materiaux.setImageUrl("images/accueil.png");
+                materiaux.setImageUrl("images/materiaux/" + imageName + ".png");
                 materiaux.setType("AMENAGEMENT");
                 materiauxRepository.save(materiaux);
             }
         }
-        // Création des matériaux Electricite
-        for (int i = 5; i <= 8; i++) {
-            String nomMateriau = "ELECTRICITE" + i;
+
+        // Création des matériaux ELECTRICITE
+        String[] electriciteImages = {
+                "ampoule", "chauffage", "fil", "interrupteur", "planches", "vis"
+        };
+
+        for (String imageName : electriciteImages) {
+            String nomMateriau = "ELECTRICITE_" + imageName;
             Materiaux materiaux = materiauxRepository.findByNomImage(nomMateriau);
             if (materiaux == null) {
                 materiaux = new Materiaux();
                 materiaux.setNomImage(nomMateriau);
-                materiaux.setImageUrl("images/archive.png");
+                materiaux.setImageUrl("images/materiaux/" + imageName + ".png");
                 materiaux.setType("ELECTRICITE");
                 materiauxRepository.save(materiaux);
             }
         }
+
         // Création des matériaux FINITION
-        for (int i = 9; i <= 12; i++) {
-            String nomMateriau = "FINITION" + i;
+        String[] finitionImages = {
+                "materiaufinition1", "materiaufinition2", "materiaufinition3",
+                "materiaufinition4", "materiaufinition5", "materiaufinition6"
+        };
+
+        for (String imageName : finitionImages) {
+            String nomMateriau = "FINITION_" + imageName;
             Materiaux materiaux = materiauxRepository.findByNomImage(nomMateriau);
             if (materiaux == null) {
                 materiaux = new Materiaux();
                 materiaux.setNomImage(nomMateriau);
-                materiaux.setImageUrl("images/finition.png");
+                materiaux.setImageUrl("images/materiaux/" + imageName + ".jpg");
                 materiaux.setType("FINITION");
                 materiauxRepository.save(materiaux);
             }
         }
+
         // Création des matériaux PLOMBERIE
-        for (int i = 13; i <= 16; i++) {
-            String nomMateriau = "PLOMBERIE" + i;
+        String[] plomberieImages = {
+                "ventouse", "chalumeau", "boitejoints", "furet", "molettevirax", "teflon"
+        };
+
+        for (String imageName : plomberieImages) {
+            String nomMateriau = "PLOMBERIE_" + imageName;
             Materiaux materiaux = materiauxRepository.findByNomImage(nomMateriau);
             if (materiaux == null) {
                 materiaux = new Materiaux();
                 materiaux.setNomImage(nomMateriau);
-                materiaux.setImageUrl("images/plomberie.png");
+                materiaux.setImageUrl("images/materiaux/" + imageName + ".jfif");
                 materiaux.setType("PLOMBERIE");
                 materiauxRepository.save(materiaux);
             }
         }
 
         // Création des matériaux SERRURERIE
-        for (int i = 17; i <= 20; i++) {
-            String nomMateriau = "SERRURERIE" + i;
+        String[] serrurerieImages = {
+                "gants", "chaussures", "marteau", "metre", "pantalon", "crayon"
+        };
+
+        for (String imageName : serrurerieImages) {
+            String nomMateriau = "SERRURERIE_" + imageName;
             Materiaux materiaux = materiauxRepository.findByNomImage(nomMateriau);
             if (materiaux == null) {
                 materiaux = new Materiaux();
                 materiaux.setNomImage(nomMateriau);
-                materiaux.setImageUrl("images/serrurerie.png");
+                materiaux.setImageUrl("images/materiaux/" + imageName + ".png");
                 materiaux.setType("SERRURERIE");
                 materiauxRepository.save(materiaux);
             }
@@ -401,12 +424,12 @@ public class Demarrage implements ApplicationRunner {
             // Ajouter les materiaux de type amenagement
             // On ajoute 4 materiaux et rien dans les deux derniers
             List<String> materiauxAmenagement = new ArrayList<>();
-            materiauxAmenagement.add("AMENAGEMENT1");
-            materiauxAmenagement.add("AMENAGEMENT2");
-            materiauxAmenagement.add("AMENAGEMENT3");
-            materiauxAmenagement.add("");
-            materiauxAmenagement.add("AMENAGEMENT4");
-            materiauxAmenagement.add("");
+            materiauxAmenagement.add("AMENAGEMENT_gants");
+            materiauxAmenagement.add("AMENAGEMENT_chaussures");
+            materiauxAmenagement.add("AMENAGEMENT_marteau");
+            materiauxAmenagement.add("AMENAGEMENT_metre");
+            materiauxAmenagement.add("AMENAGEMENT_pantalon");
+            materiauxAmenagement.add("AMENAGEMENT_crayon");
             nouvelleFiche.setMateriauxOptions(materiauxAmenagement);
             ficheRepository.save(nouvelleFiche);
         }
