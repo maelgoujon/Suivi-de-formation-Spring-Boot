@@ -792,7 +792,7 @@ public class HomeController {
             model.addAttribute("utilisateur", utilisateur);
             model.addAttribute("fiches", fiches);
             return "suivi_progression";
-        }else {
+        } else {
             return "redirect:/accueil";
         }
     }
@@ -848,26 +848,36 @@ public class HomeController {
     @GetMapping("/fiche/liste_fiche_id/{id}")
     public String showCreateInterventionFormId(Model model, @PathVariable Long id) {
 
-        List<FicheIntervention> fiches = ficheServ.lireTout(); // Ajout de la liste des fiches
-
         // List<FicheIntervention> fiches = ficheServ.getFichesByUserId(id); // Ajout de
         // la liste des fiches
         Utilisateur user = userServ.findById(id);
+        List<FicheIntervention> fiches = ficheServ.getFichesByUserId(id);
         model.addAttribute("user", user);
         model.addAttribute("fiche", new FicheIntervention());
         model.addAttribute("fiches", fiches); // Ajout de la liste des fiches
 
-        return "liste_fiche_id";
+        return "liste_fiche";
     }
 
     @GetMapping("/fiche/liste_fiche")
     public String showCreateInterventionForm(Model model) {
-        List<Utilisateur> users = userServ.lire();
-        List<FicheIntervention> fiches = ficheServ.lireTout(); // Ajout de la liste des fiches
-        model.addAttribute("fiche", new FicheIntervention());
-        model.addAttribute("users", users);
-        model.addAttribute("fiches", fiches); // Ajout de la liste des fiches
-        return "liste_fiche";
+
+        String utilisateurConnecteRole = determineUserRole();
+
+        if ("ROLE_SUPERADMIN".equals(utilisateurConnecteRole)) {
+            return "redirect:/accueil_superadmin";
+        } else if ("ROLE_ADMIN".equals(utilisateurConnecteRole) || "ROLE_CIP".equals(utilisateurConnecteRole)
+                || "ROLE_EDUCSIMPLE".equals(utilisateurConnecteRole)) {
+            List<Utilisateur> users = userServ.lire();
+            List<FicheIntervention> fiches = ficheServ.lireTout(); // Ajout de la liste des fiches
+            model.addAttribute("fiche", new FicheIntervention());
+            model.addAttribute("users", users);
+            model.addAttribute("fiches", fiches); // Ajout de la liste des fiches
+            return "liste_fiche";
+        } else {
+            return "redirect:/accueil";
+        }
+
     }
 
 }
