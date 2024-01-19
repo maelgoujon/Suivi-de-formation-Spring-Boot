@@ -357,7 +357,7 @@ public class HomeController {
         fiche.setMaintenance(maintenance);
         FicheIntervention createdFiche = ficheServ.creer(ficheOrigine);
         model.addAttribute("createdFiche", createdFiche);
-        return "redirect:/fiche/" + createdFiche.getId();
+        return "redirect:/redirectByRole";
     }
 
     @PostMapping("/ajouter_fiche")
