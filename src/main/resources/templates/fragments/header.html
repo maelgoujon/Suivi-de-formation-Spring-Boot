@@ -9,10 +9,8 @@
             <use xlink:href="#bootstrap"></use>
         </svg>
         <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
-        <div th:if="${currentUserRole}" class="user-info">
-            <span th:text="${currentUserRole}"></span>
-            <!-- Ajoutez ceci dans votre fragment Thymeleaf -->
-            <p>L'URL actuelle est : <span th:text="${currentUrl}"></span></p>
+        <div th:if="${currentUserName}" class="user-info">
+            <span th:text="${currentUserName}"></span>
 
         </div>
     </a>
