@@ -6,8 +6,11 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
-
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
+
+import javax.management.relation.Role;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -721,7 +724,16 @@ public class HomeController {
             return "redirect:/accueil_superadmin";
         } else if ("ROLE_ADMIN".equals(role) || "ROLE_CIP".equals(role) || "ROLE_EDUCSIMPLE".equals(role)) {
             // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle "ADMIN"
-            List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
+            // On récupere les utilisateurs qui sont dans les memes formations que nous
+            List<Formation> formations = userServ.findUserByLogin(userDetails.getUsername()).getFormations();
+            Set<Utilisateur> utilisateurs = new HashSet<>();
+            for (Formation formation : formations) {
+                for (Utilisateur utilisateur : formation.getUtilisateurs()) {
+                    if (utilisateur.getRole().equals(UserRole.USER)) {
+                        utilisateurs.add(utilisateur);
+                    }
+                }
+            }
             model.addAttribute("utilisateurs", utilisateurs);
             return "/accueil_admin";
         } else {
