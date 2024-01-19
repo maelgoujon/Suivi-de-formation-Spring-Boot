@@ -49,6 +49,7 @@ import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -132,7 +133,7 @@ public class HomeController {
     }
 
     // Ajouter une fiche
-    @GetMapping("/ajout_fiche")
+    @GetMapping("/ajout_fiche/")
     public String ajout_fiche(Model model) {
         FicheIntervention fiche = new FicheIntervention();
         List<ImagesTitres> imagesTitreIntervenant = imagesTitresRepository
@@ -193,7 +194,7 @@ public class HomeController {
     }
 
     // Ajouter une fiche avec id utilisateur
-    @GetMapping("/ajout_fiche/{id}")
+    @GetMapping("/niveauxFiche/{id}")
     public String ajout_fiche_id(Model model, @PathVariable Long id) {
         FicheIntervention fiche = new FicheIntervention();
         List<ImagesTitres> imagesTitreIntervenant = imagesTitresRepository
@@ -248,15 +249,110 @@ public class HomeController {
         model.addAttribute("imagesTitreInterventionType", imagesTitreInterventionType);
         model.addAttribute("imagesTitreMaintenanceType", imagesTitreMaintenanceType);
 
+        fiche.setId(id);
         model.addAttribute("fiche", fiche);
-        // si l id correspond a un role admin cip ou educsimple on n'affiche pas la page
-        if (userServ.findById(id).getRole().equals(UserRole.ADMIN)
-                || userServ.findById(id).getRole().equals(UserRole.CIP)
-                || userServ.findById(id).getRole().equals(UserRole.EDUCSIMPLE)) {
-            return "redirect:/accueil_admin";
-        }
-        model.addAttribute("users", userServ.findById(id));
+        model.addAttribute("user", ficheServ.lire(id).getIntervenant());
         return "fiche_a_completer";
+    }
+
+    @PostMapping("/modifFicheParFormateur/{id}")
+    public String modifFicheParFormateur(@ModelAttribute @Valid FicheIntervention fiche, Model model,
+            @PathVariable Long id) {
+        System.out.println("------------------------------------");
+        System.out.println(ficheRepository.findById(id).get().getId());
+        FicheIntervention ficheOrigine = ficheRepository.findById(id).get();
+
+        Demande demande = ficheOrigine.getDemande();
+        Intervenant intervenant = ficheOrigine.getIntervenant();
+        Intervention intervention = ficheOrigine.getIntervention();
+        Maintenance maintenance;
+
+        if (fiche.getMaintenance().getMaintenanceType() != null) {
+            maintenance = ficheOrigine.getMaintenance();
+        } else {
+            maintenance = new Maintenance();
+        }
+        // demande
+        demande.setNomDemandeur(fiche.getDemande().getNomDemandeur());
+        demande.setDateDemande(fiche.getDemande().getDateDemande());
+        demande.setLocalisation(fiche.getDemande().getLocalisation());
+        demande.setDescription(fiche.getDemande().getDescription());
+        demande.setDegreUrgence(fiche.getDemande().getDegreUrgence());
+        demande.setCouleurTitreDemande(fiche.getDemande().getCouleurTitreDemande());
+        demande.setNiveauTitreDemande(fiche.getDemande().getNiveauTitreDemande());
+        demande.setImageTitreDemandeUrl(fiche.getDemande().getImageTitreDemandeUrl());
+        demande.setNiveauTitreDemandeNom(fiche.getDemande().getNiveauTitreDemandeNom());
+        demande.setImageTitreDemandeNomUrl(fiche.getDemande().getImageTitreDemandeNomUrl());
+        demande.setCouleurNomDemandeur(fiche.getDemande().getCouleurNomDemandeur());
+        demande.setCouleurDegreUrgence(fiche.getDemande().getCouleurDegreUrgence());
+        demande.setCouleurDateDemande(fiche.getDemande().getCouleurDateDemande());
+        demande.setCouleurLocalisation(fiche.getDemande().getCouleurLocalisation());
+        demande.setCouleurDescription(fiche.getDemande().getCouleurDescription());
+        demande.setNiveauNomDemandeur(fiche.getDemande().getNiveauNomDemandeur());
+        demande.setNiveauDateDemande(fiche.getDemande().getNiveauDateDemande());
+        demande.setNiveauLocalisation(fiche.getDemande().getNiveauLocalisation());
+        demande.setNiveauDescription(fiche.getDemande().getNiveauDescription());
+        demande.setNiveauDegreUrgence(fiche.getDemande().getNiveauDegreUrgence());
+        demande.setNiveauTitreDemandeDegreUrgence(fiche.getDemande().getNiveauTitreDemandeDegreUrgence());
+        demande.setNiveauTitreDemandeDate(fiche.getDemande().getNiveauTitreDemandeDate());
+        demande.setNiveauTitreDemandeLocalisation(fiche.getDemande().getNiveauTitreDemandeLocalisation());
+        demande.setNiveauTitreDemandeDescription(fiche.getDemande().getNiveauTitreDemandeDescription());
+        demande.setImageTitreDemandeDegreUrgenceUrl(fiche.getDemande().getImageTitreDemandeDegreUrgenceUrl());
+        demande.setImageTitreDemandeDateUrl(fiche.getDemande().getImageTitreDemandeDateUrl());
+        demande.setImageTitreDemandeLocalisationUrl(fiche.getDemande().getImageTitreDemandeLocalisationUrl());
+        demande.setImageTitreDemandeDescriptionUrl(fiche.getDemande().getImageTitreDemandeDescriptionUrl());
+        // maintenance
+        if (fiche.getMaintenance().getMaintenanceType() != null) {
+            maintenance.setMaintenanceType(fiche.getMaintenance().getMaintenanceType());
+        }
+        maintenance.setNiveauMaintenanceType(fiche.getMaintenance().getNiveauMaintenanceType());
+        maintenance.setCouleurMaintenanceType(fiche.getMaintenance().getCouleurMaintenanceType());
+        maintenance.setImageTypeMaintenanceUrl(fiche.getMaintenance().getImageTypeMaintenanceUrl());
+
+        // intervention
+        intervention.setNiveauTitreIntervention(fiche.getIntervention().getNiveauTitreIntervention());
+        intervention.setCouleurTitreIntervention(fiche.getIntervention().getCouleurTitreIntervention());
+        intervention.setImageTitreInterventionUrl(fiche.getIntervention().getImageTitreInterventionUrl());
+        intervention.setNiveauDateIntervention(fiche.getIntervention().getNiveauDateIntervention());
+        intervention.setCouleurDateIntervention(fiche.getIntervention().getCouleurDateIntervention());
+        intervention.setImageDateInterventionUrl(fiche.getIntervention().getImageDateInterventionUrl());
+        intervention.setNiveauDureeIntervention(fiche.getIntervention().getNiveauDureeIntervention());
+        intervention.setCouleurDureeIntervention(fiche.getIntervention().getCouleurDureeIntervention());
+        intervention.setImageDureeInterventionUrl(fiche.getIntervention().getImageDureeInterventionUrl());
+        intervention.setNiveauTypeIntervention(fiche.getIntervention().getNiveauTypeIntervention());
+        intervention.setCouleurTypeIntervention(fiche.getIntervention().getCouleurTypeIntervention());
+        intervention.setImageTypeInterventionUrl(fiche.getIntervention().getImageTypeInterventionUrl());
+
+        // maintenance
+        if (fiche.getMaintenance() != null && fiche.getMaintenance().getMaintenanceType() != null) {
+            maintenance.setMaintenanceType(fiche.getMaintenance().getMaintenanceType());
+        }
+        // intervenant
+        intervenant.setCouleurNom(fiche.getIntervenant().getCouleurNom());
+        intervenant.setCouleurPrenom(fiche.getIntervenant().getCouleurPrenom());
+        intervenant.setCouleurTitreIntervenant(fiche.getIntervenant().getCouleurTitreIntervenant());
+        intervenant.setNiveauTitreIntervenant(fiche.getIntervenant().getNiveauTitreIntervenant());
+        intervenant.setImageTitreIntervenantUrl(fiche.getIntervenant().getImageTitreIntervenantUrl());
+        intervenant.setNiveauTitreIntervenantNom(fiche.getIntervenant().getNiveauTitreIntervenantNom());
+        intervenant.setNiveauTitreIntervenantPrenom(fiche.getIntervenant().getNiveauTitreIntervenantPrenom());
+        intervenant.setImageTitreIntervenantNomUrl(fiche.getIntervenant().getImageTitreIntervenantNomUrl());
+        intervenant.setImageTitreIntervenantPrenomUrl(fiche.getIntervenant().getImageTitreIntervenantPrenomUrl());
+        // Travaux
+        fiche.setNiveauTravauxRealises(fiche.getNiveauTravauxRealises());
+        fiche.setNiveauTravauxNonRealises(fiche.getNiveauTravauxNonRealises());
+        fiche.setImageTitreTravauxRealisesUrl(fiche.getImageTitreTravauxRealisesUrl());
+        // Materiaux
+        fiche.setNiveauMateriauxUtilises(fiche.getNiveauMateriauxUtilises());
+        fiche.setImageTitreMateriauxUtilisesUrl(fiche.getImageTitreMateriauxUtilisesUrl());
+
+        // on mets les objets dans la fiche
+        fiche.setDemande(demande);
+        fiche.setIntervenant(intervenant);
+        fiche.setIntervention(intervention);
+        fiche.setMaintenance(maintenance);
+        FicheIntervention createdFiche = ficheServ.creer(ficheOrigine);
+        model.addAttribute("createdFiche", createdFiche);
+        return "redirect:/fiche/" + createdFiche.getId();
     }
 
     @PostMapping("/ajouter_fiche")
@@ -297,7 +393,6 @@ public class HomeController {
         demande.setImageTitreDemandeLocalisationUrl(fiche.getDemande().getImageTitreDemandeLocalisationUrl());
         demande.setImageTitreDemandeDescriptionUrl(fiche.getDemande().getImageTitreDemandeDescriptionUrl());
         // maintenance
-        maintenance.setMaintenanceType(fiche.getMaintenance().getMaintenanceType());
         maintenance.setNiveauMaintenanceType(fiche.getMaintenance().getNiveauMaintenanceType());
         maintenance.setCouleurMaintenanceType(fiche.getMaintenance().getCouleurMaintenanceType());
         maintenance.setImageTypeMaintenanceUrl(fiche.getMaintenance().getImageTypeMaintenanceUrl());
@@ -764,7 +859,6 @@ public class HomeController {
         // Effectuez ici toutes les opérations de déconnexion nécessaires
         return "log_out";
     }
-
 
     @GetMapping("/select_fiche")
     public String select_fiche(Model model) {

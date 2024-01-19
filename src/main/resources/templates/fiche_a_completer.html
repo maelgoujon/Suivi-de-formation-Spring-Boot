@@ -89,19 +89,17 @@
 
 
 
-        <form th:action="@{/ajouter_fiche}" th:object="${fiche}" method="post" id="ficheForm" class="fiche-form">
+        <form th:action="@{/modifFicheParFormateur/{id}(id=${fiche.id})}" th:object="${fiche}" method="post" id="ficheForm" class="fiche-form">
 
+            
             <hr />
-            
-            
+
+
             <div class="row">
                 <div class="col-md-6">
-                    <div class="titre">Selectionner l'intervenant</div>
+                    <div class="titre">Intervenant :</div>
                     <div class="test">
-                        <select class="form-select" id="utilisateur" name="utilisateur.id" th:field="*{utilisateur.id}">
-                            <option th:each="user : ${users}" th:value="${user.id}"
-                                th:text="${user.nom} + ' ' + ${user.prenom}"></option>
-                        </select>
+                        <span th:text="${user.nom + ' ' + user.prenom}"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -956,8 +954,8 @@
 
 
                 <div class="col-md-4 mb-3">
-                    
-                    
+
+
                     <button class="btn d-flex align-items-center" style="height: 1.5em;" type="button"
                         data-bs-toggle="collapse" data-bs-target="#imageNiveauMaintenanceType" aria-expanded="false"
                         aria-controls="imageNiveauMaintenanceType">
@@ -1323,9 +1321,10 @@
 
             </legend>
 
-            <div class="submit-container" style="height: 10vh;width: 100%;margin-bottom: calc(var(--bs-gutter-x) * .5);">
+            <div class="submit-container"
+                style="height: 10vh;width: 100%;margin-bottom: calc(var(--bs-gutter-x) * .5);">
                 <button class="btn btn-dark" type="submit" style="height: inherit;width: inherit;">Terminer</button>
-             </div>
+            </div>
 
 
 
@@ -1486,7 +1485,7 @@
             niveauTitreMaintenanceType.value = '1';
         }
 
-        
+
 
 
 
