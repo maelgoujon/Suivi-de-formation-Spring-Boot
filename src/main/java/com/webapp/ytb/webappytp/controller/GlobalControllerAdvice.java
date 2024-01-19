@@ -1,5 +1,7 @@
 package com.webapp.ytb.webappytp.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,13 +26,25 @@ public class GlobalControllerAdvice {
     @ModelAttribute("currentUserId")
     public Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Utilisateur utilisateur = utilisateurRepository.findUserByLogin(authentication.getName());
-        return utilisateur.getId(); // Retourne l'id de l'utilisateur actuellement connecté
+        System.out.println(authentication.getName());
+        // si l'utilisateur n'est pas dans la liste on retourne null
+        List<Utilisateur> listUtilisateur = utilisateurRepository.findAll();
+        for (Utilisateur utilisateur : listUtilisateur) {
+            if (utilisateur.getLogin().equals(authentication.getName())) {
+                return utilisateur.getId();
+            }
+        }
+        return null;
+
     }
 
     @ModelAttribute("currentUserRole")
     public String getCurrentUserRole() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getName());
+        if (authentication.getName().equals("anonymousUser")) {
+            return null;
+        }
         Utilisateur utilisateur = utilisateurRepository.findUserByLogin(authentication.getName());
         return utilisateur.getRole().name(); // Retourne le rôle de l'utilisateur actuellement connecté
     }
