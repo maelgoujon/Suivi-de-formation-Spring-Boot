@@ -82,7 +82,7 @@ public class FormationServiceImpl implements FormationService {
         formationRepository.deleteById(id);
         return "Formation supprimée";
     }
-    
+
     @Override
     public void supprimerFormationAvecUtilisateurs(Long formationId) {
         List<Utilisateur> utilisateurs = formationRepository.findById(formationId).get().getUtilisateurs();
@@ -116,14 +116,18 @@ public class FormationServiceImpl implements FormationService {
         Utilisateur utilisateur = utilisateurRepository.findById(utilisateurId)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
-
         List<Formation> formations = utilisateur.getFormations();
-        Optional<Formation> formation = formationRepository.findById(formationId);
-        formations.remove(formation);
-        utilisateur.setFormations(formations);
+        Optional<Formation> formationOptional = formationRepository.findById(formationId);
 
+        if (formationOptional.isPresent()) {
+            Formation formation = formationOptional.get();
+            formations.remove(formation);
+            utilisateur.setFormations(formations);
 
-        utilisateurRepository.save(utilisateur);
+            utilisateurRepository.save(utilisateur);
+        } else {
+            throw new RuntimeException("Formation non trouvée");
+        }
     }
 
     @Override
