@@ -37,7 +37,7 @@
                 aria-current="page">Formations</a>
         </li>
 
-        <li class="nav-item" th:if="${currentUserRole == 'EDUCSIMPLE' || currentUserRole == 'ADMIN'}">
+        <li class="nav-item" th:if="${currentUserRole == 'ADMIN'}">
             <a href="/session/creer"
                 th:class="${currentUrl == '/session/creer'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'">Créer
                 une session</a>
