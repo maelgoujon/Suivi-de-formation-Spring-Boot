@@ -7,9 +7,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.servlet.HandlerMapping;
 
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
+import java.util.Map;
+import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class GlobalControllerAdvice {
@@ -47,5 +50,18 @@ public class GlobalControllerAdvice {
         }
         Utilisateur utilisateur = utilisateurRepository.findUserByLogin(authentication.getName());
         return utilisateur.getRole().name(); // Retourne le rôle de l'utilisateur actuellement connecté
+    }
+
+    @ModelAttribute("currentUrl")
+    public String getCurrentUrl(HttpServletRequest request) {
+
+        Map<String, String> pathVariables = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+
+        if (pathVariables != null && !pathVariables.isEmpty()) {
+            return path + "/" + String.join("/", pathVariables.values());
+        } else {
+            return path;
+        }
     }
 }
