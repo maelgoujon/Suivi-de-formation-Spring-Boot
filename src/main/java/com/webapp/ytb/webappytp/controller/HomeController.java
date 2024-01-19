@@ -847,6 +847,8 @@ public class HomeController {
 
     @GetMapping("/fiche/liste_fiche_id/{id}")
     public String showCreateInterventionFormId(Model model, @PathVariable Long id) {
+        // Récupérer le rôle de l'utilisateur connecté
+        String utilisateurConnecteRole = determineUserRole();
 
         // List<FicheIntervention> fiches = ficheServ.getFichesByUserId(id); // Ajout de
         // la liste des fiches
@@ -855,7 +857,7 @@ public class HomeController {
         model.addAttribute("user", user);
         model.addAttribute("fiche", new FicheIntervention());
         model.addAttribute("fiches", fiches); // Ajout de la liste des fiches
-
+        model.addAttribute("utilisateurConnecteRole", utilisateurConnecteRole);
         return "liste_fiche";
     }
 
@@ -873,6 +875,7 @@ public class HomeController {
             model.addAttribute("fiche", new FicheIntervention());
             model.addAttribute("users", users);
             model.addAttribute("fiches", fiches); // Ajout de la liste des fiches
+            model.addAttribute("utilisateurConnecteRole", utilisateurConnecteRole);
             return "liste_fiche";
         } else {
             return "redirect:/accueil";

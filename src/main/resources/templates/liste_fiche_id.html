@@ -230,7 +230,7 @@
               <a th:href="@{/fiche/{id}(id=${fiche.id})}">Voir détails</a>
             </td>
             <td id="tdEvaluation">
-              <a  th:if="${utilisateurConnecteRole == 'ROLE_ADMIN' or utilisateurConnecteRole == 'ROLE_EDUCSIMPLE'}" th:href="@{/record/{id}(id=${fiche.id})}">Laisser une évaluation</a>
+              <a th:if="${utilisateurConnecteRole == 'ROLE_ADMIN' or utilisateurConnecteRole == 'ROLE_EDUCSIMPLE'}" th:href="@{/record/{id}(id=${fiche.id})}">Laisser une évaluation</a>
               <a th:href="@{/recordaffichage/{id}(id=${fiche.id})}">Ecouter l'évaluation</a>
             </td>
           </tr>

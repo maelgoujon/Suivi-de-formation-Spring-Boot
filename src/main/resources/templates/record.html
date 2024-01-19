@@ -9,10 +9,6 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet" />
     <script src="/js/bootstrap.bundle.min.js"></script>
     <style>
-      body {
-        padding: 20px;
-      }
-
       .button {
         margin-top: 10px;
       }
@@ -45,30 +41,7 @@
   </head>
 
   <body>
-    <div class="bandeau">
-      <a href="log_out">
-        <img src="/images/porte.png" alt="logout" style="float: left" />
-      </a>
-
-      <div class="bandeau centered">
-        <a href="archive">
-          <img
-            src="/images/archive.png"
-            alt="archive"
-            style="margin-left: 10px"
-          />
-        </a>
-      </div>
-      <a
-        href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
-      >
-        <img
-          src="/images/aide.png"
-          alt="aide"
-          style="cursor: pointer; margin-left: auto"
-        />
-      </a>
-    </div>
+    <div th:replace="fragments/header :: header"></div>
     <div
       class="container d-flex justify-content-center align-items-center vh-100"
     >
