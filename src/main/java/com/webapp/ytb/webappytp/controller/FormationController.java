@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.Formation;
+import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.FormationServiceImpl;
@@ -38,8 +39,7 @@ public class FormationController {
     @Autowired
     private FicheServiceImpl ficheService;
 
-    
-     private String determineUserRole() {
+    private String determineUserRole() {
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
                 .findFirst()
                 .map(GrantedAuthority::getAuthority)
@@ -145,7 +145,9 @@ public class FormationController {
 
         // (2) Delete users associated with the formation
         for (Utilisateur utilisateur : utilisateurs) {
-            utilisateurService.supprimer(utilisateur.getId());
+            if (utilisateur.getRole() == UserRole.USER) {
+                utilisateurService.supprimer(utilisateur.getId());
+            }
         }
     }
 
