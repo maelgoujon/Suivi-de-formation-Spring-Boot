@@ -33,10 +33,16 @@
       </a>
 
       <!-- Bouton droit pour l'admin -->
-      <a href="../log_out">
-        <img src="/images/porte.png" alt="Connexion Admin" width="50" height="50">
-        Se déconnecter
-      </button>
+      <img src="/images/porte.png" alt="Connexion Admin" width="50" height="50">
+        <form th:action="@{/log_out}" method="post" class="d-inline">
+            <!-- Ajoutez le jeton CSRF si nécessaire -->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <a href="#" onclick="this.closest('form').submit()" class="nav-link text-black fs-5">Se déconnecter</a>
+        </form>
+
+
+
+
     </a>
   </nav>
   <div class="modal fade" id="modalMdpOublie" tabindex="-1" aria-labelledby="modalMdpOublieLabel" aria-hidden="true">
@@ -62,7 +68,6 @@
       <h2 th:text="${#temporals.format(fiche.Demande.dateDemande, 'dd/MM/yyyy')}"></h2>
         </div>
   </div>
-CPCCIPCIPC
 </body>
 <script>
   const Inters = document.getElementById('Inters');

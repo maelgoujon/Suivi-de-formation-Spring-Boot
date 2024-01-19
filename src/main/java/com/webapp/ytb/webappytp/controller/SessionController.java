@@ -122,31 +122,21 @@ public class SessionController {
             //
 
             if (fiches.isEmpty()) {
+                //niveaux
+
                 fiche.setNiveauIntervenant(0);
                 fiche.setNiveauTravauxRealises(0);
                 fiche.setNiveauTravauxNonRealises(0);
                 fiche.setNiveauMateriauxUtilises(0);
                 fiche.setNiveauNatureIntervention(0);
-                fiche.setImageTitreMateriauxUtilisesUrl("/images/check.png");
-                fiche.setImageTitreTravauxNonRealisesUrl("/images/check.png");
-                fiche.setImageTitreTravauxRealisesUrl("/images/check.png");
-                intervention.setTypeIntervention(typeIntervention);
                 intervention.setNiveauDateIntervention(0);
                 intervention.setNiveauDureeIntervention(0);
                 intervention.setNiveauTypeIntervention(0);
                 intervention.setNiveauTitreIntervention(0);
-                intervention.setImageDateInterventionUrl("/images/check.png");
-                intervention.setImageDureeInterventionUrl("/images/check.png");
-                intervention.setImageTypeInterventionUrl("/images/check.png");
-                intervention.setImageTitreInterventionUrl("/images/check.png");
                 maintenance.setNiveauMaintenanceType(0);
-                maintenance.setImageTypeMaintenanceUrl("/images/check.png");
                 intervenant.setNiveauTitreIntervenant(0);
                 intervenant.setNiveauTitreIntervenantNom(0);
                 intervenant.setNiveauTitreIntervenantPrenom(0);
-                intervenant.setImageTitreIntervenantUrl("/images/check.png");
-                intervenant.setImageTitreIntervenantNomUrl("/images/check.png");
-                intervenant.setImageTitreIntervenantPrenomUrl("/images/check.png");
                 demande.setNiveauDateDemande(0);
                 demande.setNiveauDegreUrgence(0);
                 demande.setNiveauDescription(0);
@@ -159,6 +149,23 @@ public class SessionController {
                 demande.setNiveauTitreDemandeLocalisation(0);
                 demande.setNiveauTitreDemandeNom(0);
                 demande.setNiveauTitreDemandeDate(0);
+                
+                //images
+                fiche.setImageTitreMateriauxUtilisesUrl("/images/check.png");
+                fiche.setImageTitreTravauxNonRealisesUrl("/images/check.png");
+                fiche.setImageTitreTravauxRealisesUrl("/images/check.png");
+                intervention.setImageDateInterventionUrl("/images/check.png");
+                intervention.setImageDureeInterventionUrl("/images/check.png");
+                intervention.setImageTypeInterventionUrl("/images/check.png");
+                intervention.setImageTitreInterventionUrl("/images/check.png");
+                maintenance.setImageTypeMaintenanceUrl("/images/check.png");
+                intervenant.setImageTitreIntervenantUrl("/images/check.png");
+                intervenant.setImageTitreIntervenantNomUrl("/images/check.png");
+                intervenant.setImageTitreIntervenantPrenomUrl("/images/check.png");
+
+                intervention.setTypeIntervention(typeIntervention);
+                fiche.setDateCreation(LocalDate.now());
+
 
             } else {
                 FicheIntervention ficheRecente = fiches.get(0);
@@ -213,17 +220,46 @@ public class SessionController {
                         ficheRecente.getDemande().getNiveauTitreDemandeLocalisation());
                 demande.setNiveauTitreDemandeNom(ficheRecente.getDemande().getNiveauTitreDemandeNom());
                 demande.setNiveauTitreDemandeDate(ficheRecente.getDemande().getNiveauTitreDemandeDate());
+                //couleurs
+                fiche.setImageTitreMateriauxUtilisesUrl(ficheRecente.getImageTitreMateriauxUtilisesUrl());
+                fiche.setImageTitreTravauxNonRealisesUrl(ficheRecente.getImageTitreTravauxNonRealisesUrl());
+                fiche.setImageTitreTravauxRealisesUrl(ficheRecente.getImageTitreTravauxRealisesUrl());
+                intervention.setImageDateInterventionUrl(ficheRecente.getIntervention().getImageDateInterventionUrl());
+                intervention
+                        .setImageDureeInterventionUrl(ficheRecente.getIntervention().getImageDureeInterventionUrl());
+                intervention.setImageTypeInterventionUrl(ficheRecente.getIntervention().getImageTypeInterventionUrl());
+                intervention
+                        .setImageTitreInterventionUrl(ficheRecente.getIntervention().getImageTitreInterventionUrl());
+                maintenance.setImageTypeMaintenanceUrl(ficheRecente.getMaintenance().getImageTypeMaintenanceUrl());
+                intervenant.setImageTitreIntervenantUrl(ficheRecente.getIntervenant().getImageTitreIntervenantUrl());
+                intervenant
+                        .setImageTitreIntervenantNomUrl(ficheRecente.getIntervenant().getImageTitreIntervenantNomUrl());
+                intervenant.setImageTitreIntervenantPrenomUrl(
 
-                fiche.setMaintenance(maintenance);
-                fiche.setIntervenant(intervenant);
-                fiche.setIntervention(intervention);
+                        ficheRecente.getIntervenant().getImageTitreIntervenantPrenomUrl());
+                demande.setImageTitreDemandeDateUrl(ficheRecente.getDemande().getImageTitreDemandeDateUrl());
+                demande.setImageTitreDemandeDegreUrgenceUrl(
+                        ficheRecente.getDemande().getImageTitreDemandeDegreUrgenceUrl());
+                demande.setImageTitreDemandeDescriptionUrl(
+                        ficheRecente.getDemande().getImageTitreDemandeDescriptionUrl());
+                demande.setImageTitreDemandeLocalisationUrl(
+                        ficheRecente.getDemande().getImageTitreDemandeLocalisationUrl());
+                demande.setImageTitreDemandeNomUrl(ficheRecente.getDemande().getImageTitreDemandeNomUrl());
+                demande.setImageTitreDemandeUrl(ficheRecente.getDemande().getImageTitreDemandeUrl());
+                demande.setImageTitreDemandeDateUrl(ficheRecente.getDemande().getImageTitreDemandeDateUrl());
+                
+
+
             }
+            fiche.setIntervention(intervention);
+            fiche.setMaintenance(maintenance);
+            fiche.setIntervenant(intervenant);
             fiche.setDateCreation(LocalDate.now());
             fiche.setUtilisateur(apprenti);
             fiche.setDemande(demande);
             ficheService.creer(fiche);
 
         }
-        return "redirect:/";
+        return "redirect:/accueil_admin";
     }
 }

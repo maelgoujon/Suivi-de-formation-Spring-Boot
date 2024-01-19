@@ -36,19 +36,16 @@ public class SecurityConfig {
                                                 .requestMatchers(staticResources).permitAll()
                                                 .requestMatchers("/", "/accueil").permitAll()
                                                 .requestMatchers("/login").permitAll()
+                                                .requestMatchers("/redirectByRole").permitAll()
                                                 .anyRequest().authenticated())
                                 .formLogin(formLogin -> formLogin
                                                 .loginPage("/accueil")
-                                                .loginProcessingUrl("/login") // This should match the action in your
-                                                                              // form
+                                                .loginProcessingUrl("/login")
                                                 .defaultSuccessUrl("/redirectByRole")
                                                 .permitAll())
-                                .logout(logout -> logout
-                                                .logoutSuccessUrl("/log_out") // specify the URL to redirect after
-                                                                              // logout
-                                                .permitAll())
-                                .userDetailsService(userDetailsService) 
-                                .authenticationProvider(authenticationProvider()); 
+                                .logout(logout -> logout.logoutUrl("/log_out").permitAll())
+                                .userDetailsService(userDetailsService)
+                                .authenticationProvider(authenticationProvider());
 
                 return http.build();
 
