@@ -29,7 +29,6 @@ public class GlobalControllerAdvice {
     @ModelAttribute("currentUserId")
     public Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getName());
         // si l'utilisateur n'est pas dans la liste on retourne null
         List<Utilisateur> listUtilisateur = utilisateurRepository.findAll();
         for (Utilisateur utilisateur : listUtilisateur) {

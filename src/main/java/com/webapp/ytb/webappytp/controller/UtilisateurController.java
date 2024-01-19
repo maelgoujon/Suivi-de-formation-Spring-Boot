@@ -77,7 +77,6 @@ public class UtilisateurController {
     public List<Utilisateur> readUtilisateurs() {
         List<Utilisateur> utilisateurs = utilisateurService.lire();
         // Ajouter des logs pour débogage
-        System.out.println("Nombre d'utilisateurs dans la liste : " + utilisateurs.size());
         return utilisateurs;
     }
 
