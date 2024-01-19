@@ -31,15 +31,29 @@
                 <img src="/images/accueil.png" alt="Accueil" width="50" height="50">
             </a>
 
+            <a type="button" class="btn" th:if="${currentUserRole == 'USER'}">
+                <form th:action="@{/log_out}" method="post" class="d-inline">
+                </form>
+            </a>
+
+
+            <img src="/images/porte.png" alt="Connexion Admin" width="50" height="50" th:if="${currentUserRole == 'USER'}">
+            <form th:action="@{/log_out}" method="post" class="d-inline" th:if="${currentUserRole == 'USER'}">
+              <!-- Ajoutez le jeton CSRF si nécessaire -->
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+              <a href="#" onclick="this.closest('form').submit()" class="nav-link text-black fs-5">Se déconnecter</a>
+            </form>
+      
+
+
             <!-- Bouton droit pour l'admin -->
-            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modalConnexionAdmin">
-                <img src="/images/admin.png" alt="Connexion Admin" width="50" height="50">
+            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modalConnexionAdmin" th:if="${currentUserRole != 'USER'}">
+                <img src="/images/admin.png" alt="Connexion Admin" width="50" height="50" th:if="${currentUserRole != 'USER'}">
                 Admin
             </button>
         </div>
     </nav>
 
-    <span id="message" th:text="${currentUserRole}"></span>
 
     <div class="modal fade" id="modalMdpOublie" tabindex="-1" aria-labelledby="modalMdpOublieLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -66,7 +80,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="adminLoginForm" th:action="@{/login}" method="post">
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                         <div class="mb-3">
                             <label for="adminUsername" class="form-label">Nom d'utilisateur</label>
                             <input type="text" class="form-control" id="adminUsername" name="username" required>
@@ -81,7 +95,7 @@
                             data-bs-content="Demander de l'aide au SUPERADMIN">
                             Mot de Passe Oublié ?
                         </button>
-                        
+
                     </form>
                 </div>
             </div>

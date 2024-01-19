@@ -24,9 +24,9 @@
     <div class="container d-flex justify-content-between align-items-center">
       <!-- Bouton gauche pour le mot de passe oublié -->
       <a th:href="@{'/suivi_progression'}">
-          <img src="/images/suivi.png" alt="Suivi de progression" width="50" height="50">
+        <img src="/images/suivi.png" alt="Suivi de progression" width="50" height="50">
       </a>
-      
+
       <!-- Logo accueil au centre -->
       <a class="navbar-brand mx-auto" href="#">
         <img src="/images/accueil.png" alt="Accueil" width="50" height="50">
@@ -34,16 +34,16 @@
 
       <!-- Bouton droit pour l'admin -->
       <img src="/images/porte.png" alt="Connexion Admin" width="50" height="50">
-        <form th:action="@{/log_out}" method="post" class="d-inline">
-            <!-- Ajoutez le jeton CSRF si nécessaire -->
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-            <a href="#" onclick="this.closest('form').submit()" class="nav-link text-black fs-5">Se déconnecter</a>
-        </form>
+      <form th:action="@{/log_out}" method="post" class="d-inline">
+        <!-- Ajoutez le jeton CSRF si nécessaire -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <a href="#" onclick="this.closest('form').submit()" class="nav-link text-black fs-5">Se déconnecter</a>
+      </form>
 
 
 
 
-    </a>
+      </a>
   </nav>
   <div class="modal fade" id="modalMdpOublie" tabindex="-1" aria-labelledby="modalMdpOublieLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -66,7 +66,7 @@
       th:onclick="'window.location.href=\'/fiche/modifier/' + ${fiche.id} + '\''">
       <img class="image2" src="/images/assignment_icon.png" style="height: 20rem;">
       <h2 th:text="${#temporals.format(fiche.Demande.dateDemande, 'dd/MM/yyyy')}"></h2>
-        </div>
+    </div>
   </div>
 </body>
 <script>
