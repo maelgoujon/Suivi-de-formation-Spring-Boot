@@ -11,25 +11,30 @@
         <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
         <div th:if="${currentUserRole}" class="user-info">
             <span th:text="${currentUserRole}"></span>
+            <!-- Ajoutez ceci dans votre fragment Thymeleaf -->
+            <p>L'URL actuelle est : <span th:text="${currentUrl}"></span></p>
+
         </div>
     </a>
     <ul class="nav nav-pills">
-        <li class="nav-item"><a href="/accueil_admin" class="nav-link active text-white fs-5"
-                aria-current="page">Accueil</a></li>
+
+        <li class="nav-item">
+            <a href="/accueil_admin" th:class="${currentUrl == '/accueil_admin' || currentUrl == '/accueil_superadmin'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'" aria-current="page">Accueil</a>
+        </li>
+
+
 
         <li class="nav-item"
-            th:if="${currentUserRole == 'EDUCSIMPLE' || currentUserRole == 'CIP' || currentUserRole == 'CIP'}">
-            <a href="/fiche/liste_fiche" class="nav-link text-black fs-5">Voir les fiches</a>
+            th:if="${currentUserRole == 'EDUCSIMPLE' || currentUserRole == 'CIP' || currentUserRole == 'ADMIN'}">
+            <a href="/fiche/liste_fiche" th:class="${currentUrl == '/fiche/liste_fiche'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'" >Voir les fiches</a>
         </li>
-
+        
         <li class="nav-item" th:if="${currentUserRole == 'SUPERADMIN'}">
-            <a href="/formation/list" class="nav-link text-black fs-5" aria-current="page">Formations</a>
+            <a href="/formation/list" th:class="${currentUrl == '/formation/list'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'"  aria-current="page">Formations</a>
         </li>
-
-        <li class="nav-item"><a href="profil_admin" class="nav-link text-black fs-5">Votre profil</a></li>
 
         <li class="nav-item" th:if="${currentUserRole == 'EDUCSIMPLE' || currentUserRole == 'ADMIN'}">
-            <a href="/session/creer" class="nav-link text-black fs-5">Créer une session</a>
+            <a href="/session/creer" th:class="${currentUrl == '/session/creer'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'" >Créer une session</a>
         </li>
         <li class="nav-item"><a
                 href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
