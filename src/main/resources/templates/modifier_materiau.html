@@ -92,55 +92,72 @@
 <body>
     <div th:replace="fragments/header :: header"></div>
 
-    <h2>Modifier l'image <span th:text="${image.nomImage}"></span></h2>
-    <form th:action="@{'/materiaux/modifier/' + ${id}}" th:object="${image}" method="post"
-        enctype="multipart/form-data">
+    <div class="container mt-4 text-center"> <!-- Ajout du conteneur centré -->
+        <h2 class="mb-4">Modifier l'image <span th:text="${image.nomImage}"></span></h2>
+        <form th:action="@{'/materiaux/modifier/' + ${id}}" th:object="${image}" method="post"
+            enctype="multipart/form-data">
 
-        <!-- Image actuelle -->
-        <h3>Image actuelle : </h3>
-        <br>
-        <img th:src="@{'/' + ${image.imageUrl}}" alt="Image" style="max-width: 20vh;" />
-        <br>
+            <!-- Image actuelle -->
+            <div class="col-md-12 text-center">
+                <h3>Image actuelle : </h3>
+                <br>
+                <img th:src="@{'/' + ${image.imageUrl}}" alt="Image" class="img-fluid mb-3" style="max-width: 20vh;">
+            </div>
 
-        <!-- Type d'intervention actuel -->
-        <h3>Type d'intervention actuel : <span th:text="${image.typeIntervention}"></span></h3>
-        <br>
-        <!--Ancien nom de l'image-->
-        <input type="hidden" id="originalNomImage" th:value="${image.nomImage}" />
-        <!-- Nouveau nom d'image -->
-        <h3>Nouveau nom d'image :</h3>
-        <input type="text" id="newNomImage" name="newNomImage" th:value="${image.nomImage}" oninput="afficherBouttonModifier()">
+            <!-- Type d'intervention actuel -->
+            <div class="col-md-12 text-center">
+                <h3>Type d'intervention actuel : <span th:text="${image.typeIntervention}"></span></h3>
+                <br>
+            </div>
 
-        <br>
+            <div>
+                <!-- Ancien nom de l'image -->
+                <div class="col-md-4 offset-md-4">
+                    <input type="hidden" id="originalNomImage" th:value="${image.nomImage}" />
+                </div>
+            </div>
 
-        <!-- Nouveau type d'intervention -->
-        <h3>Nouveau type d'intervention :</h3>
-        <select id="newTypeIntervention" name="newTypeIntervention" required>
-            <option
-                th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}"
-                th:value="${type.name()}" th:text="${type.name()}"
-                th:selected="${type.name() == image.typeIntervention.name()}"></option>
-        </select>
+            <div class="row">
 
+                <!-- Nouveau nom d'image -->
+                <div class="col-md-4">
+                    <h3>Nouveau nom d'image :</h3>
+                    <input type="text" id="newNomImage" name="newNomImage" th:value="${image.nomImage}"
+                        oninput="afficherBouttonModifier()" class="form-control form-control-sm mb-3">
+                </div>
 
-        <br>
+                <!-- Nouveau type d'intervention -->
+                <div class="col-md-4">
+                    <h3>Nouveau type d'intervention :</h3>
+                    <select id="newTypeIntervention" name="newTypeIntervention" required
+                        class="form-control form-control-sm mb-3">
+                        <option th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}"
+                            th:value="${type.name()}" th:text="${type.name()}"
+                            th:selected="${type.name() == image.typeIntervention.name()}"></option>
+                    </select>
+                </div>
 
-        <!-- Nouvelle image -->
-        <h3>Nouvelle image : </h3>
-        <input type="file" id="newImageFile" name="newImageFile" accept="image/*" onchange="previewImage(this)">
-        <br>
+                <!-- Nouvelle image -->
+                <div class="col-md-4">
+                    <h3>Nouvelle image : </h3>
+                    <input type="file" id="newImageFile" name="newImageFile" accept="image/*" onchange="previewImage(this)"
+                        class="form-control form-control-sm mb-3">
+                </div>
 
-        <!-- Prévisualisation de la nouvelle image -->
-        <img id="preview" style="max-width: 10vh;">
+                <!-- Prévisualisation de la nouvelle image -->
+                <div class="col-md-4">
+                    <img id="preview" style="max-width: 10vh;" class="img-fluid mb-3">
+                </div>
 
-        <br>
+                <!-- Bouton Modifier -->
+                <div class="col-md-4">
+                    <input type="submit" id="modifierButton" value="Modifier" disabled class="btn btn-primary">
+                </div>
+            </div>
+        </form>
 
-        <!-- Bouton Modifier -->
-        <input type="submit" id="modifierButton" value="Modifier" disabled>
-    </form>
-
-    <p th:text="${message}"></p>
-
+        <p th:text="${message}"></p>
+    </div>
 </body>
 
 </html>

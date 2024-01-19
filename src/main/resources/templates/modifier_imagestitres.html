@@ -85,62 +85,69 @@
             }
         }
     </script>
-    
-
 </head>
 
 <body>
     <div th:replace="fragments/header :: header"></div>
 
-    <h2>Modifier l'image <span th:text="${image.nomImage}"></span></h2>
-    <form th:action="@{'/imagestitres/modifier/' + ${id}}" th:object="${image}" method="post"
-        enctype="multipart/form-data">
+    <div class="container mt-4 text-center"> <!-- Ajout du conteneur centré -->
+        <h2 class="mb-4">Modifier l'image <span th:text="${image.nomImage}"></span></h2>
+        <form th:action="@{'/imagestitres/modifier/' + ${id}}" th:object="${image}" method="post"
+            enctype="multipart/form-data">
 
-        <!-- Image actuelle -->
-        <h3>Image actuelle : </h3>
-        <br>
-        <img th:src="@{'/' + ${image.imageUrl}}" alt="Image" style="max-width: 20vh;" />
-        <br>
+            <!-- Image actuelle -->
+            <div>
+                <h3>Image actuelle : </h3>
+                <br>
+                <img th:src="@{'/' + ${image.imageUrl}}" alt="Image" class="img-fluid mb-3" width="100" height="100"/>
+            </div>
 
-        <!-- Type d'image actuel -->
-        <h3>Type d'image actuel : <span th:text="${image.typeImage}"></span></h3>
-        <br>
-        <!--Ancien nom de l'image-->
-        <input type="hidden" id="originalNomImage" th:value="${image.nomImage}" />
-        <!-- Nouveau nom d'image -->
-        <h3>Nouveau nom d'image :</h3>
-        <input type="text" id="newNomImage" name="newNomImage" th:value="${image.nomImage}" oninput="afficherBouttonModifier()">
+            <!-- Type d'image actuel -->
+            <div>
+                <h3>Type d'image actuel : <span th:text="${image.typeImage}"></span></h3>
+                <br>
+            </div>
 
-        <br>
+            <div class="row">
+                <!-- Nouveau nom d'image -->
+                <div class="col-md-4">
+                    <h3>Nouveau nom d'image :</h3>
+                    <input type="text" id="newNomImage" name="newNomImage" th:value="${image.nomImage}"
+                        oninput="afficherBouttonModifier()" class="form-control form-control-sm mb-3">
+                </div>
 
-        <!-- Nouveau type d'image -->
-        <h3>Nouveau type d'image :</h3>
-        <select id="newTypeImage" name="newTypeImage" required>
-            <option
-                th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.ImagesTitres.TypeImage).values()}"
-                th:value="${type.name()}" th:text="${type.name()}"
-                th:selected="${type.name() == image.typeImage.name()}"></option>
-        </select>
+                <!-- Nouveau type d'image -->
+                <div class="col-md-4">
+                    <h3>Nouveau type d'image :</h3>
+                    <select id="newTypeImage" name="newTypeImage" required class="form-control form-control-sm mb-3">
+                        <option th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.ImagesTitres.TypeImage).values()}"
+                            th:value="${type.name()}" th:text="${type.name()}"
+                            th:selected="${type.name() == image.typeImage.name()}"></option>
+                    </select>
+                </div>
 
+                <!-- Nouvelle image -->
+                <div class="col-md-4">
+                    <h3>Nouvelle image : </h3>
+                    <input type="file" id="newImageFile" name="newImageFile" accept="image/*" onchange="previewImage(this)"
+                        class="form-control form-control-sm mb-3">
+                </div>
 
-        <br>
+                <!-- Prévisualisation de la nouvelle image -->
+                <div class="col-md-4">
+                    <img id="preview" style="max-width: 10vh;" class="img-fluid mb-3">
+                </div>
 
-        <!-- Nouvelle image -->
-        <h3>Nouvelle image : </h3>
-        <input type="file" id="newImageFile" name="newImageFile" accept="image/*" onchange="previewImage(this)">
-        <br>
+                <!-- Bouton Modifier -->
+                <div class="col-md-4">
+                    <input type="submit" id="modifierButton" value="Modifier" disabled class="btn btn-primary">
+                </div>
+            </div>
 
-        <!-- Prévisualisation de la nouvelle image -->
-        <img id="preview" style="max-width: 10vh;">
+        </form>
 
-        <br>
-
-        <!-- Bouton Modifier -->
-        <input type="submit" id="modifierButton" value="Modifier" disabled>
-    </form>
-
-    <p th:text="${message}"></p>
-
+        <p th:text="${message}"></p>
+    </div>
 </body>
 
 </html>
