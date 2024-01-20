@@ -85,11 +85,19 @@ public class FormationServiceImpl implements FormationService {
 
     @Override
     public void supprimerFormationAvecUtilisateurs(Long formationId) {
-        List<Utilisateur> utilisateurs = formationRepository.findById(formationId).get().getUtilisateurs();
+        Formation formation = formationRepository.findById(formationId)
+                .orElseThrow(() -> new RuntimeException("Formation non trouvée"));
+
+        List<Utilisateur> utilisateurs = formation.getUtilisateurs();
+
+        // Supprimez la référence à la formation pour chaque utilisateur
         for (Utilisateur utilisateur : utilisateurs) {
-            utilisateurRepository.delete(utilisateur);
+            utilisateur.getFormations().remove(formation);
+            utilisateurRepository.save(utilisateur); // Sauvegardez chaque utilisateur
         }
-        formationRepository.deleteById(formationId);
+
+        // Supprimez la formation
+        formationRepository.delete(formation);
     }
 
     @Override
