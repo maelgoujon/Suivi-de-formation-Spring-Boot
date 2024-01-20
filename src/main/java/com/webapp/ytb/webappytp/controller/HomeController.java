@@ -469,7 +469,18 @@ public class HomeController {
     // modifier la fiche no
     @GetMapping("/fiche/modifier/{id}")
     public String showFicheDetails(@PathVariable long id, Model model) {
+
+        //Obtenir id de l'utilisateur connecté
+        Long currentUserId = getCurrentUserId();
+        
+
+
         FicheIntervention ficheIntervention = ficheServ.lire(id);
+
+        // Vérifier si l'utilisateur connecté est le propriétaire de la fiche
+        if (ficheIntervention.getUtilisateur().getId() != currentUserId) {
+            return "redirect:/redirectByRole";
+        }
 
         // Utiliser directement le type d'intervention de la fiche
         String typeInterventionStr = ficheIntervention.getIntervention().getTypeIntervention();
