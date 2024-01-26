@@ -26,13 +26,13 @@
             padding-left: 10px;
             padding-right: 10px;
             max-width: 70%;
-            /* Ajustez la largeur maximale de la bulle de chat selon vos besoins */
+            width: fit-content;
         }
 
         .sender {
             background-color: #bbdefb;
             /* Couleur pour l'expéditeur */
-            color: #495057;
+            color: #000000;
             /* Couleur du texte pour l'expéditeur */
             align-self: flex-end;
             margin-left: auto;
@@ -42,7 +42,7 @@
         .receiver {
             background-color: #f8f9fa;
             /* Couleur pour le destinataire */
-            color: #495057;
+            color: #000000;
             /* Couleur du texte pour le destinataire */
             align-self: flex-start;
             margin-right: auto;
@@ -62,6 +62,7 @@
         .message-timestamp {
             text-align: right;
             margin-top: auto;
+            color :#495057;
         }
 
         p {
@@ -81,7 +82,7 @@
                 <p th:text="${message.textContent}"></p>
                 <audio controls th:if="${message.audio != null}"
                     th:src="'data:audio/ogg;base64,' + ${message.getAudioBase64()}"></audio>
-                <p th:text="${#temporals.format(message.timestamp, 'dd-MM-yyyy HH:mm')}" class="message-timestamp"></p>
+                <p th:text="${#temporals.format(message.timestamp, 'dd/MM/yyyy HH:mm')}" class="message-timestamp"></p>
             </div>
         </div>
         <audio id="audioPreview" controls style="display: none;"></audio>
