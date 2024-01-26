@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Ajoutez les liens vers les fichiers CSS Bootstrap ici -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/accueil.css" rel="stylesheet" />
+    <!-- Ajoutez les liens vers les fichiers JavaScript Bootstrap et jQuery ici -->
+    <script src="/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <title>Chat</title>
+    <style>
+        .message-container {
+            max-width: 600px;
+            /* Ajustez la largeur maximale selon vos besoins */
+            margin: auto;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            border-radius: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
+            max-width: 70%;
+            /* Ajustez la largeur maximale de la bulle de chat selon vos besoins */
+        }
+
+        .sender {
+            background-color: #bbdefb;
+            /* Couleur pour l'expéditeur */
+            color: #495057;
+            /* Couleur du texte pour l'expéditeur */
+            align-self: flex-end;
+            margin-left: auto;
+            /* Aligner à droite */
+        }
+
+        .receiver {
+            background-color: #f8f9fa;
+            /* Couleur pour le destinataire */
+            color: #495057;
+            /* Couleur du texte pour le destinataire */
+            align-self: flex-start;
+            margin-right: auto;
+            /* Aligner à gauche */
+        }
+
+        .sender-name {
+            text-align: right;
+            margin: 0;
+        }
+
+        .receiver-name {
+            text-align: left;
+            margin: 0;
+        }
+
+        .message-timestamp {
+            text-align: right;
+            margin-top: auto;
+        }
+
+        p {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="fragments/header :: header"></div>
+    <div class="message-container">
+        <div th:each="message : ${messages}">
+            <p th:text="${message.sender.nom} + ' ' + ${message.sender.prenom}"
+                th:class="${message.sender.login == currentUserName} ? 'sender-name' : 'receiver-name'"></p>
+            <div class="message d-flex flex-column"
+                th:class="${message.sender.login == currentUserName} ? 'message sender' : 'message receiver'">
+                <p th:text="${message.textContent}"></p>
+                <audio controls th:if="${message.audio != null}"
+                    th:src="'data:audio/ogg;base64,' + ${message.getAudioBase64()}"></audio>
+                <p th:text="${#temporals.format(message.timestamp, 'dd-MM-yyyy HH:mm')}" class="message-timestamp"></p>
+            </div>
+        </div>
+        <audio id="audioPreview" controls style="display: none;"></audio>
+
+        <form th:action="@{/send}" method="post" enctype="multipart/form-data" autocomplete="off">
+            <input type="text" name="textContent" placeholder="Type a message" class="form-control">
+            <input type="file" name="voiceContent" accept="audio/*" id="voiceContent" class="form-control">
+            <button type="button" id="recordButton" class="btn btn-primary mt-2">Enregistrer un vocal</button>
+            <p id="counter" style="display: none;"></p>
+            <button type="button" id="playButton" style="display: none;">Lire l'enregistrement</button>
+            <input type="submit" value="Send" class="btn btn-primary mt-2">
+        </form>
+
+
+
+
+    </div>
+
+
+</body>
+
+
+</html>

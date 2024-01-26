@@ -1,6 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 
+
 <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color"
     style="background-color: #bbdefb;">
     <a href="accueil_admin"
@@ -43,7 +44,7 @@
                 une session</a>
         </li>
 
-        
+
         <li class="nav-item" th:if="${currentUserRole == 'ADMIN'}">
             <a href="/materiaux/liste"
                 th:class="${currentUrl == '/materiaux/liste'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'">Matériaux</a>
@@ -55,13 +56,13 @@
         <li class="nav-item"><a
                 href="https://docs.google.com/document/d/1cM7t6f-XGID3lx3FNxVUTaXQoAhsjzOmj6h0Pt1NRiM/edit?usp=sharing"
                 class="nav-link text-black fs-5">Aide</a></li>
-                <li class="nav-item">
-                    <form th:action="@{/log_out}" method="post" class="d-inline">
-                        <!-- Ajoutez le jeton CSRF si nécessaire -->
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <a href="#" onclick="this.closest('form').submit()" class="nav-link text-black fs-5">Se déconnecter</a>
-                    </form>
-                </li>
+        <li class="nav-item">
+            <form th:action="@{/log_out}" method="post" class="d-inline">
+                <!-- Ajoutez le jeton CSRF si nécessaire -->
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <a href="#" onclick="this.closest('form').submit()" class="nav-link text-black fs-5">Se déconnecter</a>
+            </form>
+        </li>
 
 
     </ul>
