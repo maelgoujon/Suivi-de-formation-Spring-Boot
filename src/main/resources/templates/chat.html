@@ -1,213 +1,259 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+    <!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Ajoutez les liens vers les fichiers CSS Bootstrap ici -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/css/accueil.css" rel="stylesheet" />
-    <!-- Ajoutez les liens vers les fichiers JavaScript Bootstrap et jQuery ici -->
-    <script src="/js/jquery-3.2.1.slim.min.js"></script>
-    <script src="/js/popper.min.js"></script>
-    <script src="/js/bootstrap.bundle.min.js"></script>
-    <title>Chat</title>
-    <style>
-        .message-container {
-            max-width: 600px;
-            /* Ajustez la largeur maximale selon vos besoins */
-            margin: auto;
-        }
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Ajoutez les liens vers les fichiers CSS Bootstrap ici -->
+        <link href="/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="/css/accueil.css" rel="stylesheet" />
+        <!-- Ajoutez les liens vers les fichiers JavaScript Bootstrap et jQuery ici -->
+        <script src="/js/jquery-3.2.1.slim.min.js"></script>
+        <script src="/js/popper.min.js"></script>
+        <script src="/js/bootstrap.bundle.min.js"></script>
+        <title>Chat</title>
+        <style>
+            .message-container {
+                max-width: 600px;
+                /* Ajustez la largeur maximale selon vos besoins */
+                margin: auto;
+            }
 
-        .message {
-            margin-bottom: 10px;
-            border-radius: 10px;
-            padding-left: 10px;
-            padding-right: 10px;
-            max-width: 70%;
-            width: fit-content;
-        }
+            .message {
+                margin-bottom: 10px;
+                border-radius: 10px;
+                padding-left: 10px;
+                padding-right: 10px;
+                max-width: 70%;
+                width: fit-content;
+            }
 
-        .sender {
-            background-color: #bbdefb;
-            /* Couleur pour l'expéditeur */
-            color: #000000;
-            /* Couleur du texte pour l'expéditeur */
-            align-self: flex-end;
-            margin-left: auto;
-            /* Aligner à droite */
-        }
+            .sender {
+                background-color: #bbdefb;
+                /* Couleur pour l'expï¿½diteur */
+                color: #000000;
+                /* Couleur du texte pour l'expï¿½diteur */
+                align-self: flex-end;
+                margin-left: auto;
+                /* Aligner ï¿½ droite */
+            }
 
-        .receiver {
-            background-color: #f8f9fa;
-            /* Couleur pour le destinataire */
-            color: #000000;
-            /* Couleur du texte pour le destinataire */
-            align-self: flex-start;
-            margin-right: auto;
-            /* Aligner à gauche */
-        }
+            .receiver {
+                background-color: #f8f9fa;
+                /* Couleur pour le destinataire */
+                color: #000000;
+                /* Couleur du texte pour le destinataire */
+                align-self: flex-start;
+                margin-right: auto;
+                /* Aligner ï¿½ gauche */
+            }
 
-        .sender-name {
-            text-align: right;
-            margin: 0;
-        }
+            .sender-name {
+                text-align: right;
+                margin: 0;
+            }
 
-        .receiver-name {
-            text-align: left;
-            margin: 0;
-        }
+            .receiver-name {
+                text-align: left;
+                margin: 0;
+            }
 
-        .message-timestamp {
-            text-align: right;
-            margin-top: auto;
-            color: #495057;
-        }
+            .message-timestamp {
+                text-align: right;
+                margin-top: auto;
+                color: #495057;
+            }
 
-        p {
-            margin: 0;
-        }
-    </style>
-</head>
+            p {
+                margin: 0;
+            }
 
-<body>
-    <div th:replace="fragments/header :: header"></div>
-    <div class="message-container">
-        <div th:each="message : ${messages}">
-            <p th:text="${message.sender.nom} + ' ' + ${message.sender.prenom}"
-                th:class="${message.sender.login == currentUserName} ? 'sender-name' : 'receiver-name'"></p>
-            <div class="message d-flex flex-column"
-                th:class="${message.sender.login == currentUserName} ? 'message sender' : 'message receiver'">
-                <p th:text="${message.textContent}"></p>
-                <audio controls th:if="${message.audio != null}"
-                    th:src="'data:audio/ogg;base64,' + ${message.getAudioBase64()}"></audio>
-                <p th:text="${#temporals.format(message.timestamp, 'dd/MM/yyyy HH:mm')}" class="message-timestamp"></p>
+            .image {
+                width: 100%;
+                height: auto;
+            }
+
+        </style>
+
+    </head>
+
+
+
+    <body>
+        
+        <div th:replace="fragments/header :: header"></div>
+        <div class="message-container">
+            <div th:each="message : ${messages}">
+                <p th:text="${message.sender.nom} + ' ' + ${message.sender.prenom}"
+                    th:class="${message.sender.login == currentUserName} ? 'sender-name' : 'receiver-name'"></p>
+                <div class="message d-flex flex-column"
+                    th:class="${message.sender.login == currentUserName} ? 'message sender' : 'message receiver'">
+                    <p th:text="${message.textContent}"></p>
+
+                    <button class="btn play-button apply-filter" th:if="${message.audio != null}" th:id="'playButton-' + ${message.id}">
+                        <img src="/images/son.png" alt="Play" class="image" style="max-width: 50px; height: auto;" />
+                    </button>
+                    
+                    <audio style="display: none;" class="w-100" controls th:if="${message.audio != null}"
+                        th:id="'audio-' + ${message.id}"
+                        th:src="'data:audio/ogg;base64,' + ${message.getAudioBase64()}"></audio>
+                    <p th:text="${#temporals.format(message.timestamp, 'dd/MM/yyyy HH:mm')}" class="message-timestamp"></p>
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const playButtons = document.querySelectorAll('.play-button.apply-filter');
+                
+                        playButtons.forEach(button => {
+                            const img = button.querySelector('img');
+                            button.addEventListener('click', () => {
+                                const audioId = 'audio-' + button.id.split('-')[1];
+                                const audio = document.getElementById(audioId);
+                
+                                if (audio.paused) {
+                                    audio.play();
+                                    img.src = '/images/son.png'; // Image pour l'Ã©tat de pause
+                                } else {
+                                    audio.pause();
+                                    img.src = '/images/son.png'; // Image pour l'Ã©tat de lecture
+                                }
+                            });
+                
+                            const audioId = 'audio-' + button.id.split('-')[1];
+                            const audio = document.getElementById(audioId);
+                
+                            audio.addEventListener('ended', () => {
+                                img.src = '/images/son.png'; // Image pour l'Ã©tat de lecture
+                            });
+                        });
+                    });
+                </script>
+                
             </div>
+
+            <form th:action="@{/send}" method="post" enctype="multipart/form-data" autocomplete="off" id="uploadForm">
+                <input type="text" id="textContent" name="textContent" placeholder="Type a message" class="form-control">
+                <input type="file" name="voiceContent" accept="audio/*" id="voiceContent" class="form-control">
+
+                <div class="mb-4">
+                    <button id="startRecording" class="btn btn-success button" type="button">
+                        Commencer l'enregistrement
+                    </button>
+                    <button id="stopRecording" class="btn btn-danger button" disabled type="button">
+                        Arreter l'enregistrement
+                    </button>
+                    <span id="timer">00:00</span>
+                    <audio class="w-100" id="audioPlayer" controls style="display: none"></audio>
+                </div>
+                <input type="submit" value="Send" class="btn btn-primary mt-2">
+            </form>
         </div>
 
-        <form th:action="@{/send}" method="post" enctype="multipart/form-data" autocomplete="off" id="uploadForm">
-            <input type="text" id="textContent" name="textContent" placeholder="Type a message" class="form-control">
-            <input type="file" name="voiceContent" accept="audio/*" id="voiceContent" class="form-control">
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const startRecordingButton = document.getElementById("startRecording");
+                const stopRecordingButton = document.getElementById("stopRecording");
+                const audioPlayer = document.getElementById("audioPlayer");
+                const timerElement = document.getElementById("timer");
+                let mediaRecorder;
+                let audioBlob;
+                let chunks = [];
+                let timerInterval;
+                let secondsElapsed = 0;
 
-            <div class="mb-4">
-                <button id="startRecording" class="btn btn-success button" type="button">
-                    Commencer l'enregistrement
-                </button>
-                <button id="stopRecording" class="btn btn-danger button" disabled type="button">
-                    Arrêter l'enregistrement
-                </button>
-                <span id="timer">00:00</span>
-                <audio id="audioPlayer" controls style="display: none"></audio>
-            </div>
-            <input type="submit" value="Send" class="btn btn-primary mt-2">
-        </form>
-    </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const startRecordingButton = document.getElementById("startRecording");
-            const stopRecordingButton = document.getElementById("stopRecording");
-            const audioPlayer = document.getElementById("audioPlayer");
-            const timerElement = document.getElementById("timer");
-            let mediaRecorder;
-            let audioBlob;
-            let chunks = [];
-            let timerInterval;
-            let secondsElapsed = 0;
-
-            // Fonction pour mettre à jour le minuteur
-            function updateTimer() {
-                secondsElapsed++;
-                let minutes = Math.floor(secondsElapsed / 60);
-                let seconds = secondsElapsed % 60;
-                timerElement.textContent = `${minutes
-                    .toString()
-                    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-            }
-
-            // Réinitialiser le minuteur
-            function resetTimer() {
-                clearInterval(timerInterval);
-                secondsElapsed = 0;
-                timerElement.textContent = "00:00";
-            }
-
-            startRecordingButton.addEventListener("click", () => {
-                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices
-                        .getUserMedia({ audio: true })
-                        .then((stream) => {
-                            mediaRecorder = new MediaRecorder(stream);
-
-                            mediaRecorder.ondataavailable = (event) => {
-                                if (event.data.size > 0) chunks.push(event.data);
-                            };
-
-                            mediaRecorder.onstop = () => {
-                                audioBlob = new Blob(chunks, { type: "audio/mp3" });
-                                chunks = [];
-
-                                const audioURL = URL.createObjectURL(audioBlob);
-                                audioPlayer.src = audioURL;
-                                audioPlayer.style.display = "block";
-
-                                startRecordingButton.disabled = false;
-                                stopRecordingButton.disabled = true;
-                            };
-
-                            mediaRecorder.start();
-                            startRecordingButton.disabled = true;
-                            stopRecordingButton.disabled = false;
-                            timerInterval = setInterval(updateTimer, 1000);
-                        })
-                        .catch((error) => {
-                            console.error("Erreur lors de l'accès au microphone:", error);
-                        });
-                } else {
-                    console.error(
-                        "L'API MediaRecorder n'est pas prise en charge dans ce navigateur."
-                    );
+                // Fonction pour mettre ï¿½ jour le minuteur
+                function updateTimer() {
+                    secondsElapsed++;
+                    let minutes = Math.floor(secondsElapsed / 60);
+                    let seconds = secondsElapsed % 60;
+                    timerElement.textContent = `${minutes
+                        .toString()
+                        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
                 }
-            });
 
-            stopRecordingButton.addEventListener("click", () => {
-                if (mediaRecorder) {
-                    mediaRecorder.stop();
-                    resetTimer();
+                // Rï¿½initialiser le minuteur
+                function resetTimer() {
+                    clearInterval(timerInterval);
+                    secondsElapsed = 0;
+                    timerElement.textContent = "00:00";
                 }
-            });
 
-            // Gestionnaire d'événements pour la soumission du formulaire
-            document
-                .getElementById("uploadForm")
-                .addEventListener("submit", function (e) {
-                    e.preventDefault();
+                startRecordingButton.addEventListener("click", () => {
+                    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                        navigator.mediaDevices
+                            .getUserMedia({ audio: true })
+                            .then((stream) => {
+                                mediaRecorder = new MediaRecorder(stream);
 
-                    const formData = new FormData(this);
-                    const textContent = document.getElementById('textContent').value;
-                    if (textContent) {
-                        formData.append('message', textContent);
+                                mediaRecorder.ondataavailable = (event) => {
+                                    if (event.data.size > 0) chunks.push(event.data);
+                                };
+
+                                mediaRecorder.onstop = () => {
+                                    audioBlob = new Blob(chunks, { type: "audio/mp3" });
+                                    chunks = [];
+
+                                    const audioURL = URL.createObjectURL(audioBlob);
+                                    audioPlayer.src = audioURL;
+                                    audioPlayer.style.display = "block";
+
+                                    startRecordingButton.disabled = false;
+                                    stopRecordingButton.disabled = true;
+                                };
+
+                                mediaRecorder.start();
+                                startRecordingButton.disabled = true;
+                                stopRecordingButton.disabled = false;
+                                timerInterval = setInterval(updateTimer, 1000);
+                            })
+                            .catch((error) => {
+                                console.error("Erreur lors de l'accï¿½s au microphone:", error);
+                            });
+                    } else {
+                        console.error(
+                            "L'API MediaRecorder n'est pas prise en charge dans ce navigateur."
+                        );
                     }
-
-                    if (audioBlob) {
-                        formData.append("audioFile", audioBlob, "enregistrement.mp3");
-                    }
-
-                    fetch("/send", {
-                        method: "POST",
-                        body: formData,
-                    })
-                        .then((response) => {
-                            location.reload(); // Rafraîchir la page
-                        })
-                        .catch((error) => {
-                            location.reload(); // Rafraîchir la page
-                        });
                 });
-        });
-    </script>
 
-</body>
+                stopRecordingButton.addEventListener("click", () => {
+                    if (mediaRecorder) {
+                        mediaRecorder.stop();
+                        resetTimer();
+                    }
+                });
 
-</html>
+                // Gestionnaire d'ï¿½vï¿½nements pour la soumission du formulaire
+                document
+                    .getElementById("uploadForm")
+                    .addEventListener("submit", function (e) {
+                        e.preventDefault();
+
+                        const formData = new FormData(this);
+                        const textContent = document.getElementById('textContent').value;
+                        if (textContent) {
+                            formData.append('message', textContent);
+                        }
+
+                        if (audioBlob) {
+                            formData.append("audioFile", audioBlob, "enregistrement.mp3");
+                        }
+
+                        fetch("/send", {
+                            method: "POST",
+                            body: formData,
+                        })
+                            .then((response) => {
+                                location.reload(); // Rafraï¿½chir la page
+                            })
+                            .catch((error) => {
+                                location.reload(); // Rafraï¿½chir la page
+                            });
+                    });
+            });
+        </script>
+
+    </body>
+
+    </html>
