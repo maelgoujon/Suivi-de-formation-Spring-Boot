@@ -1,16 +1,22 @@
 package com.webapp.ytb.webappytp.controller;
 
+import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.Message;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -28,23 +34,13 @@ public class MessageController {
     }
 
     @PostMapping("/send")
-    public String sendMessage(
-            @RequestParam(value = "textContent", required = false) String textContent,
-            @RequestParam(value = "voiceContent", required = false) MultipartFile voiceContent,
+    @ResponseBody
+    public ResponseEntity<String> enregistrerAudio(@RequestParam(value = "message", required = false) String message,
+            @RequestPart(value = "audioFile", required = false) MultipartFile audioFile,
             Principal principal) {
+        messageService.envoyer(message, audioFile, principal);
 
-        if (textContent == null || textContent.isEmpty()) {
-            System.out.println("Message vide");
-        } else {
-            System.out.println("Message : " + textContent);
-        }
-        if (voiceContent != null && !voiceContent.isEmpty()) {
-            System.out.println("Fichier audio : " + voiceContent.getOriginalFilename());
-        } else {
-            System.out.println("Pas de fichier audio");
-        }
-        messageService.envoyer(textContent, voiceContent, principal);
-        return "redirect:/chat";
+        return ResponseEntity.ok().body("Enregistrement audio réussi pour la fiche avec l'ID ");
     }
 
 }

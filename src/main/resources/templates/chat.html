@@ -62,7 +62,7 @@
         .message-timestamp {
             text-align: right;
             margin-top: auto;
-            color :#495057;
+            color: #495057;
         }
 
         p {
@@ -85,24 +85,129 @@
                 <p th:text="${#temporals.format(message.timestamp, 'dd/MM/yyyy HH:mm')}" class="message-timestamp"></p>
             </div>
         </div>
-        <audio id="audioPreview" controls style="display: none;"></audio>
 
-        <form th:action="@{/send}" method="post" enctype="multipart/form-data" autocomplete="off">
-            <input type="text" name="textContent" placeholder="Type a message" class="form-control">
+        <form th:action="@{/send}" method="post" enctype="multipart/form-data" autocomplete="off" id="uploadForm">
+            <input type="text" id="textContent" name="textContent" placeholder="Type a message" class="form-control">
             <input type="file" name="voiceContent" accept="audio/*" id="voiceContent" class="form-control">
-            <button type="button" id="recordButton" class="btn btn-primary mt-2">Enregistrer un vocal</button>
-            <p id="counter" style="display: none;"></p>
-            <button type="button" id="playButton" style="display: none;">Lire l'enregistrement</button>
+
+            <div class="mb-4">
+                <button id="startRecording" class="btn btn-success button" type="button">
+                    Commencer l'enregistrement
+                </button>
+                <button id="stopRecording" class="btn btn-danger button" disabled type="button">
+                    Arrêter l'enregistrement
+                </button>
+                <span id="timer">00:00</span>
+                <audio id="audioPlayer" controls style="display: none"></audio>
+            </div>
             <input type="submit" value="Send" class="btn btn-primary mt-2">
         </form>
-
-
-
-
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const startRecordingButton = document.getElementById("startRecording");
+            const stopRecordingButton = document.getElementById("stopRecording");
+            const audioPlayer = document.getElementById("audioPlayer");
+            const timerElement = document.getElementById("timer");
+            let mediaRecorder;
+            let audioBlob;
+            let chunks = [];
+            let timerInterval;
+            let secondsElapsed = 0;
+
+            // Fonction pour mettre à jour le minuteur
+            function updateTimer() {
+                secondsElapsed++;
+                let minutes = Math.floor(secondsElapsed / 60);
+                let seconds = secondsElapsed % 60;
+                timerElement.textContent = `${minutes
+                    .toString()
+                    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+            }
+
+            // Réinitialiser le minuteur
+            function resetTimer() {
+                clearInterval(timerInterval);
+                secondsElapsed = 0;
+                timerElement.textContent = "00:00";
+            }
+
+            startRecordingButton.addEventListener("click", () => {
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    navigator.mediaDevices
+                        .getUserMedia({ audio: true })
+                        .then((stream) => {
+                            mediaRecorder = new MediaRecorder(stream);
+
+                            mediaRecorder.ondataavailable = (event) => {
+                                if (event.data.size > 0) chunks.push(event.data);
+                            };
+
+                            mediaRecorder.onstop = () => {
+                                audioBlob = new Blob(chunks, { type: "audio/mp3" });
+                                chunks = [];
+
+                                const audioURL = URL.createObjectURL(audioBlob);
+                                audioPlayer.src = audioURL;
+                                audioPlayer.style.display = "block";
+
+                                startRecordingButton.disabled = false;
+                                stopRecordingButton.disabled = true;
+                            };
+
+                            mediaRecorder.start();
+                            startRecordingButton.disabled = true;
+                            stopRecordingButton.disabled = false;
+                            timerInterval = setInterval(updateTimer, 1000);
+                        })
+                        .catch((error) => {
+                            console.error("Erreur lors de l'accès au microphone:", error);
+                        });
+                } else {
+                    console.error(
+                        "L'API MediaRecorder n'est pas prise en charge dans ce navigateur."
+                    );
+                }
+            });
+
+            stopRecordingButton.addEventListener("click", () => {
+                if (mediaRecorder) {
+                    mediaRecorder.stop();
+                    resetTimer();
+                }
+            });
+
+            // Gestionnaire d'événements pour la soumission du formulaire
+            document
+                .getElementById("uploadForm")
+                .addEventListener("submit", function (e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(this);
+                    const textContent = document.getElementById('textContent').value;
+                    if (textContent) {
+                        formData.append('message', textContent);
+                    }
+
+                    if (audioBlob) {
+                        formData.append("audioFile", audioBlob, "enregistrement.mp3");
+                    }
+
+                    fetch("/send", {
+                        method: "POST",
+                        body: formData,
+                    })
+                        .then((response) => {
+                            location.reload(); // Rafraîchir la page
+                        })
+                        .catch((error) => {
+                            location.reload(); // Rafraîchir la page
+                        });
+                });
+        });
+    </script>
 
 </body>
-
 
 </html>
