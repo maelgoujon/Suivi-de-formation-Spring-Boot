@@ -24,7 +24,8 @@ public class MessageService {
     private UtilisateurService utilisateurService;
 
     public List<Message> lire() {
-        return messageRepository.findAll();
+        //retourner la liste des messages triÃ©s par date
+        return messageRepository.findAllByOrderByTimestampAsc();
     }
 
     public void envoyer(String textContent, MultipartFile voiceContent, Principal principal) {
@@ -51,8 +52,8 @@ public class MessageService {
     }
 
     private String saveAudioFile(MultipartFile voiceContent) {
-        // Implémentez la logique pour enregistrer le fichier audio et renvoyez le chemin
-        // Assurez-vous de générer un nom de fichier unique pour éviter les conflits
+        // Implï¿½mentez la logique pour enregistrer le fichier audio et renvoyez le chemin
+        // Assurez-vous de gï¿½nï¿½rer un nom de fichier unique pour ï¿½viter les conflits
         return "chemin/vers/le/fichier/audio";
     }
 }

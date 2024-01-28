@@ -1,6 +1,9 @@
 package com.webapp.ytb.webappytp;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,8 +13,10 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import com.webapp.ytb.webappytp.controller.MessageController;
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.Formation;
+import com.webapp.ytb.webappytp.modele.Message;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
@@ -24,6 +29,7 @@ import com.webapp.ytb.webappytp.repository.FicheRepository;
 import com.webapp.ytb.webappytp.repository.FormationRepository;
 import com.webapp.ytb.webappytp.repository.ImagesTitresRepository;
 import com.webapp.ytb.webappytp.repository.MateriauxRepository;
+import com.webapp.ytb.webappytp.repository.MessageRepository;
 import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
 
 @Component
@@ -36,21 +42,25 @@ public class Demarrage implements ApplicationRunner {
     private final FormationRepository formationRepository;
     private final ImagesTitresRepository imagesTitresRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MessageRepository messageRepository;
 
     @Autowired
     public Demarrage(UtilisateurRepository utilisateurRepository, FicheRepository ficheRepository,
             MateriauxRepository materiauxRepository, FormationRepository formationRepository,
-            ImagesTitresRepository imagesTitresRepository, PasswordEncoder passwordEncoder) {
+            ImagesTitresRepository imagesTitresRepository, PasswordEncoder passwordEncoder,
+            MessageRepository messageRepository) {
         this.utilisateurRepository = utilisateurRepository;
         this.ficheRepository = ficheRepository;
         this.materiauxRepository = materiauxRepository;
         this.formationRepository = formationRepository;
         this.imagesTitresRepository = imagesTitresRepository;
         this.passwordEncoder = passwordEncoder; // Initialisez le PasswordEncoder
+        this.messageRepository = messageRepository;
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+
         // Création des matériaux AMENAGEMENT
         String[] amenagementImages = {
                 "gants", "chaussures", "marteau", "metre", "pantalon", "crayon"
@@ -454,6 +464,38 @@ public class Demarrage implements ApplicationRunner {
 
             }
         }
+
+        // Création des chat messages
+
+            Message chatMessage = new Message();
+            chatMessage.setTextContent("Bonjour");
+            chatMessage.setTimestamp(
+                    LocalDateTime.ofInstant(Instant.ofEpochMilli(1611382800000L), ZoneId.systemDefault()));
+            chatMessage.setSender(admin);
+            messageRepository.save(chatMessage);
+
+            Message chatMessage2 = new Message();
+            chatMessage2.setTextContent("Bonjour");
+            chatMessage2.setTimestamp(
+                    LocalDateTime.ofInstant(Instant.ofEpochMilli(1611382800000L), ZoneId.systemDefault()));
+            chatMessage2.setSender(educsimple);
+            messageRepository.save(chatMessage2);
+
+            Message chatMessage3 = new Message();
+            chatMessage3.setTextContent("coucocuou");
+            chatMessage3.setTimestamp(
+                    LocalDateTime.ofInstant(Instant.ofEpochMilli(1611382800000L), ZoneId.systemDefault()));
+            chatMessage3.setSender(educsimple2);
+            messageRepository.save(chatMessage3);
+
+            Message chatMessage4 = new Message();
+            chatMessage4.setTextContent("aiaiaiai");
+            chatMessage4.setTimestamp(
+                    LocalDateTime.ofInstant(Instant.ofEpochMilli(1610382800000L), ZoneId.systemDefault()));
+            chatMessage4.setSender(michel);
+            messageRepository.save(chatMessage4);
+
+
 
     }
 

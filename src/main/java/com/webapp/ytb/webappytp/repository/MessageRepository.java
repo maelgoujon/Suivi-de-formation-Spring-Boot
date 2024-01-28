@@ -7,8 +7,13 @@ import org.springframework.stereotype.Repository;
 
 import com.webapp.ytb.webappytp.modele.Message;
 
+import jakarta.transaction.Transactional;
+
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
+
+    @Transactional
+    List<Message> findAllByOrderByTimestampAsc();
 
 
 

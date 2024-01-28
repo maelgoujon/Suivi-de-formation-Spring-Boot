@@ -26,6 +26,14 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
+    @GetMapping("/test")
+    public String getTestPage(Model model, Principal principal) {
+        //renvoyer la liste des messages triés par date
+        List<Message> messages = messageService.lire();
+        model.addAttribute("messages", messages);
+        return "test";
+    }
+
     @GetMapping("/chat")
     public String getChatPage(Model model, Principal principal) {
         List<Message> messages = messageService.lire();
