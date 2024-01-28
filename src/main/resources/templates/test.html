@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <link rel="icon" type="image/vnd.icon" href="/images/apeaj.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/css/accueil.css" rel="stylesheet" />
     <script src="/js/jquery-3.2.1.slim.min.js"></script>
@@ -18,11 +18,32 @@
             overflow-y: auto;
         }
 
+        hr {
+            margin: 0;
+        }
+
+        .fixed-bottom {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #ffffff;
+            /* Couleur d'arrière-plan de votre choix */
+            padding: 10px;
+            /* Ajustez cela selon vos besoins */
+            box-shadow: 0px -5px 5px -5px #888888;
+        }
+
+        .collapseTimer {
+            position: fixed;
+            bottom: 10vh;
+            width: fit-content;
+        }
+
+
+
         .chat-list {
             padding: 0;
             font-size: .8rem;
-            height: 60vh;
-            /* Set the height of the chat to 60% of viewport height */
             overflow-y: auto;
             /* Enable vertical scrollbar */
         }
@@ -47,7 +68,7 @@
 
         .chat-list .chat-message {
             border-radius: 10px;
-            background: #a2a2a2;
+            background: #6c757d;
             display: inline-block;
             padding: 1vh 1vw;
             position: relative;
@@ -68,6 +89,14 @@
             font-size: .9rem;
         }
 
+        .chat-list .in .chat-message h5 {
+            color: #b9b9b9;
+        }
+
+        .chat-list .out .chat-message h5 {
+            color: #e8e8e8;
+        }
+
         .chat-list .chat-message p {
             margin: 0;
             padding: 0;
@@ -83,7 +112,7 @@
         .chat-list .in .chat-message:before {
             left: -15px;
             border-bottom: 15px solid transparent;
-            border-right: 15px solid #a2a2a2;
+            border-right: 15px solid #6c757d;
         }
 
         .chat-list .out .chat-img {
@@ -123,7 +152,16 @@
         }
 
         .content {
-            margin-top: 40px;
+            margin-top: 0.5vh;
+        }
+
+        .card-body {
+            padding: 0;
+        }
+
+        #bottom-bar {
+            height: 10%;
+            /* Ajustez le pourcentage selon vos besoins */
         }
     </style>
 </head>
@@ -155,20 +193,23 @@
                                     <div class="chat-body">
                                         <div class="chat-message">
                                             <h5 th:text="${message.sender.nom} + ' ' + ${message.sender.prenom}"></h5>
+                                            <hr />
                                             <button class="btn play-button apply-filter"
                                                 th:if="${message.audio != null}" th:id="'playButton-' + ${message.id}">
-                                                <img src="/images/son.png" alt="Play" class="user-image"
+                                                <img src="/images/sound.png" alt="Play" class="user-image"
                                                     style="max-width: 50px; height: auto;" />
                                             </button>
-                                            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                                                <p th:if="${message.textContent != null}" th:text="${message.textContent}">
+                                            <div
+                                                style="display: flex; justify-content: space-between; align-items: flex-end;">
+                                                <h4 th:if="${message.textContent != null}"
+                                                    th:text="${message.textContent}"></h4>
                                                 </p>
                                                 <div style="color: #17202b;padding-left: 3vw;"
                                                     th:text="${#temporals.format(message.timestamp, 'HH:mm')}"
                                                     class="message-timestamp"></div>
                                             </div>
-                                            
-                                        
+
+
                                             <audio style="display: none;" class="w-100" controls
                                                 th:if="${message.audio != null}" th:id="'audio-' + ${message.id}"
                                                 th:src="'data:audio/ogg;base64,'+ ${message.getAudioBase64()}"></audio>
@@ -182,168 +223,207 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            window.addEventListener('resize', adjustChatListHeight);
+
+            // Fonction pour ajuster la hauteur de .chat-list en fonction de la hauteur de bottom-bar .chat-list - la hauteur de bottom-bar -10 vh
+            function adjustChatListHeight() {
+                var bottomBarHeight = document.getElementById('bottom-bar').offsetHeight;
+                console.log("bottom bar height " + bottomBarHeight);
+                //hauteur de l'écran
+                var screenHeight = window.innerHeight;
+                //taille du header
+                var headerHeight = document.querySelector('header').offsetHeight;
+                console.log("header height " + headerHeight);
+                //taille de card-header
+                var cardHeaderHeight = document.querySelector('.card-header').offsetHeight;
+                var total = screenHeight - bottomBarHeight - headerHeight - cardHeaderHeight - 50;  
+                var chatListHeight = total + 'px';
+                document.querySelector('.chat-list').style.height = chatListHeight;
+                console.log(chatListHeight);
+            }
+
+
+            
+            document.addEventListener('DOMContentLoaded', () => {
+                // Appel initial pour définir la hauteur correcte au chargement de la page
+            adjustChatListHeight();
+                const playButtons = document.querySelectorAll('.play-button.apply-filter');
+
+                playButtons.forEach(button => {
+                    const img = button.querySelector('img');
+                    button.addEventListener('click', () => {
+                        const audioId = 'audio-' + button.id.split('-')[1];
+                        const audio = document.getElementById(audioId);
+
+                        if (audio.paused) {
+                            audio.play();
+                            img.src = '/images/sound.png'; // Image pour l'état de pause
+                            //mettre l'arriere plan en blanc
+                            img.style.backgroundColor = '#ffffff';
+                        } else {
+                            audio.pause();
+                            img.src = '/images/sound.png'; // Image pour l'état de lecture
+                            //mettre l'arriere plan en bleu
+                            img.style.backgroundColor = '#5a99ee';
+                        }
+                    });
+
+                    const audioId = 'audio-' + button.id.split('-')[1];
+                    const audio = document.getElementById(audioId);
+
+                    audio.addEventListener('ended', () => {
+                        img.src = '/images/sound.png'; // Image pour l'état de lecture
+                        //mettre l'arriere plan en bleu
+                        img.style.backgroundColor = '#5a99ee';
+                    });
+                });
+            });
+        </script>
+        <div class="collapseTimer fixed-bottom slide collapse" id="collapseTimer">
+            <div class="card card-body">
+                <span id="timer">00:00</span>
+            </div>
+        </div>
         <form class="form" th:action="@{/send}" method="post" enctype="multipart/form-data" autocomplete="off"
             id="uploadForm">
-            <div style="display: flex; justify-content: space-between; align-items: center;margin-top: 1vh;">
-                <input type="text" id="textContent" name="textContent" placeholder="Type a message" class="form-control" style="flex-grow: 1; margin-right: 10px;">
+            <audio class="w-100" id="audioPlayer" controls style="display: none"></audio>
+
+            <div id="bottom-bar" class="fixed-bottom"
+                style="display: flex; justify-content: space-between; align-items: center;">
+                <button id="recordToggle" class="btn btn-primary" type="button" style="margin: 0 1vh 0 0;"
+                    data-bs-toggle="collapse" data-bs-target="#collapseTimer" aria-expanded="false"
+                    aria-controls="collapseTimer">
+                    <img id="recordIcon" src="/images/microphone.png" alt="Record"
+                        style="width: 20px; height: 20px;filter: invert(1);">
+                </button>
+
+                <input type="text" id="textContent" name="textContent" placeholder="Type a message" class="form-control"
+                    style="flex-grow: 1; margin-right: 10px;">
                 <input type="submit" value="Send" class="btn btn-primary">
             </div>
-            <input style="display: none;" type="file" name="voiceContent" accept="audio/*" id="voiceContent" class="form-control">
-
-            <div class="mb-4">
-                <button id="startRecording" class="btn btn-success button" type="button">
-                    Commencer l'enregistrement
-                </button>
-                <button id="stopRecording" class="btn btn-danger button" disabled type="button">
-                    Arreter l'enregistrement
-                </button>
-                <span id="timer">00:00</span>
-                <audio class="w-100" id="audioPlayer" controls style="display: none"></audio>
-            </div>
+            <input style="display: none;" type="file" name="voiceContent" accept="audio/*" id="voiceContent"
+                class="form-control">
 
         </form>
     </div>
-</body>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const playButtons = document.querySelectorAll('.play-button.apply-filter');
 
-        playButtons.forEach(button => {
-            const img = button.querySelector('img');
-            button.addEventListener('click', () => {
-                const audioId = 'audio-' + button.id.split('-')[1];
-                const audio = document.getElementById(audioId);
 
-                if (audio.paused) {
-                    audio.play();
-                    img.src = '/images/son.png'; // Image pour l'état de pause
-                    //mettre l'arriere plan en blanc
-                    img.style.backgroundColor = '#ffffff';
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const recordToggle = document.getElementById("recordToggle");
+            const audioPlayer = document.getElementById("audioPlayer");
+            const timerElement = document.getElementById("timer");
+            const recordIcon = document.getElementById("recordIcon");
+            let mediaRecorder;
+            let audioBlob;
+            let chunks = [];
+            let timerInterval;
+            let secondsElapsed = 0;
+            let isRecording = false;
+
+            // Fonction pour mettre à jour le minuteur
+            function updateTimer() {
+                secondsElapsed++;
+                let minutes = Math.floor(secondsElapsed / 60);
+                let seconds = secondsElapsed % 60;
+                timerElement.textContent = `${minutes
+                    .toString()
+                    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+            }
+
+            // Réinitialiser le minuteur
+            function resetTimer() {
+                clearInterval(timerInterval);
+                secondsElapsed = 0;
+                timerElement.textContent = "00:00";
+            }
+
+            recordToggle.addEventListener("click", () => {
+                if (!isRecording) {
+                    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                        navigator.mediaDevices
+                            .getUserMedia({ audio: true })
+                            .then((stream) => {
+                                mediaRecorder = new MediaRecorder(stream);
+
+                                mediaRecorder.ondataavailable = (event) => {
+                                    if (event.data.size > 0) chunks.push(event.data);
+                                };
+
+                                mediaRecorder.onstop = () => {
+                                    audioBlob = new Blob(chunks, { type: "audio/mp3" });
+                                    chunks = [];
+
+                                    const audioURL = URL.createObjectURL(audioBlob);
+                                    audioPlayer.src = audioURL;
+                                    audioPlayer.style.display = "block";
+
+
+                                };
+
+
+                                mediaRecorder.start();
+                                isRecording = true;
+                                timerInterval = setInterval(updateTimer, 1000);
+                                // Changer l'arriere plan du bouton
+                                recordToggle.style.backgroundColor = '#198754';
+                                recordIcon.style.filter = invert(1);
+                                recordToggle.innerHTML = '<img id="recordIcon" src="/images/microphone.png" alt="Record" style="width: 20px; height: 20px;">';
+                            })
+                            .catch((error) => {
+                                console.error("Erreur lors de l'accès au microphone:", error);
+                            });
+                    } else {
+                        console.error("L'API MediaRecorder n'est pas prise en charge dans ce navigateur.");
+                    }
                 } else {
-                    audio.pause();
-                    img.src = '/images/son.png'; // Image pour l'état de lecture
-                    //mettre l'arriere plan en bleu
-                    img.style.backgroundColor = '#5a99ee';
+                    if (mediaRecorder) {
+                        mediaRecorder.stop();
+                        resetTimer();
+                        isRecording = false;
+                        recordToggle.style.backgroundColor = '#0d6efd';
+                        recordIcon.style.filter = invert(1);
+                        recordToggle.innerHTML = '<img id="recordIcon" src="/images/microphone.png" alt="Record" style="width: 20px; height: 20px;">';
+                    }
                 }
             });
 
-            const audioId = 'audio-' + button.id.split('-')[1];
-            const audio = document.getElementById(audioId);
+            // Gestionnaire d'événements pour la soumission du formulaire
+            document
+                .getElementById("uploadForm")
+                .addEventListener("submit", function (e) {
+                    e.preventDefault();
 
-            audio.addEventListener('ended', () => {
-                img.src = '/images/son.png'; // Image pour l'état de lecture
-                //mettre l'arriere plan en bleu
-                img.style.backgroundColor = '#5a99ee';
-            });
-        });
-    });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const startRecordingButton = document.getElementById("startRecording");
-        const stopRecordingButton = document.getElementById("stopRecording");
-        const audioPlayer = document.getElementById("audioPlayer");
-        const timerElement = document.getElementById("timer");
-        let mediaRecorder;
-        let audioBlob;
-        let chunks = [];
-        let timerInterval;
-        let secondsElapsed = 0;
+                    const formData = new FormData(this);
+                    const textContent = document.getElementById('textContent').value;
+                    if (textContent) {
+                        formData.append('message', textContent);
+                    }
 
-        // Fonction pour mettre � jour le minuteur
-        function updateTimer() {
-            secondsElapsed++;
-            let minutes = Math.floor(secondsElapsed / 60);
-            let seconds = secondsElapsed % 60;
-            timerElement.textContent = `${minutes
-                .toString()
-                .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-        }
+                    if (audioBlob) {
+                        formData.append("audioFile", audioBlob, "enregistrement.mp3");
+                    }
 
-        // R�initialiser le minuteur
-        function resetTimer() {
-            clearInterval(timerInterval);
-            secondsElapsed = 0;
-            timerElement.textContent = "00:00";
-        }
-
-        startRecordingButton.addEventListener("click", () => {
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices
-                    .getUserMedia({ audio: true })
-                    .then((stream) => {
-                        mediaRecorder = new MediaRecorder(stream);
-
-                        mediaRecorder.ondataavailable = (event) => {
-                            if (event.data.size > 0) chunks.push(event.data);
-                        };
-
-                        mediaRecorder.onstop = () => {
-                            audioBlob = new Blob(chunks, { type: "audio/mp3" });
-                            chunks = [];
-
-                            const audioURL = URL.createObjectURL(audioBlob);
-                            audioPlayer.src = audioURL;
-                            audioPlayer.style.display = "block";
-
-                            startRecordingButton.disabled = false;
-                            stopRecordingButton.disabled = true;
-                        };
-
-                        mediaRecorder.start();
-                        startRecordingButton.disabled = true;
-                        stopRecordingButton.disabled = false;
-                        timerInterval = setInterval(updateTimer, 1000);
+                    fetch("/send", {
+                        method: "POST",
+                        body: formData,
                     })
-                    .catch((error) => {
-                        console.error("Erreur lors de l'acc�s au microphone:", error);
-                    });
-            } else {
-                console.error(
-                    "L'API MediaRecorder n'est pas prise en charge dans ce navigateur."
-                );
-            }
+                        .then((response) => {
+                            location.reload(); // Rafraîchir la page
+                        })
+                        .catch((error) => {
+                            location.reload(); // Rafraîchir la page
+                        });
+                });
+
+            const chatList = document.querySelector('.chat-list');
+            chatList.scrollTop = chatList.scrollHeight;
         });
+    </script>
 
-        stopRecordingButton.addEventListener("click", () => {
-            if (mediaRecorder) {
-                mediaRecorder.stop();
-                resetTimer();
-            }
-        });
-
-        // Gestionnaire d'�v�nements pour la soumission du formulaire
-        document
-            .getElementById("uploadForm")
-            .addEventListener("submit", function (e) {
-                e.preventDefault();
-
-                const formData = new FormData(this);
-                const textContent = document.getElementById('textContent').value;
-                if (textContent) {
-                    formData.append('message', textContent);
-                }
-
-                if (audioBlob) {
-                    formData.append("audioFile", audioBlob, "enregistrement.mp3");
-                }
-
-                fetch("/send", {
-                    method: "POST",
-                    body: formData,
-                })
-                    .then((response) => {
-                        location.reload(); // Rafra�chir la page
-                    })
-                    .catch((error) => {
-                        location.reload(); // Rafra�chir la page
-                    });
-            });
-
-        const chatList = document.querySelector('.chat-list');
-        chatList.scrollTop = chatList.scrollHeight;
-    });
-</script>
+</body>
 
 </html>
