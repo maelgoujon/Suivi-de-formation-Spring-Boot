@@ -1,21 +1,19 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-
-
-<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bg-color"
-    style="background-color: #bbdefb;">
-    <a href="accueil_admin"
-        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-        <svg class="bi me-2" width="40" height="32">
-            <use xlink:href="#bootstrap"></use>
-        </svg>
-        <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
-        <div th:if="${currentUserName}" class="user-info">
-            <span th:text="${currentUserName}"></span>
-
-        </div>
-    </a>
-    <ul class="nav nav-pills">
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #bbdefb !important;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="accueil_admin">
+                <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
+                <div th:if="${currentUserName}" class="user-info">
+                    <span th:text="${currentUserName}"></span>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
 
         <li class="nav-item">
             <a href="/accueil_admin"

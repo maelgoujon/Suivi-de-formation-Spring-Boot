@@ -14,8 +14,8 @@
     <style>
         body {
             background: #eee;
-            overflow: hidden;
-            /* Hide the body's native scrollbar */
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         .chat-list {
@@ -71,6 +71,7 @@
         .chat-list .chat-message p {
             margin: 0;
             padding: 0;
+            text-align: initial;
         }
 
         .chat-list .chat-body {
@@ -80,9 +81,9 @@
         }
 
         .chat-list .in .chat-message:before {
-            left: -12px;
-            border-bottom: 20px solid transparent;
-            border-right: 20px solid #a2a2a2;
+            left: -15px;
+            border-bottom: 15px solid transparent;
+            border-right: 15px solid #a2a2a2;
         }
 
         .chat-list .out .chat-img {
@@ -100,9 +101,9 @@
         }
 
         .chat-list .out .chat-message:before {
-            right: -12px;
-            border-bottom: 20px solid transparent;
-            border-left: 20px solid #5a99ee;
+            right: -15px;
+            border-bottom: 15px solid transparent;
+            border-left: 15px solid #5a99ee;
         }
 
         .card .card-header:first-child {
@@ -112,23 +113,23 @@
         }
 
         .card .card-header {
-            background: #17202b;
+            background: #bbdefb;
             border: 0;
             font-size: 1rem;
             padding: .65rem 1rem;
             position: relative;
             font-weight: 600;
-            color: #ffffff;
+            color: #000000;
         }
 
         .content {
             margin-top: 40px;
         }
-
     </style>
 </head>
 
 <body>
+    <div th:replace="fragments/header :: header"></div>
     <div class="container content">
         <div class="row">
             <div class="">
