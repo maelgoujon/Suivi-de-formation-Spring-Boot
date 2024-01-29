@@ -12,6 +12,9 @@
     <script src="/js/bootstrap.bundle.min.js"></script>
     <title>Chat</title>
     <style>
+
+
+
         body {
             background: #eee;
             overflow-x: hidden;
@@ -163,6 +166,45 @@
             height: 10%;
             /* Ajustez le pourcentage selon vos besoins */
         }
+
+        @media (min-width: 1200px) {
+            h4 {
+                font-size: 3.5rem;
+            }
+
+            .chat-list .chat-message h5 {
+                font-size: 2.5rem;
+            }
+
+            .chat-list .chat-img {
+                width: 100px;
+            }
+
+            .message-timestamp {
+                font-size: 1.5rem;
+            }
+
+            .recordIcon {
+                height: 5vh !important;
+                width: auto !important;
+                filter: invert(1);
+            }
+
+            .form-control {
+                font-size: 2rem;
+                height: 6.5vh;
+            }
+
+            .btn-primary {
+                font-size: 2rem;
+                height: 6.5vh;
+            }
+
+            .card-header {
+                font-size: 2rem !important;
+            }
+
+        }
     </style>
 </head>
 
@@ -238,17 +280,17 @@
                 console.log("header height " + headerHeight);
                 //taille de card-header
                 var cardHeaderHeight = document.querySelector('.card-header').offsetHeight;
-                var total = screenHeight - bottomBarHeight - headerHeight - cardHeaderHeight - 50;  
+                var total = screenHeight - bottomBarHeight - headerHeight - cardHeaderHeight - 50;
                 var chatListHeight = total + 'px';
                 document.querySelector('.chat-list').style.height = chatListHeight;
                 console.log(chatListHeight);
             }
 
 
-            
+
             document.addEventListener('DOMContentLoaded', () => {
                 // Appel initial pour définir la hauteur correcte au chargement de la page
-            adjustChatListHeight();
+                adjustChatListHeight();
                 const playButtons = document.querySelectorAll('.play-button.apply-filter');
 
                 playButtons.forEach(button => {
@@ -296,7 +338,7 @@
                     data-bs-toggle="collapse" data-bs-target="#collapseTimer" aria-expanded="false"
                     aria-controls="collapseTimer">
                     <img id="recordIcon" src="/images/microphone.png" alt="Record"
-                        style="width: 20px; height: 20px;filter: invert(1);">
+                        class="recordIcon" style="width: 20px; height: 20px; filter: invert(1);">
                 </button>
 
                 <input type="text" id="textContent" name="textContent" placeholder="Type a message" class="form-control"
