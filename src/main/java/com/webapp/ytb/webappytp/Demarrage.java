@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -351,7 +353,7 @@ public class Demarrage implements ApplicationRunner {
         FicheIntervention ficheIntervention = ficheRepository
                 .findByTravauxRealisesAndUtilisateurPrenom("Travaux réalisés par Michel Michel", "Michel");
         if (ficheIntervention == null) {
-            FicheIntervention nouvelleFiche = new FicheIntervention();
+            ficheIntervention = new FicheIntervention();
             Demande demande = new Demande();
             Maintenance maintenance = new Maintenance();
             Intervention intervention = new Intervention();
@@ -408,28 +410,28 @@ public class Demarrage implements ApplicationRunner {
             demande.setCouleurDegreUrgence("#00FFFF");
             demande.setImageTitreDemandeUrl("/images/accueil.png");
             // Définir les attributs des travaux réalisés
-            nouvelleFiche.setNiveauTravauxRealises(1);
-            nouvelleFiche.setCouleurTravauxRealises("#aef800");
-            nouvelleFiche.setImageTitreTravauxRealisesUrl("/images/accueil.png");
-            nouvelleFiche.setTravauxRealises("Travaux réalisés par \nMichel Michel \n      Ligne 3");
+            ficheIntervention.setNiveauTravauxRealises(1);
+            ficheIntervention.setCouleurTravauxRealises("#aef800");
+            ficheIntervention.setImageTitreTravauxRealisesUrl("/images/accueil.png");
+            ficheIntervention.setTravauxRealises("Travaux réalisés par \nMichel Michel \n      Ligne 3");
             // Définir les attributs des travaux non réalisés
-            nouvelleFiche.setNiveauTravauxNonRealises(1);
-            nouvelleFiche.setCouleurTravauxNonRealises("#FF00FF");
-            nouvelleFiche.setImageTitreTravauxNonRealisesUrl("/images/accueil.png");
-            nouvelleFiche.setTravauxNonRealises("Travaux non réalisés par Michel Michel");
+            ficheIntervention.setNiveauTravauxNonRealises(1);
+            ficheIntervention.setCouleurTravauxNonRealises("#FF00FF");
+            ficheIntervention.setImageTitreTravauxNonRealisesUrl("/images/accueil.png");
+            ficheIntervention.setTravauxNonRealises("Travaux non réalisés par Michel Michel");
             // Définir les attributs des materiaux utilisés
-            nouvelleFiche.setNiveauMateriauxUtilises(1);
-            nouvelleFiche.setCouleurMateriauxUtilises("#00FFFF");
-            nouvelleFiche.setImageTitreMateriauxUtilisesUrl("/images/accueil.png");
+            ficheIntervention.setNiveauMateriauxUtilises(1);
+            ficheIntervention.setCouleurMateriauxUtilises("#00FFFF");
+            ficheIntervention.setImageTitreMateriauxUtilisesUrl("/images/accueil.png");
             // Définir les attributs de la fiche d'intervention
-            nouvelleFiche.setIntervenant(intervenant);
-            nouvelleFiche.setDemande(demande);
-            nouvelleFiche.setMaintenance(maintenance);
-            nouvelleFiche.setIntervention(intervention);
-            nouvelleFiche.setDateCreation(LocalDate.now());
-            nouvelleFiche.setEtatFicheFinie(false);
-            nouvelleFiche.setNouvelleIntervention(true);
-            nouvelleFiche.setUtilisateur(michel);
+            ficheIntervention.setIntervenant(intervenant);
+            ficheIntervention.setDemande(demande);
+            ficheIntervention.setMaintenance(maintenance);
+            ficheIntervention.setIntervention(intervention);
+            ficheIntervention.setDateCreation(LocalDate.now());
+            ficheIntervention.setEtatFicheFinie(false);
+            ficheIntervention.setNouvelleIntervention(true);
+            ficheIntervention.setUtilisateur(michel);
 
             // Ajouter les materiaux de type amenagement
             // On ajoute 4 materiaux et rien dans les deux derniers
@@ -440,8 +442,8 @@ public class Demarrage implements ApplicationRunner {
             materiauxAmenagement.add("AMENAGEMENT_metre");
             materiauxAmenagement.add("AMENAGEMENT_pantalon");
             materiauxAmenagement.add("AMENAGEMENT_crayon");
-            nouvelleFiche.setMateriauxOptions(materiauxAmenagement);
-            ficheRepository.save(nouvelleFiche);
+            ficheIntervention.setMateriauxOptions(materiauxAmenagement);
+            ficheRepository.save(ficheIntervention);
         }
 
         // Creation des images pour la fiche d intervention
@@ -466,34 +468,28 @@ public class Demarrage implements ApplicationRunner {
         }
 
         // Création des chat messages
-
+        
             Message chatMessage = new Message();
             chatMessage.setTextContent("Bonjour");
             chatMessage.setTimestamp(
                     LocalDateTime.ofInstant(Instant.ofEpochMilli(1611382800000L), ZoneId.systemDefault()));
             chatMessage.setSender(admin);
+            chatMessage.setFicheIntervention(ficheIntervention);
+            chatMessage.setAudio(null);
             messageRepository.save(chatMessage);
 
             Message chatMessage2 = new Message();
-            chatMessage2.setTextContent("Bonjour");
+            chatMessage2.setTextContent("message2");
             chatMessage2.setTimestamp(
                     LocalDateTime.ofInstant(Instant.ofEpochMilli(1611382800000L), ZoneId.systemDefault()));
-            chatMessage2.setSender(educsimple);
+            chatMessage2.setSender(admin);
+            chatMessage2.setFicheIntervention(ficheIntervention);
+            chatMessage2.setAudio(null);
             messageRepository.save(chatMessage2);
+            
+            
 
-            Message chatMessage3 = new Message();
-            chatMessage3.setTextContent("coucocuou");
-            chatMessage3.setTimestamp(
-                    LocalDateTime.ofInstant(Instant.ofEpochMilli(1611382800000L), ZoneId.systemDefault()));
-            chatMessage3.setSender(educsimple2);
-            messageRepository.save(chatMessage3);
-
-            Message chatMessage4 = new Message();
-            chatMessage4.setTextContent("aiaiaiai");
-            chatMessage4.setTimestamp(
-                    LocalDateTime.ofInstant(Instant.ofEpochMilli(1610382800000L), ZoneId.systemDefault()));
-            chatMessage4.setSender(michel);
-            messageRepository.save(chatMessage4);
+            
 
 
 

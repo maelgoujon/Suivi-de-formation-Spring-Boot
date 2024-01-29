@@ -9,6 +9,7 @@ import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervenant;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -18,6 +19,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -68,6 +70,10 @@ public class FicheIntervention {
     @ManyToOne
     @JoinColumn(name = "utilisateur_id")
     private Utilisateur utilisateur;
+
+    @OneToMany(mappedBy = "ficheIntervention", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> messages = new ArrayList<>();
+    
 
     @Column(name = "materiaux")
     private List<String> materiauxOptions;
@@ -174,6 +180,7 @@ public class FicheIntervention {
         this.intervention = new Intervention();
         this.intervention.setNiveauDureeIntervention(-1);
         this.maintenance = new Maintenance();
+        this.messages = new ArrayList<>();
     }
 
 }

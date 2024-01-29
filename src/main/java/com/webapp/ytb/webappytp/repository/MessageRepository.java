@@ -15,6 +15,8 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     @Transactional
     List<Message> findAllByOrderByTimestampAsc();
 
+    List<Message> findAllByFicheInterventionIdOrderByTimestampAsc(long id);
+
 
 
 }

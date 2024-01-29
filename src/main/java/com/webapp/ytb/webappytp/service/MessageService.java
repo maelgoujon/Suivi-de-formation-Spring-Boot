@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.Message;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.repository.MessageRepository;
@@ -23,31 +24,36 @@ public class MessageService {
     @Autowired
     private UtilisateurService utilisateurService;
 
+    @Autowired
+    private FicheService ficheService;
+
     public List<Message> lire() {
         //retourner la liste des messages triés par date
         return messageRepository.findAllByOrderByTimestampAsc();
     }
 
-    public void envoyer(String textContent, MultipartFile voiceContent, Principal principal) {
+    //retourner les messages d'une fiche triés par date
+    public List<Message> lireParFiche(long id) {
+        return messageRepository.findAllByFicheInterventionIdOrderByTimestampAsc(id);
+    }
+
+    public void envoyer(String textContent, byte[] voiceContent, Utilisateur principal, Long ficheId) {
         Message message = new Message();
-        Utilisateur sender = utilisateurService.findUserByLogin(principal.getName());
+        Utilisateur sender = utilisateurService.findUserByLogin(principal.getLogin());
 
         message.setSender(sender);
         message.setTextContent(textContent);
     
-        if (voiceContent != null && !voiceContent.isEmpty()){
-            try {
-                byte[] audioBytes = voiceContent.getBytes();
-                message.setAudio(audioBytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (voiceContent != null && voiceContent.length > 0) {
+            message.setAudio(voiceContent);
         }else{
             message.setAudio(null);
         }
     
         ZonedDateTime zdtAtCet = ZonedDateTime.now(ZoneId.of("Europe/Paris"));
         message.setTimestamp(zdtAtCet.toLocalDateTime());
+        FicheIntervention fiche = ficheService.lire(ficheId);
+        message.setFicheIntervention(fiche);
         messageRepository.save(message);
     }
 
