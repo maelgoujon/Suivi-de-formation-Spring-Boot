@@ -470,12 +470,13 @@ public class Demarrage implements ApplicationRunner {
         // Création des chat messages
         
             Message chatMessage = new Message();
-            chatMessage.setTextContent("Bonjour");
+            chatMessage.setTextContent("Bonjour \n je suis Admin Admin");
             chatMessage.setTimestamp(
                     LocalDateTime.ofInstant(Instant.ofEpochMilli(1611382800000L), ZoneId.systemDefault()));
             chatMessage.setSender(admin);
             chatMessage.setFicheIntervention(ficheIntervention);
             chatMessage.setAudio(null);
+            chatMessage.setImageUrl("/images/eleve.png");
             messageRepository.save(chatMessage);
 
             Message chatMessage2 = new Message();
@@ -485,6 +486,7 @@ public class Demarrage implements ApplicationRunner {
             chatMessage2.setSender(admin);
             chatMessage2.setFicheIntervention(ficheIntervention);
             chatMessage2.setAudio(null);
+            chatMessage2.setImageUrl("/images/admin.png");
             messageRepository.save(chatMessage2);
             
             

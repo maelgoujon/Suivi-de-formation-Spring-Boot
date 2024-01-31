@@ -60,9 +60,10 @@ public class MessageController {
     }
 
     @PostMapping("/chat/{id}")
-    public String enregistrerAudio(@PathVariable("id") Long id,
+    public String enregistrerMessage(@PathVariable("id") Long id,
             @RequestParam(value = "message", required = false) String message,
-            @RequestPart(value = "audioFile", required = false) MultipartFile audioFile,
+            @RequestPart(required = false) MultipartFile audioFile,
+            @RequestPart(required = false) MultipartFile imageFile,
             Principal principal) {
 
         System.out.println("id : " + id);
@@ -73,14 +74,27 @@ public class MessageController {
         FicheIntervention fiche = ficheService.lire(id);
         if (audioFile != null && !audioFile.isEmpty() && fiche != null) {
             try {
-                System.out.println("audioFile1 : " + audioFile.getBytes());
-                messageService.envoyer(message, audioFile.getBytes(), user, id);
+                System.out.println("ICICICI1");
+                messageService.envoyer(message, audioFile.getBytes(), imageFile, user, id);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else if ((audioFile == null || audioFile.isEmpty()) && fiche != null) {
-            System.out.println("audioFile2 : null");
-            messageService.envoyer(message, null, user, id);
+            System.out.println("ICICICI2");
+            messageService.envoyer(message, null, imageFile, user, id);
+        }
+
+        if (audioFile != null) {
+            System.out.println("audioFile : " + audioFile.getOriginalFilename());
+        } else {
+            System.out.println("audioFile : null");
+        
+        }
+
+        if (imageFile != null) {
+            System.out.println("imageFile : " + imageFile.getOriginalFilename());
+        } else {
+            System.out.println("imageFile : null");
         }
         return "redirect:/chat/" + id;
     }

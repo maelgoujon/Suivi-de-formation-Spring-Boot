@@ -28,18 +28,20 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne // Spécifie la relation many-to-one
-    @JoinColumn(name = "utilisateur_id") // Colonne qui contiendra la clé étrangère vers Utilisateur
+    @ManyToOne // Spï¿½cifie la relation many-to-one
+    @JoinColumn(name = "utilisateur_id") // Colonne qui contiendra la clï¿½ ï¿½trangï¿½re vers Utilisateur
     private Utilisateur sender;
 
     @Column
     private String textContent;
 
-    // fichier audio enregistré
+    // fichier audio enregistrï¿½
     @Lob
     @Column(nullable = true)
     private byte[] audio;
 
+    @Column(nullable = true)
+    private String imageUrl;
 
     @Column
     private LocalDateTime timestamp;
@@ -47,7 +49,6 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ficheIntervention_id")
     private FicheIntervention ficheIntervention;
-
 
     public String getAudioBase64() {
         return Base64.getEncoder().encodeToString(this.audio);

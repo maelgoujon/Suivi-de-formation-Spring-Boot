@@ -12,6 +12,21 @@
     <script src="/js/bootstrap.bundle.min.js"></script>
     <title>Chat</title>
     <style>
+        .imageContent__input {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+
+
+        .imageContent__label svg {
+            height: 16px;
+            margin-right: 4px;
+        }
+
         body {
             background: #eee;
             overflow-x: hidden;
@@ -233,20 +248,28 @@
                                         <div class="chat-message">
                                             <h5 th:text="${message.sender.nom} + ' ' + ${message.sender.prenom}"></h5>
                                             <hr />
+                                            <img th:if="${message.imageUrl != null}" th:src="${message.imageUrl}"
+                                                alt="Image"
+                                                style="max-width: 40vw; max-height: 40vh; height: auto;">
+
+                                            <hr />
                                             <button class="btn play-button apply-filter"
                                                 th:if="${message.audio != null}" th:id="'playButton-' + ${message.id}">
                                                 <img src="/images/sound.png" alt="Play" class="user-image"
-                                                    style="max-width: 50px; height: auto;" />
+                                                    style="max-width: 150px; height: auto;" />
                                             </button>
+
+
                                             <div
                                                 style="display: flex; justify-content: space-between; align-items: flex-end;">
                                                 <h4 th:if="${message.textContent != null}"
                                                     th:text="${message.textContent}"></h4>
-                                                </p>
+
                                                 <div style="color: #17202b;padding-left: 3vw;"
                                                     th:text="${#temporals.format(message.timestamp, 'HH:mm')}"
                                                     class="message-timestamp"></div>
                                             </div>
+
 
 
                                             <audio style="display: none;" class="w-100" controls
@@ -343,6 +366,21 @@
                     <img id="recordIcon" src="/images/microphone.png" alt="Record" class="recordIcon"
                         style="width: 20px; height: 20px; filter: invert(1);">
                 </button>
+
+
+                <div class="btn btn-primary">
+                    <input style="display: none;" id="imageContent" type="file" name="imageContent" accept="image/*"
+                        class="form-control">
+                    <label for="imageContent">
+                        <img id="recordIcon" src="/images/camera.png" alt="Camera" class="recordIcon"
+                        style="width: 20px; height: 20px; filter: invert(1);">
+                    </label>
+                </div>
+
+
+
+
+
                 <input type="text" id="textContent" placeholder="Type a message" class="form-control"
                     style="flex-grow: 1; margin-right: 10px;">
                 <input type="submit" value="Send" class="btn btn-primary">
@@ -446,6 +484,11 @@
 
                 if (audioBlob) {
                     formData.append("audioFile", audioBlob, "enregistrement.mp3");
+                }
+
+                const imageInput = document.getElementById('imageContent');
+                if (imageInput.files.length > 0) {
+                    formData.append("imageFile", imageInput.files[0], imageInput.files[0].name);
                 }
 
                 // Get the dynamic id value from your HTML
