@@ -37,19 +37,9 @@ public class MessageController {
     @Autowired
     private FicheService ficheService;
 
-    @GetMapping("/chat")
-    public String getChatPage(Model model, Principal principal) {
-        List<Message> messages = messageService.lire();
-        // creer un nouveau message en l'envoyer en attribut au template
-        Message message = new Message();
-        model.addAttribute("message", message);
-        model.addAttribute("messages", messages);
 
-        return "chat";
-    }
-
-    @GetMapping("/test/{id}")
-    public String getTestPage(Model model, Principal principal, @PathVariable("id") long id) {
+    @GetMapping("/chat/{id}")
+    public String getChatPage(Model model, Principal principal, @PathVariable("id") long id) {
         // renvoyer la liste des messages triés par date, renvoyer un message vide si la
         // fiche n'existe pas
         FicheIntervention fiche = ficheService.lire(id);
@@ -60,17 +50,17 @@ public class MessageController {
             List<Message> messages = new ArrayList<Message>();
             messages.add(message);
             model.addAttribute("messages", messages);
-            return "test";
+            return "chat";
         } else {
             List<Message> messages = messageService.lireParFiche(id);
             model.addAttribute("messages", messages);
             model.addAttribute("id", id);
-            return "test";
+            return "chat";
         }
 
     }
 
-    @PostMapping("/send/{id}")
+    @PostMapping("/chat/{id}")
     @ResponseBody
     public ResponseEntity<String> enregistrerAudio(@PathVariable("id") Long id,
             @RequestParam(value = "message", required = false) String message,
