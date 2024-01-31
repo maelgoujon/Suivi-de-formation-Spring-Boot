@@ -326,11 +326,10 @@
             </div>
         </div>
 
-        <form class="form" th:action="@{/send/{id}(id=${ficheId})}" method="post" enctype="multipart/form-data"
+        <form class="form" th:action="@{/send/1}" method="post" enctype="multipart/form-data"
             autocomplete="off" id="uploadForm" th:object="${message}">
             <audio class="w-100" id="audioPlayer" controls style="display: none"></audio>
 
-            <input type="hidden" th:field="*{ficheId}" th:value="${ficheIntervention.id}" name="ficheId">
             <div id="bottom-bar" class="fixed-bottom"
                 style="display: flex; justify-content: space-between; align-items: center;">
                 <button id="recordToggle" class="btn btn-primary" type="button" style="margin: 0 1vh 0 0;"
@@ -339,10 +338,10 @@
                     <img id="recordIcon" src="/images/microphone.png" alt="Record" class="recordIcon"
                         style="width: 20px; height: 20px; filter: invert(1);">
                 </button>
-                <input type="text" id="textContent" th:field="*{textContent}" placeholder="Type a message" class="form-control" style="flex-grow: 1; margin-right: 10px;">
+                <input type="text" id="textContent" placeholder="Type a message" class="form-control" style="flex-grow: 1; margin-right: 10px;">
                 <input type="submit" value="Send" class="btn btn-primary">
             </div>
-            <input style="display: none;" type="file" th:field="*{audio}" accept="audio/*" id="voiceContent"
+            <input style="display: none;" type="file" accept="audio/*" id="voiceContent"
                 class="form-control">
 
         </form>

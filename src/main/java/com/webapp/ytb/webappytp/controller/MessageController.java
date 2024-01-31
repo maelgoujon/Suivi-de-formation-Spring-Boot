@@ -4,6 +4,8 @@ import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.Message;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.service.MessageService;
+import com.webapp.ytb.webappytp.service.UtilisateurService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,9 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private UtilisateurService utilisateurService;
+
     @GetMapping("/test")
     public String getTestPage(Model model, Principal principal) {
         //renvoyer la liste des messages triés par date
@@ -37,7 +42,11 @@ public class MessageController {
     @GetMapping("/chat")
     public String getChatPage(Model model, Principal principal) {
         List<Message> messages = messageService.lire();
+        //creer un nouveau message en l'envoyer en attribut au template
+        Message message = new Message();
+        model.addAttribute("message", message);
         model.addAttribute("messages", messages);
+
         return "chat";
     }
 
@@ -46,8 +55,18 @@ public class MessageController {
     public ResponseEntity<String> enregistrerAudio(@RequestParam(value = "message", required = false) String message,
             @RequestPart(value = "audioFile", required = false) MultipartFile audioFile,
             Principal principal) {
-        messageService.envoyer(message, audioFile, principal);
 
+                //récuperer l'utilisateur connecté à partir de son Principal
+                Utilisateur user = utilisateurService.findUserByLogin(principal.getName());
+        if (audioFile != null && !audioFile.isEmpty()) {
+            try {
+                messageService.envoyer(message, audioFile.getBytes(), user, 1L);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            messageService.envoyer(message, null, user, 1L);
+        }
         return ResponseEntity.ok().body("Enregistrement audio réussi pour la fiche avec l'ID ");
     }
 
