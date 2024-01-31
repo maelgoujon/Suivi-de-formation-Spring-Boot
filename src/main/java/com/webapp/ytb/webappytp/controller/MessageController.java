@@ -37,7 +37,6 @@ public class MessageController {
     @Autowired
     private FicheService ficheService;
 
-
     @GetMapping("/chat/{id}")
     public String getChatPage(Model model, Principal principal, @PathVariable("id") long id) {
         // renvoyer la liste des messages triés par date, renvoyer un message vide si la
@@ -61,8 +60,7 @@ public class MessageController {
     }
 
     @PostMapping("/chat/{id}")
-    @ResponseBody
-    public ResponseEntity<String> enregistrerAudio(@PathVariable("id") Long id,
+    public String enregistrerAudio(@PathVariable("id") Long id,
             @RequestParam(value = "message", required = false) String message,
             @RequestPart(value = "audioFile", required = false) MultipartFile audioFile,
             Principal principal) {
@@ -84,6 +82,6 @@ public class MessageController {
             System.out.println("audioFile2 : null");
             messageService.envoyer(message, null, user, id);
         }
-        return ResponseEntity.ok().body("Enregistrement audio r�ussi pour la fiche avec l'ID " + id.toString());
+        return "redirect:/chat/" + id;
     }
 }
