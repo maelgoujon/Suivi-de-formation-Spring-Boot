@@ -15,7 +15,10 @@ import com.webapp.ytb.webappytp.modele.Message;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.repository.MessageRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class MessageService {
 
     @Autowired

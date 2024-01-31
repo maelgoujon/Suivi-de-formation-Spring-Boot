@@ -326,7 +326,9 @@
             </div>
         </div>
 
-        <form class="form" th:action="@{/send/1}" method="post" enctype="multipart/form-data"
+        <input type="hidden" id="dynamicId" th:value="${id}" />
+
+        <form class="form" th:action="@{/send/{id}(id=${id})}" method="post" enctype="multipart/form-data"
             autocomplete="off" id="uploadForm" th:object="${message}">
             <audio class="w-100" id="audioPlayer" controls style="display: none"></audio>
 
@@ -338,11 +340,11 @@
                     <img id="recordIcon" src="/images/microphone.png" alt="Record" class="recordIcon"
                         style="width: 20px; height: 20px; filter: invert(1);">
                 </button>
-                <input type="text" id="textContent" placeholder="Type a message" class="form-control" style="flex-grow: 1; margin-right: 10px;">
+                <input type="text" id="textContent" placeholder="Type a message" class="form-control"
+                    style="flex-grow: 1; margin-right: 10px;">
                 <input type="submit" value="Send" class="btn btn-primary">
             </div>
-            <input style="display: none;" type="file" accept="audio/*" id="voiceContent"
-                class="form-control">
+            <input style="display: none;" type="file" accept="audio/*" id="voiceContent" class="form-control">
 
         </form>
     </div>
@@ -430,36 +432,35 @@
             });
 
             // Gestionnaire d'événements pour la soumission du formulaire
-            document
-                .getElementById("uploadForm")
-                .addEventListener("submit", function (e) {
-                    e.preventDefault();
+            document.getElementById("uploadForm").addEventListener("submit", function (e) {
+                e.preventDefault();
 
-                    const formData = new FormData(this);
-                    const textContent = document.getElementById('textContent').value;
-                    if (textContent) {
-                        formData.append('message', textContent);
-                    }
+                const formData = new FormData(this);
+                const textContent = document.getElementById('textContent').value;
+                if (textContent) {
+                    formData.append('message', textContent);
+                }
 
-                    if (audioBlob) {
-                        formData.append("audioFile", audioBlob, "enregistrement.mp3");
-                    }
+                if (audioBlob) {
+                    formData.append("audioFile", audioBlob, "enregistrement.mp3");
+                }
 
-                    fetch("/send", {
-                        method: "POST",
-                        body: formData,
+                // Get the dynamic id value from your HTML
+                const dynamicId = document.getElementById("dynamicId").value;
+
+                fetch("/send/" + dynamicId, {
+                    method: "POST",
+                    body: formData,
+                })
+                    .then((response) => {
+                        location.reload(); // Refresh the page
                     })
-                        .then((response) => {
-                            location.reload(); // Rafraîchir la page
-                        })
-                        .catch((error) => {
-                            location.reload(); // Rafraîchir la page
-                        });
-                });
-
-            const chatList = document.querySelector('.chat-list');
-            chatList.scrollTop = chatList.scrollHeight;
+                    .catch((error) => {
+                        location.reload(); // Refresh the page
+                    });
+            });
         });
+
     </script>
 
 </body>
