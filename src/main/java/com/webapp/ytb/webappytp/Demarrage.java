@@ -476,7 +476,6 @@ public class Demarrage implements ApplicationRunner {
             chatMessage.setSender(admin);
             chatMessage.setFicheIntervention(ficheIntervention);
             chatMessage.setAudio(null);
-            chatMessage.setImageUrl("/images/eleve.png");
             messageRepository.save(chatMessage);
 
             Message chatMessage2 = new Message();
@@ -486,7 +485,7 @@ public class Demarrage implements ApplicationRunner {
             chatMessage2.setSender(admin);
             chatMessage2.setFicheIntervention(ficheIntervention);
             chatMessage2.setAudio(null);
-            chatMessage2.setImageUrl("/images/admin.png");
+            chatMessage2.setImageUrl("/images/intervenant/aa.jpg");
             messageRepository.save(chatMessage2);
             
             
