@@ -589,7 +589,7 @@ public class HomeController {
         }
 
         ficheServ.modifier(id, ficheIntervention);
-        return "redirect:redirectByRole";
+        return "redirect:/chat/" + id;
     }
 
     @PostMapping("/fiche/updateTypeIntervention/{id}")
