@@ -51,9 +51,11 @@ public class MessageService {
 
     // enregistrer une images dans le repertoire /images/messages
     public String saveImage(MultipartFile imageFile) throws IOException {
+        // replace spaces with underscores in userChosenFileName before saving it as fileName
         String userChosenFileName = imageFile.getOriginalFilename();
+        userChosenFileName = userChosenFileName.replaceAll("\\s+", "_");
         String fileExtension = StringUtils.getFilenameExtension(imageFile.getOriginalFilename());
-        String fileName = userChosenFileName + "." + fileExtension;
+        String fileName = userChosenFileName;
 
         String imageUrl = saveImageLocally(imageFile, fileName);
         return imageUrl;
@@ -111,10 +113,4 @@ public class MessageService {
         messageRepository.save(message);
     }
 
-    private String saveAudioFile(MultipartFile voiceContent) {
-        // Impl�mentez la logique pour enregistrer le fichier audio et renvoyez le
-        // chemin
-        // Assurez-vous de g�n�rer un nom de fichier unique pour �viter les conflits
-        return "chemin/vers/le/fichier/audio";
-    }
 }
