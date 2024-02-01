@@ -1,4 +1,4 @@
-# Projet Spring Boot Java avec Thymeleaf - Gestion des Fiches d'Intervention
+# Projet Spring Boot Java avec Thymeleaf - Suivi de formation
 
 ## Description du Projet
 
