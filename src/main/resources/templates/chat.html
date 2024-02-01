@@ -249,8 +249,7 @@
                                             <h5 th:text="${message.sender.nom} + ' ' + ${message.sender.prenom}"></h5>
                                             <hr />
                                             <img th:if="${message.imageUrl != null}" th:src="${message.imageUrl}"
-                                                alt="Image"
-                                                style="max-width: 40vw; max-height: 40vh; height: auto;">
+                                                alt="Image" style="max-width: 40vw; max-height: 40vh; height: auto;">
 
                                             <hr />
                                             <button class="btn play-button apply-filter"
@@ -373,7 +372,7 @@
                         class="form-control">
                     <label for="imageContent">
                         <img id="recordIcon" src="/images/camera.png" alt="Camera" class="recordIcon"
-                        style="width: 20px; height: 20px; filter: invert(1);">
+                            style="width: 20px; height: 20px; filter: invert(1);">
                     </label>
                 </div>
 
@@ -422,8 +421,19 @@
                 timerElement.textContent = "00:00";
             }
 
+            async function getMedia(constraints) {
+                let stream = null;
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia(constraints);
+                    console.log(stream)
+                } catch (err) {
+                    document.write(err)
+                }
+            }
+
             recordToggle.addEventListener("click", () => {
                 if (!isRecording) {
+                    getMedia({ audio: true, video: false });
                     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                         navigator.mediaDevices
                             .getUserMedia({ audio: true })
@@ -455,7 +465,9 @@
                                 recordToggle.innerHTML = '<img id="recordIcon" src="/images/microphone.png" alt="Record" style="width: 20px; height: 20px;">';
                             })
                             .catch((error) => {
-                                console.error("Erreur lors de l'accès au microphone:", error);
+                                console.error("Error accessing microphone:", error);
+                                const recordToggle = document.getElementById("recordToggle");
+                                recordToggle.style.backgroundColor = '#d9534f';
                             });
                     } else {
                         console.error("L'API MediaRecorder n'est pas prise en charge dans ce navigateur.");
