@@ -409,6 +409,11 @@ public class Demarrage implements ApplicationRunner {
             demande.setCouleurDescription("#F00");
             demande.setCouleurDegreUrgence("#00FFFF");
             demande.setImageTitreDemandeUrl("/images/accueil.png");
+            demande.setImageTitreDemandeNomUrl("/images/accueil.png");
+            demande.setImageTitreDemandeDateUrl("/images/accueil.png");
+            demande.setImageTitreDemandeLocalisationUrl("/images/accueil.png");
+            demande.setImageTitreDemandeDescriptionUrl("/images/accueil.png");
+            demande.setImageTitreDemandeDegreUrgenceUrl("/images/accueil.png");
             // Définir les attributs des travaux réalisés
             ficheIntervention.setNiveauTravauxRealises(1);
             ficheIntervention.setCouleurTravauxRealises("#aef800");

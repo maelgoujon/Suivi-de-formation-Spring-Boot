@@ -28,7 +28,7 @@
       </a>
 
       <!-- Logo accueil au centre -->
-      <a class="navbar-brand mx-auto" href="#">
+      <a class="navbar-brand mx-auto" href="/select_fiche">
         <img src="/images/accueil.png" alt="Accueil" width="50" height="50">
       </a>
 
@@ -40,37 +40,29 @@
         <a href="#" onclick="this.closest('form').submit()" class="nav-link text-black fs-5">Se déconnecter</a>
       </form>
 
-
-
-
-      </a>
+    </div>
   </nav>
-  <div class="modal fade" id="modalMdpOublie" tabindex="-1" aria-labelledby="modalMdpOublieLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalMdpOublieLabel">Réinitialisation du mot de passe</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-        </div>
-        <div class="modal-body">
-          <p>Demander de l'aide à un formateur <img type="button" src="/images/son.png" alt="Lire le nom"
-              onclick="lireTexte('Demander de l\'aide à un formateur')" style="width: 20px;"></p>
-        </div>
+
+
+  <div class="row row-cols-1 row-cols-md-4 gx-4">
+    <!-- Added row-cols-1 for 1 column, row-cols-md-4 for 4 columns on medium screens -->
+    <div th:each="fiche : ${fiches}" class="col" id="fiche-container">
+      <!-- Changed class name to "col" for better compatibility with Bootstrap -->
+      <div class="card h-100 d-flex flex-column align-items-center text-center p-3" id="fiche-item">
+        <!-- Added card and p-3 classes for proper styling and padding -->
+        <img src="/images/assignment_icon.png" alt="Assignment icon" class="img-fluid image2"
+          style="max-height: 10rem; object-fit: cover;" />
+        <!-- Changed height to max-height, added img-fluid for better image scaling -->
+        <h2 id="fiche-date" class="card-title text-truncate"
+          th:text="${#temporals.format(fiche.Demande.dateDemande, 'dd/MM/yyyy')}"></h2>
+        <!-- Added card-title and text-truncate classes for better handling of long titles -->
+        <a th:href="@{'/chat/' + ${fiche.id}}" class="btn btn-primary w-100 mt-auto">Chat</a>
+        <!-- Changed type to "button" and added w-100 and mt-auto classes for proper styling -->
+        <a th:href="@{'/fiche/modifier/' + ${fiche.id}}" class="btn btn-primary w-100 mt-auto">Fiche</a>
       </div>
     </div>
   </div>
 
-
-  <div class="row">
-    <div th:each="fiche : ${fiches}" class="col-4 d-flex flex-column align-items-center"
-      th:onclick="'window.location.href=\'/fiche/modifier/' + ${fiche.id} + '\''">
-      <img class="image2" src="/images/assignment_icon.png" style="height: 20rem;">
-      <h2 th:text="${#temporals.format(fiche.Demande.dateDemande, 'dd/MM/yyyy')}"></h2>
-      <a th:href="@{'/chat/' + ${fiche.id}}">
-        <button type="button" class="btn btn-primary">Chat</button>
-      </a>
-    </div>
-  </div>
 </body>
 <script>
   const Inters = document.getElementById('Inters');

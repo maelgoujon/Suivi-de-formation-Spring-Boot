@@ -491,6 +491,12 @@ public class HomeController {
             model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
         }
 
+        //envoyer la liste des type d'intervention
+        model.addAttribute("typeInterventionList", Intervention.TypeIntervention.values());
+
+        //envoyer la liste des maintenance
+        model.addAttribute("maintenanceList", Maintenance.MaintenanceType.values());
+
         model.addAttribute("ficheIntervention", ficheIntervention);
         model.addAttribute("color", "#8fabd9");
 
