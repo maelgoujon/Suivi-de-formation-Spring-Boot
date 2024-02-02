@@ -48,7 +48,7 @@ Evolution des élements des fiches (ajout de nouveaux materiaux/images, modifica
 1. Cloner le dépôt : `git clone https://github.com/maelgoujon/sae_apeaj.git`
 2. Compiler avec maven : `mvn clean package`
 3. Executer le war : `java -jar webapp.war`
-4. Application visible sur : `http://localhost:8081`
+4. Application visible sur : `https://localhost:8081`
 
 ## Contributeurs
 
