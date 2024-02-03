@@ -26,9 +26,14 @@ import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 @Transactional
 public class MessageService {
+
+    private static final Logger logger = LoggerFactory.getLogger(MessageService.class);
 
     @Autowired
     private MessageRepository messageRepository;
@@ -51,14 +56,17 @@ public class MessageService {
 
     // enregistrer une images dans le repertoire /images/messages
     public String saveImage(MultipartFile imageFile) throws IOException {
-        // replace spaces with underscores in userChosenFileName before saving it as fileName
         String userChosenFileName = imageFile.getOriginalFilename();
-        userChosenFileName = userChosenFileName.replaceAll("\\s+", "_");
-        String fileExtension = StringUtils.getFilenameExtension(imageFile.getOriginalFilename());
-        String fileName = userChosenFileName;
-
-        String imageUrl = saveImageLocally(imageFile, fileName);
-        return imageUrl;
+        if (userChosenFileName != null) {
+            // replace spaces with underscores
+            userChosenFileName = userChosenFileName.replaceAll("\\s+", "_");
+            String fileName = userChosenFileName;
+            return saveImageLocally(imageFile, fileName);
+        } else {
+            userChosenFileName = UUID.randomUUID().toString();
+            String fileName = userChosenFileName;
+            return saveImageLocally(imageFile, fileName);
+        }
     }
 
     private String saveImageLocally(MultipartFile imageFile, String fileName) throws IOException {
@@ -100,7 +108,7 @@ public class MessageService {
                 String path = saveImage(image);
                 message.setImageUrl(path);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Erreur lors de l'enregistrement de l'image", e);
             }
         } else {
             message.setImageUrl(null);

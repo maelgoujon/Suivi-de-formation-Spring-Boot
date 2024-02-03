@@ -24,9 +24,13 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 public class MessageController {
+
+    private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
     @Autowired
     private MessageService messageService;
@@ -77,7 +81,7 @@ public class MessageController {
                 System.out.println("ICICICI1");
                 messageService.envoyer(message, audioFile.getBytes(), imageFile, user, id);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Erreur lors de l'envoi du message audio", e);
             }
         } else if ((audioFile == null || audioFile.isEmpty()) && fiche != null) {
             System.out.println("ICICICI2");

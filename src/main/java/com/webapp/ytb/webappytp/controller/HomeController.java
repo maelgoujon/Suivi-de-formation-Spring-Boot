@@ -12,6 +12,8 @@ import java.util.Set;
 
 import javax.management.relation.Role;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -57,9 +59,12 @@ import jakarta.validation.Valid;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import com.webapp.ytb.webappytp.service.FormationService;
+import com.webapp.ytb.webappytp.service.MessageService;
 
 @Controller
 public class HomeController {
+
+    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     MateriauxAmenagementRepository materiauxAmenagementRepository;
     UtilisateurServiceImpl userServ;
@@ -128,7 +133,7 @@ public class HomeController {
             redirectAttributes.addFlashAttribute("message",
                     "Vous avez réussi à uploader '" + file.getOriginalFilename() + "'");
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             redirectAttributes.addFlashAttribute("message", "Erreur lors de l'upload du fichier");
         }
 
@@ -470,10 +475,8 @@ public class HomeController {
     @GetMapping("/fiche/modifier/{id}")
     public String showFicheDetails(@PathVariable long id, Model model) {
 
-        //Obtenir id de l'utilisateur connecté
+        // Obtenir id de l'utilisateur connecté
         Long currentUserId = getCurrentUserId();
-        
-
 
         FicheIntervention ficheIntervention = ficheServ.lire(id);
 
@@ -491,10 +494,10 @@ public class HomeController {
             model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
         }
 
-        //envoyer la liste des type d'intervention
+        // envoyer la liste des type d'intervention
         model.addAttribute("typeInterventionList", Intervention.TypeIntervention.values());
 
-        //envoyer la liste des maintenance
+        // envoyer la liste des maintenance
         model.addAttribute("maintenanceList", Maintenance.MaintenanceType.values());
 
         model.addAttribute("ficheIntervention", ficheIntervention);
@@ -760,7 +763,10 @@ public class HomeController {
 
     @GetMapping("/accueil_superadmin")
     public String superadmin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
+        String role = userDetails.getAuthorities().stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("");
 
         if ("ROLE_SUPERADMIN".equals(role)) {
             // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle
@@ -793,7 +799,11 @@ public class HomeController {
 
     @GetMapping("/profil_admin")
     public String redirectToprofiladmin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
+        String role = userDetails.getAuthorities().stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("");
+                
         Utilisateur utilisateur;
 
         // Vérifiez le rôle de l'utilisateur
@@ -815,6 +825,7 @@ public class HomeController {
         }
     }
 
+    // Page de modification de profil par le superadmin
     @GetMapping("/modif/{id}")
     public String modif(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         // Vérifiez si l'utilisateur connecté a le rôle de superadmin
@@ -831,13 +842,11 @@ public class HomeController {
             if (utilisateur.getRole() == UserRole.USER) {
                 return "/modif";
             } else {
-                // Si le rôle du compte sélectionné n'est pas USER, redirigez-le vers
-                // modif_admin
+                // Si le rôle du compte sélectionné n'est pas USER -> modif_admin
                 return "redirect:/modif_admin/" + id;
             }
         } else {
-            // Si l'utilisateur connecté n'est pas superadmin, redirigez-le vers la page
-            // d'accueil
+            // Si l'utilisateur connecté n'est pas superadmin -> accueil
             return "redirect:/accueil";
         }
     }

@@ -55,8 +55,4 @@ public class MyErrorController implements ErrorController {
     
         return "error"; // Page d'erreur générale
     }
-
-    public String getErrorPath() {
-        return "/error";
-    }
 }
