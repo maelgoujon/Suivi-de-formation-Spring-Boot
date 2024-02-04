@@ -45,6 +45,16 @@ public class Demarrage implements ApplicationRunner {
     private final ImagesTitresRepository imagesTitresRepository;
     private final PasswordEncoder passwordEncoder;
     private final MessageRepository messageRepository;
+    // url vers le repertoire des images
+    private static final String URL_IMAGES_MATERIAUX = "images/materiaux/";
+    private Formation formation;
+    private Formation formation2;
+    private static final String MICHEL = "Michel";
+    private static final String VIOLET = "#FF00FF";
+    private static final String CYAN = "#00FFFF";
+    private static final String ICONE_ACCUEIL = "/images/accueil.png";
+    private static final String ICONE_ELEVE = "images/eleve.png";
+
 
     @Autowired
     public Demarrage(UtilisateurRepository utilisateurRepository, FicheRepository ficheRepository,
@@ -59,28 +69,56 @@ public class Demarrage implements ApplicationRunner {
         this.passwordEncoder = passwordEncoder; // Initialisez le PasswordEncoder
         this.messageRepository = messageRepository;
     }
+    
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        // Création des matériaux AMENAGEMENT
-        String[] amenagementImages = {
-                "gants", "chaussures", "marteau", "metre", "pantalon", "crayon"
-        };
+        
+        // Création des materiaux
+        createMateriauxElecricite();
+        createMateriauxAmenagement();
+        createMateriauxFinition();
+        createMateriauxPlomberie();
+        createMateriauxSerrurerie();
 
-        for (String imageName : amenagementImages) {
-            String nomMateriau = "AMENAGEMENT_" + imageName;
-            Materiaux materiaux = materiauxRepository.findByNomImage(nomMateriau);
-            if (materiaux == null) {
-                materiaux = new Materiaux();
-                materiaux.setNomImage(nomMateriau);
-                materiaux.setImageUrl("images/materiaux/" + imageName + ".png");
-                materiaux.setType("AMENAGEMENT");
-                materiauxRepository.save(materiaux);
-            }
-        }
+        // Création des formations
+        createFormation1();
+        createFormation2();
 
-        // Création des matériaux ELECTRICITE
+        this.formation = formationRepository.findById(1L).orElse(null);
+        this.formation2 = formationRepository.findById(2L).orElse(null);
+
+        // Création des utilisateurs
+        createAdmin();
+        createEducSimple();
+        createEducSimple2();
+        createSuperAdmin();
+        createcip();
+        createMichel();
+        createJohnSmith();
+        createJaneDoe();
+        createAliceJohnson();
+        createPaulWilliams();
+        createEmilyBrown();
+        createPierreDupont();
+
+        // Creation d'une fiche d'Intervention
+        createFicheIntervention();
+
+        // Creation des images pour la fiche d intervention
+        createImagesFicheIntervention();
+
+        // Création des chat messages
+        createChatMessages();
+
+    }
+
+
+
+    // Création des matériaux ELECTRICITE
+    private void createMateriauxElecricite() {
+        // Création des matériaux
         String[] electriciteImages = {
                 "ampoule", "chauffage", "fil", "interrupteur", "planches", "vis"
         };
@@ -91,13 +129,34 @@ public class Demarrage implements ApplicationRunner {
             if (materiaux == null) {
                 materiaux = new Materiaux();
                 materiaux.setNomImage(nomMateriau);
-                materiaux.setImageUrl("images/materiaux/" + imageName + ".png");
+                materiaux.setImageUrl(URL_IMAGES_MATERIAUX + imageName + ".png");
                 materiaux.setType("ELECTRICITE");
                 materiauxRepository.save(materiaux);
             }
         }
+    }
 
-        // Création des matériaux FINITION
+    // Création des materiaux
+    private void createMateriauxAmenagement() {
+        String[] amenagementImages = {
+                "gants", "chaussures", "marteau", "metre", "pantalon", "crayon"
+        };
+
+        for (String imageName : amenagementImages) {
+            String nomMateriau = "AMENAGEMENT_" + imageName;
+            Materiaux materiaux = materiauxRepository.findByNomImage(nomMateriau);
+            if (materiaux == null) {
+                materiaux = new Materiaux();
+                materiaux.setNomImage(nomMateriau);
+                materiaux.setImageUrl(URL_IMAGES_MATERIAUX + imageName + ".png");
+                materiaux.setType("AMENAGEMENT");
+                materiauxRepository.save(materiaux);
+            }
+        }
+    }
+
+    // Création des matériaux FINITION
+    private void createMateriauxFinition() {
         String[] finitionImages = {
                 "materiaufinition1", "materiaufinition2", "materiaufinition3",
                 "materiaufinition4", "materiaufinition5", "materiaufinition6"
@@ -109,13 +168,15 @@ public class Demarrage implements ApplicationRunner {
             if (materiaux == null) {
                 materiaux = new Materiaux();
                 materiaux.setNomImage(nomMateriau);
-                materiaux.setImageUrl("images/materiaux/" + imageName + ".jpg");
+                materiaux.setImageUrl(URL_IMAGES_MATERIAUX + imageName + ".jpg");
                 materiaux.setType("FINITION");
                 materiauxRepository.save(materiaux);
             }
         }
+    }
 
-        // Création des matériaux PLOMBERIE
+    // Création des matériaux PLOMBERIE
+    private void createMateriauxPlomberie() {
         String[] plomberieImages = {
                 "ventouse", "chalumeau", "boitejoints", "furet", "molettevirax", "teflon"
         };
@@ -126,13 +187,15 @@ public class Demarrage implements ApplicationRunner {
             if (materiaux == null) {
                 materiaux = new Materiaux();
                 materiaux.setNomImage(nomMateriau);
-                materiaux.setImageUrl("images/materiaux/" + imageName + ".jfif");
+                materiaux.setImageUrl(URL_IMAGES_MATERIAUX + imageName + ".jfif");
                 materiaux.setType("PLOMBERIE");
                 materiauxRepository.save(materiaux);
             }
         }
+    }
 
-        // Création des matériaux SERRURERIE
+    // Création des matériaux SERRURERIE
+    private void createMateriauxSerrurerie() {
         String[] serrurerieImages = {
                 "gants", "chaussures", "marteau", "metre", "pantalon", "crayon"
         };
@@ -143,108 +206,136 @@ public class Demarrage implements ApplicationRunner {
             if (materiaux == null) {
                 materiaux = new Materiaux();
                 materiaux.setNomImage(nomMateriau);
-                materiaux.setImageUrl("images/materiaux/" + imageName + ".png");
+                materiaux.setImageUrl(URL_IMAGES_MATERIAUX + imageName + ".png");
                 materiaux.setType("SERRURERIE");
                 materiauxRepository.save(materiaux);
             }
         }
+    }
 
-        // Creation Formation 1
-        Formation formation = new Formation();
-        formation.setNom("Agent de maintenance en bâtiment");
-        formation.setNiveau_qualif("CAP 2");
-        formation.setDescription("Description Formation1");
-        formationRepository.save(formation);
+    // Creation Formation 1
+    private void createFormation1() {
+        Formation formationcap2 = new Formation();
+        formationcap2.setNom("Agent de maintenance en bâtiment");
+        formationcap2.setNiveau_qualif("CAP 2");
+        formationcap2.setDescription("Description Formation1");
+        formationRepository.save(formationcap2);
+    }
 
-        // Creation Formation 2
-        Formation formation2 = new Formation();
-        formation2.setNom("Formation 2");
-        formation2.setNiveau_qualif("CAP 1ere Annee");
-        formation2.setDescription("Description Formation2");
-        formationRepository.save(formation2);
+    // Creation Formation 2
+    private void createFormation2() {
+        Formation formationcap1 = new Formation();
+        formationcap1.setNom("Formation 2");
+        formationcap1.setNiveau_qualif("CAP 1ere Annee");
+        formationcap1.setDescription("Description Formation2");
+        formationRepository.save(formationcap1);
+    }
 
-        // Creation de l´administrateur
-        Utilisateur admin = utilisateurRepository.findUserByLogin("admin");
+
+    // Creation de l´administrateur
+    private void createAdmin() {
+        final String ADMIN_LOGIN = "admin";
+        final String ADMIN_NAME = "Admin";
+        Utilisateur admin = utilisateurRepository.findUserByLogin(ADMIN_LOGIN);
         if (admin == null) {
             admin = new Utilisateur();
             admin.setFormations(List.of(formation, formation2));
-            admin.setNom("Admin");
-            admin.setPrenom("Admin");
-            admin.setLogin("admin");
-            admin.setMdp(passwordEncoder.encode("admin"));
+            admin.setNom(ADMIN_NAME);
+            admin.setPrenom(ADMIN_NAME);
+            admin.setLogin(ADMIN_LOGIN);
+            admin.setMdp(passwordEncoder.encode(ADMIN_LOGIN));
             admin.setRole(UserRole.ADMIN);
             admin.setPhotoBase64(photoBase64);
             admin.setDescription("Création et modification visuelles totales, laisser des traces écrite/vocal");
             utilisateurRepository.save(admin);
         }
-        // Creation de l´educsimple
-        Utilisateur educsimple = utilisateurRepository.findUserByLogin("educsimple");
+    }
+
+    // Creation de l´educsimple
+    private void createEducSimple() {
+        final String EDUCSIMPLE_LOGIN = "educsimple";
+        Utilisateur educsimple = utilisateurRepository.findUserByLogin(EDUCSIMPLE_LOGIN);
         if (educsimple == null) {
             educsimple = new Utilisateur();
             educsimple.setFormations(List.of(formation, formation2));
             educsimple.setNom("Educ");
             educsimple.setPrenom("Simple");
             educsimple.setLogin("educsimple");
-            educsimple.setMdp(passwordEncoder.encode("educsimple"));
+            educsimple.setMdp(passwordEncoder.encode(EDUCSIMPLE_LOGIN));
             educsimple.setRole(UserRole.EDUCSIMPLE);
             educsimple.setPhotoBase64(photoBase64);
             educsimple.setDescription("Utilisation des fiches, pourra laisser des traces écrite/vocal \r\n" + //
                     "");
             utilisateurRepository.save(educsimple);
         }
-        // Creation de l´educsimple2
-        Utilisateur educsimple2 = utilisateurRepository.findUserByLogin("educsimple2");
+    }
+
+    // Creation de l´educsimple2
+    private void createEducSimple2() {
+        final String EDUCSIMPLE2_LOGIN = "educsimple2";
+        Utilisateur educsimple2 = utilisateurRepository.findUserByLogin(EDUCSIMPLE2_LOGIN);
         if (educsimple2 == null) {
             educsimple2 = new Utilisateur();
             educsimple2.setFormations(List.of(formation));
             educsimple2.setNom("Educ");
             educsimple2.setPrenom("Simple2");
-            educsimple2.setLogin("educsimple2");
-            educsimple2.setMdp(passwordEncoder.encode("educsimple2"));
+            educsimple2.setLogin(EDUCSIMPLE2_LOGIN);
+            educsimple2.setMdp(passwordEncoder.encode(EDUCSIMPLE2_LOGIN));
             educsimple2.setRole(UserRole.EDUCSIMPLE);
             educsimple2.setPhotoBase64(photoBase64);
             educsimple2.setDescription("Utilisation des fiches, pourra laisser des traces écrite/vocal \r\n" + //
                     "");
             utilisateurRepository.save(educsimple2);
         }
-        // Creation du superadmin
-        Utilisateur superadmin = utilisateurRepository.findUserByLogin("superadmin");
+    }
+
+    // Creation du superadmin
+    private void createSuperAdmin() {
+        final String SUPERADMIN_LOGIN = "superadmin";
+        Utilisateur superadmin = utilisateurRepository.findUserByLogin(SUPERADMIN_LOGIN);
         if (superadmin == null) {
             superadmin = new Utilisateur();
             superadmin.setFormations(List.of(formation, formation2));
             superadmin.setNom("Super");
             superadmin.setPrenom("Admin");
-            superadmin.setLogin("superadmin");
-            superadmin.setMdp(passwordEncoder.encode("superadmin"));
+            superadmin.setLogin(SUPERADMIN_LOGIN);
+            superadmin.setMdp(passwordEncoder.encode(SUPERADMIN_LOGIN));
             superadmin.setRole(UserRole.SUPERADMIN);
             superadmin.setPhotoBase64(photoBase64);
             superadmin.setDescription("Description de l'administrateur");
             utilisateurRepository.save(superadmin);
         }
-        // Creation du CIP
-        Utilisateur CIP = utilisateurRepository.findUserByLogin("CIP");
-        if (CIP == null) {
-            CIP = new Utilisateur();
-            CIP.setFormations(List.of(formation, formation2));
-            CIP.setNom("CIP");
-            CIP.setPrenom("CIP");
-            CIP.setLogin("cip");
-            CIP.setMdp(passwordEncoder.encode("cip"));
-            CIP.setRole(UserRole.CIP);
-            CIP.setPhotoBase64(photoBase64);
-            CIP.setDescription(
-                    "Suivi parcours, évolution des compétences, adaptation de la situation d'examen. Pas de modifs visuelles");
-            utilisateurRepository.save(CIP);
-        }
+    }
 
-        // Création d'un utilisateur michel
-        Utilisateur michel = utilisateurRepository.findUserByLogin("michelmichel");
+    // Creation du cip
+    private void createcip() {
+        final String CIP_LOGIN = "cip";
+        Utilisateur cip = utilisateurRepository.findUserByLogin("cip");
+        if (cip == null) {
+            cip = new Utilisateur();
+            cip.setFormations(List.of(formation, formation2));
+            cip.setNom(CIP_LOGIN);
+            cip.setPrenom(CIP_LOGIN);
+            cip.setLogin("cip");
+            cip.setMdp(passwordEncoder.encode(CIP_LOGIN));
+            cip.setRole(UserRole.CIP);
+            cip.setPhotoBase64(photoBase64);
+            cip.setDescription(
+                    "Suivi parcours, évolution des compétences, adaptation de la situation d'examen. Pas de modifs visuelles");
+            utilisateurRepository.save(cip);
+        }
+    }
+
+    // Création d'un utilisateur michel
+    private void createMichel() {
+        final String MICHEL_LOGIN = "michelmichel";
+        Utilisateur michel = utilisateurRepository.findUserByLogin(MICHEL_LOGIN);
         if (michel == null) {
             michel = new Utilisateur();
             michel.setFormations(List.of(formation, formation2));
-            michel.setNom("Michel");
-            michel.setPrenom("Michel");
-            michel.setLogin("michelmichel");
+            michel.setNom(MICHEL);
+            michel.setPrenom(MICHEL);
+            michel.setLogin(MICHEL_LOGIN);
             michel.setMdp(passwordEncoder.encode("1234"));
             michel.setRole(UserRole.USER);
             michel.setNiveau(1);
@@ -252,15 +343,18 @@ public class Demarrage implements ApplicationRunner {
             michel.setDescription("Description de Michel Michel");
             utilisateurRepository.save(michel);
         }
+    }
 
-        // Création d'un utilisateur johnSmith
-        Utilisateur johnSmith = utilisateurRepository.findUserByLogin("johnsmith");
+    // Création d'un utilisateur johnSmith
+    private void createJohnSmith() {
+        final String JOHN_SMITH_LOGIN = "johnsmith";
+        Utilisateur johnSmith = utilisateurRepository.findUserByLogin(JOHN_SMITH_LOGIN);
         if (johnSmith == null) {
             johnSmith = new Utilisateur();
             johnSmith.setFormations(List.of(formation));
             johnSmith.setNom("Smith");
             johnSmith.setPrenom("John");
-            johnSmith.setLogin("johnsmith");
+            johnSmith.setLogin(JOHN_SMITH_LOGIN);
             johnSmith.setMdp(passwordEncoder.encode("9876"));
             johnSmith.setRole(UserRole.USER);
             johnSmith.setNiveau(1);
@@ -268,8 +362,10 @@ public class Demarrage implements ApplicationRunner {
             johnSmith.setDescription("Description de John Smith");
             utilisateurRepository.save(johnSmith);
         }
+    }
 
-        // Création d'un utilisateur janeDoe
+    // Création d'un utilisateur janeDoe
+    private void createJaneDoe() {
         Utilisateur janeDoe = utilisateurRepository.findUserByLogin("janedoe");
         if (janeDoe == null) {
             janeDoe = new Utilisateur();
@@ -284,8 +380,10 @@ public class Demarrage implements ApplicationRunner {
             janeDoe.setDescription("Description de Jane Doe");
             utilisateurRepository.save(janeDoe);
         }
+    }
 
-        // Création d'un utilisateur aliceJohnson
+    // Création d'un utilisateur aliceJohnson
+    private void createAliceJohnson() {
         Utilisateur aliceJohnson = utilisateurRepository.findUserByLogin("alicejohnson");
         if (aliceJohnson == null) {
             aliceJohnson = new Utilisateur();
@@ -300,8 +398,10 @@ public class Demarrage implements ApplicationRunner {
             aliceJohnson.setDescription("Description d'Alice Johnson");
             utilisateurRepository.save(aliceJohnson);
         }
+    }
 
-        // Création d'un utilisateur paulWilliams
+    // Création d'un utilisateur paulWilliams
+    private void createPaulWilliams() {
         Utilisateur paulWilliams = utilisateurRepository.findUserByLogin("paulwilliams");
         if (paulWilliams == null) {
             paulWilliams = new Utilisateur();
@@ -309,15 +409,17 @@ public class Demarrage implements ApplicationRunner {
             paulWilliams.setNom("Williams");
             paulWilliams.setPrenom("Paul");
             paulWilliams.setLogin("paulwilliams");
-            paulWilliams.setMdp(passwordEncoder.encode("1357")); // Mot de passe à 4 chiffres
+            paulWilliams.setMdp(passwordEncoder.encode("1357"));
             paulWilliams.setRole(UserRole.USER);
             paulWilliams.setNiveau(1);
             paulWilliams.setPhotoBase64(apprenti);
             paulWilliams.setDescription("Description de Paul Williams");
             utilisateurRepository.save(paulWilliams);
         }
+    }
 
-        // Création d'un utilisateur emilyBrown
+    // Création d'un utilisateur emilyBrown
+    private void createEmilyBrown() {
         Utilisateur emilyBrown = utilisateurRepository.findUserByLogin("emilybrown");
         if (emilyBrown == null) {
             emilyBrown = new Utilisateur();
@@ -325,15 +427,17 @@ public class Demarrage implements ApplicationRunner {
             emilyBrown.setNom("Brown");
             emilyBrown.setPrenom("Emily");
             emilyBrown.setLogin("emilybrown");
-            emilyBrown.setMdp(passwordEncoder.encode("9876")); // Mot de passe à 4 chiffres
+            emilyBrown.setMdp(passwordEncoder.encode("9876"));
             emilyBrown.setRole(UserRole.USER);
             emilyBrown.setNiveau(1);
             emilyBrown.setPhotoBase64(apprentie);
             emilyBrown.setDescription("Description d'Emily Brown");
             utilisateurRepository.save(emilyBrown);
         }
+    }
 
-        // Création d'un utilisateur pierreDupont
+    // Création d'un utilisateur pierreDupont
+    private void createPierreDupont() {
         Utilisateur pierreDupont = utilisateurRepository.findUserByLogin("pierredupont");
         if (pierreDupont == null) {
             pierreDupont = new Utilisateur();
@@ -341,17 +445,19 @@ public class Demarrage implements ApplicationRunner {
             pierreDupont.setNom("Dupont");
             pierreDupont.setPrenom("Pierre");
             pierreDupont.setLogin("pierredupont");
-            pierreDupont.setMdp(passwordEncoder.encode("7462")); // Mot de passe à 4 chiffres
+            pierreDupont.setMdp(passwordEncoder.encode("7462"));
             pierreDupont.setRole(UserRole.USER);
             pierreDupont.setNiveau(1);
             pierreDupont.setPhotoBase64(apprenti);
             pierreDupont.setDescription("Description de Pierre Dupont");
             utilisateurRepository.save(pierreDupont);
         }
+    }
 
-        // Creation d'une fiche d'Intervention
+    // Creation d'une fiche d'Intervention
+    private void createFicheIntervention() {
         FicheIntervention ficheIntervention = ficheRepository
-                .findByTravauxRealisesAndUtilisateurPrenom("Travaux réalisés par Michel Michel", "Michel");
+                .findByTravauxRealisesAndUtilisateurPrenom("Travaux réalisés par Michel Michel", MICHEL);
         if (ficheIntervention == null) {
             ficheIntervention = new FicheIntervention();
             Demande demande = new Demande();
@@ -359,37 +465,37 @@ public class Demarrage implements ApplicationRunner {
             Intervention intervention = new Intervention();
             Intervenant intervenant = new Intervenant();
             // Définir les attributs de l'intervenant
-            intervenant.setNom("Michel");
-            intervenant.setPrenom("Michel");
+            intervenant.setNom(MICHEL);
+            intervenant.setPrenom(MICHEL);
             intervenant.setNiveauTitreIntervenantNom(1);
             intervenant.setNiveauTitreIntervenantPrenom(1);
             intervenant.setNiveauTitreIntervenant(1);
-            intervenant.setCouleurTitreIntervenant("#FF00FF");
+            intervenant.setCouleurTitreIntervenant(VIOLET);
             intervenant.setCouleurNom("#F00");
-            intervenant.setCouleurPrenom("#00FFFF");
-            intervenant.setImageTitreIntervenantUrl("/images/accueil.png");
-            intervenant.setImageTitreIntervenantNomUrl("/images/accueil.png");
-            intervenant.setImageTitreIntervenantPrenomUrl("/images/accueil.png");
+            intervenant.setCouleurPrenom(CYAN);
+            intervenant.setImageTitreIntervenantUrl(ICONE_ACCUEIL);
+            intervenant.setImageTitreIntervenantNomUrl(ICONE_ACCUEIL);
+            intervenant.setImageTitreIntervenantPrenomUrl(ICONE_ACCUEIL);
 
             // Définir les attributs de l'intervention
             intervention.setNiveauTitreIntervention(1);
             intervention.setNiveauDateIntervention(1);
             intervention.setNiveauDureeIntervention(1);
             intervention.setNiveauTypeIntervention(1);
-            intervention.setCouleurTitreIntervention("#FF00FF");
+            intervention.setCouleurTitreIntervention(VIOLET);
             intervention.setCouleurDateIntervention("#F00");
-            intervention.setCouleurDureeIntervention("#00FFFF");
+            intervention.setCouleurDureeIntervention(CYAN);
             intervention.setCouleurTypeIntervention("#F00");
-            intervention.setImageTitreInterventionUrl("/images/accueil.png");
-            intervention.setImageDureeInterventionUrl("/images/accueil.png");
-            intervention.setImageTypeInterventionUrl("/images/accueil.png");
-            intervention.setImageDateInterventionUrl("/images/accueil.png");
+            intervention.setImageTitreInterventionUrl(ICONE_ACCUEIL);
+            intervention.setImageDureeInterventionUrl(ICONE_ACCUEIL);
+            intervention.setImageTypeInterventionUrl(ICONE_ACCUEIL);
+            intervention.setImageDateInterventionUrl(ICONE_ACCUEIL);
             intervention.setTypeIntervention(Intervention.TypeIntervention.AMENAGEMENT.toString());
             // Définir les attributs de la maintenance
             maintenance.setMaintenanceType(Maintenance.MaintenanceType.AMELIORATIVE);
             maintenance.setNiveauMaintenanceType(1);
-            maintenance.setCouleurMaintenanceType("#FF00FF");
-            maintenance.setImageTypeMaintenanceUrl("/images/accueil.png");
+            maintenance.setCouleurMaintenanceType(VIOLET);
+            maintenance.setImageTypeMaintenanceUrl(ICONE_ACCUEIL);
             // Définir les attributs de la demande
             demande.setNomDemandeur("Nom du demandeur");
             demande.setDateDemande(LocalDate.now());
@@ -402,32 +508,32 @@ public class Demarrage implements ApplicationRunner {
             demande.setNiveauLocalisation(1);
             demande.setNiveauDescription(1);
             demande.setNiveauDegreUrgence(1);
-            demande.setCouleurTitreDemande("#FF00FF");
+            demande.setCouleurTitreDemande(VIOLET);
             demande.setCouleurNomDemandeur("#F00");
-            demande.setCouleurDateDemande("#00FFFF");
-            demande.setCouleurLocalisation("#FF00FF");
+            demande.setCouleurDateDemande(CYAN);
+            demande.setCouleurLocalisation(VIOLET);
             demande.setCouleurDescription("#F00");
-            demande.setCouleurDegreUrgence("#00FFFF");
-            demande.setImageTitreDemandeUrl("/images/accueil.png");
-            demande.setImageTitreDemandeNomUrl("/images/accueil.png");
-            demande.setImageTitreDemandeDateUrl("/images/accueil.png");
-            demande.setImageTitreDemandeLocalisationUrl("/images/accueil.png");
-            demande.setImageTitreDemandeDescriptionUrl("/images/accueil.png");
-            demande.setImageTitreDemandeDegreUrgenceUrl("/images/accueil.png");
+            demande.setCouleurDegreUrgence(CYAN);
+            demande.setImageTitreDemandeUrl(ICONE_ACCUEIL);
+            demande.setImageTitreDemandeNomUrl(ICONE_ACCUEIL);
+            demande.setImageTitreDemandeDateUrl(ICONE_ACCUEIL);
+            demande.setImageTitreDemandeLocalisationUrl(ICONE_ACCUEIL);
+            demande.setImageTitreDemandeDescriptionUrl(ICONE_ACCUEIL);
+            demande.setImageTitreDemandeDegreUrgenceUrl(ICONE_ACCUEIL);
             // Définir les attributs des travaux réalisés
             ficheIntervention.setNiveauTravauxRealises(1);
             ficheIntervention.setCouleurTravauxRealises("#aef800");
-            ficheIntervention.setImageTitreTravauxRealisesUrl("/images/accueil.png");
+            ficheIntervention.setImageTitreTravauxRealisesUrl(ICONE_ACCUEIL);
             ficheIntervention.setTravauxRealises("Travaux réalisés par \nMichel Michel \n      Ligne 3");
             // Définir les attributs des travaux non réalisés
             ficheIntervention.setNiveauTravauxNonRealises(1);
-            ficheIntervention.setCouleurTravauxNonRealises("#FF00FF");
-            ficheIntervention.setImageTitreTravauxNonRealisesUrl("/images/accueil.png");
+            ficheIntervention.setCouleurTravauxNonRealises(VIOLET);
+            ficheIntervention.setImageTitreTravauxNonRealisesUrl(ICONE_ACCUEIL);
             ficheIntervention.setTravauxNonRealises("Travaux non réalisés par Michel Michel");
             // Définir les attributs des materiaux utilisés
             ficheIntervention.setNiveauMateriauxUtilises(1);
-            ficheIntervention.setCouleurMateriauxUtilises("#00FFFF");
-            ficheIntervention.setImageTitreMateriauxUtilisesUrl("/images/accueil.png");
+            ficheIntervention.setCouleurMateriauxUtilises(CYAN);
+            ficheIntervention.setImageTitreMateriauxUtilisesUrl(ICONE_ACCUEIL);
             // Définir les attributs de la fiche d'intervention
             ficheIntervention.setIntervenant(intervenant);
             ficheIntervention.setDemande(demande);
@@ -436,6 +542,7 @@ public class Demarrage implements ApplicationRunner {
             ficheIntervention.setDateCreation(LocalDate.now());
             ficheIntervention.setEtatFicheFinie(false);
             ficheIntervention.setNouvelleIntervention(true);
+            Utilisateur michel = utilisateurRepository.findUserByLogin("michelmichel");
             ficheIntervention.setUtilisateur(michel);
 
             // Ajouter les materiaux de type amenagement
@@ -450,15 +557,17 @@ public class Demarrage implements ApplicationRunner {
             ficheIntervention.setMateriauxOptions(materiauxAmenagement);
             ficheRepository.save(ficheIntervention);
         }
+    }
 
-        // Creation des images pour la fiche d intervention
+    // Creation des images pour la fiche d intervention
+    private void createImagesFicheIntervention() {
         String[] types = { "INTERVENANT", "DEMANDE", "INTERVENTION", "MATERIAUX_UTILISES", "TRAVAUX_REALISES",
                 "TRAVAUX_NON_REALISES", "INTERVENANT_PRENOM", "INTERVENANT_NOM", "DEMANDE_NOM", "DEMANDE_DATE",
                 "DEMANDE_LOCALISATION", "DEMANDE_DESCRIPTION", "DEMANDE_DEGRE_URGENCE", "MAINTENANCE_TYPE",
                 "INTERVENTION_DATE", "INTERVENTION_DUREE", "INTERVENTION_TYPE" };
         String[] nomImages = { "Image1", "ADMIN", "Image2", "FICHES1", "FICHES2", "FICHES3", "FICHES4" };
-        String[] imageUrls = { "images/accueil.png", "images/admin.png", "images/archive.png", "images/eleve.png",
-                "images/eleve.png", "images/eleve.png", "images/eleve.png" };
+        String[] imageUrls = { "images/accueil.png", "images/admin.png", "images/archive.png", ICONE_ELEVE,
+                ICONE_ELEVE, ICONE_ELEVE, ICONE_ELEVE };
 
         for (String type : types) {
             for (int i = 0; i < nomImages.length; i++) {
@@ -471,34 +580,31 @@ public class Demarrage implements ApplicationRunner {
 
             }
         }
+    }
 
-        // Création des chat messages
-        
-            Message chatMessage = new Message();
-            chatMessage.setTextContent("Bonjour \n je suis Admin Admin");
-            chatMessage.setTimestamp(
-                    LocalDateTime.ofInstant(Instant.ofEpochMilli(1611382800000L), ZoneId.systemDefault()));
-            chatMessage.setSender(admin);
-            chatMessage.setFicheIntervention(ficheIntervention);
-            chatMessage.setAudio(null);
-            messageRepository.save(chatMessage);
+    // Création des chat messages
+    private void createChatMessages() {
+        Message chatMessage = new Message();
+        chatMessage.setTextContent("Bonjour \n je suis Admin Admin");
+        chatMessage.setTimestamp(
+                LocalDateTime.ofInstant(Instant.ofEpochMilli(1611382800000L), ZoneId.systemDefault()));
+        Utilisateur admin = utilisateurRepository.findUserByLogin("admin");
+        chatMessage.setSender(admin);
+        FicheIntervention ficheIntervention = ficheRepository
+                .findById(1L).orElse(null);
+        chatMessage.setFicheIntervention(ficheIntervention);
+        chatMessage.setAudio(null);
+        messageRepository.save(chatMessage);
 
-            Message chatMessage2 = new Message();
-            chatMessage2.setTextContent("message2");
-            chatMessage2.setTimestamp(
-                    LocalDateTime.ofInstant(Instant.ofEpochMilli(1611382800000L), ZoneId.systemDefault()));
-            chatMessage2.setSender(admin);
-            chatMessage2.setFicheIntervention(ficheIntervention);
-            chatMessage2.setAudio(null);
-            chatMessage2.setImageUrl("/images/intervenant/aa.jpg");
-            messageRepository.save(chatMessage2);
-            
-            
-
-            
-
-
-
+        Message chatMessage2 = new Message();
+        chatMessage2.setTextContent("message2");
+        chatMessage2.setTimestamp(
+                LocalDateTime.ofInstant(Instant.ofEpochMilli(1611382800000L), ZoneId.systemDefault()));
+        chatMessage2.setSender(admin);
+        chatMessage2.setFicheIntervention(ficheIntervention);
+        chatMessage2.setAudio(null);
+        chatMessage2.setImageUrl("/images/intervenant/aa.jpg");
+        messageRepository.save(chatMessage2);
     }
 
     // Champs trop longs et inutiles pour être mis en haut

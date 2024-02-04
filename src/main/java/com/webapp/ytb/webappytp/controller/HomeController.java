@@ -72,6 +72,7 @@ public class HomeController {
     ImagesTitresRepository imagesTitresRepository;
     FicheRepository ficheRepository;
     UtilisateurRepository utilisateurRepository;
+    private static final String MESSAGE = "message";
 
     public HomeController(UtilisateurServiceImpl userServ, FicheServiceImpl ficheServ,
             MateriauxAmenagementRepository materiauxAmenagementRepository,
@@ -111,7 +112,7 @@ public class HomeController {
             RedirectAttributes redirectAttributes,
             HttpServletRequest request) {
         if (file.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Veuillez sélectionner un fichier à uploader");
+            redirectAttributes.addFlashAttribute(MESSAGE, "Veuillez sélectionner un fichier à uploader");
             return "redirect:/fiche/icones/upload";
         }
 
@@ -130,20 +131,23 @@ public class HomeController {
             // Mettez à jour l'URL de l'image dans la base de données
             image.setImageUrl("/images/icones/" + file.getOriginalFilename());
 
-            redirectAttributes.addFlashAttribute("message",
+            redirectAttributes.addFlashAttribute(MESSAGE,
                     "Vous avez réussi à uploader '" + file.getOriginalFilename() + "'");
         } catch (IOException e) {
             logger.error(e.getMessage());
-            redirectAttributes.addFlashAttribute("message", "Erreur lors de l'upload du fichier");
+            redirectAttributes.addFlashAttribute(MESSAGE, "Erreur lors de l'upload du fichier");
         }
 
         return "redirect:/fiche/icones/upload";
     }
 
     // Ajouter une fiche
-    @GetMapping("/ajout_fiche/")
-    public String ajout_fiche(Model model) {
+    @GetMapping("/ajout_fiche/{id}")
+    public String ajout_fiche(Model model, @PathVariable Long id) {
+
         FicheIntervention fiche = new FicheIntervention();
+        Utilisateur user =  userServ.findById(id);
+        fiche.setUtilisateur(user);
         List<ImagesTitres> imagesTitreIntervenant = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT);
         List<ImagesTitres> imagesTitreDemande = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.DEMANDE);
@@ -197,8 +201,8 @@ public class HomeController {
         model.addAttribute("imagesTitreMaintenanceType", imagesTitreMaintenanceType);
 
         model.addAttribute("fiche", fiche);
-        model.addAttribute("users", userServ.getUtilisateursByRole("USER"));
-        return "fiche_a_completer";
+        model.addAttribute("user", userServ.findById(id));
+        return "fiche_nouvelle";
     }
 
     // Ajouter une fiche avec id utilisateur
@@ -374,7 +378,7 @@ public class HomeController {
         Intervention intervention = new Intervention();
         Maintenance maintenance = new Maintenance();
         // demande
-        demande.setNomDemandeur(fiche.getDemande().getNomDemandeur());
+        demande.setNomDemandeur(fiche.getDemande().getNomDemandeur() != null ? fiche.getDemande().getNomDemandeur() : "");
         demande.setDateDemande(fiche.getDemande().getDateDemande());
         demande.setLocalisation(fiche.getDemande().getLocalisation());
         demande.setDescription(fiche.getDemande().getDescription());
@@ -803,7 +807,7 @@ public class HomeController {
                 .findFirst()
                 .map(GrantedAuthority::getAuthority)
                 .orElse("");
-                
+
         Utilisateur utilisateur;
 
         // Vérifiez le rôle de l'utilisateur

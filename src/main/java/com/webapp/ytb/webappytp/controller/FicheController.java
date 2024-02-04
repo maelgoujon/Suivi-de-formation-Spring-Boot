@@ -24,8 +24,13 @@ import org.springframework.validation.annotation.Validated;
 public class FicheController {
     private final FicheService ficheService;
 
+    private final UtilisateurService utilisateurService;
+
     @Autowired
-    private UtilisateurService utilisateurService;
+    public FicheController(UtilisateurService utilisateurService, FicheService ficheService) {
+        this.utilisateurService = utilisateurService;
+        this.ficheService = ficheService;
+    }
 
     @PostMapping("/create/{utilisateurId}")
     public String create(@Valid @ModelAttribute("fiche") FicheIntervention fiche, @PathVariable Long utilisateurId) {
@@ -33,9 +38,9 @@ public class FicheController {
         fiche.setUtilisateur(utilisateur);
         if (utilisateur != null) {
             ficheService.creer(fiche);
-            return "redirect:/fiche/create";  // Redirect to the create form again or any other page
+            return "redirect:/ajout_fiche/"+utilisateurId;  // Redirect to the create form again or any other page
         } else {
-            return "redirect:/accueil";
+            return "redirect:/ajout_fiche/"+utilisateurId;
         }
     }
         

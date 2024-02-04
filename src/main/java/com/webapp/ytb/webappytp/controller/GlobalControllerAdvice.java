@@ -13,12 +13,19 @@ import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
 import java.util.Map;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ControllerAdvice
 public class GlobalControllerAdvice {
 
+    private final UtilisateurRepository utilisateurRepository;
+    
+
     @Autowired
-    private UtilisateurRepository utilisateurRepository;
+    public GlobalControllerAdvice(UtilisateurRepository utilisateurRepository) {
+        this.utilisateurRepository = utilisateurRepository;
+    }
 
     @ModelAttribute("currentUserName")
     public String getCurrentUserName() {
@@ -40,10 +47,10 @@ public class GlobalControllerAdvice {
 
     }
 
+
     @ModelAttribute("currentUserRole")
     public String getCurrentUserRole() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getName());
         if (authentication.getName().equals("anonymousUser")) {
             return null;
         }
