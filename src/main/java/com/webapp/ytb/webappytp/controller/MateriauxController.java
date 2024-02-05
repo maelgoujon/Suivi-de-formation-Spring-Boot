@@ -33,32 +33,41 @@ import com.webapp.ytb.webappytp.repository.MateriauxAmenagementRepository;
 @RequestMapping("/materiaux")
 public class MateriauxController {
 
-    @Autowired
-    private MateriauxAmenagementRepository materiauxAmenagementRepository;
+    private final MateriauxAmenagementRepository materiauxAmenagementRepository;
+    private static final String MAX_FILE_SIZE_STRING = "maxFileSize";
+    private static final String REDIRECT_MATERIAUX_LISTE = "redirect:/materiaux/liste";
+    private static final String ERROR_MESSAGE = "errorMessage";
+    private static final String SUCCESS_MESSAGE = "successMessage";
+    private static final String ERROR_FILE_SIZE = "La taille du fichier dépasse la limite autorisée.";
 
     @Value("${spring.servlet.multipart.max-file-size}")
     private String MAX_FILE_SIZE;
 
+    @Autowired
+    public MateriauxController(MateriauxAmenagementRepository materiauxAmenagementRepository) {
+        this.materiauxAmenagementRepository = materiauxAmenagementRepository;
+    }
+
     @GetMapping("/ajouter")
-        public String showImagePage(Model model) {
+    public String showImagePage(Model model) {
         List<Materiaux> allImages = materiauxAmenagementRepository.findAll();
-        model.addAttribute("maxFileSize", parseFileSize(MAX_FILE_SIZE));
+        model.addAttribute(MAX_FILE_SIZE_STRING, parseFileSize(MAX_FILE_SIZE));
         model.addAttribute("allImages", allImages);
         model.addAttribute("materiau", new Materiaux());
         return "ajout_materiau";
     }
 
     @GetMapping("/liste")
-        public String liste_materiaux(Model model) {
+    public String listeMateriaux(Model model) {
         List<Materiaux> allImages = materiauxAmenagementRepository.findAll();
-        model.addAttribute("maxFileSize", parseFileSize(MAX_FILE_SIZE));
+        model.addAttribute(MAX_FILE_SIZE_STRING, parseFileSize(MAX_FILE_SIZE));
         model.addAttribute("allImages", allImages);
         model.addAttribute("materiau", new Materiaux());
         return "liste_materiaux";
     }
 
     @PostMapping("/uploadMateriaux")
-        public String uploadImage(@ModelAttribute("materiau") Materiaux materiau,
+    public String uploadImage(@ModelAttribute("materiau") Materiaux materiau,
             @RequestParam("imageFile") MultipartFile imageFile,
             RedirectAttributes redirectAttributes, Model model) {
 
@@ -74,15 +83,15 @@ public class MateriauxController {
                 materiau.setImageUrl(imageUrl);
 
                 materiauxAmenagementRepository.save(materiau);
-                redirectAttributes.addFlashAttribute("successMessage", "Materiau enregistré avec succès");
+                redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE, "Materiau enregistré avec succès");
             }
         } catch (MaxUploadSizeExceededException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "La taille du fichier dépasse la limite autorisée.");
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, ERROR_FILE_SIZE);
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Une image avec ce nom existe déjà.");
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, "Une image avec ce nom existe déjà.");
         }
 
-        return "redirect:/materiaux/liste";
+        return REDIRECT_MATERIAUX_LISTE;
     }
 
     private String saveImageLocally(MultipartFile imageFile, String fileName,
@@ -107,7 +116,7 @@ public class MateriauxController {
     }
 
     @PostMapping("/modifier/{id}")
-        public String editImage(@PathVariable("id") Long id,
+    public String editImage(@PathVariable("id") Long id,
             @RequestParam(value = "newImageFile", required = false) MultipartFile newImageFile,
             @RequestParam(value = "newNomImage", required = false) String newNomImage, // Nouveau nom d'image
             @RequestParam(value = "newTypeIntervention") Intervention.TypeIntervention newTypeIntervention,
@@ -124,9 +133,9 @@ public class MateriauxController {
                         // Vérifiez la taille du fichier
                         long maxFileSize = parseFileSize(MAX_FILE_SIZE);
                         if (newImageFile.getSize() > maxFileSize) {
-                            redirectAttributes.addFlashAttribute("errorMessage",
-                                    "La taille du fichier dépasse la limite autorisée.");
-                            return "redirect:/materiaux/liste";
+                            redirectAttributes.addFlashAttribute(ERROR_MESSAGE,
+                                    ERROR_FILE_SIZE);
+                            return REDIRECT_MATERIAUX_LISTE;
                         }
 
                         // Enregistrez la nouvelle image localement et obtenez l'URL
@@ -134,9 +143,9 @@ public class MateriauxController {
                                 newTypeIntervention);
                         existingImage.setImageUrl(imageUrl);
                     } else {
-                        redirectAttributes.addFlashAttribute("errorMessage",
+                        redirectAttributes.addFlashAttribute(ERROR_MESSAGE,
                                 "Le type de fichier n'est pas pris en charge.");
-                        return "redirect:/materiaux/liste";
+                        return REDIRECT_MATERIAUX_LISTE;
                     }
                 }
 
@@ -149,19 +158,19 @@ public class MateriauxController {
                 }
 
                 materiauxAmenagementRepository.save(existingImage);
-                redirectAttributes.addFlashAttribute("successMessage", "Materiau modifiée avec succès");
+                redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE, "Materiau modifiée avec succès");
             } catch (FileSizeLimitExceededException ex) {
                 // Interceptez l'exception et gérez-la ici
-                redirectAttributes.addFlashAttribute("errorMessage",
-                        "La taille du fichier dépasse la limite autorisée.");
+                redirectAttributes.addFlashAttribute(ERROR_MESSAGE,
+                        ERROR_FILE_SIZE);
             } catch (Exception e) {
                 // Gérez les autres exceptions ici si nécessaire
-                redirectAttributes.addFlashAttribute("errorMessage",
+                redirectAttributes.addFlashAttribute(ERROR_MESSAGE,
                         "Une erreur s'est produite lors de la modification du Materiau.");
             }
         }
 
-        return "redirect:/materiaux/liste";
+        return REDIRECT_MATERIAUX_LISTE;
     }
 
     private long parseFileSize(String fileSize) {
@@ -170,22 +179,22 @@ public class MateriauxController {
     }
 
     @GetMapping("/modifier/{id}")
-        public String showEditImagePage(@PathVariable("id") Long id, Model model) {
+    public String showEditImagePage(@PathVariable("id") Long id, Model model) {
         Optional<Materiaux> optionalImage = materiauxAmenagementRepository.findById(id);
         if (optionalImage.isPresent()) {
             Materiaux existingImage = optionalImage.get();
 
-            model.addAttribute("maxFileSize", parseFileSize(MAX_FILE_SIZE));
+            model.addAttribute(MAX_FILE_SIZE_STRING, parseFileSize(MAX_FILE_SIZE));
             model.addAttribute("image", existingImage);
             model.addAttribute("id", id);
             return "modifier_materiau";
         } else {
-            return "redirect:/materiaux/liste";
+            return REDIRECT_MATERIAUX_LISTE;
         }
     }
 
     @GetMapping("/supprimer/{id}")
-        public String deleteImage(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+    public String deleteImage(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
             Optional<Materiaux> optionalImage = materiauxAmenagementRepository.findById(id);
             if (optionalImage.isPresent()) {
@@ -197,14 +206,14 @@ public class MateriauxController {
                 // Supprimez l'entité image de la base de données
                 materiauxAmenagementRepository.deleteById(id);
 
-                redirectAttributes.addFlashAttribute("successMessage", "Image supprimée avec succès");
+                redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE, "Image supprimée avec succès");
             }
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage",
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE,
                     "Une erreur s'est produite lors de la suppression de l'image.");
         }
 
-        return "redirect:/materiaux/liste";
+        return REDIRECT_MATERIAUX_LISTE;
     }
 
     private void deleteImageLocally(String imageUrl) throws IOException {

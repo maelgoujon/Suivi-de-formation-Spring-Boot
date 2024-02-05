@@ -38,8 +38,17 @@ import com.webapp.ytb.webappytp.repository.ImagesTitresRepository;
 @RequestMapping("/imagestitres")
 public class ImagesTitresController {
 
+    private final ImagesTitresRepository imagesTitresRepository;
+    private static final String MAX_FILE_SIZE_STRING = "maxFileSize";
+    private static final String SUCCESS_MESSAGE = "successMessage";
+    private static final String ERROR_FILE_SIZE = "La taille du fichier dépasse la limite autorisée.";
+    private static final String ERROR_MESSAGE = "errorMessage";
+    private static final String REDIRECT_IMAGE_LIST = "redirect:/imagestitres/liste";
+
     @Autowired
-    private ImagesTitresRepository imagesTitresRepository;
+    public ImagesTitresController(ImagesTitresRepository imagesTitresRepository) {
+        this.imagesTitresRepository = imagesTitresRepository;
+    }
 
     @Value("${spring.servlet.multipart.max-file-size}")
     private String MAX_FILE_SIZE;
@@ -47,7 +56,7 @@ public class ImagesTitresController {
     @GetMapping("/ajouter")
     public String showImagePage(Model model) {
         List<ImagesTitres> allImages = imagesTitresRepository.findAll();
-        model.addAttribute("maxFileSize", parseFileSize(MAX_FILE_SIZE));
+        model.addAttribute(MAX_FILE_SIZE_STRING, parseFileSize(MAX_FILE_SIZE));
         model.addAttribute("allImages", allImages);
         model.addAttribute("imageTitre", new ImagesTitres());
         return "ajout_imageTitre";
@@ -56,7 +65,7 @@ public class ImagesTitresController {
     @GetMapping("/liste")
     public String showImageList(Model model) {
         List<ImagesTitres> allImages = imagesTitresRepository.findAll();
-        model.addAttribute("maxFileSize", parseFileSize(MAX_FILE_SIZE));
+        model.addAttribute(MAX_FILE_SIZE_STRING, parseFileSize(MAX_FILE_SIZE));
         model.addAttribute("allImages", allImages);
         model.addAttribute("imageTitre", new ImagesTitres());
         return "liste_imagesTitres";
@@ -79,15 +88,15 @@ public class ImagesTitresController {
                 imageTitre.setImageUrl(imageUrl);
 
                 imagesTitresRepository.save(imageTitre);
-                redirectAttributes.addFlashAttribute("successMessage", "Image enregistrée avec succès");
+                redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE, "Image enregistrée avec succès");
             }
         } catch (MaxUploadSizeExceededException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "La taille du fichier dépasse la limite autorisée.");
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, ERROR_FILE_SIZE);
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Une image avec ce nom existe déjà.");
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, "Une image avec ce nom existe déjà.");
         }
 
-        return "redirect:/imagestitres/liste";
+        return REDIRECT_IMAGE_LIST;
     }
 
     private String saveImageLocally(MultipartFile imageFile, String fileName,
@@ -119,23 +128,9 @@ public class ImagesTitresController {
 
             try {
                 if (newImageFile != null && !newImageFile.isEmpty()) {
-                    String contentType = newImageFile.getContentType();
-                    if (contentType != null && (contentType.equals("image/jpeg") || contentType.equals("image/png"))) {
-                        long maxFileSize = parseFileSize(MAX_FILE_SIZE);
-                        if (newImageFile.getSize() > maxFileSize) {
-                            redirectAttributes.addFlashAttribute("errorMessage",
-                                    "La taille du fichier dépasse la limite autorisée.");
-                            return "redirect:/imagestitres/liste";
-                        }
-
-                        String imageUrl = saveImageLocally(newImageFile, existingImage.getNomImage(),
-                                newTypeImage);
-                        existingImage.setImageUrl(imageUrl);
-                    } else {
-                        redirectAttributes.addFlashAttribute("errorMessage",
-                                "Le type de fichier n'est pas pris en charge.");
-                        return "redirect:/imagestitres/liste";
-                    }
+                    validateImageFile(newImageFile, redirectAttributes);
+                    String imageUrl = saveImageLocally(newImageFile, existingImage.getNomImage(), newTypeImage);
+                    existingImage.setImageUrl(imageUrl);
                 }
 
                 existingImage.setTypeImage(newTypeImage);
@@ -145,17 +140,30 @@ public class ImagesTitresController {
                 }
 
                 imagesTitresRepository.save(existingImage);
-                redirectAttributes.addFlashAttribute("successMessage", "Image modifiée avec succès");
+                redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE, "Image modifiée avec succès");
             } catch (FileSizeLimitExceededException ex) {
-                redirectAttributes.addFlashAttribute("errorMessage",
-                        "La taille du fichier dépasse la limite autorisée.");
+                redirectAttributes.addFlashAttribute(ERROR_MESSAGE, ERROR_FILE_SIZE);
             } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("errorMessage",
+                redirectAttributes.addFlashAttribute(ERROR_MESSAGE,
                         "Une erreur s'est produite lors de la modification de l'image.");
             }
         }
 
-        return "redirect:/imagestitres/liste";
+        return REDIRECT_IMAGE_LIST;
+    }
+
+    private void validateImageFile(MultipartFile imageFile, RedirectAttributes redirectAttributes) {
+        String contentType = imageFile.getContentType();
+        if (contentType != null && (contentType.equals("image/jpeg") || contentType.equals("image/png"))) {
+            long maxFileSize = parseFileSize(MAX_FILE_SIZE);
+            if (imageFile.getSize() > maxFileSize) {
+                redirectAttributes.addFlashAttribute(ERROR_MESSAGE, ERROR_FILE_SIZE);
+
+            }
+        } else {
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, "Le type de fichier n'est pas pris en charge.");
+            throw new IllegalArgumentException();
+        }
     }
 
     @GetMapping("/modifier/{id}")
@@ -164,11 +172,11 @@ public class ImagesTitresController {
         if (optionalImage.isPresent()) {
             ImagesTitres existingImage = optionalImage.get();
             model.addAttribute("image", existingImage);
-            model.addAttribute("maxFileSize", parseFileSize(MAX_FILE_SIZE));
+            model.addAttribute(MAX_FILE_SIZE_STRING, parseFileSize(MAX_FILE_SIZE));
             model.addAttribute("id", id);
             return "modifier_imagestitres";
         } else {
-            return "redirect:/imagestitres/liste";
+            return REDIRECT_IMAGE_LIST;
         }
     }
 
@@ -181,16 +189,14 @@ public class ImagesTitresController {
     public String deleteImage(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         Optional<ImagesTitres> optionalImage = imagesTitresRepository.findById(id);
         if (optionalImage.isPresent()) {
-            ImagesTitres existingImage = optionalImage.get();
-
             // Supprimez l'image de la base de données
             imagesTitresRepository.deleteById(id);
-            redirectAttributes.addFlashAttribute("successMessage", "Image supprimée avec succès");
+            redirectAttributes.addFlashAttribute(SUCCESS_MESSAGE, "Image supprimée avec succès");
         } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "Image introuvable");
+            redirectAttributes.addFlashAttribute(ERROR_MESSAGE, "Image introuvable");
         }
 
-        return "redirect:/imagestitres/liste";
+        return REDIRECT_IMAGE_LIST;
     }
 
 }

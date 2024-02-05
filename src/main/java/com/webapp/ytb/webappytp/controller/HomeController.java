@@ -72,18 +72,33 @@ public class HomeController {
     ImagesTitresRepository imagesTitresRepository;
     FicheRepository ficheRepository;
     UtilisateurRepository utilisateurRepository;
+    private final FormationService formationService;
     private static final String MESSAGE = "message";
+    private static final String FICHE = "fiche";
+    private static final String FICHE_INTERVENTION = "ficheIntervention";
+    private static final String UTILISATEURS =  "utilisateurs";
+    private static final String ROLE_SUPERADMIN = "ROLE_SUPERADMIN";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
+    private static final String ROLE_CIP = "ROLE_CIP";
+    private static final String ROLE_EDUCSIMPLE = "ROLE_EDUCSIMPLE";
+    private static final String REDIRECT_ACCUEIL_SUPERADMIN = "redirect:/accueil_superadmin";
+    private static final String REDIRECT_ACCUEIL = "redirect:/accueil";
+    private static final String UTILISATEUR_CONNECTE_ROLE  = "utilisateurConnecteRole";
+    private static final String UTILISATEUR = "utilisateur";
+    private static final String FICHES = "fiches";
+
 
     public HomeController(UtilisateurServiceImpl userServ, FicheServiceImpl ficheServ,
             MateriauxAmenagementRepository materiauxAmenagementRepository,
             ImagesTitresRepository imagesTitresRepository, FicheRepository ficheRepository,
-            UtilisateurRepository utilisateurRepository) {
+            UtilisateurRepository utilisateurRepository,  FormationService formationService) {
         this.userServ = userServ;
         this.ficheServ = ficheServ;
         this.materiauxAmenagementRepository = materiauxAmenagementRepository;
         this.imagesTitresRepository = imagesTitresRepository;
         this.ficheRepository = ficheRepository;
         this.utilisateurRepository = utilisateurRepository;
+        this.formationService = formationService;
     }
 
     public Long getCurrentUserId() {
@@ -142,11 +157,11 @@ public class HomeController {
     }
 
     // Ajouter une fiche
-    @GetMapping("/ajout_fiche/{id}")
-    public String ajout_fiche(Model model, @PathVariable Long id) {
+    @GetMapping("/ajoutfiche/{id}")
+    public String ajoutfiche(Model model, @PathVariable Long id) {
 
         FicheIntervention fiche = new FicheIntervention();
-        Utilisateur user =  userServ.findById(id);
+        Utilisateur user = userServ.findById(id);
         fiche.setUtilisateur(user);
         List<ImagesTitres> imagesTitreIntervenant = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT);
@@ -200,14 +215,14 @@ public class HomeController {
         model.addAttribute("imagesTitreInterventionType", imagesTitreInterventionType);
         model.addAttribute("imagesTitreMaintenanceType", imagesTitreMaintenanceType);
 
-        model.addAttribute("fiche", fiche);
+        model.addAttribute(FICHE, fiche);
         model.addAttribute("user", userServ.findById(id));
         return "fiche_nouvelle";
     }
 
     // Ajouter une fiche avec id utilisateur
     @GetMapping("/niveauxFiche/{id}")
-    public String ajout_fiche_id(Model model, @PathVariable Long id) {
+    public String ajoutficheId(Model model, @PathVariable Long id) {
         FicheIntervention ficheExistante = ficheServ.lire(id);
         FicheIntervention fiche = new FicheIntervention();
         List<ImagesTitres> imagesTitreIntervenant = imagesTitresRepository
@@ -264,7 +279,7 @@ public class HomeController {
 
         fiche.setId(id);
         fiche.setDemande(ficheExistante.getDemande());
-        model.addAttribute("fiche", fiche);
+        model.addAttribute(FICHE, fiche);
         model.addAttribute("user", ficheServ.lire(id).getIntervenant());
         return "fiche_a_completer";
     }
@@ -272,8 +287,6 @@ public class HomeController {
     @PostMapping("/modifFicheParFormateur/{id}")
     public String modifFicheParFormateur(@ModelAttribute @Valid FicheIntervention fiche, Model model,
             @PathVariable Long id) {
-        System.out.println("------------------------------------");
-        System.out.println(ficheRepository.findById(id).get().getId());
         FicheIntervention ficheOrigine = ficheRepository.findById(id).get();
 
         Demande demande = ficheOrigine.getDemande();
@@ -370,7 +383,7 @@ public class HomeController {
     }
 
     @PostMapping("/ajouter_fiche")
-    public String ajouter_fiche(@ModelAttribute FicheIntervention fiche, Model model) {
+    public String ajouterFiche(@ModelAttribute FicheIntervention fiche, Model model) {
         fiche.setDateCreation(LocalDate.now());
         fiche.setMateriauxOptions(new ArrayList<>());
         Demande demande = new Demande();
@@ -378,7 +391,8 @@ public class HomeController {
         Intervention intervention = new Intervention();
         Maintenance maintenance = new Maintenance();
         // demande
-        demande.setNomDemandeur(fiche.getDemande().getNomDemandeur() != null ? fiche.getDemande().getNomDemandeur() : "");
+        demande.setNomDemandeur(
+                fiche.getDemande().getNomDemandeur() != null ? fiche.getDemande().getNomDemandeur() : "");
         demande.setDateDemande(fiche.getDemande().getDateDemande());
         demande.setLocalisation(fiche.getDemande().getLocalisation());
         demande.setDescription(fiche.getDemande().getDescription());
@@ -469,7 +483,7 @@ public class HomeController {
         }
         List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository
                 .findByTypeIntervention(typeIntervention);
-        model.addAttribute("ficheIntervention", ficheIntervention);
+        model.addAttribute(FICHE_INTERVENTION, ficheIntervention);
         model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
         model.addAttribute("color", "#8fabd9");
         return "fiche_complete";
@@ -504,7 +518,7 @@ public class HomeController {
         // envoyer la liste des maintenance
         model.addAttribute("maintenanceList", Maintenance.MaintenanceType.values());
 
-        model.addAttribute("ficheIntervention", ficheIntervention);
+        model.addAttribute(FICHE_INTERVENTION, ficheIntervention);
         model.addAttribute("color", "#8fabd9");
 
         return "fiche_modifier";
@@ -536,40 +550,66 @@ public class HomeController {
         boolean nouvelleInterventionValue = newNouvelleIntervention.orElse(false);
 
         FicheIntervention ficheIntervention = ficheServ.lire(id);
+        updateDemande(ficheIntervention.getDemande(), newNomDemandeur, newDateDemande, newLocalisation, newDescription,
+                newDegreUrgence);
+        updateIntervention(ficheIntervention.getIntervention(), newDateIntervention, newDureeIntervention,
+                newNatureType);
+        updateMaintenance(ficheIntervention.getMaintenance(), newMaintenanceType);
+        updateFicheDetails(ficheIntervention, newTravauxRealises, newTravauxNonRealises, nouvelleInterventionValue);
+        updateMateriauxOptions(ficheIntervention, newMateriau0, newMateriau1, newMateriau2, newMateriau3, newMateriau4,
+                newMateriau5);
+
+        ficheServ.modifier(id, ficheIntervention);
+        return "redirect:/chat/" + id;
+    }
+
+    private void updateDemande(Demande demande, String newNomDemandeur, LocalDate newDateDemande,
+            String newLocalisation, String newDescription, Integer newDegreUrgence) {
         if (newNomDemandeur != null) {
-            ficheIntervention.getDemande().setNomDemandeur(newNomDemandeur);
+            demande.setNomDemandeur(newNomDemandeur);
         }
         if (newDateDemande != null) {
-            ficheIntervention.getDemande().setDateDemande(newDateDemande);
+            demande.setDateDemande(newDateDemande);
         }
         if (newLocalisation != null) {
-            ficheIntervention.getDemande().setLocalisation(newLocalisation);
+            demande.setLocalisation(newLocalisation);
         }
         if (newDescription != null) {
-            ficheIntervention.getDemande().setDescription(newDescription);
+            demande.setDescription(newDescription);
         }
         if (newDegreUrgence != null) {
-            ficheIntervention.getDemande().setDegreUrgence(newDegreUrgence);
+            demande.setDegreUrgence(newDegreUrgence);
         }
+    }
 
+    private void updateIntervention(Intervention intervention, LocalDate newDateIntervention,
+            Integer newDureeIntervention, String newNatureType) {
         if (newDateIntervention != null) {
-            ficheIntervention.getIntervention().setDateIntervention(newDateIntervention);
+            intervention.setDateIntervention(newDateIntervention);
         }
-
         if (newDureeIntervention != null) {
-            ficheIntervention.getIntervention().setDureeIntervention(newDureeIntervention);
-        }
-
-        if (newMaintenanceType != null) {
-            ficheIntervention.getMaintenance().setMaintenanceType(newMaintenanceType);
+            intervention.setDureeIntervention(newDureeIntervention);
         }
         if (newNatureType != null) {
-            ficheIntervention.getIntervention().setTypeIntervention(newNatureType);
+            intervention.setTypeIntervention(newNatureType);
         }
+    }
+
+    private void updateMaintenance(Maintenance maintenance, Maintenance.MaintenanceType newMaintenanceType) {
+        if (newMaintenanceType != null) {
+            maintenance.setMaintenanceType(newMaintenanceType);
+        }
+    }
+
+    private void updateFicheDetails(FicheIntervention ficheIntervention, String newTravauxRealises,
+            String newTravauxNonRealises, boolean nouvelleInterventionValue) {
         ficheIntervention.setTravauxRealises(newTravauxRealises);
         ficheIntervention.setTravauxNonRealises(newTravauxNonRealises);
         ficheIntervention.setNouvelleIntervention(nouvelleInterventionValue);
+    }
 
+    private void updateMateriauxOptions(FicheIntervention ficheIntervention, String newMateriau0, String newMateriau1,
+            String newMateriau2, String newMateriau3, String newMateriau4, String newMateriau5) {
         ArrayList<String> materiauxOptions = new ArrayList<>();
 
         if (newMateriau0 != null) {
@@ -594,9 +634,6 @@ public class HomeController {
         if (!materiauxOptions.isEmpty()) {
             ficheIntervention.setMateriauxOptions(materiauxOptions);
         }
-
-        ficheServ.modifier(id, ficheIntervention);
-        return "redirect:/chat/" + id;
     }
 
     @PostMapping("/fiche/updateTypeIntervention/{id}")
@@ -625,64 +662,14 @@ public class HomeController {
         boolean nouvelleInterventionValue = newNouvelleIntervention.orElse(false);
 
         FicheIntervention ficheIntervention = ficheServ.lire(id);
-        if (newNomDemandeur != null) {
-            ficheIntervention.getDemande().setNomDemandeur(newNomDemandeur);
-        }
-        if (newDateDemande != null) {
-            ficheIntervention.getDemande().setDateDemande(newDateDemande);
-        }
-        if (newLocalisation != null) {
-            ficheIntervention.getDemande().setLocalisation(newLocalisation);
-        }
-        if (newDescription != null) {
-            ficheIntervention.getDemande().setDescription(newDescription);
-        }
-        if (newDegreUrgence != null) {
-            ficheIntervention.getDemande().setDegreUrgence(newDegreUrgence);
-        }
-
-        if (newDateIntervention != null) {
-            ficheIntervention.getIntervention().setDateIntervention(newDateIntervention);
-        }
-
-        if (newDureeIntervention != null) {
-            ficheIntervention.getIntervention().setDureeIntervention(newDureeIntervention);
-        }
-
-        if (newMaintenanceType != null) {
-            ficheIntervention.getMaintenance().setMaintenanceType(newMaintenanceType);
-        }
-        if (newNatureType != null) {
-            ficheIntervention.getIntervention().setTypeIntervention(newNatureType);
-        }
-        ficheIntervention.setTravauxRealises(newTravauxRealises);
-        ficheIntervention.setTravauxNonRealises(newTravauxNonRealises);
-        ficheIntervention.setNouvelleIntervention(nouvelleInterventionValue);
-
-        ArrayList<String> materiauxOptions = new ArrayList<>();
-
-        if (newMateriau0 != null) {
-            materiauxOptions.add(newMateriau0);
-        }
-        if (newMateriau1 != null) {
-            materiauxOptions.add(newMateriau1);
-        }
-        if (newMateriau2 != null) {
-            materiauxOptions.add(newMateriau2);
-        }
-        if (newMateriau3 != null) {
-            materiauxOptions.add(newMateriau3);
-        }
-        if (newMateriau4 != null) {
-            materiauxOptions.add(newMateriau4);
-        }
-        if (newMateriau5 != null) {
-            materiauxOptions.add(newMateriau5);
-        }
-
-        if (!materiauxOptions.isEmpty()) {
-            ficheIntervention.setMateriauxOptions(materiauxOptions);
-        }
+        updateDemande(ficheIntervention.getDemande(), newNomDemandeur, newDateDemande, newLocalisation, newDescription,
+                newDegreUrgence);
+        updateIntervention(ficheIntervention.getIntervention(), newDateIntervention, newDureeIntervention,
+                newNatureType);
+        updateMaintenance(ficheIntervention.getMaintenance(), newMaintenanceType);
+        updateFicheDetails(ficheIntervention, newTravauxRealises, newTravauxNonRealises, nouvelleInterventionValue);
+        updateMateriauxOptions(ficheIntervention, newMateriau0, newMateriau1, newMateriau2, newMateriau3, newMateriau4,
+                newMateriau5);
 
         ficheServ.modifier(id, ficheIntervention);
         return "redirect:/fiche/modifier/" + id;
@@ -694,33 +681,21 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
-        model.addAttribute("utilisateurs", utilisateurs);
+        model.addAttribute(UTILISATEURS, utilisateurs);
         return "accueil";
     }
 
     @GetMapping("/redirectByRole")
     public String redirectByRole() {
         String utilisateurConnecteRole = determineUserRole();
-        System.out.println(utilisateurConnecteRole);
 
-        if ("ROLE_SUPERADMIN".equals(utilisateurConnecteRole)) {
-            return "redirect:/accueil_superadmin";
-        } else if ("ROLE_ADMIN".equals(utilisateurConnecteRole) || "ROLE_CIP".equals(utilisateurConnecteRole)
-                || "ROLE_EDUCSIMPLE".equals(utilisateurConnecteRole)) {
+        if (ROLE_SUPERADMIN.equals(utilisateurConnecteRole)) {
+            return REDIRECT_ACCUEIL_SUPERADMIN;
+        } else if (ROLE_ADMIN.equals(utilisateurConnecteRole) || ROLE_CIP.equals(utilisateurConnecteRole)
+                || ROLE_EDUCSIMPLE.equals(utilisateurConnecteRole)) {
             return "redirect:/accueil_admin";
         } else {
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-            String username;
-            if (principal instanceof UserDetails) {
-                username = ((UserDetails) principal).getUsername();
-            } else {
-                username = principal.toString();
-            }
-
-            // Utilisez le nom d'utilisateur pour obtenir l'ID de l'utilisateur à partir de
-            // votre service d'utilisateur
-            long userId = userServ.findUserByLogin(username).getId();
+            
 
             return "redirect:/select_fiche";
         }
@@ -736,7 +711,7 @@ public class HomeController {
     @GetMapping("/accueil")
     public String redirectToAccueil(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
-        model.addAttribute("utilisateurs", utilisateurs);
+        model.addAttribute(UTILISATEURS, utilisateurs);
         return "accueil";
     }
 
@@ -744,9 +719,9 @@ public class HomeController {
     public String admin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
 
-        if ("ROLE_SUPERADMIN".equals(role)) {
-            return "redirect:/accueil_superadmin";
-        } else if ("ROLE_ADMIN".equals(role) || "ROLE_CIP".equals(role) || "ROLE_EDUCSIMPLE".equals(role)) {
+        if (ROLE_SUPERADMIN.equals(role)) {
+            return REDIRECT_ACCUEIL_SUPERADMIN;
+        } else if (ROLE_ADMIN.equals(role) || ROLE_CIP.equals(role) || ROLE_EDUCSIMPLE.equals(role)) {
             // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle "ADMIN"
             // On récupere les utilisateurs qui sont dans les memes formations que nous
             List<Formation> formations = userServ.findUserByLogin(userDetails.getUsername()).getFormations();
@@ -758,10 +733,10 @@ public class HomeController {
                     }
                 }
             }
-            model.addAttribute("utilisateurs", utilisateurs);
+            model.addAttribute(UTILISATEURS, utilisateurs);
             return "/accueil_admin";
         } else {
-            return "redirect:/accueil";
+            return REDIRECT_ACCUEIL;
         }
     }
 
@@ -772,21 +747,21 @@ public class HomeController {
                 .map(GrantedAuthority::getAuthority)
                 .orElse("");
 
-        if ("ROLE_SUPERADMIN".equals(role)) {
+        if (ROLE_SUPERADMIN.equals(role)) {
             // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle
             // "SUPERADMIN"
             List<Utilisateur> utilisateurs = userServ.getAllUtilisateurs();
-            model.addAttribute("utilisateurs", utilisateurs);
+            model.addAttribute(UTILISATEURS, utilisateurs);
             return "/accueil_superadmin";
         } else {
-            return "redirect:/accueil";
+            return REDIRECT_ACCUEIL;
         }
     }
 
     @GetMapping("/ancienaccueil")
     public String redirectToAncienAccueil(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
-        model.addAttribute("utilisateurs", utilisateurs);
+        model.addAttribute(UTILISATEURS, utilisateurs);
         return "ancienaccueil";
     }
 
@@ -795,9 +770,9 @@ public class HomeController {
             @AuthenticationPrincipal UserDetails userDetails) {
         String role = userDetails.getAuthorities().iterator().next().getAuthority();
         // Placer le rôle dans le modèle
-        model.addAttribute("utilisateurConnecteRole", role);
+        model.addAttribute(UTILISATEUR_CONNECTE_ROLE, role);
         Utilisateur utilisateur = userServ.findById(id);
-        model.addAttribute("utilisateur", utilisateur);
+        model.addAttribute(UTILISATEUR, utilisateur);
         return "profil_apprenti";
     }
 
@@ -811,21 +786,21 @@ public class HomeController {
         Utilisateur utilisateur;
 
         // Vérifiez le rôle de l'utilisateur
-        if ("ROLE_ADMIN".equals(role) || "ROLE_SUPERADMIN".equals(role) || "ROLE_CIP".equals(role)
-                || "ROLE_EDUCSIMPLE".equals(role)) {
+        if (ROLE_ADMIN.equals(role) || ROLE_SUPERADMIN.equals(role) || ROLE_CIP.equals(role)
+                || ROLE_EDUCSIMPLE.equals(role)) {
             // Si l'utilisateur a le rôle d'admin, récupérez les informations de
             // l'utilisateur connecté
             String login = userDetails.getUsername();
             utilisateur = userServ.findUserByLogin(login);
 
             // Ajoutez l'utilisateur à votre modèle
-            model.addAttribute("utilisateur", utilisateur);
+            model.addAttribute(UTILISATEUR, utilisateur);
 
             // Redirigez vers la page de profil_admin
             return "profil_admin";
         } else {
             // Si l'utilisateur n'a pas le rôle d'admin, redirigez-le vers la page d'accueil
-            return "redirect:/accueil";
+            return REDIRECT_ACCUEIL;
         }
     }
 
@@ -835,7 +810,7 @@ public class HomeController {
         // Vérifiez si l'utilisateur connecté a le rôle de superadmin
         if (isUserSuperAdmin(userDetails)) {
             Utilisateur utilisateur = userServ.findById(id);
-            model.addAttribute("utilisateur", utilisateur);
+            model.addAttribute(UTILISATEUR, utilisateur);
 
             // Récupérez les rôles définis dans l'enum UserRole
             UserRole[] roles = UserRole.values();
@@ -851,12 +826,11 @@ public class HomeController {
             }
         } else {
             // Si l'utilisateur connecté n'est pas superadmin -> accueil
-            return "redirect:/accueil";
+            return REDIRECT_ACCUEIL;
         }
     }
 
-    @Autowired
-    private FormationService formationService;
+    
 
     @GetMapping("/modif_admin/{id}")
     public String modifadmin(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
@@ -868,7 +842,7 @@ public class HomeController {
         // Vérifiez si l'utilisateur connecté a le rôle de superadmin
         if (isUserSuperAdmin(userDetails)) {
             Utilisateur utilisateur = userServ.findById(id);
-            model.addAttribute("utilisateur", utilisateur);
+            model.addAttribute(UTILISATEUR, utilisateur);
 
             // Votre logique spécifique pour la page modif_admin
             if (utilisateur.getRole() == UserRole.USER) {
@@ -881,19 +855,19 @@ public class HomeController {
         } else {
             // Si l'utilisateur connecté n'est pas superadmin, redirigez-le vers la page
             // d'accueil
-            return "redirect:/accueil";
+            return REDIRECT_ACCUEIL;
         }
     }
 
     private boolean isUserSuperAdmin(UserDetails userDetails) {
         return userDetails.getAuthorities().stream()
-                .anyMatch(role -> role.getAuthority().equals("ROLE_SUPERADMIN"));
+                .anyMatch(role -> role.getAuthority().equals(ROLE_SUPERADMIN));
     }
 
     @GetMapping("/mdpmodif/{id}")
     public String mdpmodif(@PathVariable Long id, Model model) {
         Utilisateur utilisateur = userServ.findById(id);
-        model.addAttribute("utilisateur", utilisateur);
+        model.addAttribute(UTILISATEUR, utilisateur);
         return "mdpmodif";
     }
 
@@ -905,15 +879,15 @@ public class HomeController {
     }
 
     @GetMapping("/select_fiche")
-    public String select_fiche(Model model) {
+    public String selectFiche(Model model) {
         // List<FicheIntervention> fiches = ficheServ.lireTout(); // Ajout de la liste
         // des fiches
 
         List<FicheIntervention> fiches = ficheServ.getFichesByUserId(getCurrentUserId());
         Utilisateur userrr = userServ.findById(getCurrentUserId());
         model.addAttribute("userrr", userrr);
-        model.addAttribute("fiche", new FicheIntervention());
-        model.addAttribute("fiches", fiches);
+        model.addAttribute(FICHE, new FicheIntervention());
+        model.addAttribute(FICHES, fiches);
         return "select_fiche";
     }
 
@@ -930,11 +904,11 @@ public class HomeController {
             Utilisateur utilisateur = userServ.findById(userId);
             List<FicheIntervention> fiches = ficheServ.getFichesByUserId(userId);
 
-            model.addAttribute("utilisateur", utilisateur);
-            model.addAttribute("fiches", fiches);
+            model.addAttribute(UTILISATEUR, utilisateur);
+            model.addAttribute(FICHES, fiches);
             return "suivi_progression";
         } else {
-            return "redirect:/accueil";
+            return REDIRECT_ACCUEIL;
         }
     }
 
@@ -943,8 +917,8 @@ public class HomeController {
         Utilisateur utilisateur = userServ.findById(getCurrentUserId());
         List<FicheIntervention> fiches = ficheServ.getFichesByUserId(getCurrentUserId());
 
-        model.addAttribute("utilisateur", utilisateur);
-        model.addAttribute("fiches", fiches);
+        model.addAttribute(UTILISATEUR, utilisateur);
+        model.addAttribute(FICHES, fiches);
         return "suivi_progression";
     }
 
@@ -954,16 +928,16 @@ public class HomeController {
     }
 
     @GetMapping("/record/{ficheId}")
-    public String record(@PathVariable Long ficheId, Model model) {
+    public String recordFiche(@PathVariable Long ficheId, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(ficheId);
-        model.addAttribute("ficheIntervention", ficheIntervention);
+        model.addAttribute(FICHE_INTERVENTION, ficheIntervention);
         return "record";
     }
 
     @GetMapping("/recordaffichage/{ficheId}")
     public String recordaffichage(@PathVariable Long ficheId, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(ficheId);
-        model.addAttribute("ficheIntervention", ficheIntervention);
+        model.addAttribute(FICHE_INTERVENTION, ficheIntervention);
         return "recordaffichage";
     }
 
@@ -996,9 +970,9 @@ public class HomeController {
         Utilisateur user = userServ.findById(id);
         List<FicheIntervention> fiches = ficheServ.getFichesByUserId(id);
         model.addAttribute("user", user);
-        model.addAttribute("fiche", new FicheIntervention());
-        model.addAttribute("fiches", fiches); // Ajout de la liste des fiches
-        model.addAttribute("utilisateurConnecteRole", utilisateurConnecteRole);
+        model.addAttribute(FICHE, new FicheIntervention());
+        model.addAttribute(FICHES, fiches); // Ajout de la liste des fiches
+        model.addAttribute(UTILISATEUR_CONNECTE_ROLE, utilisateurConnecteRole);
         return "liste_fiche";
     }
 
@@ -1007,19 +981,19 @@ public class HomeController {
 
         String utilisateurConnecteRole = determineUserRole();
 
-        if ("ROLE_SUPERADMIN".equals(utilisateurConnecteRole)) {
-            return "redirect:/accueil_superadmin";
-        } else if ("ROLE_ADMIN".equals(utilisateurConnecteRole) || "ROLE_CIP".equals(utilisateurConnecteRole)
-                || "ROLE_EDUCSIMPLE".equals(utilisateurConnecteRole)) {
+        if (ROLE_SUPERADMIN.equals(utilisateurConnecteRole)) {
+            return REDIRECT_ACCUEIL_SUPERADMIN;
+        } else if (ROLE_ADMIN.equals(utilisateurConnecteRole) || ROLE_CIP.equals(utilisateurConnecteRole)
+                || ROLE_EDUCSIMPLE.equals(utilisateurConnecteRole)) {
             List<Utilisateur> users = userServ.lire();
             List<FicheIntervention> fiches = ficheServ.lireTout(); // Ajout de la liste des fiches
-            model.addAttribute("fiche", new FicheIntervention());
+            model.addAttribute(FICHE, new FicheIntervention());
             model.addAttribute("users", users);
-            model.addAttribute("fiches", fiches); // Ajout de la liste des fiches
-            model.addAttribute("utilisateurConnecteRole", utilisateurConnecteRole);
+            model.addAttribute(FICHES, fiches); // Ajout de la liste des fiches
+            model.addAttribute(UTILISATEUR_CONNECTE_ROLE, utilisateurConnecteRole);
             return "liste_fiche";
         } else {
-            return "redirect:/accueil";
+            return REDIRECT_ACCUEIL;
         }
 
     }
