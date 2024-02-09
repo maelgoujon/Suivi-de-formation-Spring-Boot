@@ -734,7 +734,7 @@ public class HomeController {
                 }
             }
             model.addAttribute(UTILISATEURS, utilisateurs);
-            return "/accueil_admin";
+            return "accueil_admin";
         } else {
             return REDIRECT_ACCUEIL;
         }
