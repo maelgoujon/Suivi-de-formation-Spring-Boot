@@ -822,13 +822,8 @@ public class HomeController {
             List<Formation> allFormations = formationService.lire();
             model.addAttribute("allFormations", allFormations);
             // Vérifiez si le rôle du compte sélectionné est USER
-            if (utilisateur.getRole() == UserRole.USER) {
-                return "/modif";
-            } else {
-                // Si le rôle du compte sélectionné n'est pas USER, redirigez-le vers
-                // modif_admin
-                return "redirect:/modif_admin/" + id;
-            }
+            
+            return "/modif";
         } else {
             // Si l'utilisateur connecté n'est pas superadmin, redirigez-le vers la page
             // d'accueil
@@ -839,32 +834,7 @@ public class HomeController {
     @Autowired
     private FormationService formationService;
 
-    @GetMapping("/modif_admin/{id}")
-    public String modifadmin(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        // Récupérez les rôles définis dans l'enum UserRole
-        UserRole[] roles = UserRole.values();
-        model.addAttribute("roles", roles);
-        List<Formation> allFormations = formationService.lire();
-        model.addAttribute("allFormations", allFormations);
-        // Vérifiez si l'utilisateur connecté a le rôle de superadmin
-        if (isUserSuperAdmin(userDetails)) {
-            Utilisateur utilisateur = userServ.findById(id);
-            model.addAttribute("utilisateur", utilisateur);
-
-            // Votre logique spécifique pour la page modif_admin
-            if (utilisateur.getRole() == UserRole.USER) {
-                // Si le rôle de l'utilisateur est USER, redirigez vers la page modif
-                return "redirect:/modif/" + id;
-            } else {
-                // Sinon, affichez la page modif_admin
-                return "/modif_admin";
-            }
-        } else {
-            // Si l'utilisateur connecté n'est pas superadmin, redirigez-le vers la page
-            // d'accueil
-            return "redirect:/accueil";
-        }
-    }
+   
 
     private boolean isUserSuperAdmin(UserDetails userDetails) {
         return userDetails.getAuthorities().stream()
