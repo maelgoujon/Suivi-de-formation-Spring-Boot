@@ -101,7 +101,7 @@ public class ImagesTitresController {
 
     private String saveImageLocally(MultipartFile imageFile, String fileName,
             ImagesTitres.TypeImage typeImage) throws IOException {
-        String localPath = "src/main/resources/static/images/" + typeImage.name().toLowerCase() + "/";
+        String localPath = "images/" + typeImage.name().toLowerCase() + "/";
 
         Path uploadPath = Paths.get(localPath);
         if (!Files.exists(uploadPath)) {

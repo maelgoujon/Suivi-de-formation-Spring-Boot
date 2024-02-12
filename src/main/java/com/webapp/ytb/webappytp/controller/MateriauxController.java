@@ -97,7 +97,7 @@ public class MateriauxController {
     private String saveImageLocally(MultipartFile imageFile, String fileName,
             Intervention.TypeIntervention typeIntervention) throws IOException {
         // Obtenez le dossier de destination en fonction du type d'intervention
-        String localPath = "src/main/resources/static/images/" + typeIntervention.name().toLowerCase() + "/";
+        String localPath = "images/" + typeIntervention.name().toLowerCase() + "/";
 
         // Assurez-vous que le dossier de destination existe
         Path uploadPath = Paths.get(localPath);
@@ -218,7 +218,7 @@ public class MateriauxController {
 
     private void deleteImageLocally(String imageUrl) throws IOException {
         // Obtenez le chemin du fichier à partir de l'URL de l'image
-        Path imagePath = Paths.get("src/main/resources/static/" + imageUrl);
+        Path imagePath = Paths.get(imageUrl);
 
         // Supprimez le fichier image du système de fichiers
         Files.deleteIfExists(imagePath);

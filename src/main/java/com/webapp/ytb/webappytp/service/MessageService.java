@@ -71,7 +71,7 @@ public class MessageService {
 
     private String saveImageLocally(MultipartFile imageFile, String fileName) throws IOException {
         // Obtenez le dossier de destination en fonction du type d'intervention
-        String localPath = "src/main/resources/static/images/messages/";
+        String localPath = "images/messages/";
 
         // Assurez-vous que le dossier de destination existe
         Path uploadPath = Paths.get(localPath);
