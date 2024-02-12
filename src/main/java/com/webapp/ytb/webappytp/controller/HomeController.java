@@ -785,29 +785,7 @@ public class HomeController {
         return "profil_apprenti";
     }
 
-    @GetMapping("/profil_admin")
-    public String redirectToprofiladmin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
-        Utilisateur utilisateur;
-
-        // Vérifiez le rôle de l'utilisateur
-        if ("ROLE_ADMIN".equals(role) || "ROLE_SUPERADMIN".equals(role) || "ROLE_CIP".equals(role)
-                || "ROLE_EDUCSIMPLE".equals(role)) {
-            // Si l'utilisateur a le rôle d'admin, récupérez les informations de
-            // l'utilisateur connecté
-            String login = userDetails.getUsername();
-            utilisateur = userServ.findUserByLogin(login);
-
-            // Ajoutez l'utilisateur à votre modèle
-            model.addAttribute("utilisateur", utilisateur);
-
-            // Redirigez vers la page de profil_admin
-            return "profil_admin";
-        } else {
-            // Si l'utilisateur n'a pas le rôle d'admin, redirigez-le vers la page d'accueil
-            return "redirect:/accueil";
-        }
-    }
+    
 
     @GetMapping("/modif/{id}")
     public String modif(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
