@@ -159,7 +159,7 @@ public class Demarrage implements ApplicationRunner {
     private void createMateriauxFinition() {
         String[] finitionImages = {
                 "materiaufinition1", "materiaufinition2", "materiaufinition3",
-                "materiaufinition4", "materiaufinition5", "materiaufinition6"
+                "materiaufinition4", "materiaufinition6"
         };
 
         for (String imageName : finitionImages) {
@@ -173,12 +173,21 @@ public class Demarrage implements ApplicationRunner {
                 materiauxRepository.save(materiaux);
             }
         }
+        // Création de "matériauxFinition5"
+        Materiaux materiaux = materiauxRepository.findByNomImage("FINITION_materiaufinition5");
+        if (materiaux == null) {
+            materiaux = new Materiaux();
+            materiaux.setNomImage("FINITION_materiaufinition5");
+            materiaux.setImageUrl(URL_IMAGES_MATERIAUX + "materiaufinition5.png");
+            materiaux.setType("FINITION");
+            materiauxRepository.save(materiaux);
+        }
     }
 
     // Création des matériaux PLOMBERIE
     private void createMateriauxPlomberie() {
         String[] plomberieImages = {
-                "ventouse", "chalumeau", "boitejoints", "furet", "molettevirax", "teflon"
+                "ventouse", "boitejoints", "furet", "teflon"
         };
 
         for (String imageName : plomberieImages) {
@@ -191,6 +200,25 @@ public class Demarrage implements ApplicationRunner {
                 materiaux.setType("PLOMBERIE");
                 materiauxRepository.save(materiaux);
             }
+        }
+        // Créer "molettevirax"
+        Materiaux materiaux = materiauxRepository.findByNomImage("PLOMBERIE_molettevirax");
+        if (materiaux == null) {
+            materiaux = new Materiaux();
+            materiaux.setNomImage("PLOMBERIE_molettevirax");
+            materiaux.setImageUrl(URL_IMAGES_MATERIAUX + "molettevirax.jpg");
+            materiaux.setType("PLOMBERIE");
+            materiauxRepository.save(materiaux);
+        }
+
+        //Créer "Chalumeau"
+        materiaux = materiauxRepository.findByNomImage("PLOMBERIE_Chalumeau");
+        if (materiaux == null) {
+            materiaux = new Materiaux();
+            materiaux.setNomImage("PLOMBERIE_Chalumeau");
+            materiaux.setImageUrl(URL_IMAGES_MATERIAUX + "chalumeau.jpg");
+            materiaux.setType("PLOMBERIE");
+            materiauxRepository.save(materiaux);
         }
     }
 
