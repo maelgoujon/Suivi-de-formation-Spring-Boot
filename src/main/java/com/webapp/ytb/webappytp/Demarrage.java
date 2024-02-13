@@ -53,7 +53,7 @@ public class Demarrage implements ApplicationRunner {
     private static final String VIOLET = "#FF00FF";
     private static final String CYAN = "#00FFFF";
     private static final String ICONE_ACCUEIL = "/images/accueil.png";
-    private static final String ICONE_ELEVE = "images/eleve.png";
+    private static final String ICONE_ELEVE = "/images/eleve.png";
 
 
     @Autowired
@@ -501,9 +501,9 @@ public class Demarrage implements ApplicationRunner {
             intervenant.setCouleurTitreIntervenant(VIOLET);
             intervenant.setCouleurNom("#F00");
             intervenant.setCouleurPrenom(CYAN);
-            intervenant.setImageTitreIntervenantUrl(ICONE_ACCUEIL);
+            intervenant.setImageTitreIntervenantUrl(ICONE_ELEVE);
             intervenant.setImageTitreIntervenantNomUrl(ICONE_ACCUEIL);
-            intervenant.setImageTitreIntervenantPrenomUrl(ICONE_ACCUEIL);
+            intervenant.setImageTitreIntervenantPrenomUrl(ICONE_ELEVE);
 
             // Définir les attributs de l'intervention
             intervention.setNiveauTitreIntervention(1);
@@ -516,7 +516,7 @@ public class Demarrage implements ApplicationRunner {
             intervention.setCouleurTypeIntervention("#F00");
             intervention.setImageTitreInterventionUrl(ICONE_ACCUEIL);
             intervention.setImageDureeInterventionUrl(ICONE_ACCUEIL);
-            intervention.setImageTypeInterventionUrl(ICONE_ACCUEIL);
+            intervention.setImageTypeInterventionUrl(ICONE_ELEVE);
             intervention.setImageDateInterventionUrl(ICONE_ACCUEIL);
             intervention.setTypeIntervention(Intervention.TypeIntervention.AMENAGEMENT.toString());
             // Définir les attributs de la maintenance

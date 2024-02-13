@@ -259,6 +259,12 @@ public class HomeController {
         List<ImagesTitres> imagesTitreMaintenanceType = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.MAINTENANCE_TYPE);
 
+        // types d'intervention ElementsFiche.Intervention.TypeIntervention).values();
+        model.addAttribute("typeInterventionList", Intervention.TypeIntervention.values());
+
+        //types de maintenance Maintenance.MaintenanceType.values();
+        model.addAttribute("maintenanceList", Maintenance.MaintenanceType.values());
+
         model.addAttribute("imagesTitreIntervenant", imagesTitreIntervenant);
         model.addAttribute("imagesTitreDemande", imagesTitreDemande);
         model.addAttribute("imagesTitreIntervention", imagesTitreIntervention);

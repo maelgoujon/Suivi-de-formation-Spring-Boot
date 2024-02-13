@@ -939,7 +939,7 @@
                     </div>
 
                     <div id="disabledTypeIntervention"
-                        th:each="nature : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention.TypeIntervention).values()}">
+                        th:each="nature : ${typeInterventionList}">
                         <div class="media form-check">
                             <input class="form-check-input" type="radio" name="intervention" th:value="${nature.name()}"
                                 th:id="${'radio-' + nature}" th:field="*{intervention.TypeIntervention}" />
@@ -1013,7 +1013,7 @@
 
 
                     <div id="newMaintenanceType"
-                        th:each="type : ${T(com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance.MaintenanceType).values()}">
+                        th:each="type : ${maintenanceList}">
                         <div class="media form-check">
                             <input class="form-check-input" type="radio" name="maintenanceType" th:value="${type}"
                                 th:id="${'radio-' + type.name()}" th:field="*{maintenance.maintenanceType}" />
