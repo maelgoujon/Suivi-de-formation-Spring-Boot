@@ -52,8 +52,8 @@ public class Demarrage implements ApplicationRunner {
     private static final String MICHEL = "Michel";
     private static final String VIOLET = "#FF00FF";
     private static final String CYAN = "#00FFFF";
-    private static final String ICONE_ACCUEIL = "/images/accueil.png";
-    private static final String ICONE_ELEVE = "/images/eleve.png";
+    private static final String ICONE_ACCUEIL = "images/accueil.png";
+    private static final String ICONE_ELEVE = "images/eleve.png";
 
 
     @Autowired

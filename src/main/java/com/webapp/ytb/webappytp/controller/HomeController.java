@@ -59,6 +59,7 @@ import jakarta.validation.Valid;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import com.webapp.ytb.webappytp.service.FormationService;
+import com.webapp.ytb.webappytp.service.ImagesTitresServiceImpl;
 import com.webapp.ytb.webappytp.service.MessageService;
 
 @Controller
@@ -72,26 +73,27 @@ public class HomeController {
     ImagesTitresRepository imagesTitresRepository;
     FicheRepository ficheRepository;
     UtilisateurRepository utilisateurRepository;
+    ImagesTitresServiceImpl imagesTitresServiceImpl;
     private final FormationService formationService;
     private static final String MESSAGE = "message";
     private static final String FICHE = "fiche";
     private static final String FICHE_INTERVENTION = "ficheIntervention";
-    private static final String UTILISATEURS =  "utilisateurs";
+    private static final String UTILISATEURS = "utilisateurs";
     private static final String ROLE_SUPERADMIN = "ROLE_SUPERADMIN";
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
     private static final String ROLE_CIP = "ROLE_CIP";
     private static final String ROLE_EDUCSIMPLE = "ROLE_EDUCSIMPLE";
     private static final String REDIRECT_ACCUEIL_SUPERADMIN = "redirect:/accueil_superadmin";
     private static final String REDIRECT_ACCUEIL = "redirect:/accueil";
-    private static final String UTILISATEUR_CONNECTE_ROLE  = "utilisateurConnecteRole";
+    private static final String UTILISATEUR_CONNECTE_ROLE = "utilisateurConnecteRole";
     private static final String UTILISATEUR = "utilisateur";
     private static final String FICHES = "fiches";
-
 
     public HomeController(UtilisateurServiceImpl userServ, FicheServiceImpl ficheServ,
             MateriauxAmenagementRepository materiauxAmenagementRepository,
             ImagesTitresRepository imagesTitresRepository, FicheRepository ficheRepository,
-            UtilisateurRepository utilisateurRepository,  FormationService formationService) {
+            UtilisateurRepository utilisateurRepository, FormationService formationService,
+            ImagesTitresServiceImpl imagesTitresServiceImpl) {
         this.userServ = userServ;
         this.ficheServ = ficheServ;
         this.materiauxAmenagementRepository = materiauxAmenagementRepository;
@@ -99,6 +101,7 @@ public class HomeController {
         this.ficheRepository = ficheRepository;
         this.utilisateurRepository = utilisateurRepository;
         this.formationService = formationService;
+        this.imagesTitresServiceImpl = imagesTitresServiceImpl;
     }
 
     public Long getCurrentUserId() {
@@ -225,44 +228,226 @@ public class HomeController {
     public String ajoutficheId(Model model, @PathVariable Long id) {
         FicheIntervention ficheExistante = ficheServ.lire(id);
         FicheIntervention fiche = new FicheIntervention();
+
+        if (ficheExistante.getIntervenant().getImageTitreIntervenantUrl() == null) {
+            System.out.println("getImageTitreIntervenantUrl est null");
+        }
+
+        // on récupère les images pour les niveaux et on mets en premiere position celle
+        // qui est déjà utilisée
+
+        // ImagesTitres Intervenant
         List<ImagesTitres> imagesTitreIntervenant = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT);
-        List<ImagesTitres> imagesTitreDemande = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.DEMANDE);
-        List<ImagesTitres> imagesTitreIntervention = imagesTitresRepository
-                .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION);
-        List<ImagesTitres> imagesTitreTravauxRealises = imagesTitresRepository
-                .findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_REALISES);
-        List<ImagesTitres> imagesTitreTravauxNonRealises = imagesTitresRepository
-                .findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_NON_REALISES);
-        List<ImagesTitres> imagesTitreMateriauxUtilises = imagesTitresRepository
-                .findByTypeImage(ImagesTitres.TypeImage.MATERIAUX_UTILISES);
+        // on récupere l'image utilisée
+        String stringImageTitreIntervenant = ficheExistante.getIntervenant().getImageTitreIntervenantUrl();
+        ImagesTitres imageTitreIntervenant = imagesTitresServiceImpl.findByImageUrl(stringImageTitreIntervenant);
+        // on la met en premiere position
+        if (imageTitreIntervenant != null) {
+            imagesTitreIntervenant.remove(imageTitreIntervenant);
+            imagesTitreIntervenant.add(0, imageTitreIntervenant);
+        }
+        // ImagesTitres Intervenant Prenom
         List<ImagesTitres> imagesTitreIntervenantPrenom = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT_PRENOM);
+        // on récupere l'image utilisée
+        String stringImageTitreIntervenantPrenom = ficheExistante.getIntervenant().getImageTitreIntervenantPrenomUrl();
+        ImagesTitres imageTitreIntervenantPrenom = imagesTitresServiceImpl
+                .findByImageUrl(stringImageTitreIntervenantPrenom);
+        // on la met en premiere position
+        if (imageTitreIntervenantPrenom != null) {
+            imagesTitreIntervenantPrenom.remove(imageTitreIntervenantPrenom);
+            imagesTitreIntervenantPrenom.add(0, imageTitreIntervenantPrenom);
+        }
+        // ImagesTitres Intervenant Nom
         List<ImagesTitres> imagesTitreIntervenantNom = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT_NOM);
+        // on récupere l'image utilisée
+        String stringImageTitreIntervenantNom = ficheExistante.getIntervenant().getImageTitreIntervenantNomUrl();
+        ImagesTitres imageTitreIntervenantNom = imagesTitresServiceImpl.findByImageUrl(stringImageTitreIntervenantNom);
+        // on la met en premiere position
+        if (imageTitreIntervenantNom != null) {
+            imagesTitreIntervenantNom.remove(imageTitreIntervenantNom);
+            imagesTitreIntervenantNom.add(0, imageTitreIntervenantNom);
+        }
+
+        // ImagesTitres Demande
+        List<ImagesTitres> imagesTitreDemande = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.DEMANDE);
+        // on récupere l'image utilisée
+        String stringImagesTitreDemande = ficheExistante.getDemande().getImageTitreDemandeUrl();
+        ImagesTitres imageTitreDemande = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreDemande);
+        // on la met en premiere position
+        if (imageTitreDemande != null) {
+            imagesTitreDemande.remove(imageTitreDemande);
+            imagesTitreDemande.add(0, imageTitreDemande);
+        }
+
+        // ImagesTitres Demande Nom
         List<ImagesTitres> imagesTitreDemandeNom = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_NOM);
+        // on récupere l'image utilisée
+        String stringImagesTitreDemandeNom = ficheExistante.getDemande().getImageTitreDemandeNomUrl();
+        ImagesTitres imageTitreDemandeNom = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreDemandeNom);
+        // on la met en premiere position
+        if (imageTitreDemandeNom != null) {
+            imagesTitreDemandeNom.remove(imageTitreDemandeNom);
+            imagesTitreDemandeNom.add(0, imageTitreDemandeNom);
+        }
+
+        // ImagesTitres Demande DegreUrgence
         List<ImagesTitres> imagesTitreDemandeDegreUrgence = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_DEGRE_URGENCE);
+        // on récupere l'image utilisée
+        String stringImagesTitreDemandeDegreUrgence = ficheExistante.getDemande().getImageTitreDemandeDegreUrgenceUrl();
+        ImagesTitres imageTitreDemandeDegreUrgence = imagesTitresServiceImpl
+                .findByImageUrl(stringImagesTitreDemandeDegreUrgence);
+        // on la met en premiere position
+        if (imageTitreDemandeDegreUrgence != null) {
+            imagesTitreDemandeDegreUrgence.remove(imageTitreDemandeDegreUrgence);
+            imagesTitreDemandeDegreUrgence.add(0, imageTitreDemandeDegreUrgence);
+        }
+
+        // ImagesTitres Demande Date
         List<ImagesTitres> imagesTitreDemandeDate = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_DATE);
+        // on récupere l'image utilisée
+        String stringImagesTitreDemandeDate = ficheExistante.getDemande().getImageTitreDemandeDateUrl();
+        ImagesTitres imageTitreDemandeDate = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreDemandeDate);
+        // on la met en premiere position
+        if (imageTitreDemandeDate != null) {
+            imagesTitreDemandeDate.remove(imageTitreDemandeDate);
+            imagesTitreDemandeDate.add(0, imageTitreDemandeDate);
+        }
+
+        // ImagesTitres Demande Localisation
         List<ImagesTitres> imagesTitreDemandeLocalisation = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_LOCALISATION);
+        // on récupere l'image utilisée
+        String stringImagesTitreDemandeLocalisation = ficheExistante.getDemande().getImageTitreDemandeLocalisationUrl();
+        ImagesTitres imageTitreDemandeLocalisation = imagesTitresServiceImpl
+                .findByImageUrl(stringImagesTitreDemandeLocalisation);
+        // on la met en premiere position
+        if (imageTitreDemandeLocalisation != null) {
+            imagesTitreDemandeLocalisation.remove(imageTitreDemandeLocalisation);
+            imagesTitreDemandeLocalisation.add(0, imageTitreDemandeLocalisation);
+        }
+
+        // ImagesTitres Demande Description
         List<ImagesTitres> imagesTitreDemandeDescription = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_DESCRIPTION);
+        // on récupere l'image utilisée
+        String stringImagesTitreDemandeDescription = ficheExistante.getDemande().getImageTitreDemandeDescriptionUrl();
+        ImagesTitres imageTitreDemandeDescription = imagesTitresServiceImpl
+                .findByImageUrl(stringImagesTitreDemandeDescription);
+        // on la met en premiere position
+        if (imageTitreDemandeDescription != null) {
+            imagesTitreDemandeDescription.remove(imageTitreDemandeDescription);
+            imagesTitreDemandeDescription.add(0, imageTitreDemandeDescription);
+        }
+
+        // ImagesTitres Intervention
+        List<ImagesTitres> imagesTitreIntervention = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION);
+        // on récupere l'image utilisée
+        String stringImagesTitreIntervention = ficheExistante.getIntervention().getImageTitreInterventionUrl();
+        ImagesTitres imageTitreIntervention = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreIntervention);
+        // on la met en premiere position
+        if (imageTitreIntervention != null) {
+            imagesTitreIntervention.remove(imageTitreIntervention);
+            imagesTitreIntervention.add(0, imageTitreIntervention);
+        }
+
+        // ImagesTitres Intervention Date
         List<ImagesTitres> imagesTitreInterventionDate = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION_DATE);
+        // on récupere l'image utilisée
+        String stringImagesTitreInterventionDate = ficheExistante.getIntervention().getImageDateInterventionUrl();
+        ImagesTitres imageTitreInterventionDate = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreInterventionDate);
+        // on la met en premiere position
+        if (imageTitreInterventionDate != null) {
+            imagesTitreInterventionDate.remove(imageTitreInterventionDate);
+            imagesTitreInterventionDate.add(0, imageTitreInterventionDate);
+        }
+
+        // ImagesTitres Intervention Duree
         List<ImagesTitres> imagesTitreInterventionDuree = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION_DUREE);
+        // on récupere l'image utilisée
+        String stringImagesTitreInterventionDuree = ficheExistante.getIntervention().getImageDureeInterventionUrl();
+        ImagesTitres imageTitreInterventionDuree = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreInterventionDuree);
+        // on la met en premiere position
+        if (imageTitreInterventionDuree != null) {
+            imagesTitreInterventionDuree.remove(imageTitreInterventionDuree);
+            imagesTitreInterventionDuree.add(0, imageTitreInterventionDuree);
+        }
+
+        // ImagesTitres Intervention Type
         List<ImagesTitres> imagesTitreInterventionType = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION_TYPE);
+        // on récupere l'image utilisée
+        String stringImagesTitreInterventionType = ficheExistante.getIntervention().getImageTypeInterventionUrl();
+        ImagesTitres imageTitreInterventionType = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreInterventionType);
+        // on la met en premiere position
+        if (imageTitreInterventionType != null) {
+            imagesTitreInterventionType.remove(imageTitreInterventionType);
+            imagesTitreInterventionType.add(0, imageTitreInterventionType);
+        }
+
+        // ImagesTitres Maintenance Type
         List<ImagesTitres> imagesTitreMaintenanceType = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.MAINTENANCE_TYPE);
+        // on récupere l'image utilisée
+        String stringImagesTitreMaintenanceType = ficheExistante.getMaintenance().getImageTypeMaintenanceUrl();
+        ImagesTitres imageTitreMaintenanceType = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreMaintenanceType);
+        // on la met en premiere position
+        if (imageTitreMaintenanceType != null) {
+            imagesTitreMaintenanceType.remove(imageTitreMaintenanceType);
+            imagesTitreMaintenanceType.add(0, imageTitreMaintenanceType);
+        }
+
+        // ImagesTitres Travaux Réalisés
+        List<ImagesTitres> imagesTitreTravauxRealises = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_REALISES);
+        // on récupere l'image utilisée
+        String stringImagesTitreTravauxRealises = ficheExistante.getImageTitreTravauxRealisesUrl();
+        ImagesTitres imageTitreTravauxRealises = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreTravauxRealises);
+        // on la met en premiere position
+        if (imageTitreTravauxRealises != null) {
+            imagesTitreTravauxRealises.remove(imageTitreTravauxRealises);
+            imagesTitreTravauxRealises.add(0, imageTitreTravauxRealises);
+        }
+
+        // ImagesTitres Travaux Non Réalisés
+        List<ImagesTitres> imagesTitreTravauxNonRealises = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_NON_REALISES);
+        // on récupere l'image utilisée
+        String stringImagesTitreTravauxNonRealises = ficheExistante.getImageTitreTravauxNonRealisesUrl();
+        ImagesTitres imageTitreTravauxNonRealises = imagesTitresServiceImpl
+                .findByImageUrl(stringImagesTitreTravauxNonRealises);
+        // on la met en premiere position
+        if (imageTitreTravauxNonRealises != null) {
+            imagesTitreTravauxNonRealises.remove(imageTitreTravauxNonRealises);
+            imagesTitreTravauxNonRealises.add(0, imageTitreTravauxNonRealises);
+        }
+
+        // ImagesTitres Materiaux Utilisés
+        List<ImagesTitres> imagesTitreMateriauxUtilises = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.MATERIAUX_UTILISES);
+        // on récupere l'image utilisée
+        String stringImagesTitreMateriauxUtilises = ficheExistante.getImageTitreMateriauxUtilisesUrl();
+        ImagesTitres imageTitreMateriauxUtilises = imagesTitresServiceImpl
+                .findByImageUrl(stringImagesTitreMateriauxUtilises);
+        // on la met en premiere position
+        if (imageTitreMateriauxUtilises != null) {
+            imagesTitreMateriauxUtilises.remove(imageTitreMateriauxUtilises);
+            imagesTitreMateriauxUtilises.add(0, imageTitreMateriauxUtilises);
+        }
+        
 
         // types d'intervention ElementsFiche.Intervention.TypeIntervention).values();
         model.addAttribute("typeInterventionList", Intervention.TypeIntervention.values());
 
-        //types de maintenance Maintenance.MaintenanceType.values();
+        // types de maintenance Maintenance.MaintenanceType.values();
         model.addAttribute("maintenanceList", Maintenance.MaintenanceType.values());
 
         model.addAttribute("imagesTitreIntervenant", imagesTitreIntervenant);
@@ -701,7 +886,6 @@ public class HomeController {
                 || ROLE_EDUCSIMPLE.equals(utilisateurConnecteRole)) {
             return "redirect:/accueil_admin";
         } else {
-            
 
             return "redirect:/select_fiche";
         }
@@ -835,8 +1019,6 @@ public class HomeController {
             return REDIRECT_ACCUEIL;
         }
     }
-
-    
 
     @GetMapping("/modif_admin/{id}")
     public String modifadmin(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
