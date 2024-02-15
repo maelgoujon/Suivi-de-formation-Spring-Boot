@@ -148,7 +148,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.Intervenant.couleurTitreIntervenant}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Intervenant.couleurTitreIntervenant}" />
                                         </div>
@@ -285,7 +285,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.Intervenant.couleurNom}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Intervenant.couleurNom}" />
                                         </div>
@@ -349,7 +349,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.Demande.couleurTitreDemande}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Demande.couleurTitreDemande}" />
                                         </div>
@@ -424,7 +424,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.Demande.couleurNomDemandeur}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Demande.couleurNomDemandeur}" />
                                         </div>
@@ -477,7 +477,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.Demande.couleurDegreUrgence}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Demande.couleurDegreUrgence}" />
                                         </div>
@@ -532,7 +532,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.Demande.couleurDateDemande}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{demande.couleurDateDemande}" />
                                         </div>
@@ -587,7 +587,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.Demande.couleurLocalisation}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{demande.couleurLocalisation}" />
                                         </div>
@@ -645,7 +645,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.Demande.couleurDescription}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{demande.couleurDescription}" />
                                         </div>
@@ -682,7 +682,7 @@
                             aria-controls="imageNiveauIntervention">
                             <img id="ImageAAfficherOuNonIntervention" class="display-5 imageIcon"
                                 src="/images/check.png" alt="Fait" style="height: 1em;" />
-                            <h2 id="TitreSAAfficherOuNonIntervention" class="display-5 TitreSection" th:style="'color: ' + ${fiche.Intervention.couleurDateIntervention}">Intervention</h2>
+                            <h2 id="TitreSAAfficherOuNonIntervention" class="display-5 TitreSection" th:style="'color: ' + ${fiche.Intervention.couleurTitreIntervention}">Intervention</h2>
                         </button>
                     </div>
                     <div class="row">
@@ -712,7 +712,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.Intervention.couleurTitreIntervention}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Intervention.couleurTitreIntervention}" />
                                         </div>
@@ -792,7 +792,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.Intervention.couleurDateIntervention}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{intervention.couleurDateIntervention}" />
                                         </div>
@@ -849,7 +849,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.Intervention.couleurDureeIntervention}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{intervention.couleurDureeIntervention}" />
                                         </div>
@@ -907,7 +907,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.Intervention.couleurTypeIntervention}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{intervention.couleurTypeIntervention}" />
                                         </div>
@@ -977,7 +977,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.Maintenance.CouleurMaintenanceType}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{maintenance.CouleurMaintenanceType}" />
                                         </div>
@@ -1061,7 +1061,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.couleurTravauxRealises}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{couleurTravauxRealises}" />
                                         </div>
@@ -1152,7 +1152,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.couleurTravauxNonRealises}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{couleurTravauxNonRealises}" />
                                         </div>

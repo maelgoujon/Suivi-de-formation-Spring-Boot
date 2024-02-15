@@ -14,40 +14,7 @@
 </head>
 <body>
 
-    <!-- Barre de navigation Bootstrap -->
-  <nav class="navbar bg-body-tertiary">
-    <div class="container d-flex justify-content-between align-items-center">
-      <!-- Bouton gauche pour le mot de passe oublié -->
-      <a th:href="@{'/suivi_progression'}">
-          <img src="/images/suivi.png" alt="Suivi de progression" width="50" height="50">
-      </a>
-      
-      <!-- Logo accueil au centre -->
-      <a class="navbar-brand mx-auto" href="#">
-        <img src="/images/accueil.png" alt="Accueil" width="50" height="50">
-      </a>
-
-      <!-- Bouton droit pour l'admin -->
-      <a href="../log_out">
-        <img src="/images/porte.png" alt="Connexion Admin" width="50" height="50">
-        Se déconnecter
-      </button>
-    </a>
-  </nav>
-  <div class="modal fade" id="modalMdpOublie" tabindex="-1" aria-labelledby="modalMdpOublieLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalMdpOublieLabel">Réinitialisation du mot de passe</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-        </div>
-        <div class="modal-body">
-          <p>Demander de l'aide à un formateur <img type="button" src="/images/son.png" alt="Lire le nom"
-              onclick="lireTexte('Demander de l\'aide à un formateur')" style="width: 20px;"></p>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div th:replace="fragments/header :: header"></div>
 
 
     <h1>Écouter les Audios Enregistrés de <span th:text="${utilisateur.prenom}"></span> <span th:text="${utilisateur.nom}"></span></h1>
