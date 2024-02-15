@@ -640,8 +640,6 @@ public class HomeController {
         fiche.setNiveauMateriauxUtilises(fiche.getNiveauMateriauxUtilises());
         fiche.setImageTitreMateriauxUtilisesUrl(fiche.getImageTitreMateriauxUtilisesUrl());
 
-        System.out.println(fiche.getImageTitreMateriauxUtilisesUrl());
-
         // on mets les objets dans la fiche
         fiche.setDemande(demande);
         fiche.setIntervenant(intervenant);
