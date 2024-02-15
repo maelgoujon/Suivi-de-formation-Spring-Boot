@@ -1039,33 +1039,6 @@ public class HomeController {
         return "profil_apprenti";
     }
 
-    @GetMapping("/profil_admin")
-    public String redirectToprofiladmin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        String role = userDetails.getAuthorities().stream()
-                .findFirst()
-                .map(GrantedAuthority::getAuthority)
-                .orElse("");
-
-        Utilisateur utilisateur;
-
-        // Vérifiez le rôle de l'utilisateur
-        if (ROLE_ADMIN.equals(role) || ROLE_SUPERADMIN.equals(role) || ROLE_CIP.equals(role)
-                || ROLE_EDUCSIMPLE.equals(role)) {
-            // Si l'utilisateur a le rôle d'admin, récupérez les informations de
-            // l'utilisateur connecté
-            String login = userDetails.getUsername();
-            utilisateur = userServ.findUserByLogin(login);
-
-            // Ajoutez l'utilisateur à votre modèle
-            model.addAttribute(UTILISATEUR, utilisateur);
-
-            // Redirigez vers la page de profil_admin
-            return "profil_admin";
-        } else {
-            // Si l'utilisateur n'a pas le rôle d'admin, redirigez-le vers la page d'accueil
-            return REDIRECT_ACCUEIL;
-        }
-    }
 
     // Page de modification de profil par le superadmin
     @GetMapping("/modif/{id}")
@@ -1081,44 +1054,18 @@ public class HomeController {
             List<Formation> allFormations = formationService.lire();
             model.addAttribute("allFormations", allFormations);
             // Vérifiez si le rôle du compte sélectionné est USER
-            if (utilisateur.getRole() == UserRole.USER) {
-                return "/modif";
-            } else {
-                // Si le rôle du compte sélectionné n'est pas USER -> modif_admin
-                return "redirect:/modif_admin/" + id;
-            }
+
+            
+            return "/modif";
         } else {
             // Si l'utilisateur connecté n'est pas superadmin -> accueil
             return REDIRECT_ACCUEIL;
         }
     }
+    @Autowired
+    private FormationService formationService;
 
-    @GetMapping("/modif_admin/{id}")
-    public String modifadmin(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        // Récupérez les rôles définis dans l'enum UserRole
-        UserRole[] roles = UserRole.values();
-        model.addAttribute("roles", roles);
-        List<Formation> allFormations = formationService.lire();
-        model.addAttribute("allFormations", allFormations);
-        // Vérifiez si l'utilisateur connecté a le rôle de superadmin
-        if (isUserSuperAdmin(userDetails)) {
-            Utilisateur utilisateur = userServ.findById(id);
-            model.addAttribute(UTILISATEUR, utilisateur);
-
-            // Votre logique spécifique pour la page modif_admin
-            if (utilisateur.getRole() == UserRole.USER) {
-                // Si le rôle de l'utilisateur est USER, redirigez vers la page modif
-                return "redirect:/modif/" + id;
-            } else {
-                // Sinon, affichez la page modif_admin
-                return "/modif_admin";
-            }
-        } else {
-            // Si l'utilisateur connecté n'est pas superadmin, redirigez-le vers la page
-            // d'accueil
-            return REDIRECT_ACCUEIL;
-        }
-    }
+   
 
     private boolean isUserSuperAdmin(UserDetails userDetails) {
         return userDetails.getAuthorities().stream()

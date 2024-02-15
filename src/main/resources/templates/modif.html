@@ -17,16 +17,14 @@
 
     <div th:replace="fragments/header :: header"></div>
 
-
+<!-- Affiche un message de succès si l'utilisateur a été créé avec succès -->
     <div class="container mt-5">
         <div th:if="${success}">
             <p style="color: green;">Utilisateur modifié avec succès!</p>
         </div>
         <h2>Modifier l'utilisateur :</h2>
         <div class="encadre p-4 bg-light d-flex justify-content-center align-items-center">
-            <!-- Afficher un message de succès si l'utilisateur a été créé avec succès -->
-
-
+            
             <!-- Formulaire de création d'utilisateur -->
             <form class="formulaire" th:action="@{/utilisateur/modifier/{id}(id=${utilisateur.id})}"
                 th:object="${utilisateur}" method="post" enctype="multipart/form-data"
@@ -46,7 +44,7 @@
                     <div class="col-md-4">
                         <input type="text" id="login" name="login" th:field="*{login}" class="form-control" required>
                     </div>
-
+                    <!--S'affiche que si rôle USER pas selectionné-->
                     <label for="mdp" type="password" class="col-md-2 col-form-label">Mot de passe:</label>
                     <div class="col-md-4">
                         <input type="password" id="motdepasse" name="motdepasse" th:field="*{mdp}" required>
@@ -66,7 +64,7 @@
                         </select>
                     </div>
 
-
+                    <!--S'affiche que si rôle USER selectionné-->
                     <label for="niveauSelect" id="niveauLabel" class="col-md-2 col-form-label">Niveau:</label>
                     <div class="col-md-4">
                         <select class="form-control" th:field="*{niveau}" id="niveauSelect">
@@ -89,6 +87,7 @@
                             <div class="col-md-4">
                                 <button type="submit" class="btn btn-primary">Modifier l'utilisateur</button>
                             </div>
+                            <!--S'affiche que si rôle USER selectionné-->
                             <div class="col-md-4">
                                 <button type="button" id="mdp" class="btn btn-primary"
                                     th:attr="data-userid=${utilisateur.id}">Modifier Mot de passe</button>
@@ -106,9 +105,6 @@
             </form>
         </div>
     </div>
-
-
-
     <script>
         var initialRole = '${utilisateur.role.name()}';
 
@@ -172,7 +168,6 @@
         const mdpButton = document.getElementById("mdp");
         mdpButton.addEventListener("click", () => {
             const userId = document.getElementById("mdp").getAttribute("data-userid");
-            // Utilisez la syntaxe @{/} pour construire l'URL avec Thymeleaf
             window.location.href = "/mdpmodif/" + userId;
         });
     </script>
