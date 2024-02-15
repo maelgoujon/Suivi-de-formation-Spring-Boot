@@ -45,6 +45,15 @@ public class FicheServiceImpl implements FicheService {
                 existingFiche.setTravauxRealises(fiche.getTravauxRealises());
                 existingFiche.setTravauxNonRealises(fiche.getTravauxNonRealises());
                 existingFiche.setEvaluation(fiche.getEvaluation());
+                existingFiche.setUtilisateur(fiche.getUtilisateur());
+                existingFiche.setImageTitreMateriauxUtilisesUrl(fiche.getImageTitreMateriauxUtilisesUrl());
+                existingFiche.setImageTitreTravauxRealisesUrl(fiche.getImageTitreTravauxRealisesUrl());
+                existingFiche.setImageTitreTravauxNonRealisesUrl(fiche.getImageTitreTravauxNonRealisesUrl());
+                existingFiche.setCouleurMateriauxUtilises(fiche.getCouleurMateriauxUtilises());
+                existingFiche.setCouleurTravauxRealises(fiche.getCouleurTravauxRealises());
+                existingFiche.setCouleurTravauxNonRealises(fiche.getCouleurTravauxNonRealises());
+                
+
     
                 return ficheRepository.save(existingFiche);
             })
