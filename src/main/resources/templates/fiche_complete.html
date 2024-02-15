@@ -73,11 +73,11 @@
 
 
          <legend th:switch="${ficheIntervention.Intervenant.niveauTitreIntervenant}">
-            <img th:case="0" class="display-5" th:src="@{'/' + ${ficheIntervention.Intervenant.imageTitreIntervenantUrl}}"
+            <img th:case="0" class="display-5" th:src="@{${ficheIntervention.Intervenant.imageTitreIntervenantUrl}}"
                alt="Image Titre" style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
-                  <img class="display-5" th:src="@{'/' +${ficheIntervention.Intervenant.imageTitreIntervenantUrl}}"
+                  <img class="display-5" th:src="@{${ficheIntervention.Intervenant.imageTitreIntervenantUrl}}"
                      alt="Image Titre" oncontextmenu="return false;" draggable="false" style="height: 1em;" />
                </div>
                <div class="col-auto">
@@ -94,12 +94,12 @@
          <div class="row" th:if="${ficheIntervention.Intervenant.niveauTitreIntervenant != 4}">
             <div class="col-md-6 mb-3">
                <div th:switch="${ficheIntervention.Intervenant.niveauTitreIntervenantPrenom}">
-                  <img th:case="0" th:src="@{'/' +${ficheIntervention.Intervenant.imageTitreIntervenantPrenomUrl}}"
+                  <img th:case="0" th:src="@{${ficheIntervention.Intervenant.imageTitreIntervenantPrenomUrl}}"
                      class="display-8" alt="Image Intervenant" oncontextmenu="return false;" draggable="false"
                      style="height: 1em;" />
                   <div th:case="1" class="row align-items-center">
                      <div class="col-auto">
-                        <img th:src="@{'/' +${ficheIntervention.Intervenant.imageTitreIntervenantPrenomUrl}}"
+                        <img th:src="@{${ficheIntervention.Intervenant.imageTitreIntervenantPrenomUrl}}"
                            class="display-8" alt="Image Intervenant" oncontextmenu="return false;" draggable="false"
                            style="height: 1em;" />
                      </div>
@@ -119,12 +119,12 @@
             </div>
             <div class="col-md-6 mb-3">
                <div th:switch="${ficheIntervention.Intervenant.niveauTitreIntervenantNom}">
-                  <img th:case="0" th:src="@{'/' + ${ficheIntervention.Intervenant.imageTitreIntervenantNomUrl}}"
+                  <img th:case="0" th:src="@{${ficheIntervention.Intervenant.imageTitreIntervenantNomUrl}}"
                      class="display-8" alt="Image Intervenant" oncontextmenu="return false;" draggable="false"
                      style="height: 1em;" />
                   <div th:case="1" class="row align-items-center">
                      <div class="col-auto">
-                        <img th:src="@{'/' + ${ficheIntervention.Intervenant.imageTitreIntervenantNomUrl}}" class="display-8"
+                        <img th:src="@{${ficheIntervention.Intervenant.imageTitreIntervenantNomUrl}}" class="display-8"
                            alt="Image Intervenant" oncontextmenu="return false;" draggable="false"
                            style="height: 1em;" />
                      </div>
@@ -150,11 +150,11 @@
 
          <hr th:if="${ficheIntervention.demande.niveauTitreDemande != 4}" />
          <legend th:switch="${ficheIntervention.demande.niveauTitreDemande}">
-            <img th:case="0" class="display-5" th:src="@{'/' + ${ficheIntervention.Demande.ImageTitreDemandeUrl}}" alt="Fait"
+            <img th:case="0" class="display-5" th:src="@{${ficheIntervention.Demande.ImageTitreDemandeUrl}}" alt="Fait"
                style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
-                  <img class="display-5" th:src="@{'/' + ${ficheIntervention.Demande.ImageTitreDemandeUrl}}" alt="Fait"
+                  <img class="display-5" th:src="@{${ficheIntervention.Demande.ImageTitreDemandeUrl}}" alt="Fait"
                      style="height: 1em;" />
                </div>
                <div class="col-auto">
@@ -169,11 +169,11 @@
          <div class="row" th:if="${ficheIntervention.demande.niveauTitreDemande != 4}">
             <div class="col-md-6 mb-3">
                <div th:switch="${ficheIntervention.demande.niveauTitreDemande}">
-                  <img th:case="0" th:src="@{'/' + ${ficheIntervention.Demande.imageTitreDemandeNomUrl}}" class="display-8"
+                  <img th:case="0" th:src="@{${ficheIntervention.Demande.imageTitreDemandeNomUrl}}" class="display-8"
                      alt="Image Demandeur" oncontextmenu="return false;" draggable="false" style="height: 1em;" />
                   <div th:case="1" class="row align-items-center">
                      <div class="col-auto">
-                        <img th:src="@{'/' + ${ficheIntervention.Demande.imageTitreDemandeNomUrl}}" class="display-8"
+                        <img th:src="@{${ficheIntervention.Demande.imageTitreDemandeNomUrl}}" class="display-8"
                            alt="Image Demandeur" oncontextmenu="return false;" draggable="false" style="height: 1em;" />
                      </div>
                      <div class="col-auto">
@@ -190,12 +190,12 @@
 
 
                <div th:switch="${ficheIntervention.demande.niveauTitreDemandeDegreUrgence}">
-                  <img th:case="0" th:src="@{'/' + ${ficheIntervention.demande.imageTitreDemandeDegreUrgenceUrl}}"
+                  <img th:case="0" th:src="@{${ficheIntervention.demande.imageTitreDemandeDegreUrgenceUrl}}"
                      class="display-8" alt="Image Urgence" oncontextmenu="return false;" draggable="false"
                      style="height: 1em;" />
                   <div th:case="1" class="row align-items-center">
                      <div class="col-auto">
-                        <img th:src="@{'/' + ${ficheIntervention.demande.imageTitreDemandeDegreUrgenceUrl}}" class="display-8"
+                        <img th:src="@{${ficheIntervention.demande.imageTitreDemandeDegreUrgenceUrl}}" class="display-8"
                            alt="Image Urgence" oncontextmenu="return false;" draggable="false" style="height: 1em;" />
                      </div>
                      <div class="col-auto">
@@ -214,11 +214,11 @@
 
             <div class="col-md-6 mb-3">
                <div th:switch="${ficheIntervention.demande.niveauTitreDemandeDate}">
-                  <img th:case="0" th:src="@{'/' + ${ficheIntervention.demande.imageTitreDemandeDateUrl}}" class="display-8"
+                  <img th:case="0" th:src="@{${ficheIntervention.demande.imageTitreDemandeDateUrl}}" class="display-8"
                      alt="Image Date" oncontextmenu="return false;" draggable="false" style="height: 1em;" />
                   <div th:case="1" class="row align-items-center">
                      <div class="col-auto">
-                        <img th:src="@{'/' + ${ficheIntervention.demande.imageTitreDemandeDateUrl}}" class="display-8"
+                        <img th:src="@{${ficheIntervention.demande.imageTitreDemandeDateUrl}}" class="display-8"
                            alt="Image Date" oncontextmenu="return false;" draggable="false" style="height: 1em;" />
                      </div>
                      <div class="col-auto">
@@ -234,12 +234,12 @@
                   th:value="${ficheIntervention.demande.dateDemande}" disabled>
 
                <div th:switch="${ficheIntervention.demande.niveauTitreDemandeLocalisation}">
-                  <img th:case="0" th:src="@{'/' + ${ficheIntervention.demande.imageTitreDemandeLocalisationUrl}}"
+                  <img th:case="0" th:src="@{${ficheIntervention.demande.imageTitreDemandeLocalisationUrl}}"
                      class="display-8" alt="Image Localisation" oncontextmenu="return false;" draggable="false"
                      style="height: 1em;" />
                   <div th:case="1" class="row align-items-center">
                      <div class="col-auto">
-                        <img th:src="@{'/' + ${ficheIntervention.demande.imageTitreDemandeLocalisationUrl}}" class="display-8"
+                        <img th:src="@{${ficheIntervention.demande.imageTitreDemandeLocalisationUrl}}" class="display-8"
                            alt="Image Localisation" oncontextmenu="return false;" draggable="false"
                            style="height: 1em;" />
                      </div>
@@ -260,12 +260,12 @@
             <div class="form-group">
 
                <div th:switch="${ficheIntervention.demande.niveauTitreDemandeDescription}">
-                  <img th:case="0" th:src="@{'/' + ${ficheIntervention.demande.imageTitreDemandeDescriptionUrl}}"
+                  <img th:case="0" th:src="@{${ficheIntervention.demande.imageTitreDemandeDescriptionUrl}}"
                      class="display-8" alt="Image Description" oncontextmenu="return false;" draggable="false"
                      style="height: 1em;" />
                   <div th:case="1" class="row align-items-center">
                      <div class="col-auto">
-                        <img th:src="@{'/' + ${ficheIntervention.demande.imageTitreDemandeDescriptionUrl}}" class="display-8"
+                        <img th:src="@{${ficheIntervention.demande.imageTitreDemandeDescriptionUrl}}" class="display-8"
                            alt="Image Description" oncontextmenu="return false;" draggable="false"
                            style="height: 1em;" />
                      </div>
@@ -287,11 +287,11 @@
          <hr th:if="${ficheIntervention.intervention.niveauTitreIntervention != 4}" />
 
          <legend th:switch="${ficheIntervention.intervention.niveauTitreIntervention}">
-            <img th:case="0" class="display-5" th:src="@{'/' + ${ficheIntervention.Intervention.imageTitreInterventionUrl}}"
+            <img th:case="0" class="display-5" th:src="@{${ficheIntervention.Intervention.imageTitreInterventionUrl}}"
                alt="Fait" style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
-                  <img class="display-5" th:src="@{'/' + ${ficheIntervention.Intervention.imageTitreInterventionUrl}}"
+                  <img class="display-5" th:src="@{${ficheIntervention.Intervention.imageTitreInterventionUrl}}"
                      alt="Fait" style="height: 1em;" />
                </div>
                <div class="col-auto">
@@ -308,12 +308,12 @@
 
 
                <div th:switch="${ficheIntervention.intervention.niveauDateIntervention}">
-                  <img th:case="0" th:src="@{'/' + ${ficheIntervention.intervention.imageDateInterventionUrl}}"
+                  <img th:case="0" th:src="@{${ficheIntervention.intervention.imageDateInterventionUrl}}"
                      class="display-8" alt="Image Date Intervention" oncontextmenu="return false;" draggable="false"
                      style="height: 1em;" />
                   <div th:case="1" class="row align-items-center">
                      <div class="col-auto">
-                        <img th:src="@{'/' + ${ficheIntervention.intervention.imageDateInterventionUrl}}" class="display-8"
+                        <img th:src="@{${ficheIntervention.intervention.imageDateInterventionUrl}}" class="display-8"
                            alt="Image Date Intervention" oncontextmenu="return false;" draggable="false"
                            style="height: 1em;" />
                      </div>
@@ -333,12 +333,12 @@
 
 
                <div th:switch="${ficheIntervention.intervention.niveauDureeIntervention}">
-                  <img th:case="0" th:src="@{'/' + ${ficheIntervention.intervention.imageDureeInterventionUrl}}"
+                  <img th:case="0" th:src="@{${ficheIntervention.intervention.imageDureeInterventionUrl}}"
                      class="display-8" alt="Image Duree Intervention" oncontextmenu="return false;" draggable="false"
                      style="height: 1em;" />
                   <div th:case="1" class="row align-items-center">
                      <div class="col-auto">
-                        <img th:src="@{'/' + ${ficheIntervention.intervention.imageDureeInterventionUrl}}" class="display-8"
+                        <img th:src="@{${ficheIntervention.intervention.imageDureeInterventionUrl}}" class="display-8"
                            alt="Image Duree Intervention" oncontextmenu="return false;" draggable="false"
                            style="height: 1em;" />
                      </div>
@@ -363,12 +363,12 @@
 
             <div class="col-md-4 mb-3">
                <div th:switch="${ficheIntervention.intervention.niveauTypeIntervention}">
-                  <img th:case="0" th:src="@{'/' + ${ficheIntervention.intervention.imageTypeInterventionUrl}}"
+                  <img th:case="0" th:src="@{${ficheIntervention.intervention.imageTypeInterventionUrl}}"
                      class="display-8" alt="Image Type Intervention" oncontextmenu="return false;" draggable="false"
                      style="height: 1em;" />
                   <div th:case="1" class="row align-items-center">
                      <div class="col-auto">
-                        <img th:src="@{'/' + ${ficheIntervention.intervention.imageTypeInterventionUrl}}" class="display-8"
+                        <img th:src="@{${ficheIntervention.intervention.imageTypeInterventionUrl}}" class="display-8"
                            alt="Image Type Intervention" oncontextmenu="return false;" draggable="false"
                            style="height: 1em;" />
                      </div>
@@ -408,12 +408,12 @@
 
 
                <div th:switch="${ficheIntervention.maintenance.NiveauMaintenanceType}">
-                  <img th:case="0" th:src="@{'/' + ${ficheIntervention.maintenance.imageTypeMaintenanceUrl}}"
+                  <img th:case="0" th:src="@{${ficheIntervention.maintenance.imageTypeMaintenanceUrl}}"
                      class="display-8" alt="Image Type Intervention" oncontextmenu="return false;" draggable="false"
                      style="height: 1em;" />
                   <div th:case="1" class="row align-items-center">
                      <div class="col-auto">
-                        <img th:src="@{'/' + ${ficheIntervention.maintenance.imageTypeMaintenanceUrl}}" class="display-8"
+                        <img th:src="@{${ficheIntervention.maintenance.imageTypeMaintenanceUrl}}" class="display-8"
                            alt="Image Type Intervention" oncontextmenu="return false;" draggable="false"
                            style="height: 1em;" />
                      </div>
@@ -454,11 +454,11 @@
          <!--------------------------Travaux réalisés--------------------------------------->
          <hr th:if="${ficheIntervention.NiveauTravauxRealises != 4}" />
          <legend th:switch="${ficheIntervention.NiveauTravauxRealises}">
-            <img th:case="0" class="display-5" th:src="@{'/' + ${ficheIntervention.imageTitreTravauxRealisesUrl}}" alt="Fait"
+            <img th:case="0" class="display-5" th:src="@{${ficheIntervention.imageTitreTravauxRealisesUrl}}" alt="Fait"
                style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
-                  <img class="display-5" th:src="@{'/' + ${ficheIntervention.imageTitreTravauxRealisesUrl}}" alt="Fait"
+                  <img class="display-5" th:src="@{${ficheIntervention.imageTitreTravauxRealisesUrl}}" alt="Fait"
                      style="height: 1em;" />
                </div>
                <div class="col-auto">
@@ -478,12 +478,12 @@
          <!--------------------------Travaux NON réalisés--------------------------------------->
          <hr th:if="${ficheIntervention.NiveauTravauxNonRealises != 4}" />
          <legend th:switch="${ficheIntervention.NiveauTravauxNonRealises}">
-            <img th:case="0" class="display-5" th:src="@{'/' + ${ficheIntervention.imageTitreTravauxNonRealisesUrl}}"
+            <img th:case="0" class="display-5" th:src="@{${ficheIntervention.imageTitreTravauxNonRealisesUrl}}"
                alt="Pas Fait" style="height: 1em;" />
 
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
-                  <img class="display-5" th:src="@{'/' + ${ficheIntervention.imageTitreTravauxNonRealisesUrl}}" alt="Pas fait"
+                  <img class="display-5" th:src="@{${ficheIntervention.imageTitreTravauxNonRealisesUrl}}" alt="Pas fait"
                      style="height: 1em;" />
                </div>
                <div class="col-auto">
@@ -507,11 +507,11 @@
          <hr th:if="${ficheIntervention.NiveauMateriauxUtilises != 4}" />
 
          <legend th:switch="${ficheIntervention.NiveauMateriauxUtilises}">
-            <img th:case="0" class="display-5" th:src="@{'/' + ${ficheIntervention.imageTitreMateriauxUtilisesUrl}}"
+            <img th:case="0" class="display-5" th:src="@{${ficheIntervention.imageTitreMateriauxUtilisesUrl}}"
                alt="Materiaux" style="height: 1em;" />
             <div th:case="1" class="row align-items-center">
                <div class="col-auto">
-                  <img class="display-5" th:src="@{'/' + ${ficheIntervention.imageTitreMateriauxUtilisesUrl}}" alt="Materiaux"
+                  <img class="display-5" th:src="@{${ficheIntervention.imageTitreMateriauxUtilisesUrl}}" alt="Materiaux"
                      style="height: 1em;" />
                </div>
                <div class="col-auto">
