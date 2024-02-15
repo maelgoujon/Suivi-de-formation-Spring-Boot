@@ -227,8 +227,8 @@ public class HomeController {
     @GetMapping("/niveauxFiche/{id}")
     public String ajoutficheId(Model model, @PathVariable Long id) {
         FicheIntervention ficheExistante = ficheServ.lire(id);
-        FicheIntervention fiche = new FicheIntervention();
-
+        //FicheIntervention fiche = new FicheIntervention();
+        FicheIntervention fiche = ficheServ.lire(id);
         if (ficheExistante.getIntervenant().getImageTitreIntervenantUrl() == null) {
             System.out.println("getImageTitreIntervenantUrl est null");
         }
@@ -241,6 +241,10 @@ public class HomeController {
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT);
         // on récupere l'image utilisée
         String stringImageTitreIntervenant = ficheExistante.getIntervenant().getImageTitreIntervenantUrl();
+        //retirer le '/' en début de string
+        if (stringImageTitreIntervenant != null && stringImageTitreIntervenant.charAt(0) == '/') {
+            stringImageTitreIntervenant = stringImageTitreIntervenant.substring(1);
+        }
         ImagesTitres imageTitreIntervenant = imagesTitresServiceImpl.findByImageUrl(stringImageTitreIntervenant);
         // on la met en premiere position
         if (imageTitreIntervenant != null) {
@@ -252,6 +256,10 @@ public class HomeController {
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT_PRENOM);
         // on récupere l'image utilisée
         String stringImageTitreIntervenantPrenom = ficheExistante.getIntervenant().getImageTitreIntervenantPrenomUrl();
+        //retirer le '/' en début de string
+        if (stringImageTitreIntervenantPrenom != null && stringImageTitreIntervenantPrenom.charAt(0) == '/') {
+            stringImageTitreIntervenantPrenom = stringImageTitreIntervenantPrenom.substring(1);
+        }
         ImagesTitres imageTitreIntervenantPrenom = imagesTitresServiceImpl
                 .findByImageUrl(stringImageTitreIntervenantPrenom);
         // on la met en premiere position
@@ -264,6 +272,10 @@ public class HomeController {
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT_NOM);
         // on récupere l'image utilisée
         String stringImageTitreIntervenantNom = ficheExistante.getIntervenant().getImageTitreIntervenantNomUrl();
+        //retirer le '/' en début de string
+        if (stringImageTitreIntervenantNom != null && stringImageTitreIntervenantNom.charAt(0) == '/') {
+            stringImageTitreIntervenantNom = stringImageTitreIntervenantNom.substring(1);
+        }
         ImagesTitres imageTitreIntervenantNom = imagesTitresServiceImpl.findByImageUrl(stringImageTitreIntervenantNom);
         // on la met en premiere position
         if (imageTitreIntervenantNom != null) {
@@ -275,6 +287,10 @@ public class HomeController {
         List<ImagesTitres> imagesTitreDemande = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.DEMANDE);
         // on récupere l'image utilisée
         String stringImagesTitreDemande = ficheExistante.getDemande().getImageTitreDemandeUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreDemande != null && stringImagesTitreDemande.charAt(0) == '/') {
+            stringImagesTitreDemande = stringImagesTitreDemande.substring(1);
+        }
         ImagesTitres imageTitreDemande = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreDemande);
         // on la met en premiere position
         if (imageTitreDemande != null) {
@@ -287,6 +303,10 @@ public class HomeController {
                 .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_NOM);
         // on récupere l'image utilisée
         String stringImagesTitreDemandeNom = ficheExistante.getDemande().getImageTitreDemandeNomUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreDemandeNom != null && stringImagesTitreDemandeNom.charAt(0) == '/') {
+            stringImagesTitreDemandeNom = stringImagesTitreDemandeNom.substring(1);
+        }
         ImagesTitres imageTitreDemandeNom = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreDemandeNom);
         // on la met en premiere position
         if (imageTitreDemandeNom != null) {
@@ -299,6 +319,10 @@ public class HomeController {
                 .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_DEGRE_URGENCE);
         // on récupere l'image utilisée
         String stringImagesTitreDemandeDegreUrgence = ficheExistante.getDemande().getImageTitreDemandeDegreUrgenceUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreDemandeDegreUrgence != null && stringImagesTitreDemandeDegreUrgence.charAt(0) == '/') {
+            stringImagesTitreDemandeDegreUrgence = stringImagesTitreDemandeDegreUrgence.substring(1);
+        }
         ImagesTitres imageTitreDemandeDegreUrgence = imagesTitresServiceImpl
                 .findByImageUrl(stringImagesTitreDemandeDegreUrgence);
         // on la met en premiere position
@@ -312,6 +336,10 @@ public class HomeController {
                 .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_DATE);
         // on récupere l'image utilisée
         String stringImagesTitreDemandeDate = ficheExistante.getDemande().getImageTitreDemandeDateUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreDemandeDate != null && stringImagesTitreDemandeDate.charAt(0) == '/') {
+            stringImagesTitreDemandeDate = stringImagesTitreDemandeDate.substring(1);
+        }
         ImagesTitres imageTitreDemandeDate = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreDemandeDate);
         // on la met en premiere position
         if (imageTitreDemandeDate != null) {
@@ -324,6 +352,10 @@ public class HomeController {
                 .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_LOCALISATION);
         // on récupere l'image utilisée
         String stringImagesTitreDemandeLocalisation = ficheExistante.getDemande().getImageTitreDemandeLocalisationUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreDemandeLocalisation != null && stringImagesTitreDemandeLocalisation.charAt(0) == '/') {
+            stringImagesTitreDemandeLocalisation = stringImagesTitreDemandeLocalisation.substring(1);
+        }
         ImagesTitres imageTitreDemandeLocalisation = imagesTitresServiceImpl
                 .findByImageUrl(stringImagesTitreDemandeLocalisation);
         // on la met en premiere position
@@ -337,6 +369,10 @@ public class HomeController {
                 .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_DESCRIPTION);
         // on récupere l'image utilisée
         String stringImagesTitreDemandeDescription = ficheExistante.getDemande().getImageTitreDemandeDescriptionUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreDemandeDescription != null && stringImagesTitreDemandeDescription.charAt(0) == '/') {
+            stringImagesTitreDemandeDescription = stringImagesTitreDemandeDescription.substring(1);
+        }
         ImagesTitres imageTitreDemandeDescription = imagesTitresServiceImpl
                 .findByImageUrl(stringImagesTitreDemandeDescription);
         // on la met en premiere position
@@ -350,6 +386,10 @@ public class HomeController {
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION);
         // on récupere l'image utilisée
         String stringImagesTitreIntervention = ficheExistante.getIntervention().getImageTitreInterventionUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreIntervention != null && stringImagesTitreIntervention.charAt(0) == '/') {
+            stringImagesTitreIntervention = stringImagesTitreIntervention.substring(1);
+        }
         ImagesTitres imageTitreIntervention = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreIntervention);
         // on la met en premiere position
         if (imageTitreIntervention != null) {
@@ -362,6 +402,10 @@ public class HomeController {
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION_DATE);
         // on récupere l'image utilisée
         String stringImagesTitreInterventionDate = ficheExistante.getIntervention().getImageDateInterventionUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreInterventionDate != null && stringImagesTitreInterventionDate.charAt(0) == '/') {
+            stringImagesTitreInterventionDate = stringImagesTitreInterventionDate.substring(1);
+        }
         ImagesTitres imageTitreInterventionDate = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreInterventionDate);
         // on la met en premiere position
         if (imageTitreInterventionDate != null) {
@@ -374,6 +418,10 @@ public class HomeController {
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION_DUREE);
         // on récupere l'image utilisée
         String stringImagesTitreInterventionDuree = ficheExistante.getIntervention().getImageDureeInterventionUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreInterventionDuree != null && stringImagesTitreInterventionDuree.charAt(0) == '/') {
+            stringImagesTitreInterventionDuree = stringImagesTitreInterventionDuree.substring(1);
+        }
         ImagesTitres imageTitreInterventionDuree = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreInterventionDuree);
         // on la met en premiere position
         if (imageTitreInterventionDuree != null) {
@@ -386,6 +434,10 @@ public class HomeController {
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION_TYPE);
         // on récupere l'image utilisée
         String stringImagesTitreInterventionType = ficheExistante.getIntervention().getImageTypeInterventionUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreInterventionType != null && stringImagesTitreInterventionType.charAt(0) == '/') {
+            stringImagesTitreInterventionType = stringImagesTitreInterventionType.substring(1);
+        }
         ImagesTitres imageTitreInterventionType = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreInterventionType);
         // on la met en premiere position
         if (imageTitreInterventionType != null) {
@@ -398,6 +450,10 @@ public class HomeController {
                 .findByTypeImage(ImagesTitres.TypeImage.MAINTENANCE_TYPE);
         // on récupere l'image utilisée
         String stringImagesTitreMaintenanceType = ficheExistante.getMaintenance().getImageTypeMaintenanceUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreMaintenanceType != null && stringImagesTitreMaintenanceType.charAt(0) == '/') {
+            stringImagesTitreMaintenanceType = stringImagesTitreMaintenanceType.substring(1);
+        }
         ImagesTitres imageTitreMaintenanceType = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreMaintenanceType);
         // on la met en premiere position
         if (imageTitreMaintenanceType != null) {
@@ -410,6 +466,10 @@ public class HomeController {
                 .findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_REALISES);
         // on récupere l'image utilisée
         String stringImagesTitreTravauxRealises = ficheExistante.getImageTitreTravauxRealisesUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreTravauxRealises != null && stringImagesTitreTravauxRealises.charAt(0) == '/') {
+            stringImagesTitreTravauxRealises = stringImagesTitreTravauxRealises.substring(1);
+        }
         ImagesTitres imageTitreTravauxRealises = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreTravauxRealises);
         // on la met en premiere position
         if (imageTitreTravauxRealises != null) {
@@ -422,6 +482,10 @@ public class HomeController {
                 .findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_NON_REALISES);
         // on récupere l'image utilisée
         String stringImagesTitreTravauxNonRealises = ficheExistante.getImageTitreTravauxNonRealisesUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreTravauxNonRealises != null && stringImagesTitreTravauxNonRealises.charAt(0) == '/') {
+            stringImagesTitreTravauxNonRealises = stringImagesTitreTravauxNonRealises.substring(1);
+        }
         ImagesTitres imageTitreTravauxNonRealises = imagesTitresServiceImpl
                 .findByImageUrl(stringImagesTitreTravauxNonRealises);
         // on la met en premiere position
@@ -435,6 +499,10 @@ public class HomeController {
                 .findByTypeImage(ImagesTitres.TypeImage.MATERIAUX_UTILISES);
         // on récupere l'image utilisée
         String stringImagesTitreMateriauxUtilises = ficheExistante.getImageTitreMateriauxUtilisesUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreMateriauxUtilises != null && stringImagesTitreMateriauxUtilises.charAt(0) == '/') {
+            stringImagesTitreMateriauxUtilises = stringImagesTitreMateriauxUtilises.substring(1);
+        }
         ImagesTitres imageTitreMateriauxUtilises = imagesTitresServiceImpl
                 .findByImageUrl(stringImagesTitreMateriauxUtilises);
         // on la met en premiere position
@@ -470,6 +538,11 @@ public class HomeController {
 
         fiche.setId(id);
         fiche.setDemande(ficheExistante.getDemande());
+        fiche.setIntervenant(ficheExistante.getIntervenant());
+        fiche.setIntervention(ficheExistante.getIntervention());
+        fiche.setMaintenance(ficheExistante.getMaintenance());
+        fiche.setUtilisateur(ficheExistante.getUtilisateur());
+
         model.addAttribute(FICHE, fiche);
         model.addAttribute("user", ficheServ.lire(id).getIntervenant());
         return "fiche_a_completer";

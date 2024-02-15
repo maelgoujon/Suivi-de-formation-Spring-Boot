@@ -96,20 +96,12 @@
 
 
             <div class="row">
-                <div class="col-md-6">
-                    <div class="titre">Intervenant :</div>
-                    <div class="test">
-                        <span th:text="${user.nom + ' ' + user.prenom}"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="row">
                         <div class="col">
-                            <div class="titre">&nbsp;</div>
                             <a href="/imagestitres/liste" class="btn btn-dark">Modifier les images des titres</a>
                         </div>
                         <div class="col">
-                            <div class="titre">&nbsp;</div>
                             <a href="/materiaux/liste" class="btn btn-dark">Modifier les materiaux</a>
                         </div>
                     </div>
@@ -127,7 +119,7 @@
                             aria-controls="imageNiveauIntervenant">
                             <img id="ImageAAfficherOuNonIntervenant" class="display-5 imageIcon" src="/images/check.png"
                                 alt="Fait" style="height: 1em;" />
-                            <h2 id="TitreSAAfficherOuNonIntervenant" class="display-5 TitreSection">Intervenant</h2>
+                            <h2 id="TitreSAAfficherOuNonIntervenant" class="display-5 TitreSection" th:style="'color: ' + ${fiche.Intervenant.couleurTitreIntervenant}">Intervenant</h2>
                         </button>
                     </div>
                     <div class="row">
@@ -213,7 +205,7 @@
                         <img id="ImageAAfficherOuNonIntervenantPrenom" class="display-8" src="/images/check.png"
                             alt="Fait" style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonIntervenantPrenom" class="TitreSection" for="firstName"
-                            style="cursor: pointer;">Prénom</label>
+                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Intervenant.couleurPrenom}">Prénom</label>
                     </button>
 
                     <div class="row">
@@ -236,7 +228,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.Intervenant.couleurPrenom}" />
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Intervenant.couleurPrenom}" />
                                         </div>
@@ -261,7 +253,7 @@
 
 
 
-                    <input type="text" class="form-control" id="firstName" placeholder="" disabled>
+                    <input th:placeholder="${user.prenom}" type="text" class="form-control" id="firstName" disabled>
                 </div>
                 <!-----------------------Nom--------------------------------------->
                 <div class="col-md-6 mb-3">
@@ -271,7 +263,7 @@
                         <img id="ImageAAfficherOuNonIntervenantNom" class="display-8" src="/images/check.png" alt="Fait"
                             style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonIntervenantNom" class="TitreSection" for="lastName"
-                            style="cursor: pointer;">Nom</label>
+                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Intervenant.couleurNom}">Nom</label>
                     </button>
 
                     <div class="row">
@@ -317,7 +309,7 @@
                         </div>
                     </div>
 
-                    <input type="text" class="form-control" id="lastName" placeholder="" disabled>
+                    <input type="text" class="form-control" id="lastName" th:placeholder="${user.nom}" disabled>
                 </div>
             </div>
             <!--------------------------Demande--------------------------------------->
@@ -330,7 +322,7 @@
                             aria-controls="imageNiveauDemande">
                             <img id="ImageAAfficherOuNonDemande" class="display-5 imageIcon" src="/images/check.png"
                                 alt="Fait" style="height: 1em;" />
-                            <h2 id="TitreSAAfficherOuNonDemande" class="display-5 TitreSection">Demande</h2>
+                            <h2 id="TitreSAAfficherOuNonDemande" class="display-5 TitreSection" th:style="'color: ' + ${fiche.Demande.couleurTitreDemande}">Demande</h2>
                         </button>
                     </div>
                     <div class="row">
@@ -410,7 +402,7 @@
                         <img id="ImageAAfficherOuNonDemandeNom" class="display-8" src="/images/check.png" alt="Fait"
                             style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonDemandeNom" class="TitreSection" for="disabledNomDemandeur"
-                            style="cursor: pointer;">Nom du demandeur</label>
+                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Demande.couleurNomDemandeur}">Nom du demandeur</label>
                     </button>
 
                     <div class="row">
@@ -463,7 +455,7 @@
                         <img id="ImageAAfficherOuNonDemandeDegreUrgence" class="display-8" src="/images/check.png"
                             alt="Fait" style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonDemandeDegreUrgence" class="TitreSection"
-                            for="disabledDegreDemandeDegreUrgence" style="cursor: pointer;">Degré d'urgence</label>
+                            for="disabledDegreDemandeDegreUrgence" style="cursor: pointer;" th:style="'color: ' + ${fiche.Demande.couleurDegreUrgence}">Degré d'urgence</label>
                     </button>
 
                     <div class="row">
@@ -518,7 +510,7 @@
                         <img id="ImageAAfficherOuNonDemandeDate" class="display-8" src="/images/check.png" alt="Fait"
                             style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonDemandeDate" class="TitreSection" for="disabledDegreDemandeDate"
-                            style="cursor: pointer;">Date de la demande</label>
+                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Demande.couleurDateDemande}">Date de la demande</label>
                     </button>
 
                     <div class="row">
@@ -561,7 +553,7 @@
                             </div>
                         </div>
                     </div>
-                    <input type="date" id="disabledDateDemande" name="disabledDateDemande" class="form-control"
+                    <input type="text" id="disabledDateDemande" name="disabledDateDemande" class="form-control"
                         th:field="*{demande.dateDemande}" />
 
 
@@ -573,7 +565,7 @@
                         <img id="ImageAAfficherOuNonDemandeLocalisation" class="display-8" src="/images/check.png"
                             alt="Fait" style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonDemandeLocalisation" class="TitreSection"
-                            for="disabledLocalisation" style="cursor: pointer;">Localisation</label>
+                            for="disabledLocalisation" style="cursor: pointer;" th:style="'color: ' + ${fiche.Demande.couleurLocalisation}">Localisation</label>
                     </button>
 
                     <div class="row">
@@ -631,7 +623,7 @@
                         <img id="ImageAAfficherOuNonDemandeDescription" class="display-8" src="/images/check.png"
                             alt="Fait" style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonDemandeDescription" class="TitreSection"
-                            for="disabledDescription" style="cursor: pointer;">Description</label>
+                            for="disabledDescription" style="cursor: pointer;" th:style="'color: ' + ${fiche.Demande.couleurDescription}">Description</label>
                     </button>
 
                     <div class="row">
@@ -690,7 +682,7 @@
                             aria-controls="imageNiveauIntervention">
                             <img id="ImageAAfficherOuNonIntervention" class="display-5 imageIcon"
                                 src="/images/check.png" alt="Fait" style="height: 1em;" />
-                            <h2 id="TitreSAAfficherOuNonIntervention" class="display-5 TitreSection">Intervention</h2>
+                            <h2 id="TitreSAAfficherOuNonIntervention" class="display-5 TitreSection" th:style="'color: ' + ${fiche.Intervention.couleurDateIntervention}">Intervention</h2>
                         </button>
                     </div>
                     <div class="row">
@@ -777,7 +769,7 @@
                         <img id="ImageAAfficherOuNonInterventionDate" class="display-8" src="/images/check.png"
                             alt="Fait" style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonInterventionDate" class="TitreSection" for="newDateIntervention"
-                            style="cursor: pointer;">Date de l'intervention</label>
+                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Intervention.couleurDateIntervention}">Date de l'intervention</label>
                     </button>
 
                     <div class="row">
@@ -822,8 +814,8 @@
                             </div>
                         </div>
                     </div>
-                    <input type="date" id="newDateIntervention" name="newDateIntervention" class="form-control"
-                        th:field="*{intervention.dateIntervention}" />
+                    <input type="text" id="newDateIntervention" name="newDateIntervention" class="form-control"
+                        th:field="*{intervention.dateIntervention}" disabled/>
 
 
 
@@ -834,7 +826,7 @@
                         <img id="ImageAAfficherOuNonInterventionDuree" class="display-8" src="/images/check.png"
                             alt="Fait" style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonInterventionDuree" class="TitreSection"
-                            for="newDureeIntervention" style="cursor: pointer;">Durée de l'intervention</label>
+                            for="newDureeIntervention" style="cursor: pointer;" th:style="'color: ' + ${fiche.Intervention.couleurDureeIntervention}">Durée de l'intervention</label>
                     </button>
 
                     <div class="row">
@@ -880,7 +872,7 @@
                         </div>
                     </div>
                     <input type="text" id="newDureeIntervention" name="newDureeIntervention" class="form-control"
-                        th:field="*{intervention.dureeIntervention}">
+                        th:field="*{intervention.dureeIntervention}" disabled>
                 </div>
 
 
@@ -892,7 +884,7 @@
                         <img id="ImageAAfficherOuNonInterventionType" class="display-8" src="/images/check.png"
                             alt="Fait" style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonInterventionType" class="TitreSection" for="newTypeIntervention"
-                            style="cursor: pointer;">Type d'intervention</label>
+                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Intervention.couleurTypeIntervention}">Type d'intervention</label>
                     </button>
 
                     <div class="row">
@@ -962,7 +954,7 @@
                         <img id="ImageAAfficherOuNonMaintenanceType" class="display-8" src="/images/check.png"
                             alt="Fait" style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonMaintenanceType" class="TitreSection" for="newMaintenanceType"
-                            style="cursor: pointer;">Type de maintenance</label>
+                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Intervention.couleurTypeIntervention}">Type de maintenance</label>
                     </button>
 
                     <div class="row">
@@ -1040,7 +1032,7 @@
                             aria-controls="imageNiveauTravauxRealises">
                             <img id="ImageAAfficherOuNonTravauxRealises" class="display-5 imageIcon"
                                 src="/images/check.png" alt="Fait" style="height: 1em;" />
-                            <h2 id="TitreSAAfficherOuNonTravauxRealises" class="display-5 TitreSection">Travaux réalisés
+                            <h2 id="TitreSAAfficherOuNonTravauxRealises" class="display-5 TitreSection" th:style="'color: ' + ${fiche.couleurTravauxRealises}">Travaux réalisés
                             </h2>
                         </button>
                     </div>
@@ -1114,7 +1106,7 @@
 
                     <div class="form-group">
                         <textarea rows="10" id="newTravauxRealises" class="form-control" name="newTravauxRealises"
-                            onkeydown="handleDescriptionKeyDown(event)"></textarea>
+                            onkeydown="handleDescriptionKeyDown(event)" th:text="${fiche.travauxRealises}" disabled></textarea>
                     </div>
                 </div>
             </legend>
@@ -1128,7 +1120,7 @@
                             aria-controls="imageNiveauTravauxNonRealises">
                             <img id="ImageAAfficherOuNonTravauxNonRealises" class="display-5 imageIcon"
                                 src="/images/check.png" alt="Fait" style="height: 1em;" />
-                            <h2 id="TitreSAAfficherOuNonTravauxNonRealises" class="display-5 TitreSection">Travaux non
+                            <h2 id="TitreSAAfficherOuNonTravauxNonRealises" class="display-5 TitreSection" th:style="'color: ' + ${fiche.couleurTravauxNonRealises}">Travaux non
                                 réalisés
                             </h2>
                         </button>
@@ -1203,7 +1195,7 @@
                     </div>
                     <div class="form-group">
                         <textarea rows="10" id="newTravauxNonRealises" class="form-control" name="newTravauxNonRealises"
-                            onkeydown="handleDescriptionKeyDown(event)"></textarea>
+                            onkeydown="handleDescriptionKeyDown(event)" th:text="${fiche.travauxNonRealises}" disabled></textarea>
                     </div>
                 </div>
             </legend>
@@ -1218,7 +1210,7 @@
                             aria-controls="imageNiveauMateriauxUtilises">
                             <img id="ImageAAfficherOuNonMateriauxUtilises" class="display-5 imageIcon"
                                 src="/images/check.png" alt="Fait" style="height: 1em;" />
-                            <h2 id="TitreSAAfficherOuNonMateriauxUtilises" class="display-5 TitreSection">Materiaux
+                            <h2 id="TitreSAAfficherOuNonMateriauxUtilises" class="display-5 TitreSection" th:style="'color: ' + ${fiche.couleurMateriauxUtilises}">Materiaux
                                 utilisés
                             </h2>
                         </button>
@@ -1249,7 +1241,7 @@
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" value="#000000">
+                                            <input type="color" class="colorPicker" th:value="${fiche.couleurMateriauxUtilises}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{couleurMateriauxUtilises}" />
                                         </div>
