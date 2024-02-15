@@ -985,54 +985,28 @@ public class HomeController {
 
     @GetMapping("/accueil_admin")
     public String admin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
-
-        if (ROLE_SUPERADMIN.equals(role)) {
-            return REDIRECT_ACCUEIL_SUPERADMIN;
-        } else if (ROLE_ADMIN.equals(role) || ROLE_CIP.equals(role) || ROLE_EDUCSIMPLE.equals(role)) {
-            // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle "ADMIN"
-            // On récupere les utilisateurs qui sont dans les memes formations que nous
-            List<Formation> formations = userServ.findUserByLogin(userDetails.getUsername()).getFormations();
-            Set<Utilisateur> utilisateurs = new HashSet<>();
-            for (Formation formation : formations) {
-                for (Utilisateur utilisateur : formation.getUtilisateurs()) {
-                    if (utilisateur.getRole().equals(UserRole.USER)) {
-                        utilisateurs.add(utilisateur);
-                    }
+        // On récupere les utilisateurs qui sont dans les memes formations que nous
+        List<Formation> formations = userServ.findUserByLogin(userDetails.getUsername()).getFormations();
+        Set<Utilisateur> utilisateurs = new HashSet<>();
+        for (Formation formation : formations) {
+            for (Utilisateur utilisateur : formation.getUtilisateurs()) {
+                if (utilisateur.getRole().equals(UserRole.USER)) {
+                    utilisateurs.add(utilisateur);
                 }
             }
-            model.addAttribute(UTILISATEURS, utilisateurs);
-            return "accueil_admin";
-        } else {
-            return REDIRECT_ACCUEIL;
         }
+        model.addAttribute(UTILISATEURS, utilisateurs);
+        return "accueil_admin";
+        
     }
 
     @GetMapping("/accueil_superadmin")
     public String superadmin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        String role = userDetails.getAuthorities().stream()
-                .findFirst()
-                .map(GrantedAuthority::getAuthority)
-                .orElse("");
-
-        if (ROLE_SUPERADMIN.equals(role)) {
-            // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle
-            // "SUPERADMIN"
-            List<Utilisateur> utilisateurs = userServ.getAllUtilisateurs();
-            model.addAttribute(UTILISATEURS, utilisateurs);
-            return "/accueil_superadmin";
-        } else {
-            return REDIRECT_ACCUEIL;
-        }
-    }
-
-    @GetMapping("/ancienaccueil")
-    public String redirectToAncienAccueil(Model model) {
-        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
+        List<Utilisateur> utilisateurs = userServ.getAllUtilisateurs();
         model.addAttribute(UTILISATEURS, utilisateurs);
-        return "ancienaccueil";
+        return "/accueil_superadmin";
+        
     }
-
     @GetMapping("/profil_apprenti/{id}")
     public String redirectToprofil(@PathVariable Long id, Model model,
             @AuthenticationPrincipal UserDetails userDetails) {
@@ -1127,11 +1101,6 @@ public class HomeController {
         model.addAttribute(UTILISATEUR, utilisateur);
         model.addAttribute(FICHES, fiches);
         return "suivi_progression";
-    }
-
-    @GetMapping("/presentation")
-    public String presentation() {
-        return "presentation";
     }
 
     @GetMapping("/record/{ficheId}")
