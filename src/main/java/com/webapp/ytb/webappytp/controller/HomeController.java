@@ -546,6 +546,7 @@ public class HomeController {
         fiche.setIntervention(ficheExistante.getIntervention());
         fiche.setMaintenance(ficheExistante.getMaintenance());
         fiche.setUtilisateur(ficheExistante.getUtilisateur());
+    
 
         model.addAttribute(FICHE, fiche);
         model.addAttribute("user", ficheServ.lire(id).getIntervenant());
@@ -561,6 +562,8 @@ public class HomeController {
         Intervenant intervenant = ficheOrigine.getIntervenant();
         Intervention intervention = ficheOrigine.getIntervention();
         Maintenance maintenance;
+        Utilisateur user = userServ.findById(ficheOrigine.getUtilisateur().getId());
+
 
         if (fiche.getMaintenance().getMaintenanceType() != null) {
             maintenance = ficheOrigine.getMaintenance();
@@ -645,6 +648,11 @@ public class HomeController {
         fiche.setIntervenant(intervenant);
         fiche.setIntervention(intervention);
         fiche.setMaintenance(maintenance);
+        fiche.setUtilisateur(user);
+        System.out.println(ficheOrigine.getTravauxRealises());
+        fiche.setTravauxRealises(ficheOrigine.getTravauxRealises());
+        fiche.setTravauxNonRealises(ficheOrigine.getTravauxNonRealises());
+        fiche.setMateriauxOptions(ficheOrigine.getMateriauxOptions());
         ficheServ.modifier(fiche.getId(), fiche);
         //FicheIntervention createdFiche = ficheServ.creer(ficheOrigine);
         //model.addAttribute("createdFiche", createdFiche);

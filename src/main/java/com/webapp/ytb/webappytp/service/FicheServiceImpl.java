@@ -52,6 +52,13 @@ public class FicheServiceImpl implements FicheService {
                 existingFiche.setCouleurMateriauxUtilises(fiche.getCouleurMateriauxUtilises());
                 existingFiche.setCouleurTravauxRealises(fiche.getCouleurTravauxRealises());
                 existingFiche.setCouleurTravauxNonRealises(fiche.getCouleurTravauxNonRealises());
+                existingFiche.setUtilisateur(fiche.getUtilisateur());
+                existingFiche.setTravauxRealises(fiche.getTravauxRealises());
+                if (fiche.getTravauxRealises()==null) {
+                    System.out.println("Travaux realises est null");
+                }
+                existingFiche.setTravauxNonRealises(fiche.getTravauxNonRealises());
+                existingFiche.setMateriauxOptions(fiche.getMateriauxOptions());
                 
 
     
