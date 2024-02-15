@@ -35,231 +35,338 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class SessionController {
 
-    @Autowired
-    private SessionService sessionService;
+        @Autowired
+        private SessionService sessionService;
 
-    @Autowired
-    private FormationService formationService;
+        @Autowired
+        private FormationService formationService;
 
-    @Autowired
-    private FicheServiceImpl ficheService;
+        @Autowired
+        private FicheServiceImpl ficheService;
 
-    @Autowired
-    private UtilisateurService userService;
+        @Autowired
+        private UtilisateurService userService;
 
-    @GetMapping("/session/creer")
-    public String afficherFormulaireCreationSession(Model model) {
-        Demande demande = new Demande();
+        @GetMapping("/session/creer")
+        public String afficherFormulaireCreationSession(Model model) {
+                Demande demande = new Demande();
 
-        // Ajouter au modèle un attribut avec tous les types d'intervention
-        List<String> typesIntervention = Arrays.asList(Intervention.TypeIntervention.values())
-                .stream()
-                .map(Enum::toString)
-                .collect(Collectors.toList());
+                // Ajouter au modèle un attribut avec tous les types d'intervention
+                List<String> typesIntervention = Arrays.asList(Intervention.TypeIntervention.values())
+                                .stream()
+                                .map(Enum::toString)
+                                .collect(Collectors.toList());
 
-        model.addAttribute("typesIntervention", typesIntervention);
-        model.addAttribute("session", new Session());
+                model.addAttribute("typesIntervention", typesIntervention);
+                model.addAttribute("session", new Session());
 
-        // Récupérer l'ID de l'utilisateur connecté
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        Long userId = userService.findUserByLogin(username).getId();
+                // Récupérer l'ID de l'utilisateur connecté
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                String username = authentication.getName();
+                Long userId = userService.findUserByLogin(username).getId();
 
-        // Récupérer les formations de l'utilisateur connecté
-        model.addAttribute("allFormations", formationService.getFormationsByUserId(userId));
-        model.addAttribute("demande", demande);
+                // Récupérer les formations de l'utilisateur connecté
+                model.addAttribute("allFormations", formationService.getFormationsByUserId(userId));
+                model.addAttribute("demande", demande);
 
-        return "session";
-    }
-
-    @PostMapping("/session/creer")
-    public String creerSession(Session session, @RequestParam("typeIntervention") String typeIntervention) {
-        Session session1 = new Session();
-        session1.setDemande(session.getDemande());
-        session1.setFormation(session.getFormation());
-        session1.setDate(session.getDate());
-
-        sessionService.creer(session1);
-
-        // ajouter une fiche avec les données de la session pour chaque apprenti de la
-        // formation
-        List<Utilisateur> utilisateurs = session.getFormation().getUtilisateurs();
-        // on ne garde que les apprentis dans la liste
-        List<Utilisateur> apprentis = new ArrayList<>();
-        for (Utilisateur utilisateur : utilisateurs) {
-            if (utilisateur.getRole().equals(UserRole.USER)) {
-                apprentis.add(utilisateur);
-            }
+                return "session";
         }
-        for (Utilisateur apprenti : apprentis) {
-            FicheIntervention fiche = new FicheIntervention();
-            Intervention intervention = new Intervention();
 
-            Intervenant intervenant = new Intervenant();
+        @PostMapping("/session/creer")
+        public String creerSession(Session session, @RequestParam("typeIntervention") String typeIntervention) {
+                Session session1 = new Session();
+                session1.setDemande(session.getDemande());
+                session1.setFormation(session.getFormation());
+                session1.setDate(session.getDate());
 
-            Maintenance maintenance = new Maintenance();
+                sessionService.creer(session1);
 
-            Demande demande = new Demande();
-            demande.setDateDemande(session.getDate());
-            demande.setNomDemandeur(session.getDemande().getNomDemandeur());
-            demande.setDateDemande(session.getDate());
-            demande.setLocalisation(session.getDemande().getLocalisation());
-            demande.setDescription(session.getDemande().getDescription());
-            demande.setDegreUrgence(session.getDemande().getDegreUrgence());
-
-            List<String> materiaux = new ArrayList<>();
-            materiaux.add("");
-            materiaux.add("");
-            materiaux.add("");
-            materiaux.add("");
-            materiaux.add("");
-            materiaux.add("");
-            fiche.setMateriauxOptions(materiaux);
-            // Niveaux de la fiche
-            // on mets les memes niveaux que la derniere fiche de l'apprenti
-            List<FicheIntervention> fiches = ficheService.getFichesByUserId(apprenti.getId());
-            // recuperer la fiche avec date creation la plus recente
-            //
-
-            if (fiches.isEmpty()) {
-                //niveaux
-
-                fiche.setNiveauIntervenant(0);
-                fiche.setNiveauTravauxRealises(0);
-                fiche.setNiveauTravauxNonRealises(0);
-                fiche.setNiveauMateriauxUtilises(0);
-                fiche.setNiveauNatureIntervention(0);
-                intervention.setNiveauDateIntervention(0);
-                intervention.setNiveauDureeIntervention(0);
-                intervention.setNiveauTypeIntervention(0);
-                intervention.setNiveauTitreIntervention(0);
-                maintenance.setNiveauMaintenanceType(0);
-                intervenant.setNiveauTitreIntervenant(0);
-                intervenant.setNiveauTitreIntervenantNom(0);
-                intervenant.setNiveauTitreIntervenantPrenom(0);
-                demande.setNiveauDateDemande(0);
-                demande.setNiveauDegreUrgence(0);
-                demande.setNiveauDescription(0);
-                demande.setNiveauLocalisation(0);
-                demande.setNiveauNomDemandeur(0);
-                demande.setNiveauTitreDemande(0);
-                demande.setNiveauTitreDemandeDate(0);
-                demande.setNiveauTitreDemandeDegreUrgence(0);
-                demande.setNiveauTitreDemandeDescription(0);
-                demande.setNiveauTitreDemandeLocalisation(0);
-                demande.setNiveauTitreDemandeNom(0);
-                demande.setNiveauTitreDemandeDate(0);
-                
-                //images
-                fiche.setImageTitreMateriauxUtilisesUrl("/images/check.png");
-                fiche.setImageTitreTravauxNonRealisesUrl("/images/check.png");
-                fiche.setImageTitreTravauxRealisesUrl("/images/check.png");
-                intervention.setImageDateInterventionUrl("/images/check.png");
-                intervention.setImageDureeInterventionUrl("/images/check.png");
-                intervention.setImageTypeInterventionUrl("/images/check.png");
-                intervention.setImageTitreInterventionUrl("/images/check.png");
-                maintenance.setImageTypeMaintenanceUrl("/images/check.png");
-                intervenant.setImageTitreIntervenantUrl("/images/check.png");
-                intervenant.setImageTitreIntervenantNomUrl("/images/check.png");
-                intervenant.setImageTitreIntervenantPrenomUrl("/images/check.png");
-
-                intervention.setTypeIntervention(typeIntervention);
-                fiche.setDateCreation(LocalDate.now());
-
-
-            } else {
-                FicheIntervention ficheRecente = fiches.get(0);
-                for (FicheIntervention ficheIntervention : fiches) {
-                    if (ficheIntervention.getDateCreation() != null &&
-                            (ficheRecente.getDateCreation() == null ||
-                                    ficheIntervention.getDateCreation().isAfter(ficheRecente.getDateCreation()))) {
-                        ficheRecente = ficheIntervention;
-                    }
+                // ajouter une fiche avec les données de la session pour chaque apprenti de la
+                // formation
+                List<Utilisateur> utilisateurs = session.getFormation().getUtilisateurs();
+                // on ne garde que les apprentis dans la liste
+                List<Utilisateur> apprentis = new ArrayList<>();
+                for (Utilisateur utilisateur : utilisateurs) {
+                        if (utilisateur.getRole().equals(UserRole.USER)) {
+                                apprentis.add(utilisateur);
+                        }
                 }
-                fiche.setNiveauIntervenant(ficheRecente.getNiveauIntervenant());
-                fiche.setNiveauTravauxRealises(ficheRecente.getNiveauTravauxRealises());
-                fiche.setNiveauTravauxNonRealises(ficheRecente.getNiveauTravauxNonRealises());
-                fiche.setNiveauMateriauxUtilises(ficheRecente.getNiveauMateriauxUtilises());
-                fiche.setNiveauNatureIntervention(ficheRecente.getNiveauNatureIntervention());
-                fiche.setImageTitreMateriauxUtilisesUrl(ficheRecente.getImageTitreMateriauxUtilisesUrl());
-                fiche.setImageTitreTravauxNonRealisesUrl(ficheRecente.getImageTitreTravauxNonRealisesUrl());
-                fiche.setImageTitreTravauxRealisesUrl(ficheRecente.getImageTitreTravauxRealisesUrl());
-                intervention.setTypeIntervention(typeIntervention);
-                intervention.setNiveauDateIntervention(ficheRecente.getIntervention().getNiveauDateIntervention());
-                intervention.setNiveauDureeIntervention(ficheRecente.getIntervention().getNiveauDureeIntervention());
-                intervention.setNiveauTypeIntervention(ficheRecente.getIntervention().getNiveauTypeIntervention());
-                intervention.setNiveauTitreIntervention(ficheRecente.getIntervention().getNiveauTitreIntervention());
-                maintenance.setNiveauMaintenanceType(ficheRecente.getMaintenance().getNiveauMaintenanceType());
-                maintenance.setImageTypeMaintenanceUrl(ficheRecente.getMaintenance().getImageTypeMaintenanceUrl());
-                intervenant.setNiveauTitreIntervenant(ficheRecente.getIntervenant().getNiveauTitreIntervenant());
-                intervenant.setNiveauTitreIntervenantNom(ficheRecente.getIntervenant().getNiveauTitreIntervenantNom());
-                intervenant.setNiveauTitreIntervenantPrenom(
-                        ficheRecente.getIntervenant().getNiveauTitreIntervenantPrenom());
-                intervenant.setImageTitreIntervenantUrl(ficheRecente.getIntervenant().getImageTitreIntervenantUrl());
-                intervenant
-                        .setImageTitreIntervenantNomUrl(ficheRecente.getIntervenant().getImageTitreIntervenantNomUrl());
-                intervenant.setImageTitreIntervenantPrenomUrl(
-                        ficheRecente.getIntervenant().getImageTitreIntervenantPrenomUrl());
-                intervention.setImageDateInterventionUrl(ficheRecente.getIntervention().getImageDateInterventionUrl());
-                intervention
-                        .setImageDureeInterventionUrl(ficheRecente.getIntervention().getImageDureeInterventionUrl());
-                intervention.setImageTypeInterventionUrl(ficheRecente.getIntervention().getImageTypeInterventionUrl());
-                intervention
-                        .setImageTitreInterventionUrl(ficheRecente.getIntervention().getImageTitreInterventionUrl());
-                demande.setNiveauDateDemande(ficheRecente.getDemande().getNiveauDateDemande());
-                demande.setNiveauDegreUrgence(ficheRecente.getDemande().getNiveauDegreUrgence());
-                demande.setNiveauDescription(ficheRecente.getDemande().getNiveauDescription());
-                demande.setNiveauLocalisation(ficheRecente.getDemande().getNiveauLocalisation());
-                demande.setNiveauNomDemandeur(ficheRecente.getDemande().getNiveauNomDemandeur());
-                demande.setNiveauTitreDemande(ficheRecente.getDemande().getNiveauTitreDemande());
-                demande.setNiveauTitreDemandeDate(ficheRecente.getDemande().getNiveauTitreDemandeDate());
-                demande.setNiveauTitreDemandeDegreUrgence(
-                        ficheRecente.getDemande().getNiveauTitreDemandeDegreUrgence());
-                demande.setNiveauTitreDemandeDescription(ficheRecente.getDemande().getNiveauTitreDemandeDescription());
-                demande.setNiveauTitreDemandeLocalisation(
-                        ficheRecente.getDemande().getNiveauTitreDemandeLocalisation());
-                demande.setNiveauTitreDemandeNom(ficheRecente.getDemande().getNiveauTitreDemandeNom());
-                demande.setNiveauTitreDemandeDate(ficheRecente.getDemande().getNiveauTitreDemandeDate());
-                //couleurs
-                fiche.setImageTitreMateriauxUtilisesUrl(ficheRecente.getImageTitreMateriauxUtilisesUrl());
-                fiche.setImageTitreTravauxNonRealisesUrl(ficheRecente.getImageTitreTravauxNonRealisesUrl());
-                fiche.setImageTitreTravauxRealisesUrl(ficheRecente.getImageTitreTravauxRealisesUrl());
-                intervention.setImageDateInterventionUrl(ficheRecente.getIntervention().getImageDateInterventionUrl());
-                intervention
-                        .setImageDureeInterventionUrl(ficheRecente.getIntervention().getImageDureeInterventionUrl());
-                intervention.setImageTypeInterventionUrl(ficheRecente.getIntervention().getImageTypeInterventionUrl());
-                intervention
-                        .setImageTitreInterventionUrl(ficheRecente.getIntervention().getImageTitreInterventionUrl());
-                maintenance.setImageTypeMaintenanceUrl(ficheRecente.getMaintenance().getImageTypeMaintenanceUrl());
-                intervenant.setImageTitreIntervenantUrl(ficheRecente.getIntervenant().getImageTitreIntervenantUrl());
-                intervenant
-                        .setImageTitreIntervenantNomUrl(ficheRecente.getIntervenant().getImageTitreIntervenantNomUrl());
-                intervenant.setImageTitreIntervenantPrenomUrl(
+                for (Utilisateur apprenti : apprentis) {
+                        FicheIntervention fiche = new FicheIntervention();
+                        Intervention intervention = new Intervention();
 
-                        ficheRecente.getIntervenant().getImageTitreIntervenantPrenomUrl());
-                demande.setImageTitreDemandeDateUrl(ficheRecente.getDemande().getImageTitreDemandeDateUrl());
-                demande.setImageTitreDemandeDegreUrgenceUrl(
-                        ficheRecente.getDemande().getImageTitreDemandeDegreUrgenceUrl());
-                demande.setImageTitreDemandeDescriptionUrl(
-                        ficheRecente.getDemande().getImageTitreDemandeDescriptionUrl());
-                demande.setImageTitreDemandeLocalisationUrl(
-                        ficheRecente.getDemande().getImageTitreDemandeLocalisationUrl());
-                demande.setImageTitreDemandeNomUrl(ficheRecente.getDemande().getImageTitreDemandeNomUrl());
-                demande.setImageTitreDemandeUrl(ficheRecente.getDemande().getImageTitreDemandeUrl());
-                demande.setImageTitreDemandeDateUrl(ficheRecente.getDemande().getImageTitreDemandeDateUrl());
-                
+                        Intervenant intervenant = new Intervenant();
 
+                        Maintenance maintenance = new Maintenance();
 
-            }
-            fiche.setIntervention(intervention);
-            fiche.setMaintenance(maintenance);
-            fiche.setIntervenant(intervenant);
-            fiche.setDateCreation(LocalDate.now());
-            fiche.setUtilisateur(apprenti);
-            fiche.setDemande(demande);
-            ficheService.creer(fiche);
+                        Demande demande = new Demande();
+                        demande.setDateDemande(session.getDate());
+                        demande.setNomDemandeur(session.getDemande().getNomDemandeur());
+                        demande.setDateDemande(session.getDate());
+                        demande.setLocalisation(session.getDemande().getLocalisation());
+                        demande.setDescription(session.getDemande().getDescription());
+                        demande.setDegreUrgence(session.getDemande().getDegreUrgence());
 
+                        List<String> materiaux = new ArrayList<>();
+                        materiaux.add("");
+                        materiaux.add("");
+                        materiaux.add("");
+                        materiaux.add("");
+                        materiaux.add("");
+                        materiaux.add("");
+                        fiche.setMateriauxOptions(materiaux);
+                        // Niveaux de la fiche
+                        // on mets les memes niveaux que la derniere fiche de l'apprenti
+                        List<FicheIntervention> fiches = ficheService.getFichesByUserId(apprenti.getId());
+                        // recuperer la fiche avec date creation la plus recente
+                        //
+
+                        if (fiches.isEmpty()) {
+                                // niveaux
+
+                                fiche.setNiveauIntervenant(0);
+                                fiche.setNiveauTravauxRealises(0);
+                                fiche.setNiveauTravauxNonRealises(0);
+                                fiche.setNiveauMateriauxUtilises(0);
+                                fiche.setNiveauNatureIntervention(0);
+                                fiche.setCouleurMateriauxUtilises("black");
+                                fiche.setCouleurTravauxNonRealises("black");
+                                fiche.setCouleurTravauxRealises("black");
+                                intervention.setNiveauDateIntervention(0);
+                                intervention.setNiveauDureeIntervention(0);
+                                intervention.setNiveauTypeIntervention(0);
+                                intervention.setNiveauTitreIntervention(0);
+                                intervention.setCouleurDateIntervention("black");
+                                intervention.setCouleurDureeIntervention("black");
+                                intervention.setCouleurTypeIntervention("black");
+                                intervention.setCouleurTitreIntervention("black");
+                                maintenance.setNiveauMaintenanceType(0);
+                                maintenance.setCouleurMaintenanceType("black");
+                                intervenant.setNiveauTitreIntervenant(0);
+                                intervenant.setNiveauTitreIntervenantNom(0);
+                                intervenant.setNiveauTitreIntervenantPrenom(0);
+                                intervenant.setCouleurNom("black");
+                                intervenant.setCouleurPrenom("black");
+                                demande.setCouleurDateDemande("black");
+                                demande.setNiveauDateDemande(0);
+                                demande.setNiveauDegreUrgence(0);
+                                demande.setNiveauDescription(0);
+                                demande.setNiveauLocalisation(0);
+                                demande.setNiveauNomDemandeur(0);
+                                demande.setNiveauTitreDemande(0);
+                                demande.setNiveauTitreDemandeDate(0);
+                                demande.setNiveauTitreDemandeDegreUrgence(0);
+                                demande.setNiveauTitreDemandeDescription(0);
+                                demande.setNiveauTitreDemandeLocalisation(0);
+                                demande.setNiveauTitreDemandeNom(0);
+                                demande.setNiveauTitreDemandeDate(0);
+                                demande.setCouleurDateDemande("black");
+                                demande.setCouleurDegreUrgence("black");
+                                demande.setCouleurDescription("black");
+                                demande.setCouleurLocalisation("black");
+                                demande.setCouleurNomDemandeur("black");
+                                demande.setCouleurTitreDemande("black");
+
+                                // images
+                                fiche.setImageTitreMateriauxUtilisesUrl("/images/check.png");
+                                fiche.setImageTitreTravauxNonRealisesUrl("/images/check.png");
+                                fiche.setImageTitreTravauxRealisesUrl("/images/check.png");
+                                intervention.setImageDateInterventionUrl("/images/check.png");
+                                intervention.setImageDureeInterventionUrl("/images/check.png");
+                                intervention.setImageTypeInterventionUrl("/images/check.png");
+                                intervention.setImageTitreInterventionUrl("/images/check.png");
+                                maintenance.setImageTypeMaintenanceUrl("/images/check.png");
+                                intervenant.setImageTitreIntervenantUrl("/images/check.png");
+                                intervenant.setImageTitreIntervenantNomUrl("/images/check.png");
+                                intervenant.setImageTitreIntervenantPrenomUrl("/images/check.png");
+                                intervenant.setCouleurNom("black");
+                                intervenant.setCouleurPrenom("black");
+                                intervenant.setCouleurTitreIntervenant("black");
+
+                                intervention.setTypeIntervention(typeIntervention);
+                                fiche.setDateCreation(LocalDate.now());
+
+                        } else {
+                                FicheIntervention ficheRecente = fiches.get(0);
+                                for (FicheIntervention ficheIntervention : fiches) {
+                                        if (ficheIntervention.getDateCreation() != null &&
+                                                        (ficheRecente.getDateCreation() == null ||
+                                                                        ficheIntervention.getDateCreation().isAfter(
+                                                                                        ficheRecente.getDateCreation()))) {
+                                                ficheRecente = ficheIntervention;
+                                        }
+                                }
+                                fiche.setNiveauIntervenant(ficheRecente.getNiveauIntervenant());
+                                fiche.setNiveauTravauxRealises(ficheRecente.getNiveauTravauxRealises());
+                                fiche.setNiveauTravauxNonRealises(ficheRecente.getNiveauTravauxNonRealises());
+                                fiche.setNiveauMateriauxUtilises(ficheRecente.getNiveauMateriauxUtilises());
+                                fiche.setNiveauNatureIntervention(ficheRecente.getNiveauNatureIntervention());
+                                fiche.setImageTitreMateriauxUtilisesUrl(
+                                                ficheRecente.getImageTitreMateriauxUtilisesUrl());
+                                fiche.setImageTitreTravauxNonRealisesUrl(
+                                                ficheRecente.getImageTitreTravauxNonRealisesUrl());
+                                fiche.setImageTitreTravauxRealisesUrl(ficheRecente.getImageTitreTravauxRealisesUrl());
+                                fiche.setCouleurMateriauxUtilises(ficheRecente.getCouleurMateriauxUtilises());
+                                fiche.setCouleurTravauxNonRealises(ficheRecente.getCouleurTravauxNonRealises());
+                                fiche.setCouleurTravauxRealises(ficheRecente.getCouleurTravauxRealises());
+                                intervention.setTypeIntervention(typeIntervention);
+                                intervention.setNiveauDateIntervention(
+                                                ficheRecente.getIntervention().getNiveauDateIntervention());
+                                intervention.setNiveauDureeIntervention(
+                                                ficheRecente.getIntervention().getNiveauDureeIntervention());
+                                intervention.setNiveauTypeIntervention(
+                                                ficheRecente.getIntervention().getNiveauTypeIntervention());
+                                intervention.setNiveauTitreIntervention(
+                                                ficheRecente.getIntervention().getNiveauTitreIntervention());
+                                intervention.setCouleurDateIntervention(
+                                                ficheRecente.getIntervention().getCouleurDateIntervention());
+                                intervention.setCouleurDureeIntervention(
+                                                ficheRecente.getIntervention().getCouleurDureeIntervention());
+                                intervention.setCouleurTypeIntervention(
+                                                ficheRecente.getIntervention().getCouleurTypeIntervention());
+                                intervention.setCouleurTitreIntervention(
+                                                ficheRecente.getIntervention().getCouleurTitreIntervention());
+                                maintenance.setNiveauMaintenanceType(
+                                                ficheRecente.getMaintenance().getNiveauMaintenanceType());
+                                maintenance.setImageTypeMaintenanceUrl(
+                                                ficheRecente.getMaintenance().getImageTypeMaintenanceUrl());
+                                maintenance.setCouleurMaintenanceType(
+                                                ficheRecente.getMaintenance().getCouleurMaintenanceType());
+                                intervenant.setNiveauTitreIntervenant(
+                                                ficheRecente.getIntervenant().getNiveauTitreIntervenant());
+                                intervenant.setNiveauTitreIntervenantNom(
+                                                ficheRecente.getIntervenant().getNiveauTitreIntervenantNom());
+                                intervenant.setNiveauTitreIntervenantPrenom(
+                                                ficheRecente.getIntervenant().getNiveauTitreIntervenantPrenom());
+                                intervenant.setImageTitreIntervenantUrl(
+                                                ficheRecente.getIntervenant().getImageTitreIntervenantUrl());
+                                intervenant
+                                                .setImageTitreIntervenantNomUrl(ficheRecente.getIntervenant()
+                                                                .getImageTitreIntervenantNomUrl());
+                                intervenant.setImageTitreIntervenantPrenomUrl(
+                                                ficheRecente.getIntervenant().getImageTitreIntervenantPrenomUrl());
+                                intervenant.setCouleurNom(ficheRecente.getIntervenant().getCouleurNom());
+                                intervenant.setCouleurPrenom(ficheRecente.getIntervenant().getCouleurPrenom());
+                                intervenant.setCouleurTitreIntervenant(
+                                                ficheRecente.getIntervenant().getCouleurTitreIntervenant());
+                                intervention.setImageDateInterventionUrl(
+                                                ficheRecente.getIntervention().getImageDateInterventionUrl());
+                                intervention
+                                                .setImageDureeInterventionUrl(ficheRecente.getIntervention()
+                                                                .getImageDureeInterventionUrl());
+                                intervention.setImageTypeInterventionUrl(
+                                                ficheRecente.getIntervention().getImageTypeInterventionUrl());
+                                intervention
+                                                .setImageTitreInterventionUrl(ficheRecente.getIntervention()
+                                                                .getImageTitreInterventionUrl());
+                                intervention.setCouleurDateIntervention(
+                                                ficheRecente.getIntervention().getCouleurDateIntervention());
+                                intervention.setCouleurDureeIntervention(
+                                                ficheRecente.getIntervention().getCouleurDureeIntervention());
+                                intervention.setCouleurTypeIntervention(
+                                                ficheRecente.getIntervention().getCouleurTypeIntervention());
+                                intervention.setCouleurTitreIntervention(
+                                                ficheRecente.getIntervention().getCouleurTitreIntervention());
+                                demande.setNiveauDateDemande(ficheRecente.getDemande().getNiveauDateDemande());
+                                demande.setNiveauDegreUrgence(ficheRecente.getDemande().getNiveauDegreUrgence());
+                                demande.setNiveauDescription(ficheRecente.getDemande().getNiveauDescription());
+                                demande.setNiveauLocalisation(ficheRecente.getDemande().getNiveauLocalisation());
+                                demande.setNiveauNomDemandeur(ficheRecente.getDemande().getNiveauNomDemandeur());
+                                demande.setNiveauTitreDemande(ficheRecente.getDemande().getNiveauTitreDemande());
+                                demande.setNiveauTitreDemandeDate(
+                                                ficheRecente.getDemande().getNiveauTitreDemandeDate());
+                                demande.setNiveauTitreDemandeDegreUrgence(
+                                                ficheRecente.getDemande().getNiveauTitreDemandeDegreUrgence());
+                                demande.setNiveauTitreDemandeDescription(
+                                                ficheRecente.getDemande().getNiveauTitreDemandeDescription());
+                                demande.setNiveauTitreDemandeLocalisation(
+                                                ficheRecente.getDemande().getNiveauTitreDemandeLocalisation());
+                                demande.setNiveauTitreDemandeNom(ficheRecente.getDemande().getNiveauTitreDemandeNom());
+                                demande.setNiveauTitreDemandeDate(
+                                                ficheRecente.getDemande().getNiveauTitreDemandeDate());
+                                demande.setCouleurDateDemande(ficheRecente.getDemande().getCouleurDateDemande());
+                                demande.setCouleurDegreUrgence(ficheRecente.getDemande().getCouleurDegreUrgence());
+                                demande.setCouleurDescription(ficheRecente.getDemande().getCouleurDescription());
+                                demande.setCouleurLocalisation(ficheRecente.getDemande().getCouleurLocalisation());
+                                demande.setCouleurNomDemandeur(ficheRecente.getDemande().getCouleurNomDemandeur());
+                                demande.setCouleurTitreDemande(ficheRecente.getDemande().getCouleurTitreDemande());
+
+                                fiche.setImageTitreMateriauxUtilisesUrl(
+                                                ficheRecente.getImageTitreMateriauxUtilisesUrl());
+                                fiche.setImageTitreTravauxNonRealisesUrl(
+                                                ficheRecente.getImageTitreTravauxNonRealisesUrl());
+                                fiche.setImageTitreTravauxRealisesUrl(ficheRecente.getImageTitreTravauxRealisesUrl());
+                                fiche.setCouleurMateriauxUtilises(ficheRecente.getCouleurMateriauxUtilises());
+                                fiche.setCouleurTravauxNonRealises(ficheRecente.getCouleurTravauxNonRealises());
+                                fiche.setCouleurTravauxRealises(ficheRecente.getCouleurTravauxRealises());
+                                intervention.setImageDateInterventionUrl(
+                                                ficheRecente.getIntervention().getImageDateInterventionUrl());
+                                intervention
+                                                .setImageDureeInterventionUrl(ficheRecente.getIntervention()
+                                                                .getImageDureeInterventionUrl());
+                                intervention.setImageTypeInterventionUrl(
+                                                ficheRecente.getIntervention().getImageTypeInterventionUrl());
+                                intervention
+                                                .setImageTitreInterventionUrl(ficheRecente.getIntervention()
+                                                                .getImageTitreInterventionUrl());
+                                intervention.setCouleurDateIntervention(
+                                                ficheRecente.getIntervention().getCouleurDateIntervention());
+                                intervention.setCouleurDureeIntervention(
+                                                ficheRecente.getIntervention().getCouleurDureeIntervention());
+                                intervention.setCouleurTypeIntervention(
+                                                ficheRecente.getIntervention().getCouleurTypeIntervention());
+                                intervention.setCouleurTitreIntervention(
+                                                ficheRecente.getIntervention().getCouleurTitreIntervention());
+                                maintenance.setImageTypeMaintenanceUrl(
+                                                ficheRecente.getMaintenance().getImageTypeMaintenanceUrl());
+                                maintenance.setCouleurMaintenanceType(
+                                                ficheRecente.getMaintenance().getCouleurMaintenanceType());
+                                intervenant.setImageTitreIntervenantUrl(
+                                                ficheRecente.getIntervenant().getImageTitreIntervenantUrl());
+                                intervenant
+                                                .setImageTitreIntervenantNomUrl(ficheRecente.getIntervenant()
+                                                                .getImageTitreIntervenantNomUrl());
+                                intervenant.setImageTitreIntervenantPrenomUrl(
+
+                                                ficheRecente.getIntervenant().getImageTitreIntervenantPrenomUrl());
+                                intervenant.setCouleurNom(ficheRecente.getIntervenant().getCouleurNom());
+                                intervenant.setCouleurPrenom(ficheRecente.getIntervenant().getCouleurPrenom());
+                                intervenant.setCouleurTitreIntervenant(
+                                                ficheRecente.getIntervenant().getCouleurTitreIntervenant());
+                                demande.setImageTitreDemandeDateUrl(
+                                                ficheRecente.getDemande().getImageTitreDemandeDateUrl());
+                                demande.setImageTitreDemandeDegreUrgenceUrl(
+                                                ficheRecente.getDemande().getImageTitreDemandeDegreUrgenceUrl());
+                                demande.setImageTitreDemandeDescriptionUrl(
+                                                ficheRecente.getDemande().getImageTitreDemandeDescriptionUrl());
+                                demande.setImageTitreDemandeLocalisationUrl(
+                                                ficheRecente.getDemande().getImageTitreDemandeLocalisationUrl());
+                                demande.setImageTitreDemandeNomUrl(
+                                                ficheRecente.getDemande().getImageTitreDemandeNomUrl());
+                                demande.setImageTitreDemandeUrl(ficheRecente.getDemande().getImageTitreDemandeUrl());
+                                demande.setImageTitreDemandeDateUrl(
+                                                ficheRecente.getDemande().getImageTitreDemandeDateUrl());
+
+                                demande.setCouleurDateDemande(ficheRecente.getDemande().getCouleurDateDemande());
+                                demande.setCouleurDegreUrgence(ficheRecente.getDemande().getCouleurDegreUrgence());
+                                demande.setCouleurDescription(ficheRecente.getDemande().getCouleurDescription());
+                                demande.setCouleurLocalisation(ficheRecente.getDemande().getCouleurLocalisation());
+                                demande.setCouleurNomDemandeur(ficheRecente.getDemande().getCouleurNomDemandeur());
+                                demande.setCouleurTitreDemande(ficheRecente.getDemande().getCouleurTitreDemande());
+
+                        }
+                        // set the intervenant to apprenti
+                        intervenant.setNom(apprenti.getNom());
+                        intervenant.setPrenom(apprenti.getPrenom());
+                        fiche.setIntervention(intervention);
+                        fiche.setMaintenance(maintenance);
+                        fiche.setIntervenant(intervenant);
+                        fiche.setDateCreation(LocalDate.now());
+                        fiche.setUtilisateur(apprenti);
+                        fiche.setDemande(demande);
+                        ficheService.creer(fiche);
+
+                }
+                return "redirect:/accueil_admin";
         }
-        return "redirect:/accueil_admin";
-    }
 }

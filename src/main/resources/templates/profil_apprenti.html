@@ -69,7 +69,7 @@
 
                                     <!-- S'affiche que si on est en admin -->
                                     <a th:if="${utilisateurConnecteRole == 'ROLE_ADMIN'}"
-                                        th:href="@{/niveauxFiche/{id}(id=${utilisateur.id})}"
+                                        th:href="@{/ajoutfiche/{id}(id=${utilisateur.id})}"
                                         class="btn btn-outline-primary small-btn">
                                         <img src="/images/plus.png" alt="Ajouter une fiche"
                                             class="modifimg me-2 small-img" />

@@ -30,8 +30,8 @@ public class FicheServiceImpl implements FicheService {
     @Override
     @Transactional 
     public FicheIntervention lire(Long id) {
-        return ficheRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Fiche non trouvée"));
+        // retourner la fiche ou null si elle n'existe pas
+        return ficheRepository.findById(id).orElse(null);
     }
 
     @Override

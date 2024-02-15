@@ -33,4 +33,7 @@ build/
 .vscode/
 
 ### Images ###
-## src/main/resources/static/images/
+src/main/resources/static/images/messages/
+src/main/resources/static/images/amenagement/
+uploads/
+images/

@@ -12,6 +12,8 @@ import java.util.Set;
 
 import javax.management.relation.Role;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -57,9 +59,13 @@ import jakarta.validation.Valid;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import com.webapp.ytb.webappytp.service.FormationService;
+import com.webapp.ytb.webappytp.service.ImagesTitresServiceImpl;
+import com.webapp.ytb.webappytp.service.MessageService;
 
 @Controller
 public class HomeController {
+
+    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     MateriauxAmenagementRepository materiauxAmenagementRepository;
     UtilisateurServiceImpl userServ;
@@ -67,17 +73,35 @@ public class HomeController {
     ImagesTitresRepository imagesTitresRepository;
     FicheRepository ficheRepository;
     UtilisateurRepository utilisateurRepository;
+    ImagesTitresServiceImpl imagesTitresServiceImpl;
+    private final FormationService formationService;
+    private static final String MESSAGE = "message";
+    private static final String FICHE = "fiche";
+    private static final String FICHE_INTERVENTION = "ficheIntervention";
+    private static final String UTILISATEURS = "utilisateurs";
+    private static final String ROLE_SUPERADMIN = "ROLE_SUPERADMIN";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
+    private static final String ROLE_CIP = "ROLE_CIP";
+    private static final String ROLE_EDUCSIMPLE = "ROLE_EDUCSIMPLE";
+    private static final String REDIRECT_ACCUEIL_SUPERADMIN = "redirect:/accueil_superadmin";
+    private static final String REDIRECT_ACCUEIL = "redirect:/accueil";
+    private static final String UTILISATEUR_CONNECTE_ROLE = "utilisateurConnecteRole";
+    private static final String UTILISATEUR = "utilisateur";
+    private static final String FICHES = "fiches";
 
     public HomeController(UtilisateurServiceImpl userServ, FicheServiceImpl ficheServ,
             MateriauxAmenagementRepository materiauxAmenagementRepository,
             ImagesTitresRepository imagesTitresRepository, FicheRepository ficheRepository,
-            UtilisateurRepository utilisateurRepository) {
+            UtilisateurRepository utilisateurRepository, FormationService formationService,
+            ImagesTitresServiceImpl imagesTitresServiceImpl) {
         this.userServ = userServ;
         this.ficheServ = ficheServ;
         this.materiauxAmenagementRepository = materiauxAmenagementRepository;
         this.imagesTitresRepository = imagesTitresRepository;
         this.ficheRepository = ficheRepository;
         this.utilisateurRepository = utilisateurRepository;
+        this.formationService = formationService;
+        this.imagesTitresServiceImpl = imagesTitresServiceImpl;
     }
 
     public Long getCurrentUserId() {
@@ -106,7 +130,7 @@ public class HomeController {
             RedirectAttributes redirectAttributes,
             HttpServletRequest request) {
         if (file.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Veuillez sélectionner un fichier à uploader");
+            redirectAttributes.addFlashAttribute(MESSAGE, "Veuillez sélectionner un fichier à uploader");
             return "redirect:/fiche/icones/upload";
         }
 
@@ -125,20 +149,23 @@ public class HomeController {
             // Mettez à jour l'URL de l'image dans la base de données
             image.setImageUrl("/images/icones/" + file.getOriginalFilename());
 
-            redirectAttributes.addFlashAttribute("message",
+            redirectAttributes.addFlashAttribute(MESSAGE,
                     "Vous avez réussi à uploader '" + file.getOriginalFilename() + "'");
         } catch (IOException e) {
-            e.printStackTrace();
-            redirectAttributes.addFlashAttribute("message", "Erreur lors de l'upload du fichier");
+            logger.error(e.getMessage());
+            redirectAttributes.addFlashAttribute(MESSAGE, "Erreur lors de l'upload du fichier");
         }
 
         return "redirect:/fiche/icones/upload";
     }
 
     // Ajouter une fiche
-    @GetMapping("/ajout_fiche/")
-    public String ajout_fiche(Model model) {
+    @GetMapping("/ajoutfiche/{id}")
+    public String ajoutfiche(Model model, @PathVariable Long id) {
+
         FicheIntervention fiche = new FicheIntervention();
+        Utilisateur user = userServ.findById(id);
+        fiche.setUtilisateur(user);
         List<ImagesTitres> imagesTitreIntervenant = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT);
         List<ImagesTitres> imagesTitreDemande = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.DEMANDE);
@@ -191,49 +218,305 @@ public class HomeController {
         model.addAttribute("imagesTitreInterventionType", imagesTitreInterventionType);
         model.addAttribute("imagesTitreMaintenanceType", imagesTitreMaintenanceType);
 
-        model.addAttribute("fiche", fiche);
-        model.addAttribute("users", userServ.getUtilisateursByRole("USER"));
-        return "fiche_a_completer";
+        model.addAttribute(FICHE, fiche);
+        model.addAttribute("user", userServ.findById(id));
+        return "fiche_nouvelle";
     }
 
     // Ajouter une fiche avec id utilisateur
     @GetMapping("/niveauxFiche/{id}")
-    public String ajout_fiche_id(Model model, @PathVariable Long id) {
+    public String ajoutficheId(Model model, @PathVariable Long id) {
         FicheIntervention ficheExistante = ficheServ.lire(id);
-        FicheIntervention fiche = new FicheIntervention();
+        //FicheIntervention fiche = new FicheIntervention();
+        FicheIntervention fiche = ficheServ.lire(id);
+        if (ficheExistante.getIntervenant().getImageTitreIntervenantUrl() == null) {
+            System.out.println("getImageTitreIntervenantUrl est null");
+        }
+
+        // on récupère les images pour les niveaux et on mets en premiere position celle
+        // qui est déjà utilisée
+
+        // ImagesTitres Intervenant
         List<ImagesTitres> imagesTitreIntervenant = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT);
-        List<ImagesTitres> imagesTitreDemande = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.DEMANDE);
-        List<ImagesTitres> imagesTitreIntervention = imagesTitresRepository
-                .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION);
-        List<ImagesTitres> imagesTitreTravauxRealises = imagesTitresRepository
-                .findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_REALISES);
-        List<ImagesTitres> imagesTitreTravauxNonRealises = imagesTitresRepository
-                .findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_NON_REALISES);
-        List<ImagesTitres> imagesTitreMateriauxUtilises = imagesTitresRepository
-                .findByTypeImage(ImagesTitres.TypeImage.MATERIAUX_UTILISES);
+        // on récupere l'image utilisée
+        String stringImageTitreIntervenant = ficheExistante.getIntervenant().getImageTitreIntervenantUrl();
+        //retirer le '/' en début de string
+        if (stringImageTitreIntervenant != null && stringImageTitreIntervenant.charAt(0) == '/') {
+            stringImageTitreIntervenant = stringImageTitreIntervenant.substring(1);
+        }
+        ImagesTitres imageTitreIntervenant = imagesTitresServiceImpl.findByImageUrl(stringImageTitreIntervenant);
+        // on la met en premiere position
+        if (imageTitreIntervenant != null) {
+            imagesTitreIntervenant.remove(imageTitreIntervenant);
+            imagesTitreIntervenant.add(0, imageTitreIntervenant);
+        }
+        // ImagesTitres Intervenant Prenom
         List<ImagesTitres> imagesTitreIntervenantPrenom = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT_PRENOM);
+        // on récupere l'image utilisée
+        String stringImageTitreIntervenantPrenom = ficheExistante.getIntervenant().getImageTitreIntervenantPrenomUrl();
+        //retirer le '/' en début de string
+        if (stringImageTitreIntervenantPrenom != null && stringImageTitreIntervenantPrenom.charAt(0) == '/') {
+            stringImageTitreIntervenantPrenom = stringImageTitreIntervenantPrenom.substring(1);
+        }
+        ImagesTitres imageTitreIntervenantPrenom = imagesTitresServiceImpl
+                .findByImageUrl(stringImageTitreIntervenantPrenom);
+        // on la met en premiere position
+        if (imageTitreIntervenantPrenom != null) {
+            imagesTitreIntervenantPrenom.remove(imageTitreIntervenantPrenom);
+            imagesTitreIntervenantPrenom.add(0, imageTitreIntervenantPrenom);
+        }
+        // ImagesTitres Intervenant Nom
         List<ImagesTitres> imagesTitreIntervenantNom = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENANT_NOM);
+        // on récupere l'image utilisée
+        String stringImageTitreIntervenantNom = ficheExistante.getIntervenant().getImageTitreIntervenantNomUrl();
+        //retirer le '/' en début de string
+        if (stringImageTitreIntervenantNom != null && stringImageTitreIntervenantNom.charAt(0) == '/') {
+            stringImageTitreIntervenantNom = stringImageTitreIntervenantNom.substring(1);
+        }
+        ImagesTitres imageTitreIntervenantNom = imagesTitresServiceImpl.findByImageUrl(stringImageTitreIntervenantNom);
+        // on la met en premiere position
+        if (imageTitreIntervenantNom != null) {
+            imagesTitreIntervenantNom.remove(imageTitreIntervenantNom);
+            imagesTitreIntervenantNom.add(0, imageTitreIntervenantNom);
+        }
+
+        // ImagesTitres Demande
+        List<ImagesTitres> imagesTitreDemande = imagesTitresRepository.findByTypeImage(ImagesTitres.TypeImage.DEMANDE);
+        // on récupere l'image utilisée
+        String stringImagesTitreDemande = ficheExistante.getDemande().getImageTitreDemandeUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreDemande != null && stringImagesTitreDemande.charAt(0) == '/') {
+            stringImagesTitreDemande = stringImagesTitreDemande.substring(1);
+        }
+        ImagesTitres imageTitreDemande = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreDemande);
+        // on la met en premiere position
+        if (imageTitreDemande != null) {
+            imagesTitreDemande.remove(imageTitreDemande);
+            imagesTitreDemande.add(0, imageTitreDemande);
+        }
+
+        // ImagesTitres Demande Nom
         List<ImagesTitres> imagesTitreDemandeNom = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_NOM);
+        // on récupere l'image utilisée
+        String stringImagesTitreDemandeNom = ficheExistante.getDemande().getImageTitreDemandeNomUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreDemandeNom != null && stringImagesTitreDemandeNom.charAt(0) == '/') {
+            stringImagesTitreDemandeNom = stringImagesTitreDemandeNom.substring(1);
+        }
+        ImagesTitres imageTitreDemandeNom = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreDemandeNom);
+        // on la met en premiere position
+        if (imageTitreDemandeNom != null) {
+            imagesTitreDemandeNom.remove(imageTitreDemandeNom);
+            imagesTitreDemandeNom.add(0, imageTitreDemandeNom);
+        }
+
+        // ImagesTitres Demande DegreUrgence
         List<ImagesTitres> imagesTitreDemandeDegreUrgence = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_DEGRE_URGENCE);
+        // on récupere l'image utilisée
+        String stringImagesTitreDemandeDegreUrgence = ficheExistante.getDemande().getImageTitreDemandeDegreUrgenceUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreDemandeDegreUrgence != null && stringImagesTitreDemandeDegreUrgence.charAt(0) == '/') {
+            stringImagesTitreDemandeDegreUrgence = stringImagesTitreDemandeDegreUrgence.substring(1);
+        }
+        ImagesTitres imageTitreDemandeDegreUrgence = imagesTitresServiceImpl
+                .findByImageUrl(stringImagesTitreDemandeDegreUrgence);
+        // on la met en premiere position
+        if (imageTitreDemandeDegreUrgence != null) {
+            imagesTitreDemandeDegreUrgence.remove(imageTitreDemandeDegreUrgence);
+            imagesTitreDemandeDegreUrgence.add(0, imageTitreDemandeDegreUrgence);
+        }
+
+        // ImagesTitres Demande Date
         List<ImagesTitres> imagesTitreDemandeDate = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_DATE);
+        // on récupere l'image utilisée
+        String stringImagesTitreDemandeDate = ficheExistante.getDemande().getImageTitreDemandeDateUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreDemandeDate != null && stringImagesTitreDemandeDate.charAt(0) == '/') {
+            stringImagesTitreDemandeDate = stringImagesTitreDemandeDate.substring(1);
+        }
+        ImagesTitres imageTitreDemandeDate = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreDemandeDate);
+        // on la met en premiere position
+        if (imageTitreDemandeDate != null) {
+            imagesTitreDemandeDate.remove(imageTitreDemandeDate);
+            imagesTitreDemandeDate.add(0, imageTitreDemandeDate);
+        }
+
+        // ImagesTitres Demande Localisation
         List<ImagesTitres> imagesTitreDemandeLocalisation = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_LOCALISATION);
+        // on récupere l'image utilisée
+        String stringImagesTitreDemandeLocalisation = ficheExistante.getDemande().getImageTitreDemandeLocalisationUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreDemandeLocalisation != null && stringImagesTitreDemandeLocalisation.charAt(0) == '/') {
+            stringImagesTitreDemandeLocalisation = stringImagesTitreDemandeLocalisation.substring(1);
+        }
+        ImagesTitres imageTitreDemandeLocalisation = imagesTitresServiceImpl
+                .findByImageUrl(stringImagesTitreDemandeLocalisation);
+        // on la met en premiere position
+        if (imageTitreDemandeLocalisation != null) {
+            imagesTitreDemandeLocalisation.remove(imageTitreDemandeLocalisation);
+            imagesTitreDemandeLocalisation.add(0, imageTitreDemandeLocalisation);
+        }
+
+        // ImagesTitres Demande Description
         List<ImagesTitres> imagesTitreDemandeDescription = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.DEMANDE_DESCRIPTION);
+        // on récupere l'image utilisée
+        String stringImagesTitreDemandeDescription = ficheExistante.getDemande().getImageTitreDemandeDescriptionUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreDemandeDescription != null && stringImagesTitreDemandeDescription.charAt(0) == '/') {
+            stringImagesTitreDemandeDescription = stringImagesTitreDemandeDescription.substring(1);
+        }
+        ImagesTitres imageTitreDemandeDescription = imagesTitresServiceImpl
+                .findByImageUrl(stringImagesTitreDemandeDescription);
+        // on la met en premiere position
+        if (imageTitreDemandeDescription != null) {
+            imagesTitreDemandeDescription.remove(imageTitreDemandeDescription);
+            imagesTitreDemandeDescription.add(0, imageTitreDemandeDescription);
+        }
+
+        // ImagesTitres Intervention
+        List<ImagesTitres> imagesTitreIntervention = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION);
+        // on récupere l'image utilisée
+        String stringImagesTitreIntervention = ficheExistante.getIntervention().getImageTitreInterventionUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreIntervention != null && stringImagesTitreIntervention.charAt(0) == '/') {
+            stringImagesTitreIntervention = stringImagesTitreIntervention.substring(1);
+        }
+        ImagesTitres imageTitreIntervention = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreIntervention);
+        // on la met en premiere position
+        if (imageTitreIntervention != null) {
+            imagesTitreIntervention.remove(imageTitreIntervention);
+            imagesTitreIntervention.add(0, imageTitreIntervention);
+        }
+
+        // ImagesTitres Intervention Date
         List<ImagesTitres> imagesTitreInterventionDate = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION_DATE);
+        // on récupere l'image utilisée
+        String stringImagesTitreInterventionDate = ficheExistante.getIntervention().getImageDateInterventionUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreInterventionDate != null && stringImagesTitreInterventionDate.charAt(0) == '/') {
+            stringImagesTitreInterventionDate = stringImagesTitreInterventionDate.substring(1);
+        }
+        ImagesTitres imageTitreInterventionDate = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreInterventionDate);
+        // on la met en premiere position
+        if (imageTitreInterventionDate != null) {
+            imagesTitreInterventionDate.remove(imageTitreInterventionDate);
+            imagesTitreInterventionDate.add(0, imageTitreInterventionDate);
+        }
+
+        // ImagesTitres Intervention Duree
         List<ImagesTitres> imagesTitreInterventionDuree = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION_DUREE);
+        // on récupere l'image utilisée
+        String stringImagesTitreInterventionDuree = ficheExistante.getIntervention().getImageDureeInterventionUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreInterventionDuree != null && stringImagesTitreInterventionDuree.charAt(0) == '/') {
+            stringImagesTitreInterventionDuree = stringImagesTitreInterventionDuree.substring(1);
+        }
+        ImagesTitres imageTitreInterventionDuree = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreInterventionDuree);
+        // on la met en premiere position
+        if (imageTitreInterventionDuree != null) {
+            imagesTitreInterventionDuree.remove(imageTitreInterventionDuree);
+            imagesTitreInterventionDuree.add(0, imageTitreInterventionDuree);
+        }
+
+        // ImagesTitres Intervention Type
         List<ImagesTitres> imagesTitreInterventionType = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.INTERVENTION_TYPE);
+        // on récupere l'image utilisée
+        String stringImagesTitreInterventionType = ficheExistante.getIntervention().getImageTypeInterventionUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreInterventionType != null && stringImagesTitreInterventionType.charAt(0) == '/') {
+            stringImagesTitreInterventionType = stringImagesTitreInterventionType.substring(1);
+        }
+        ImagesTitres imageTitreInterventionType = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreInterventionType);
+        // on la met en premiere position
+        if (imageTitreInterventionType != null) {
+            imagesTitreInterventionType.remove(imageTitreInterventionType);
+            imagesTitreInterventionType.add(0, imageTitreInterventionType);
+        }
+
+        // ImagesTitres Maintenance Type
         List<ImagesTitres> imagesTitreMaintenanceType = imagesTitresRepository
                 .findByTypeImage(ImagesTitres.TypeImage.MAINTENANCE_TYPE);
+        // on récupere l'image utilisée
+        String stringImagesTitreMaintenanceType = ficheExistante.getMaintenance().getImageTypeMaintenanceUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreMaintenanceType != null && stringImagesTitreMaintenanceType.charAt(0) == '/') {
+            stringImagesTitreMaintenanceType = stringImagesTitreMaintenanceType.substring(1);
+        }
+        ImagesTitres imageTitreMaintenanceType = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreMaintenanceType);
+        // on la met en premiere position
+        if (imageTitreMaintenanceType != null) {
+            imagesTitreMaintenanceType.remove(imageTitreMaintenanceType);
+            imagesTitreMaintenanceType.add(0, imageTitreMaintenanceType);
+        }
+
+        // ImagesTitres Travaux Réalisés
+        List<ImagesTitres> imagesTitreTravauxRealises = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_REALISES);
+        // on récupere l'image utilisée
+        String stringImagesTitreTravauxRealises = ficheExistante.getImageTitreTravauxRealisesUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreTravauxRealises != null && stringImagesTitreTravauxRealises.charAt(0) == '/') {
+            stringImagesTitreTravauxRealises = stringImagesTitreTravauxRealises.substring(1);
+        }
+        ImagesTitres imageTitreTravauxRealises = imagesTitresServiceImpl.findByImageUrl(stringImagesTitreTravauxRealises);
+        // on la met en premiere position
+        if (imageTitreTravauxRealises != null) {
+            imagesTitreTravauxRealises.remove(imageTitreTravauxRealises);
+            imagesTitreTravauxRealises.add(0, imageTitreTravauxRealises);
+        }
+
+        // ImagesTitres Travaux Non Réalisés
+        List<ImagesTitres> imagesTitreTravauxNonRealises = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.TRAVAUX_NON_REALISES);
+        // on récupere l'image utilisée
+        String stringImagesTitreTravauxNonRealises = ficheExistante.getImageTitreTravauxNonRealisesUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreTravauxNonRealises != null && stringImagesTitreTravauxNonRealises.charAt(0) == '/') {
+            stringImagesTitreTravauxNonRealises = stringImagesTitreTravauxNonRealises.substring(1);
+        }
+        ImagesTitres imageTitreTravauxNonRealises = imagesTitresServiceImpl
+                .findByImageUrl(stringImagesTitreTravauxNonRealises);
+        // on la met en premiere position
+        if (imageTitreTravauxNonRealises != null) {
+            imagesTitreTravauxNonRealises.remove(imageTitreTravauxNonRealises);
+            imagesTitreTravauxNonRealises.add(0, imageTitreTravauxNonRealises);
+        }
+
+        // ImagesTitres Materiaux Utilisés
+        List<ImagesTitres> imagesTitreMateriauxUtilises = imagesTitresRepository
+                .findByTypeImage(ImagesTitres.TypeImage.MATERIAUX_UTILISES);
+        // on récupere l'image utilisée
+        String stringImagesTitreMateriauxUtilises = ficheExistante.getImageTitreMateriauxUtilisesUrl();
+        //retirer le '/' en début de string
+        if (stringImagesTitreMateriauxUtilises != null && stringImagesTitreMateriauxUtilises.charAt(0) == '/') {
+            stringImagesTitreMateriauxUtilises = stringImagesTitreMateriauxUtilises.substring(1);
+        }
+        ImagesTitres imageTitreMateriauxUtilises = imagesTitresServiceImpl
+                .findByImageUrl(stringImagesTitreMateriauxUtilises);
+        // on la met en premiere position
+        if (imageTitreMateriauxUtilises != null) {
+            imagesTitreMateriauxUtilises.remove(imageTitreMateriauxUtilises);
+            imagesTitreMateriauxUtilises.add(0, imageTitreMateriauxUtilises);
+        }
+        
+
+        // types d'intervention ElementsFiche.Intervention.TypeIntervention).values();
+        model.addAttribute("typeInterventionList", Intervention.TypeIntervention.values());
+
+        // types de maintenance Maintenance.MaintenanceType.values();
+        model.addAttribute("maintenanceList", Maintenance.MaintenanceType.values());
 
         model.addAttribute("imagesTitreIntervenant", imagesTitreIntervenant);
         model.addAttribute("imagesTitreDemande", imagesTitreDemande);
@@ -255,7 +538,12 @@ public class HomeController {
 
         fiche.setId(id);
         fiche.setDemande(ficheExistante.getDemande());
-        model.addAttribute("fiche", fiche);
+        fiche.setIntervenant(ficheExistante.getIntervenant());
+        fiche.setIntervention(ficheExistante.getIntervention());
+        fiche.setMaintenance(ficheExistante.getMaintenance());
+        fiche.setUtilisateur(ficheExistante.getUtilisateur());
+
+        model.addAttribute(FICHE, fiche);
         model.addAttribute("user", ficheServ.lire(id).getIntervenant());
         return "fiche_a_completer";
     }
@@ -263,8 +551,6 @@ public class HomeController {
     @PostMapping("/modifFicheParFormateur/{id}")
     public String modifFicheParFormateur(@ModelAttribute @Valid FicheIntervention fiche, Model model,
             @PathVariable Long id) {
-        System.out.println("------------------------------------");
-        System.out.println(ficheRepository.findById(id).get().getId());
         FicheIntervention ficheOrigine = ficheRepository.findById(id).get();
 
         Demande demande = ficheOrigine.getDemande();
@@ -361,7 +647,7 @@ public class HomeController {
     }
 
     @PostMapping("/ajouter_fiche")
-    public String ajouter_fiche(@ModelAttribute FicheIntervention fiche, Model model) {
+    public String ajouterFiche(@ModelAttribute FicheIntervention fiche, Model model) {
         fiche.setDateCreation(LocalDate.now());
         fiche.setMateriauxOptions(new ArrayList<>());
         Demande demande = new Demande();
@@ -369,7 +655,8 @@ public class HomeController {
         Intervention intervention = new Intervention();
         Maintenance maintenance = new Maintenance();
         // demande
-        demande.setNomDemandeur(fiche.getDemande().getNomDemandeur());
+        demande.setNomDemandeur(
+                fiche.getDemande().getNomDemandeur() != null ? fiche.getDemande().getNomDemandeur() : "");
         demande.setDateDemande(fiche.getDemande().getDateDemande());
         demande.setLocalisation(fiche.getDemande().getLocalisation());
         demande.setDescription(fiche.getDemande().getDescription());
@@ -460,7 +747,7 @@ public class HomeController {
         }
         List<Materiaux> materiauxAmenagementList = materiauxAmenagementRepository
                 .findByTypeIntervention(typeIntervention);
-        model.addAttribute("ficheIntervention", ficheIntervention);
+        model.addAttribute(FICHE_INTERVENTION, ficheIntervention);
         model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
         model.addAttribute("color", "#8fabd9");
         return "fiche_complete";
@@ -470,10 +757,8 @@ public class HomeController {
     @GetMapping("/fiche/modifier/{id}")
     public String showFicheDetails(@PathVariable long id, Model model) {
 
-        //Obtenir id de l'utilisateur connecté
+        // Obtenir id de l'utilisateur connecté
         Long currentUserId = getCurrentUserId();
-        
-
 
         FicheIntervention ficheIntervention = ficheServ.lire(id);
 
@@ -491,7 +776,13 @@ public class HomeController {
             model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
         }
 
-        model.addAttribute("ficheIntervention", ficheIntervention);
+        // envoyer la liste des type d'intervention
+        model.addAttribute("typeInterventionList", Intervention.TypeIntervention.values());
+
+        // envoyer la liste des maintenance
+        model.addAttribute("maintenanceList", Maintenance.MaintenanceType.values());
+
+        model.addAttribute(FICHE_INTERVENTION, ficheIntervention);
         model.addAttribute("color", "#8fabd9");
 
         return "fiche_modifier";
@@ -523,40 +814,66 @@ public class HomeController {
         boolean nouvelleInterventionValue = newNouvelleIntervention.orElse(false);
 
         FicheIntervention ficheIntervention = ficheServ.lire(id);
+        updateDemande(ficheIntervention.getDemande(), newNomDemandeur, newDateDemande, newLocalisation, newDescription,
+                newDegreUrgence);
+        updateIntervention(ficheIntervention.getIntervention(), newDateIntervention, newDureeIntervention,
+                newNatureType);
+        updateMaintenance(ficheIntervention.getMaintenance(), newMaintenanceType);
+        updateFicheDetails(ficheIntervention, newTravauxRealises, newTravauxNonRealises, nouvelleInterventionValue);
+        updateMateriauxOptions(ficheIntervention, newMateriau0, newMateriau1, newMateriau2, newMateriau3, newMateriau4,
+                newMateriau5);
+
+        ficheServ.modifier(id, ficheIntervention);
+        return "redirect:/chat/" + id;
+    }
+
+    private void updateDemande(Demande demande, String newNomDemandeur, LocalDate newDateDemande,
+            String newLocalisation, String newDescription, Integer newDegreUrgence) {
         if (newNomDemandeur != null) {
-            ficheIntervention.getDemande().setNomDemandeur(newNomDemandeur);
+            demande.setNomDemandeur(newNomDemandeur);
         }
         if (newDateDemande != null) {
-            ficheIntervention.getDemande().setDateDemande(newDateDemande);
+            demande.setDateDemande(newDateDemande);
         }
         if (newLocalisation != null) {
-            ficheIntervention.getDemande().setLocalisation(newLocalisation);
+            demande.setLocalisation(newLocalisation);
         }
         if (newDescription != null) {
-            ficheIntervention.getDemande().setDescription(newDescription);
+            demande.setDescription(newDescription);
         }
         if (newDegreUrgence != null) {
-            ficheIntervention.getDemande().setDegreUrgence(newDegreUrgence);
+            demande.setDegreUrgence(newDegreUrgence);
         }
+    }
 
+    private void updateIntervention(Intervention intervention, LocalDate newDateIntervention,
+            Integer newDureeIntervention, String newNatureType) {
         if (newDateIntervention != null) {
-            ficheIntervention.getIntervention().setDateIntervention(newDateIntervention);
+            intervention.setDateIntervention(newDateIntervention);
         }
-
         if (newDureeIntervention != null) {
-            ficheIntervention.getIntervention().setDureeIntervention(newDureeIntervention);
-        }
-
-        if (newMaintenanceType != null) {
-            ficheIntervention.getMaintenance().setMaintenanceType(newMaintenanceType);
+            intervention.setDureeIntervention(newDureeIntervention);
         }
         if (newNatureType != null) {
-            ficheIntervention.getIntervention().setTypeIntervention(newNatureType);
+            intervention.setTypeIntervention(newNatureType);
         }
+    }
+
+    private void updateMaintenance(Maintenance maintenance, Maintenance.MaintenanceType newMaintenanceType) {
+        if (newMaintenanceType != null) {
+            maintenance.setMaintenanceType(newMaintenanceType);
+        }
+    }
+
+    private void updateFicheDetails(FicheIntervention ficheIntervention, String newTravauxRealises,
+            String newTravauxNonRealises, boolean nouvelleInterventionValue) {
         ficheIntervention.setTravauxRealises(newTravauxRealises);
         ficheIntervention.setTravauxNonRealises(newTravauxNonRealises);
         ficheIntervention.setNouvelleIntervention(nouvelleInterventionValue);
+    }
 
+    private void updateMateriauxOptions(FicheIntervention ficheIntervention, String newMateriau0, String newMateriau1,
+            String newMateriau2, String newMateriau3, String newMateriau4, String newMateriau5) {
         ArrayList<String> materiauxOptions = new ArrayList<>();
 
         if (newMateriau0 != null) {
@@ -581,9 +898,6 @@ public class HomeController {
         if (!materiauxOptions.isEmpty()) {
             ficheIntervention.setMateriauxOptions(materiauxOptions);
         }
-
-        ficheServ.modifier(id, ficheIntervention);
-        return "redirect:redirectByRole";
     }
 
     @PostMapping("/fiche/updateTypeIntervention/{id}")
@@ -612,64 +926,14 @@ public class HomeController {
         boolean nouvelleInterventionValue = newNouvelleIntervention.orElse(false);
 
         FicheIntervention ficheIntervention = ficheServ.lire(id);
-        if (newNomDemandeur != null) {
-            ficheIntervention.getDemande().setNomDemandeur(newNomDemandeur);
-        }
-        if (newDateDemande != null) {
-            ficheIntervention.getDemande().setDateDemande(newDateDemande);
-        }
-        if (newLocalisation != null) {
-            ficheIntervention.getDemande().setLocalisation(newLocalisation);
-        }
-        if (newDescription != null) {
-            ficheIntervention.getDemande().setDescription(newDescription);
-        }
-        if (newDegreUrgence != null) {
-            ficheIntervention.getDemande().setDegreUrgence(newDegreUrgence);
-        }
-
-        if (newDateIntervention != null) {
-            ficheIntervention.getIntervention().setDateIntervention(newDateIntervention);
-        }
-
-        if (newDureeIntervention != null) {
-            ficheIntervention.getIntervention().setDureeIntervention(newDureeIntervention);
-        }
-
-        if (newMaintenanceType != null) {
-            ficheIntervention.getMaintenance().setMaintenanceType(newMaintenanceType);
-        }
-        if (newNatureType != null) {
-            ficheIntervention.getIntervention().setTypeIntervention(newNatureType);
-        }
-        ficheIntervention.setTravauxRealises(newTravauxRealises);
-        ficheIntervention.setTravauxNonRealises(newTravauxNonRealises);
-        ficheIntervention.setNouvelleIntervention(nouvelleInterventionValue);
-
-        ArrayList<String> materiauxOptions = new ArrayList<>();
-
-        if (newMateriau0 != null) {
-            materiauxOptions.add(newMateriau0);
-        }
-        if (newMateriau1 != null) {
-            materiauxOptions.add(newMateriau1);
-        }
-        if (newMateriau2 != null) {
-            materiauxOptions.add(newMateriau2);
-        }
-        if (newMateriau3 != null) {
-            materiauxOptions.add(newMateriau3);
-        }
-        if (newMateriau4 != null) {
-            materiauxOptions.add(newMateriau4);
-        }
-        if (newMateriau5 != null) {
-            materiauxOptions.add(newMateriau5);
-        }
-
-        if (!materiauxOptions.isEmpty()) {
-            ficheIntervention.setMateriauxOptions(materiauxOptions);
-        }
+        updateDemande(ficheIntervention.getDemande(), newNomDemandeur, newDateDemande, newLocalisation, newDescription,
+                newDegreUrgence);
+        updateIntervention(ficheIntervention.getIntervention(), newDateIntervention, newDureeIntervention,
+                newNatureType);
+        updateMaintenance(ficheIntervention.getMaintenance(), newMaintenanceType);
+        updateFicheDetails(ficheIntervention, newTravauxRealises, newTravauxNonRealises, nouvelleInterventionValue);
+        updateMateriauxOptions(ficheIntervention, newMateriau0, newMateriau1, newMateriau2, newMateriau3, newMateriau4,
+                newMateriau5);
 
         ficheServ.modifier(id, ficheIntervention);
         return "redirect:/fiche/modifier/" + id;
@@ -681,33 +945,20 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
-        model.addAttribute("utilisateurs", utilisateurs);
+        model.addAttribute(UTILISATEURS, utilisateurs);
         return "accueil";
     }
 
     @GetMapping("/redirectByRole")
     public String redirectByRole() {
         String utilisateurConnecteRole = determineUserRole();
-        System.out.println(utilisateurConnecteRole);
 
-        if ("ROLE_SUPERADMIN".equals(utilisateurConnecteRole)) {
-            return "redirect:/accueil_superadmin";
-        } else if ("ROLE_ADMIN".equals(utilisateurConnecteRole) || "ROLE_CIP".equals(utilisateurConnecteRole)
-                || "ROLE_EDUCSIMPLE".equals(utilisateurConnecteRole)) {
+        if (ROLE_SUPERADMIN.equals(utilisateurConnecteRole)) {
+            return REDIRECT_ACCUEIL_SUPERADMIN;
+        } else if (ROLE_ADMIN.equals(utilisateurConnecteRole) || ROLE_CIP.equals(utilisateurConnecteRole)
+                || ROLE_EDUCSIMPLE.equals(utilisateurConnecteRole)) {
             return "redirect:/accueil_admin";
         } else {
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-            String username;
-            if (principal instanceof UserDetails) {
-                username = ((UserDetails) principal).getUsername();
-            } else {
-                username = principal.toString();
-            }
-
-            // Utilisez le nom d'utilisateur pour obtenir l'ID de l'utilisateur à partir de
-            // votre service d'utilisateur
-            long userId = userServ.findUserByLogin(username).getId();
 
             return "redirect:/select_fiche";
         }
@@ -723,7 +974,7 @@ public class HomeController {
     @GetMapping("/accueil")
     public String redirectToAccueil(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
-        model.addAttribute("utilisateurs", utilisateurs);
+        model.addAttribute(UTILISATEURS, utilisateurs);
         return "accueil";
     }
 
@@ -731,9 +982,9 @@ public class HomeController {
     public String admin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
 
-        if ("ROLE_SUPERADMIN".equals(role)) {
-            return "redirect:/accueil_superadmin";
-        } else if ("ROLE_ADMIN".equals(role) || "ROLE_CIP".equals(role) || "ROLE_EDUCSIMPLE".equals(role)) {
+        if (ROLE_SUPERADMIN.equals(role)) {
+            return REDIRECT_ACCUEIL_SUPERADMIN;
+        } else if (ROLE_ADMIN.equals(role) || ROLE_CIP.equals(role) || ROLE_EDUCSIMPLE.equals(role)) {
             // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle "ADMIN"
             // On récupere les utilisateurs qui sont dans les memes formations que nous
             List<Formation> formations = userServ.findUserByLogin(userDetails.getUsername()).getFormations();
@@ -745,32 +996,35 @@ public class HomeController {
                     }
                 }
             }
-            model.addAttribute("utilisateurs", utilisateurs);
-            return "/accueil_admin";
+            model.addAttribute(UTILISATEURS, utilisateurs);
+            return "accueil_admin";
         } else {
-            return "redirect:/accueil";
+            return REDIRECT_ACCUEIL;
         }
     }
 
     @GetMapping("/accueil_superadmin")
     public String superadmin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
+        String role = userDetails.getAuthorities().stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("");
 
-        if ("ROLE_SUPERADMIN".equals(role)) {
+        if (ROLE_SUPERADMIN.equals(role)) {
             // Ajoutez la logique ici pour gérer le cas où l'utilisateur a le rôle
             // "SUPERADMIN"
             List<Utilisateur> utilisateurs = userServ.getAllUtilisateurs();
-            model.addAttribute("utilisateurs", utilisateurs);
+            model.addAttribute(UTILISATEURS, utilisateurs);
             return "/accueil_superadmin";
         } else {
-            return "redirect:/accueil";
+            return REDIRECT_ACCUEIL;
         }
     }
 
     @GetMapping("/ancienaccueil")
     public String redirectToAncienAccueil(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
-        model.addAttribute("utilisateurs", utilisateurs);
+        model.addAttribute(UTILISATEURS, utilisateurs);
         return "ancienaccueil";
     }
 
@@ -779,20 +1033,20 @@ public class HomeController {
             @AuthenticationPrincipal UserDetails userDetails) {
         String role = userDetails.getAuthorities().iterator().next().getAuthority();
         // Placer le rôle dans le modèle
-        model.addAttribute("utilisateurConnecteRole", role);
+        model.addAttribute(UTILISATEUR_CONNECTE_ROLE, role);
         Utilisateur utilisateur = userServ.findById(id);
-        model.addAttribute("utilisateur", utilisateur);
+        model.addAttribute(UTILISATEUR, utilisateur);
         return "profil_apprenti";
     }
 
-    
 
+    // Page de modification de profil par le superadmin
     @GetMapping("/modif/{id}")
     public String modif(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         // Vérifiez si l'utilisateur connecté a le rôle de superadmin
         if (isUserSuperAdmin(userDetails)) {
             Utilisateur utilisateur = userServ.findById(id);
-            model.addAttribute("utilisateur", utilisateur);
+            model.addAttribute(UTILISATEUR, utilisateur);
 
             // Récupérez les rôles définis dans l'enum UserRole
             UserRole[] roles = UserRole.values();
@@ -800,15 +1054,14 @@ public class HomeController {
             List<Formation> allFormations = formationService.lire();
             model.addAttribute("allFormations", allFormations);
             // Vérifiez si le rôle du compte sélectionné est USER
+
             
             return "/modif";
         } else {
-            // Si l'utilisateur connecté n'est pas superadmin, redirigez-le vers la page
-            // d'accueil
-            return "redirect:/accueil";
+            // Si l'utilisateur connecté n'est pas superadmin -> accueil
+            return REDIRECT_ACCUEIL;
         }
     }
-
     @Autowired
     private FormationService formationService;
 
@@ -816,13 +1069,13 @@ public class HomeController {
 
     private boolean isUserSuperAdmin(UserDetails userDetails) {
         return userDetails.getAuthorities().stream()
-                .anyMatch(role -> role.getAuthority().equals("ROLE_SUPERADMIN"));
+                .anyMatch(role -> role.getAuthority().equals(ROLE_SUPERADMIN));
     }
 
     @GetMapping("/mdpmodif/{id}")
     public String mdpmodif(@PathVariable Long id, Model model) {
         Utilisateur utilisateur = userServ.findById(id);
-        model.addAttribute("utilisateur", utilisateur);
+        model.addAttribute(UTILISATEUR, utilisateur);
         return "mdpmodif";
     }
 
@@ -834,15 +1087,15 @@ public class HomeController {
     }
 
     @GetMapping("/select_fiche")
-    public String select_fiche(Model model) {
+    public String selectFiche(Model model) {
         // List<FicheIntervention> fiches = ficheServ.lireTout(); // Ajout de la liste
         // des fiches
 
         List<FicheIntervention> fiches = ficheServ.getFichesByUserId(getCurrentUserId());
         Utilisateur userrr = userServ.findById(getCurrentUserId());
         model.addAttribute("userrr", userrr);
-        model.addAttribute("fiche", new FicheIntervention());
-        model.addAttribute("fiches", fiches);
+        model.addAttribute(FICHE, new FicheIntervention());
+        model.addAttribute(FICHES, fiches);
         return "select_fiche";
     }
 
@@ -859,11 +1112,11 @@ public class HomeController {
             Utilisateur utilisateur = userServ.findById(userId);
             List<FicheIntervention> fiches = ficheServ.getFichesByUserId(userId);
 
-            model.addAttribute("utilisateur", utilisateur);
-            model.addAttribute("fiches", fiches);
+            model.addAttribute(UTILISATEUR, utilisateur);
+            model.addAttribute(FICHES, fiches);
             return "suivi_progression";
         } else {
-            return "redirect:/accueil";
+            return REDIRECT_ACCUEIL;
         }
     }
 
@@ -872,8 +1125,8 @@ public class HomeController {
         Utilisateur utilisateur = userServ.findById(getCurrentUserId());
         List<FicheIntervention> fiches = ficheServ.getFichesByUserId(getCurrentUserId());
 
-        model.addAttribute("utilisateur", utilisateur);
-        model.addAttribute("fiches", fiches);
+        model.addAttribute(UTILISATEUR, utilisateur);
+        model.addAttribute(FICHES, fiches);
         return "suivi_progression";
     }
 
@@ -883,16 +1136,16 @@ public class HomeController {
     }
 
     @GetMapping("/record/{ficheId}")
-    public String record(@PathVariable Long ficheId, Model model) {
+    public String recordFiche(@PathVariable Long ficheId, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(ficheId);
-        model.addAttribute("ficheIntervention", ficheIntervention);
+        model.addAttribute(FICHE_INTERVENTION, ficheIntervention);
         return "record";
     }
 
     @GetMapping("/recordaffichage/{ficheId}")
     public String recordaffichage(@PathVariable Long ficheId, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(ficheId);
-        model.addAttribute("ficheIntervention", ficheIntervention);
+        model.addAttribute(FICHE_INTERVENTION, ficheIntervention);
         return "recordaffichage";
     }
 
@@ -925,9 +1178,9 @@ public class HomeController {
         Utilisateur user = userServ.findById(id);
         List<FicheIntervention> fiches = ficheServ.getFichesByUserId(id);
         model.addAttribute("user", user);
-        model.addAttribute("fiche", new FicheIntervention());
-        model.addAttribute("fiches", fiches); // Ajout de la liste des fiches
-        model.addAttribute("utilisateurConnecteRole", utilisateurConnecteRole);
+        model.addAttribute(FICHE, new FicheIntervention());
+        model.addAttribute(FICHES, fiches); // Ajout de la liste des fiches
+        model.addAttribute(UTILISATEUR_CONNECTE_ROLE, utilisateurConnecteRole);
         return "liste_fiche";
     }
 
@@ -936,19 +1189,19 @@ public class HomeController {
 
         String utilisateurConnecteRole = determineUserRole();
 
-        if ("ROLE_SUPERADMIN".equals(utilisateurConnecteRole)) {
-            return "redirect:/accueil_superadmin";
-        } else if ("ROLE_ADMIN".equals(utilisateurConnecteRole) || "ROLE_CIP".equals(utilisateurConnecteRole)
-                || "ROLE_EDUCSIMPLE".equals(utilisateurConnecteRole)) {
+        if (ROLE_SUPERADMIN.equals(utilisateurConnecteRole)) {
+            return REDIRECT_ACCUEIL_SUPERADMIN;
+        } else if (ROLE_ADMIN.equals(utilisateurConnecteRole) || ROLE_CIP.equals(utilisateurConnecteRole)
+                || ROLE_EDUCSIMPLE.equals(utilisateurConnecteRole)) {
             List<Utilisateur> users = userServ.lire();
             List<FicheIntervention> fiches = ficheServ.lireTout(); // Ajout de la liste des fiches
-            model.addAttribute("fiche", new FicheIntervention());
+            model.addAttribute(FICHE, new FicheIntervention());
             model.addAttribute("users", users);
-            model.addAttribute("fiches", fiches); // Ajout de la liste des fiches
-            model.addAttribute("utilisateurConnecteRole", utilisateurConnecteRole);
+            model.addAttribute(FICHES, fiches); // Ajout de la liste des fiches
+            model.addAttribute(UTILISATEUR_CONNECTE_ROLE, utilisateurConnecteRole);
             return "liste_fiche";
         } else {
-            return "redirect:/accueil";
+            return REDIRECT_ACCUEIL;
         }
 
     }

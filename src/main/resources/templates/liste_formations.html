@@ -42,7 +42,7 @@
                                 <li th:each="utilisateur : ${formation.utilisateurs}" th:text="${utilisateur.nom} + ' ' + ${utilisateur.prenom}"></li>
                             </ul>
                         </div>
-                        <a th:if="${utilisateurConnecteRole == 'ROLE_SUPERADMIN'}" th:href="@{/formation/excel/{id_formation}(id_formation=${formation.id})}" class="btn btn-danger small-btn">
+                        <a th:if="${utilisateurConnecteRole == 'ROLE_SUPERADMIN'}" th:href="@{/formation/excel/{idFormation}(idFormation=${formation.id})}" class="btn btn-danger small-btn">
                             <img src="/images/archive.png" alt="Ajouter une fiche"
                                             class="modifimg me-2 small-img" width="50" height="50"/>
                             Archiver

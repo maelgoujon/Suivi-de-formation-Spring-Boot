@@ -32,12 +32,20 @@ import jakarta.servlet.http.HttpServletResponse;
 @RequestMapping("/formation")
 public class FormationController {
 
+    private final FormationServiceImpl formationService;
+    private final UtilisateurServiceImpl utilisateurService;
+    private final FicheServiceImpl ficheService;
+
+    private static final String SUCCESS = "success";
+    private static final String ERROR = "error";
+    private static final String REDIRECT_FORMATION_LISTE = "redirect:/formation/list";
+
     @Autowired
-    private FormationServiceImpl formationService;
-    @Autowired
-    private UtilisateurServiceImpl utilisateurService;
-    @Autowired
-    private FicheServiceImpl ficheService;
+    public FormationController(FormationServiceImpl formationService, UtilisateurServiceImpl utilisateurService, FicheServiceImpl ficheService) {
+        this.formationService = formationService;
+        this.utilisateurService = utilisateurService;
+        this.ficheService = ficheService;
+    }
 
     private String determineUserRole() {
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
@@ -50,23 +58,23 @@ public class FormationController {
     public String ajouterFormation(@ModelAttribute Formation formation, RedirectAttributes redirectAttributes) {
         try {
             formationService.creer(formation);
-            redirectAttributes.addFlashAttribute("success", "Formation ajoutée avec succès");
+            redirectAttributes.addFlashAttribute(SUCCESS, "Formation ajoutée avec succès");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Erreur lors de l'ajout de la formation: " + e.getMessage());
+            redirectAttributes.addFlashAttribute(ERROR, "Erreur lors de l'ajout de la formation: " + e.getMessage());
         }
-        return "redirect:/formation/list";
+        return REDIRECT_FORMATION_LISTE;
     }
 
     @PostMapping("/supprimerFormation")
     public String supprimerFormation(@RequestParam Long formationId, RedirectAttributes redirectAttributes) {
         try {
             formationService.supprimerFormationAvecUtilisateurs(formationId);
-            redirectAttributes.addFlashAttribute("success", "Formation supprimée avec succès");
+            redirectAttributes.addFlashAttribute(SUCCESS, "Formation supprimée avec succès");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error",
+            redirectAttributes.addFlashAttribute(ERROR,
                     "Erreur lors de la suppression de la formation: " + e.getMessage());
         }
-        return "redirect:/formation/list";
+        return REDIRECT_FORMATION_LISTE;
     }
 
     @PostMapping("/ajouterUtilisateur")
@@ -74,11 +82,11 @@ public class FormationController {
             RedirectAttributes redirectAttributes) {
         try {
             formationService.ajouterUtilisateurALaFormation(utilisateurId, formationId);
-            redirectAttributes.addFlashAttribute("success", "Utilisateur ajouté à la formation avec succès");
+            redirectAttributes.addFlashAttribute(SUCCESS, "Utilisateur ajouté à la formation avec succès");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Erreur lors de l'ajout: " + e.getMessage());
+            redirectAttributes.addFlashAttribute(ERROR, "Erreur lors de l'ajout: " + e.getMessage());
         }
-        return "redirect:/formation/list";
+        return REDIRECT_FORMATION_LISTE;
     }
 
     @PostMapping("/retirerUtilisateur")
@@ -86,11 +94,11 @@ public class FormationController {
             @RequestParam Long formationId, RedirectAttributes redirectAttributes) {
         try {
             formationService.retirerUtilisateurDeLaFormation(utilisateurId, formationId);
-            redirectAttributes.addFlashAttribute("success", "Utilisateur retiré de la formation avec succès");
+            redirectAttributes.addFlashAttribute(SUCCESS, "Utilisateur retiré de la formation avec succès");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Erreur lors du retrait de l'utilisateur: " + e.getMessage());
+            redirectAttributes.addFlashAttribute(ERROR, "Erreur lors du retrait de l'utilisateur: " + e.getMessage());
         }
-        return "redirect:/formation/list";
+        return REDIRECT_FORMATION_LISTE;
     }
 
     @GetMapping("/list")
@@ -110,13 +118,10 @@ public class FormationController {
         return "liste_formations";
     }
 
-    @GetMapping("/excel/{id_formation}")
-    public void generateExcelArchive(@PathVariable Long id_formation, HttpServletResponse response) throws Exception {
+    @GetMapping("/excel/{idFormation}")
+    public void generateExcelArchive(@PathVariable Long idFormation, HttpServletResponse response) throws Exception {
         // Création du fichier excel
-        Formation formation = formationService.findById(id_formation);
-        if (formation == null) {
-            throw new RuntimeException("Formation not found with ID: " + id_formation);
-        }
+        Formation formation = formationService.findById(idFormation);
 
         response.setContentType("application/vnd.ms-excel");
         String headerKey = "Content-Disposition";
@@ -125,7 +130,7 @@ public class FormationController {
 
         response.setHeader(headerKey, headerValue);
 
-        formationService.generatedExcel(id_formation, response);
+        formationService.generatedExcel(idFormation, response);
 
         response.flushBuffer();
         // Suppression des éléments liés à la formation
@@ -133,7 +138,7 @@ public class FormationController {
         // l'user (1)
 
         // Retrieve all users associated with the formation
-        List<Utilisateur> utilisateurs = utilisateurService.findUserByFormation(id_formation);
+        List<Utilisateur> utilisateurs = utilisateurService.findUserByFormation(idFormation);
 
         // (1) Delete fiches d'intervention for each user
         for (Utilisateur utilisateur : utilisateurs) {

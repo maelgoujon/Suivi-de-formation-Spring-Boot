@@ -3,15 +3,25 @@ package com.webapp.ytb.webappytp.controller;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class MyErrorController implements ErrorController {
 
-    @RequestMapping("/error")
+    @GetMapping("/error")
     public String handleError(HttpServletRequest request) {
+        return processError(request);
+    }
+
+    @PostMapping("/error")
+    public String handleErrorPost(HttpServletRequest request) {
+        return processError(request);
+    }
+
+    private String processError(HttpServletRequest request) {
         // Récupérer des détails sur l'erreur à partir de la requête
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 
@@ -26,9 +36,5 @@ public class MyErrorController implements ErrorController {
         }
 
         return "error"; // Page d'erreur générale
-    }
-
-    public String getErrorPath() {
-        return "/error";
     }
 }
