@@ -551,17 +551,17 @@ public class Demarrage implements ApplicationRunner {
             // Définir les attributs des travaux réalisés
             ficheIntervention.setNiveauTravauxRealises(1);
             ficheIntervention.setCouleurTravauxRealises("#aef800");
-            ficheIntervention.setImageTitreTravauxRealisesUrl(ICONE_ACCUEIL);
+            ficheIntervention.setImageTitreTravauxRealisesUrl(ICONE_ELEVE);
             ficheIntervention.setTravauxRealises("Travaux réalisés par \nMichel Michel \n      Ligne 3");
             // Définir les attributs des travaux non réalisés
             ficheIntervention.setNiveauTravauxNonRealises(1);
             ficheIntervention.setCouleurTravauxNonRealises(VIOLET);
-            ficheIntervention.setImageTitreTravauxNonRealisesUrl(ICONE_ACCUEIL);
+            ficheIntervention.setImageTitreTravauxNonRealisesUrl(ICONE_ELEVE);
             ficheIntervention.setTravauxNonRealises("Travaux non réalisés par Michel Michel");
             // Définir les attributs des materiaux utilisés
             ficheIntervention.setNiveauMateriauxUtilises(1);
             ficheIntervention.setCouleurMateriauxUtilises(CYAN);
-            ficheIntervention.setImageTitreMateriauxUtilisesUrl(ICONE_ACCUEIL);
+            ficheIntervention.setImageTitreMateriauxUtilisesUrl(ICONE_ELEVE);
             // Définir les attributs de la fiche d'intervention
             ficheIntervention.setIntervenant(intervenant);
             ficheIntervention.setDemande(demande);

@@ -640,13 +640,16 @@ public class HomeController {
         fiche.setNiveauMateriauxUtilises(fiche.getNiveauMateriauxUtilises());
         fiche.setImageTitreMateriauxUtilisesUrl(fiche.getImageTitreMateriauxUtilisesUrl());
 
+        System.out.println(fiche.getImageTitreMateriauxUtilisesUrl());
+
         // on mets les objets dans la fiche
         fiche.setDemande(demande);
         fiche.setIntervenant(intervenant);
         fiche.setIntervention(intervention);
         fiche.setMaintenance(maintenance);
-        FicheIntervention createdFiche = ficheServ.creer(ficheOrigine);
-        model.addAttribute("createdFiche", createdFiche);
+        ficheServ.modifier(fiche.getId(), fiche);
+        //FicheIntervention createdFiche = ficheServ.creer(ficheOrigine);
+        //model.addAttribute("createdFiche", createdFiche);
         return "redirect:/redirectByRole";
     }
 
