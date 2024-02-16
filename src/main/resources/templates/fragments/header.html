@@ -140,9 +140,9 @@
     <nav class="navbar bg-body-tertiary" th:if="${currentUserRole == 'USER'}">
         <div class="container d-flex justify-content-between align-items-center">
             <!-- Bouton gauche pour le mot de passe oublié -->
-            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#modalMdpOublie">
-                <img src="/images/mdp_oublie.png" alt="Mot de Passe Oublié?" width="50" height="50">
-            </button>
+            <a class="btn" href="/suivi_progression">
+                <img src="/images/suivi.png" alt="Suivi" width="50" height="50">
+            </a>
 
             <!-- Logo accueil au centre -->
             <a class="navbar-brand mx-auto" href="/redirectByRole">

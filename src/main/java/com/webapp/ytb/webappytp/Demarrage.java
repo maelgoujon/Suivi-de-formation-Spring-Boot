@@ -499,7 +499,7 @@ public class Demarrage implements ApplicationRunner {
             intervenant.setNiveauTitreIntervenantPrenom(1);
             intervenant.setNiveauTitreIntervenant(1);
             intervenant.setCouleurTitreIntervenant(VIOLET);
-            intervenant.setCouleurNom("#F00");
+            intervenant.setCouleurNom("#FF0000");
             intervenant.setCouleurPrenom(CYAN);
             intervenant.setImageTitreIntervenantUrl(ICONE_ELEVE);
             intervenant.setImageTitreIntervenantNomUrl(ICONE_ACCUEIL);
@@ -511,9 +511,9 @@ public class Demarrage implements ApplicationRunner {
             intervention.setNiveauDureeIntervention(1);
             intervention.setNiveauTypeIntervention(1);
             intervention.setCouleurTitreIntervention(VIOLET);
-            intervention.setCouleurDateIntervention("#F00");
+            intervention.setCouleurDateIntervention("#FF0000");
             intervention.setCouleurDureeIntervention(CYAN);
-            intervention.setCouleurTypeIntervention("#F00");
+            intervention.setCouleurTypeIntervention("#FF0000");
             intervention.setImageTitreInterventionUrl(ICONE_ACCUEIL);
             intervention.setImageDureeInterventionUrl(ICONE_ACCUEIL);
             intervention.setImageTypeInterventionUrl(ICONE_ELEVE);
@@ -537,10 +537,10 @@ public class Demarrage implements ApplicationRunner {
             demande.setNiveauDescription(1);
             demande.setNiveauDegreUrgence(1);
             demande.setCouleurTitreDemande(VIOLET);
-            demande.setCouleurNomDemandeur("#F00");
+            demande.setCouleurNomDemandeur("#FF0000");
             demande.setCouleurDateDemande(CYAN);
             demande.setCouleurLocalisation(VIOLET);
-            demande.setCouleurDescription("#F00");
+            demande.setCouleurDescription("#FF0000");
             demande.setCouleurDegreUrgence(CYAN);
             demande.setImageTitreDemandeUrl(ICONE_ACCUEIL);
             demande.setImageTitreDemandeNomUrl(ICONE_ACCUEIL);
