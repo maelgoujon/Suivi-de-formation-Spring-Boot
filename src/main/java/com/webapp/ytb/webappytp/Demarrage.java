@@ -583,6 +583,9 @@ public class Demarrage implements ApplicationRunner {
             materiauxAmenagement.add("AMENAGEMENT_pantalon");
             materiauxAmenagement.add("AMENAGEMENT_crayon");
             ficheIntervention.setMateriauxOptions(materiauxAmenagement);
+            ficheIntervention.setPoliceDisMateriauxUtilises(false);
+            ficheIntervention.setPoliceDisTravauxNonRealises(true);
+            ficheIntervention.setPoliceDisTravauxRealises(true);
             ficheRepository.save(ficheIntervention);
         }
     }

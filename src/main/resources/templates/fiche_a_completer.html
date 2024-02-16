@@ -15,6 +15,11 @@
 
 
     <style>
+        @font-face {
+            font-family: 'OpenDyslexic';
+            src: url('/fonts/OpenDyslexic-Regular.otf') format('opentype');
+        }
+        
         .card-block {
             padding: 10px;
         }
@@ -1032,7 +1037,12 @@
                             aria-controls="imageNiveauTravauxRealises">
                             <img id="ImageAAfficherOuNonTravauxRealises" class="display-5 imageIcon"
                                 src="/images/check.png" alt="Fait" style="height: 1em;" />
-                            <h2 id="TitreSAAfficherOuNonTravauxRealises" class="display-5 TitreSection" th:style="'color: ' + ${fiche.couleurTravauxRealises}">Travaux réalisés
+                            <h2 th:if="${fiche.policeDisTravauxRealises}" id="TitreSAAfficherOuNonTravauxRealises" class="display-5 TitreSection" th:style="'font-family: ' + 'OpenDyslexic' + '; color: ' + ${fiche.couleurTravauxRealises}">
+                                Travaux réalisés
+                            </h2>
+
+                            <h2 th:unless="${fiche.policeDisTravauxRealises}" id="TitreSAAfficherOuNonTravauxRealises" class="display-5 TitreSection" th:style="'font-family: ' + 'var(--bs-btn-font-family);' + '; color: ' + ${fiche.couleurTravauxRealises}">
+                                Travaux réalisés
                             </h2>
                         </button>
                     </div>
@@ -1064,6 +1074,10 @@
                                             <input type="color" class="colorPicker" th:value="${fiche.couleurTravauxRealises}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{couleurTravauxRealises}" />
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Dislexique</div>
+                                            <input class="form-check-input" type="checkbox" th:checked="${fiche.policeDisTravauxRealises}" th:field="*{policeDisTravauxRealises}">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -1121,7 +1135,12 @@
                             aria-controls="imageNiveauTravauxNonRealises">
                             <img id="ImageAAfficherOuNonTravauxNonRealises" class="display-5 imageIcon"
                                 src="/images/check.png" alt="Fait" style="height: 1em;" />
-                            <h2 id="TitreSAAfficherOuNonTravauxNonRealises" class="display-5 TitreSection" th:style="'color: ' + ${fiche.couleurTravauxNonRealises}">Travaux non
+                            <h2 th:if="${fiche.policeDisTravauxNonRealises}" id="TitreSAAfficherOuNonTravauxNonRealises" class="display-5 TitreSection" th:style="'font-family: ' + 'OpenDyslexic' + '; color: ' + ${fiche.couleurTravauxNonRealises}">
+                                Travaux non
+                                réalisés
+                            </h2>
+                            <h2 th:unless="${fiche.policeDisTravauxNonRealises}" id="TitreSAAfficherOuNonTravauxNonRealises" class="display-5 TitreSection" th:style="'font-family: ' + 'var(--bs-btn-font-family);' + '; color: ' + ${fiche.couleurTravauxNonRealises}">
+                                Travaux non
                                 réalisés
                             </h2>
                         </button>
@@ -1155,6 +1174,10 @@
                                             <input type="color" class="colorPicker" th:value="${fiche.couleurTravauxNonRealises}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{couleurTravauxNonRealises}" />
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Dislexique</div>
+                                            <input class="form-check-input" type="checkbox" th:checked="${fiche.policeDisTravauxNonRealises}" th:field="*{policeDisTravauxNonRealises}">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -1211,9 +1234,15 @@
                             aria-controls="imageNiveauMateriauxUtilises">
                             <img id="ImageAAfficherOuNonMateriauxUtilises" class="display-5 imageIcon"
                                 src="/images/check.png" alt="Fait" style="height: 1em;" />
-                            <h2 id="TitreSAAfficherOuNonMateriauxUtilises" class="display-5 TitreSection" th:style="'color: ' + ${fiche.couleurMateriauxUtilises}">Materiaux
+                            <h2 th:if="${fiche.policeDisMateriauxUtilises}" id="TitreSAAfficherOuNonMateriauxUtilises" class="display-5 TitreSection" th:style="'font-family: ' + 'OpenDyslexic' + '; color: ' + ${fiche.couleurMateriauxUtilises}">
+                                Materiaux
                                 utilisés
                             </h2>
+                            <h2 th:unless="${fiche.policeDisMateriauxUtilises}" id="TitreSAAfficherOuNonMateriauxUtilises" class="display-5 TitreSection" th:style="'font-family: ' + 'var(--bs-btn-font-family);' + '; color: ' + ${fiche.couleurMateriauxUtilises}">
+                                Materiaux
+                                utilisés
+                            </h2>
+
                         </button>
                     </div>
                     <div class="row">
@@ -1241,10 +1270,14 @@
                                             </fieldset>
                                         </div>
                                         <div class="col">
-                                            <div class="titre">Couleur Texte</div>
+                                            <div class="titre">Couleur</div>
                                             <input type="color" class="colorPicker" th:value="${fiche.couleurMateriauxUtilises}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{couleurMateriauxUtilises}" />
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Dislexique</div>
+                                            <input class="form-check-input" type="checkbox" th:checked="${fiche.policeDisMateriauxUtilises}" th:field="*{policeDisMateriauxUtilises}">
                                         </div>
                                     </div>
                                     <div class="row">

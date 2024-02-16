@@ -558,6 +558,8 @@ public class HomeController {
             @PathVariable Long id) {
         FicheIntervention ficheOrigine = ficheRepository.findById(id).get();
 
+        
+
         Demande demande = ficheOrigine.getDemande();
         Intervenant intervenant = ficheOrigine.getIntervenant();
         Intervention intervention = ficheOrigine.getIntervention();
@@ -642,6 +644,8 @@ public class HomeController {
         // Materiaux
         fiche.setNiveauMateriauxUtilises(fiche.getNiveauMateriauxUtilises());
         fiche.setImageTitreMateriauxUtilisesUrl(fiche.getImageTitreMateriauxUtilisesUrl());
+        
+
 
         // on mets les objets dans la fiche
         fiche.setDemande(demande);
@@ -649,10 +653,12 @@ public class HomeController {
         fiche.setIntervention(intervention);
         fiche.setMaintenance(maintenance);
         fiche.setUtilisateur(user);
-        System.out.println(ficheOrigine.getTravauxRealises());
         fiche.setTravauxRealises(ficheOrigine.getTravauxRealises());
         fiche.setTravauxNonRealises(ficheOrigine.getTravauxNonRealises());
         fiche.setMateriauxOptions(ficheOrigine.getMateriauxOptions());
+        Boolean test = fiche.getPoliceDisMateriauxUtilises();
+        System.out.println("test : " + test);
+        fiche.setPoliceDisMateriauxUtilises(test);
         ficheServ.modifier(fiche.getId(), fiche);
         //FicheIntervention createdFiche = ficheServ.creer(ficheOrigine);
         //model.addAttribute("createdFiche", createdFiche);

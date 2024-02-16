@@ -118,6 +118,16 @@ public class FicheIntervention {
     @Column
     private String imageTitreMateriauxUtilisesUrl;
 
+    // Polices de caractères
+    @Column
+    private Boolean policeDisTravauxRealises;
+
+    @Column
+    private Boolean policeDisTravauxNonRealises;
+
+    @Column
+    private Boolean policeDisMateriauxUtilises;
+
     // getters
     public String getNomDemandeur() {
         return demande.getNomDemandeur();
