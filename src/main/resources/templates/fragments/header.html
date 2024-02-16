@@ -4,29 +4,56 @@
 <header>
     <style>
         @media (min-width: 1200px) {
+            /* Styles pour les écrans plus larges (vos styles existants) */
             .fs-5 {
                 font-size: 1.5rem !important;
             }
-
+    
             .user-info {
                 font-size: 2rem !important;
             }
-
+    
             .img-fluid {
                 width: 30px !important;
                 height: 30px !important;
             }
-
+    
             .active {
                 color: black !important;
                 background-color: white;
                 border-radius: 1rem;
             }
         }
+    
+        @media (max-width: 1199px) {
+            /* Styles pour les écrans plus petits (masquer les images, afficher uniquement le texte) */
+            .navbar-nav img {
+                display: none; /* Masquer les images dans la barre de navigation */
+            }
+    
+            .nav-item div {
+                display: block; /* Afficher le texte en bloc (une ligne par élément) */
+                text-align: center; /* Centrer le texte */
+                margin-bottom: 10px; /* Ajouter un espacement sous chaque élément de texte si nécessaire */
+            }
+    
+            /* Ajout de la bordure autour de la section active */
+            .active {
+                color: black !important;
+                background-color: white;
+                border: 2px solid white; /* Ajouter une bordure blanche */
+                border-radius: 5px; /* Ajouter une bordure arrondie */
+            }
+        }
     </style>
+    
+    
+    
+
+    <!-- Barre de navigation != USER -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #bbdefb !important;" th:if="${currentUserRole != 'USER'}">
         <div class="container-fluid">
-            <a class="navbar-brand" href="accueil_admin">
+            <a class="navbar-brand" href="/redirectByRole">
                 <img src="/images/apeaj.png" width="50" height="50" class="img-fluid">
 
             </a>
@@ -41,7 +68,7 @@
                 <ul class="navbar-nav ms-auto">
 
                     <li class="nav-item">
-                        <a href="/accueil_admin"
+                        <a href="/redirectByRole"
                             th:class="${currentUrl == '/accueil_admin' || currentUrl == '/accueil_superadmin'} ? 'nav-link active text-white fs-5' : 'nav-link text-black fs-5'"
                             aria-current="page">
                             <div style="text-align: center;">
@@ -136,7 +163,7 @@
 
 
 
-    <!-- Barre de navigation Bootstrap -->
+    <!-- Barre de navigation USER -->
     <nav class="navbar bg-body-tertiary" th:if="${currentUserRole == 'USER'}">
         <div class="container d-flex justify-content-between align-items-center">
             <!-- Bouton gauche pour le mot de passe oublié -->
