@@ -223,6 +223,8 @@ public class HomeController {
         return "fiche_nouvelle";
     }
 
+
+    
     // Ajouter une fiche avec id utilisateur
     @GetMapping("/niveauxFiche/{id}")
     public String ajoutficheId(Model model, @PathVariable Long id) {
@@ -553,6 +555,8 @@ public class HomeController {
         return "fiche_a_completer";
     }
 
+
+
     @PostMapping("/modifFicheParFormateur/{id}")
     public String modifFicheParFormateur(@ModelAttribute @Valid FicheIntervention fiche, Model model,
             @PathVariable Long id) {
@@ -659,6 +663,11 @@ public class HomeController {
         Boolean test = fiche.getPoliceDisMateriauxUtilises();
         System.out.println("test : " + test);
         fiche.setPoliceDisMateriauxUtilises(test);
+
+        fiche.setNiveauTravauxRealises(fiche.getNiveauTravauxRealises());
+        fiche.setNiveauTravauxNonRealises(fiche.getNiveauTravauxNonRealises());
+        fiche.setNiveauMateriauxUtilises(fiche.getNiveauMateriauxUtilises());
+
         ficheServ.modifier(fiche.getId(), fiche);
         //FicheIntervention createdFiche = ficheServ.creer(ficheOrigine);
         //model.addAttribute("createdFiche", createdFiche);
