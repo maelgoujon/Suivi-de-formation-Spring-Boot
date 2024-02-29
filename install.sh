@@ -70,6 +70,11 @@ function configure_postgresql {
     else
         echo "### La base de données n'existe pas, création en cours..."
         create_database
+        if [ $? -eq 0 ]; then
+            echo "### Base de données créée avec succès!"
+        else
+            echo "### Echec de la création de la base de données!"
+        fi
     fi
 }
 
@@ -89,6 +94,10 @@ function openjdk17_install {
         echo "### Echec de l'installation OpenJDK 17!"
     fi
     
+}
+
+function start_app {
+    java -jar webappytp-0.0.1-SNAPSHOT.war
 }
 
 echo "#################################################################"
