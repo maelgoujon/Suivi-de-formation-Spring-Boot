@@ -1013,7 +1013,9 @@ public class HomeController {
         for (Formation formation : formations) {
             for (Utilisateur utilisateur : formation.getUtilisateurs()) {
                 if (utilisateur.getRole().equals(UserRole.USER)) {
-                    utilisateurs.add(utilisateur);
+                    if (!utilisateur.isArchive()) {
+                        utilisateurs.add(utilisateur);
+                    }
                 }
             }
         }
