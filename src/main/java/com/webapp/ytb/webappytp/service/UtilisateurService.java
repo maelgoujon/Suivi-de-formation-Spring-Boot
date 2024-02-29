@@ -31,4 +31,12 @@ public interface UtilisateurService {
     public List<Utilisateur> findUserByFormation(Long formationId);
 
     public void generatedExcelForUser(Long userId, HttpServletResponse response) throws Exception;
+
+    public List<Utilisateur> getUtilisateursNonArchives();
+
+    public void archiverUtilisateur(Long userId);
+
+    public void desarchiverUtilisateur(Long userId);
+
+    public Utilisateur save(Utilisateur utilisateur);
 }

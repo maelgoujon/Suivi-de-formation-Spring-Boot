@@ -659,6 +659,11 @@ public class HomeController {
         Boolean test = fiche.getPoliceDisMateriauxUtilises();
         System.out.println("test : " + test);
         fiche.setPoliceDisMateriauxUtilises(test);
+        
+        fiche.setNiveauTravauxRealises(fiche.getNiveauTravauxRealises());
+        fiche.setNiveauTravauxNonRealises(fiche.getNiveauTravauxNonRealises());
+        fiche.setNiveauMateriauxUtilises(fiche.getNiveauMateriauxUtilises());
+
         ficheServ.modifier(fiche.getId(), fiche);
         //FicheIntervention createdFiche = ficheServ.creer(ficheOrigine);
         //model.addAttribute("createdFiche", createdFiche);
@@ -963,7 +968,7 @@ public class HomeController {
     // -----------------------------------------//
     @GetMapping("/")
     public String home(Model model) {
-        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
+        List<Utilisateur> utilisateurs = userServ.getUtilisateursNonArchives();
         model.addAttribute(UTILISATEURS, utilisateurs);
         return "accueil";
     }
@@ -992,7 +997,7 @@ public class HomeController {
 
     @GetMapping("/accueil")
     public String redirectToAccueil(Model model) {
-        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
+        List<Utilisateur> utilisateurs = userServ.getUtilisateursNonArchives();
         model.addAttribute(UTILISATEURS, utilisateurs);
         return "accueil";
     }

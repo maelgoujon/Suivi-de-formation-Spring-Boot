@@ -21,22 +21,30 @@
 
   <div th:replace="fragments/header :: header"></div>
 
-
-  <div class="row row-cols-1 row-cols-md-4 gx-4">
-    <!-- Added row-cols-1 for 1 column, row-cols-md-4 for 4 columns on medium screens -->
-    <div th:each="fiche : ${fiches}" class="col" id="fiche-container">
-      <!-- Changed class name to "col" for better compatibility with Bootstrap -->
-      <div class="card h-100 d-flex flex-column align-items-center text-center p-3" id="fiche-item">
-        <!-- Added card and p-3 classes for proper styling and padding -->
-        <img src="/images/assignment_icon.png" alt="Assignment icon" class="img-fluid image2"
-          style="max-height: 10rem; object-fit: cover;" />
-        <!-- Changed height to max-height, added img-fluid for better image scaling -->
-        <h2 id="fiche-date" class="card-title text-truncate"
-          th:text="${#temporals.format(fiche.Demande.dateDemande, 'dd/MM/yyyy')}"></h2>
-        <!-- Added card-title and text-truncate classes for better handling of long titles -->
-        <a th:href="@{'/chat/' + ${fiche.id}}" class="btn btn-primary w-100 mt-auto">Chat</a>
-        <!-- Changed type to "button" and added w-100 and mt-auto classes for proper styling -->
-        <a th:href="@{'/fiche/modifier/' + ${fiche.id}}" class="btn btn-primary w-100 mt-auto">Fiche</a>
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col">
+        <h1 class="text-center">Choix d'une fiche d'intervention</h1>
+        <!-- Ajout d'un titre -->
+      </div>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <div th:each="fiche : ${fiches}" class="col">
+        <div class="card h-100">
+          <img src="/images/assignment_icon.png" class="card-img-top" alt="Assignment icon">
+          <div class="card-body">
+            <h5 class="card-title fiche-date" th:text="${#temporals.format(fiche.Demande.dateDemande, 'dd/MM/yyyy')}">
+              Date de la demande</h5>
+            <div class="btn-container">
+              <a th:href="@{'/chat/' + ${fiche.id}}" class="btn btn-primary w-100 mb-2">
+                <img src="/images/messages/chat.png" alt="Chat icon" class="btn-icon img-fluid icon-size">
+              </a>
+              <a th:href="@{'/fiche/modifier/' + ${fiche.id}}" class="btn btn-primary w-100">
+                <img src="/images/messages/fiche.png" alt="Fiche icon" class="btn-icon img-fluid icon-size">
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

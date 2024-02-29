@@ -22,6 +22,8 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> 
 
     List<Utilisateur> findByRole(UserRole role);
 
-    Utilisateur findByLogin(String login);
+    Utilisateur findByLogin(String login); 
+
+    List<Utilisateur> findByRoleAndArchive(UserRole role, boolean archive);
 
 }

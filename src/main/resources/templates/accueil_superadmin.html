@@ -62,7 +62,7 @@
       <div class="row row-cols-1 row-cols-md-3 g-4">
         <!-- Iteration sur chaque utilisateur -->
         <div th:each="utilisateur : ${utilisateurs}" class="profil" th:data-id="${utilisateur.id}">
-          <div class="card profil">
+          <div th:classappend="${utilisateur.archive} ? 'card profil archived' : 'card profil'" >
             <div th:if="${utilisateur.photoBase64 != null and not #strings.isEmpty(utilisateur.photoBase64)}">
               <img class="card-img-top" th:src="${utilisateur.photoBase64}" alt="Photo de profil" />
             </div>

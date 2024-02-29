@@ -18,12 +18,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.webapp.ytb.webappytp.service.MessageService;
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.Formation;
+import com.webapp.ytb.webappytp.modele.Message;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.repository.FicheRepository;
 import com.webapp.ytb.webappytp.repository.FormationRepository;
+import com.webapp.ytb.webappytp.repository.MessageRepository;
 import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
 
 import jakarta.servlet.ServletOutputStream;
@@ -37,7 +40,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     private final UtilisateurRepository utilisateurRepository;
     private final FicheRepository ficheRepository;
     private final FormationRepository formationRepository;
-
+    private final MessageRepository messageRepository;
+    
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -92,6 +96,27 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public List<Utilisateur> getUtilisateursByRole(String roleStr) {
         UserRole role = UserRole.valueOf(roleStr); // Convertit la chaîne en énumération
         return utilisateurRepository.findByRole(role);
+    }
+
+    @Override
+    public List<Utilisateur> getUtilisateursNonArchives() {
+        return utilisateurRepository.findByRoleAndArchive(UserRole.USER, false);
+    }
+
+    @Override
+    public void archiverUtilisateur(Long userId) {
+        Utilisateur utilisateur = utilisateurRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+        utilisateur.setArchive(true);
+        utilisateurRepository.save(utilisateur);
+    }
+
+    @Override
+    public void desarchiverUtilisateur(Long userId) {
+        Utilisateur utilisateur = utilisateurRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+        utilisateur.setArchive(false);
+        utilisateurRepository.save(utilisateur);
     }
 
     @Override
