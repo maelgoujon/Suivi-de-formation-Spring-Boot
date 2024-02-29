@@ -41,7 +41,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     private final FicheRepository ficheRepository;
     private final FormationRepository formationRepository;
     private final MessageRepository messageRepository;
-    
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -133,6 +133,11 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public List<Utilisateur> findUserByFormation(Long formationId) {
         return formationRepository.findById(formationId).get().getUtilisateurs();
+    }
+
+    @Override
+    public Utilisateur save(Utilisateur utilisateur) {
+        return utilisateurRepository.save(utilisateur);
     }
 
     @Override

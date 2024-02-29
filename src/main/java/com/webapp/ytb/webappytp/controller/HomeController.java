@@ -663,11 +663,6 @@ public class HomeController {
         Boolean test = fiche.getPoliceDisMateriauxUtilises();
         System.out.println("test : " + test);
         fiche.setPoliceDisMateriauxUtilises(test);
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> 208f79ea17aee017e60d052a64f6ae7139d4ee27
         fiche.setNiveauTravauxRealises(fiche.getNiveauTravauxRealises());
         fiche.setNiveauTravauxNonRealises(fiche.getNiveauTravauxNonRealises());
         fiche.setNiveauMateriauxUtilises(fiche.getNiveauMateriauxUtilises());
