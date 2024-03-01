@@ -151,6 +151,17 @@ public class UtilisateurController {
         return "redirect:/utilisateur/nouveau";
     }
 
+    @PostMapping("/supprimer/{id}")
+    public String supprimerUtilisateur(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        try {
+            utilisateurService.supprimer(id);
+            redirectAttributes.addFlashAttribute("success", "Utilisateur supprimé avec succès.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Erreur lors de la suppression de l'utilisateur.");
+        }
+        return "redirect:/accueil_superadmin";
+    }
+
     @PostMapping("/desarchiver/{userId}") // Assurez-vous que le nom dans l'annotation @PathVariable correspond à celui
                                           // du paramètre de méthode
     public String desarchiverUser(@PathVariable Long userId, RedirectAttributes redirectAttributes) {
