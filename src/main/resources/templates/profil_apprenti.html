@@ -33,6 +33,35 @@
         <div>
             <div th:replace="fragments/header :: header"></div>
 
+            <!-- Modal de Confirmation -->
+            <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="modalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalLabel">Confirmer la Suppression</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <strong>Êtes-vous sûr de vouloir supprimer cet utilisateur?</strong>
+                            <br>
+                            <small>Si vous souhaitez télécharger l'archive avant de supprimer, veuillez cliquer sur le
+                                bouton ci-dessous.</small>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Non</button>
+                            <button type="button" class="btn btn-danger"
+                                onclick="document.getElementById('deleteUserForm').submit();">Oui</button>
+                            <a th:href="@{/utilisateur/excel/{userId}(userId=${utilisateur.id})}"
+                                class="btn btn-secondary">
+                                <img src="/images/download.png" alt="Télécharger" style="width: 20px; height: 20px;" />
+                                Télécharger
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="encadre p-4 bg-light">
                 <div class="container mt-5">
                     <h2>Profil de : <span th:text="${utilisateur.nom}"></span> <span
@@ -80,15 +109,15 @@
 
                                     <form th:if="${utilisateurConnecteRole == 'ROLE_SUPERADMIN'}"
                                         th:action="@{/utilisateur/supprimer/{userId}(userId=${utilisateur.id})}"
-                                        method="post"
-                                        onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur?');">
-                                        <!-- CSRF Token -->
+                                        method="post" id="deleteUserForm">
                                         <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-                                        <button type="submit" class="btn btn-secondary small-btn me-2 mb-2">
+                                        <button type="button" class="btn btn-secondary small-btn me-2 mb-2"
+                                            data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
                                             <img src="/images/bin.png" alt="Supprimer un utilisateur"
                                                 class="archiveimg small-img" />
                                         </button>
                                     </form>
+
 
 
 
