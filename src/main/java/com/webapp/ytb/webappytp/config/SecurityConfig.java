@@ -2,6 +2,8 @@ package com.webapp.ytb.webappytp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,31 +34,37 @@ public class SecurityConfig {
 
                 http
                                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                                        .requestMatchers(staticResources).permitAll()
-                                        .requestMatchers("/", "/accueil").permitAll()
-                                        .requestMatchers("/accueil_admin").hasAnyRole("ADMIN", "CIP", "EDUCSIMPLE")
-                                        .requestMatchers("/accueil_superadmin").hasRole("SUPERADMIN")
-                                        .requestMatchers("/ajoutfiche/{id}").hasRole("ADMIN")
-                                        .requestMatchers("/fiche/icones/{categorie}").hasRole("ADMIN")
-                                        .requestMatchers("/niveauxFiche/{id}").hasRole("ADMIN")
-                                        .requestMatchers("/chat/{id}").permitAll()
-                                        .requestMatchers("/record/{ficheId}").hasAnyRole("ADMIN", "CIP", "EDUCSIMPLE")
-                                        .requestMatchers("/recordaffichage/{ficheId}").hasAnyRole("ADMIN", "CIP", "EDUCSIMPLE")
-                                        .requestMatchers("/fiche/icones/upload").hasRole("ADMIN")
-                                        .requestMatchers("/modif/{id}").hasRole("SUPERADMIN")
-                                        .requestMatchers("/fiche/liste_fiche/{id}").hasAnyRole("ADMIN","CIP","EDUCSIMPLE")
-                                        .requestMatchers("/fiche/liste_fiche").hasAnyRole("ADMIN","CIP","EDUCSIMPLE")
-                                        .requestMatchers("/mdpmodif/{id}").hasRole("SUPERADMIN")
-                                        .requestMatchers("/formation").hasRole("SUPERADMIN")
-                                        .requestMatchers("/session/creer").hasRole("ADMIN") 
-                                        .requestMatchers("/materiaux").hasRole("ADMIN")
-                                        .requestMatchers("/suivi_progression/{userid}").hasRole("CIP")
-                                        .requestMatchers("/suivi_progression").hasRole("USER")
-                                        .requestMatchers("/profil_apprenti/{id}").hasAnyRole("ADMIN", "CIP", "EDUCSIMPLE","SUPERADMIN")
-                                        .requestMatchers("/login").permitAll()
-                                        .requestMatchers("/redirectByRole").permitAll()
-                                        .requestMatchers("/select_fiche").hasRole("USER")
-                                        .anyRequest().authenticated())
+                                                .requestMatchers(staticResources).permitAll()
+                                                .requestMatchers("/", "/accueil").permitAll()
+                                                .requestMatchers("/accueil_admin")
+                                                .hasAnyRole("ADMIN", "CIP", "EDUCSIMPLE")
+                                                .requestMatchers("/accueil_superadmin").hasRole("SUPERADMIN")
+                                                .requestMatchers("/ajoutfiche/{id}").hasRole("ADMIN")
+                                                .requestMatchers("/fiche/icones/{categorie}").hasRole("ADMIN")
+                                                .requestMatchers("/niveauxFiche/{id}").hasRole("ADMIN")
+                                                .requestMatchers("/chat/{id}").permitAll()
+                                                .requestMatchers("/record/{ficheId}")
+                                                .hasAnyRole("ADMIN", "CIP", "EDUCSIMPLE")
+                                                .requestMatchers("/recordaffichage/{ficheId}")
+                                                .hasAnyRole("ADMIN", "CIP", "EDUCSIMPLE")
+                                                .requestMatchers("/fiche/icones/upload").hasRole("ADMIN")
+                                                .requestMatchers("/modif/{id}").hasRole("SUPERADMIN")
+                                                .requestMatchers("/fiche/liste_fiche/{id}")
+                                                .hasAnyRole("ADMIN", "CIP", "EDUCSIMPLE")
+                                                .requestMatchers("/fiche/liste_fiche")
+                                                .hasAnyRole("ADMIN", "CIP", "EDUCSIMPLE")
+                                                .requestMatchers("/mdpmodif/{id}").hasRole("SUPERADMIN")
+                                                .requestMatchers("/formation").hasRole("SUPERADMIN")
+                                                .requestMatchers("/session/creer").hasRole("ADMIN")
+                                                .requestMatchers("/materiaux").hasRole("ADMIN")
+                                                .requestMatchers("/suivi_progression/{userid}").hasRole("CIP")
+                                                .requestMatchers("/suivi_progression").hasRole("USER")
+                                                .requestMatchers("/profil_apprenti/{id}")
+                                                .hasAnyRole("ADMIN", "CIP", "EDUCSIMPLE", "SUPERADMIN")
+                                                .requestMatchers("/login").permitAll()
+                                                .requestMatchers("/redirectByRole").permitAll()
+                                                .requestMatchers("/select_fiche").hasRole("USER")
+                                                .anyRequest().authenticated())
                                 .formLogin(formLogin -> formLogin
                                                 .loginPage("/accueil")
                                                 .loginProcessingUrl("/login")
@@ -82,6 +90,12 @@ public class SecurityConfig {
         public PasswordEncoder passwordEncoder() {
                 return new BCryptPasswordEncoder();
         }
-        
+
+        @Bean
+        public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+                PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
+                configurer.setLocation(new FileSystemResource(".env"));
+                return configurer;
+        }
 
 }
