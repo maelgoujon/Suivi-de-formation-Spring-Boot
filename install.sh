@@ -159,7 +159,7 @@ function wifi_hotspot_configure {
 function configure_service {
     # Configure service to start at boot
     if [ -f /etc/systemd/system/apeaj.service ]; then
-        echo "### Service déjà configuré!"
+        echo "### Service déjà configuré, on le supprime..."
         rm /etc/systemd/system/apeaj.service
     else
         echo "### Configuration du service en cours..."
@@ -173,6 +173,84 @@ function configure_service {
     else
         echo "### Echec de la configuration du service!"
     fi
+}
+
+function iptables_install {
+    # check if iptables is already installed
+    if [ -x /usr/sbin/iptables ]; then
+        echo "### iptables est déjà installé!"
+    else
+        echo "### iptables n'est pas installé, installation en cours..."
+        
+        apt-get install iptables -y
+        # check if iptables is installed
+        if [ $? -eq 0 ]; then
+            echo "### iptables installé avec succès"
+        else
+            echo "### Echec installation iptables!"
+        fi
+    fi
+}
+
+function configure_iptables {
+    function reset_iptables {
+        echo "### Supprimer les règles actuelles..."
+        # Vider les règles actuelles
+        iptables -F
+        # Supprimer les chaînes personnalisées
+        iptables -X
+        # Supprimer les regles de redirection
+        iptables -t nat -F
+        # supprimer les chaînes personnalisées de redirection
+        iptables -t nat -X
+        # Sauvegarder les règles
+        sudo -s iptables-save -c
+    }
+    reset_iptables
+    if [ $? -eq 0 ]; then
+        echo "### Réinitialisation des règles iptables réussie!"
+    else
+        echo "### Echec de la réinitialisation des règles iptables!"
+    fi
+    function set_rules {
+        echo "### Configuration des règles iptables..."
+        iptables -A INPUT -p tcp --dport 8081 -j ACCEPT
+        iptables -A INPUT -p tcp --dport 5432 -j ACCEPT
+        iptables -A INPUT -s 127.0.0.1/32 -p tcp --dport 8081 -j ACCEPT
+        iptables -A INPUT -s 127.0.0.1/32 -p tcp --dport 5432 -j ACCEPT
+        sudo -s iptables-save -c
+        
+        
+        
+        
+        # Autoriser les connexions au port 22 (SSH), 443 (HTTPS), 80 (HTTP) et 8081 (Application APEAJ)
+        iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+        iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+        iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+        iptables -A INPUT -p tcp --dport 8081 -j ACCEPT
+        
+        iptables -A OUTPUT -j ACCEPT
+        iptables -N IN_REPLY
+        iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+        iptables -A INPUT -j IN_REPLY
+        iptables -A IN_REPLY -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+        
+        iptables -P INPUT DROP
+        iptables -P OUTPUT ACCEPT
+        iptables -P FORWARD ACCEPT
+        
+        # Rediriger le port HTTP (80) vers 8081
+        iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination :8081
+        # Rediriger le port HTTPS (443) vers 8081
+        iptables -t nat -A PREROUTING -p tcp --dport 443 -j DNAT --to-destination :8081
+    }
+    set_rules
+    if [ $? -eq 0 ]; then
+        echo "### Configuration des règles iptables réussie!"
+    else
+        echo "### Echec de la configuration des règles iptables!"
+    fi
+    
 }
 
 # Check if root user is logged in
@@ -195,6 +273,12 @@ else
     echo "### Echec de la mise à jour du système!"
 fi
 
+# check if the service is running and stop it
+if [ -f /etc/systemd/system/apeaj.service ]; then
+    echo "### Le serveur web est en cours d'exécution, arrêt en cours..."
+    service apeaj stop
+fi
+
 # Install sudo
 echo "#################################################################"
 echo "#################### Installation de sudo #######################"
@@ -202,10 +286,6 @@ echo "#################################################################"
 
 sudo_install
 
-# check if service apeaj is running and stop it
-if [ -f /etc/systemd/system/apeaj.service ]; then
-    service apeaj stop
-fi
 # Install PostgreSQL
 echo "#################################################################"
 echo "#################### Installation PostgreSQL ####################"
@@ -241,18 +321,37 @@ echo "#################################################################"
 
 wifi_hotspot_configure
 
+# Installation iptables
+echo "#################################################################"
+echo "#################### Installation iptables ######################"
+echo "#################################################################"
+
+iptables_install
+
+# Configuration des règles iptables
+echo "#################################################################"
+echo "#################### Configuration des règles iptables #########"
+echo "#################################################################"
+
+configure_iptables
+
 # Setup images directory
 echo "#################################################################"
 echo "############# Repertoire des images préenregistrées #############"
 echo "#################################################################"
 
 if [ -d /home/etu/images ]; then
-    echo "### Le répertoire des images existe déjà!"
+    echo "### Le répertoire des images existe déjà!, suppression en cours..."
     rm -r /home/etu/images
+    if [ $? -eq 0 ]; then
+        echo "### Répertoire des images supprimé avec succès!"
+    else
+        echo "### Echec de la suppression du répertoire des images!"
+    fi
 fi
 echo "### Création du répertoire des images..."
 # Extract in background
-tar -xJvf images.tar.xz -C /home/etu/ &
+tar -xJvf images.tar.xz -C /home/etu/
 # set the group of the directory to etugroup
 chgrp etugroup /home/etu/images
 #set the permissions of the directory to 775 recursively

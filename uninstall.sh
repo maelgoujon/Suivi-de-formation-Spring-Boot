@@ -29,3 +29,9 @@ echo "Uninstalling NetworkManager..."
 sudo apt-get remove --purge --autoremove network-manager*
 echo "Removing configuration files and data for NetworkManager..."
 sudo rm -rf /etc/NetworkManager /var/lib/NetworkManager
+
+
+echo "Resetting iptables and redirect"
+sudo iptables -F
+sudo iptables -t nat -F
+sudo -s iptables-save -c
