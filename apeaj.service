@@ -1,0 +1,16 @@
+[Unit]
+Description=Java application webappytp
+After=syslog.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=etu
+WorkingDirectory=/home/etu/
+Environment="PATH=/home/etu/"
+ExecStart=/usr/bin/java -jar /home/etu/webappytp-0.0.1-SNAPSHOT.war
+TimeoutSec=300
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
