@@ -148,10 +148,10 @@ public class FormationController {
             }
         }
 
-        // (2) Delete users associated with the formation
+        /// (2) Archiver les utilisateurs associés à la formation
         for (Utilisateur utilisateur : utilisateurs) {
             if (utilisateur.getRole() == UserRole.USER) {
-                utilisateurService.supprimer(utilisateur.getId());
+            utilisateurService.archiverUtilisateur(utilisateur.getId());
             }
         }
     }
