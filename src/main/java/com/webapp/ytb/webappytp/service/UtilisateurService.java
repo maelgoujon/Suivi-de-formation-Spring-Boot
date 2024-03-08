@@ -31,4 +31,8 @@ public interface UtilisateurService {
     public List<Utilisateur> findUserByFormation(Long formationId);
 
     public void generatedExcelForUser(Long userId, HttpServletResponse response) throws Exception;
+   
+    int getNombreEssais();
+    
+    void saveNombreEssais(int nbrEssais);
 }

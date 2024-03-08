@@ -2,6 +2,8 @@ package com.webapp.ytb.webappytp.modele;
 
 import java.util.List;
 
+import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,8 +61,13 @@ public class Utilisateur {
     @Max(3)
     @Column
     private Integer niveau;
+    
+    @Column(name = "nb_essais")
+    private Integer nombreEssais; 
 
     @ManyToMany
     @JoinTable(name = "utilisateur_formation", joinColumns = @JoinColumn(name = "utilisateur_id"), inverseJoinColumns = @JoinColumn(name = "formation_id"))
     private List<Formation> formations;
+
+   
 }

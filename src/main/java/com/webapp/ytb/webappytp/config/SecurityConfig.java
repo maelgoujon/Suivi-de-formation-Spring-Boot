@@ -48,6 +48,7 @@ public class SecurityConfig {
                                         .requestMatchers("/fiche/liste_fiche").hasAnyRole("ADMIN","CIP","EDUCSIMPLE")
                                         .requestMatchers("/mdpmodif/{id}").hasRole("SUPERADMIN")
                                         .requestMatchers("/formation").hasRole("SUPERADMIN")
+                                        .requestMatchers("/nombre_essais").hasRole("SUPERADMIN")
                                         .requestMatchers("/session/creer").hasRole("ADMIN") 
                                         .requestMatchers("/materiaux").hasRole("ADMIN")
                                         .requestMatchers("/suivi_progression/{userid}").hasRole("CIP")

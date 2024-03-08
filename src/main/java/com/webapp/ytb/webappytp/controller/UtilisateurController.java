@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -198,6 +199,21 @@ public class UtilisateurController {
         // Utilisation de ModelAndView pour définir la vue et la redirection
         ModelAndView modelAndView = new ModelAndView("redirect:/accueil_superadmin");
         return modelAndView;
+    }
+
+
+    @GetMapping("/nombre_essais")
+    public String afficherPageNombreEssais(Model model) {
+        int nombreEssaisActuel = utilisateurService.getNombreEssais(); 
+        model.addAttribute("nombreEssaisActuel", nombreEssaisActuel);
+        return "nombre_essais";
+    }
+
+    @PostMapping("/nombre_essais")
+    public String enregistrerNombreEssais(@RequestParam("passwordAttempts") int passwordAttempts, Model model) {
+        utilisateurService.saveNombreEssais(passwordAttempts); 
+        model.addAttribute("success", true);
+        return "redirect:/utilisateur/nombre_essais";
     }
 
 }
