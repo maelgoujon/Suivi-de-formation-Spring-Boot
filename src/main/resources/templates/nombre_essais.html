@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/vnd.icon" href="/images/cercle.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Ajoutez les liens vers les fichiers CSS Bootstrap ici -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/front-awesome.min.css" rel="stylesheet" />
+    <!-- Ajoutez les liens vers les fichiers JavaScript Bootstrap et jQuery ici -->
+    <script src="/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <title>Paramètres de sécurité</title>
+</head>
+<body>
+    <h1>Configuration du nombre d'essais de mot de passe</h1>
+    
+    <form action="#" th:action="@{/utilisateur/nombre_essais}" th:object="${nombreEssaisActuel}" method="post">
+        <label for="passwordAttempts">Nombre d'essais de mot de passe :</label>
+        <input type="number" id="passwordAttempts" name="passwordAttempts" th:value="${nombreEssaisActuel}" required>
+        <button type="submit">Enregistrer</button>
+    </form>
+    
+    <!-- Afficher un message de succès si la sauvegarde est réussie -->
+    <div th:if="${success}">
+        <p>Nombre d'essais de mot de passe enregistré avec succès.</p>
+    </div>
+</body>
+</html>

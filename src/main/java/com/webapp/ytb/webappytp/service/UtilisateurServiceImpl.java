@@ -50,6 +50,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public Utilisateur creer(Utilisateur utilisateur) {
         // Encodez le mot de passe avant de sauvegarder l'utilisateur
         utilisateur.setMdp(passwordEncoder.encode(utilisateur.getMdp()));
+
+        // Nombre d'essais à 5 pour le nouvel utilisateur
+        utilisateur.setNombreEssais(5);
+
         return utilisateurRepository.save(utilisateur);
     }
 
@@ -295,5 +299,20 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         workbook.close();
         ops.close();
     }
+    // Méthode pour récupérer le nombre d'essais depuis la base de données
+    @Override
+    public int getNombreEssais() {
+        List<Utilisateur> usersList = utilisateurRepository.findAll();
+        return usersList.get(0).getNombreEssais();
+    }
 
+    // Méthode pour sauvegarder le nombre d'essais dans la base de données
+    @Override
+    public void saveNombreEssais(int nbrEssais) {
+        List<Utilisateur> usersList = utilisateurRepository.findAll();
+        for (Utilisateur u : usersList) {
+            u.setNombreEssais(nbrEssais);
+            utilisateurRepository.save(u);
+        }
+    }
 }

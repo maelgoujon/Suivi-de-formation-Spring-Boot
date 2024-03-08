@@ -1140,6 +1140,11 @@ public class HomeController {
         model.addAttribute(FICHE_INTERVENTION, ficheIntervention);
         return "recordaffichage";
     }
+    @GetMapping("/nombre_essais")
+    public String afficherPageNombreEssais(Model model) {
+        
+        return "nombre_essais";
+    }
 
     @GetMapping("/fiche/evaluation/{id}")
     public ResponseEntity<byte[]> getAudioEvaluation(@PathVariable Long id) {

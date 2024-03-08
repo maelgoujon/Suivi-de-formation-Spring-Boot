@@ -32,6 +32,12 @@ public interface UtilisateurService {
 
     public void generatedExcelForUser(Long userId, HttpServletResponse response) throws Exception;
 
+   
+    int getNombreEssais();
+    
+    void saveNombreEssais(int nbrEssais);
+
+
     public List<Utilisateur> getUtilisateursNonArchives();
 
     public void archiverUtilisateur(Long userId);
@@ -39,4 +45,5 @@ public interface UtilisateurService {
     public void desarchiverUtilisateur(Long userId);
 
     public Utilisateur save(Utilisateur utilisateur);
+
 }

@@ -181,6 +181,9 @@ class WebappytpApplicationTests {
 		assertTrue(Arrays.asList(typeIntervention).contains(Intervention.TypeIntervention.PLOMBERIE), "TypeIntervention doit contenir PLOMBERIE");
 		assertTrue(Arrays.asList(typeIntervention).contains(Intervention.TypeIntervention.SERRURERIE), "TypeIntervention doit contenir SERRURERIE");
 	}
+	// ---------------------------//
+	// ----Test nombre essais-----//
+	// ---------------------------//
 
 
 
