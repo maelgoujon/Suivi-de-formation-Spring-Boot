@@ -17,6 +17,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     List<Message> findAllByFicheInterventionIdOrderByTimestampAsc(long id);
 
-
+    List<Message> findByFicheInterventionId(Long ficheInterventionId);
 
 }

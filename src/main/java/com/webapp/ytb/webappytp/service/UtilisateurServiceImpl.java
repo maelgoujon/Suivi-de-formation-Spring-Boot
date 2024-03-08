@@ -4,6 +4,7 @@ import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
@@ -18,12 +19,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.webapp.ytb.webappytp.service.MessageService;
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.Formation;
+import com.webapp.ytb.webappytp.modele.Message;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.repository.FicheRepository;
 import com.webapp.ytb.webappytp.repository.FormationRepository;
+import com.webapp.ytb.webappytp.repository.MessageRepository;
 import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
 
 import jakarta.servlet.ServletOutputStream;
@@ -37,6 +41,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     private final UtilisateurRepository utilisateurRepository;
     private final FicheRepository ficheRepository;
     private final FormationRepository formationRepository;
+    private final MessageRepository messageRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -99,6 +104,27 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
+    public List<Utilisateur> getUtilisateursNonArchives() {
+        return utilisateurRepository.findByRoleAndArchive(UserRole.USER, false);
+    }
+
+    @Override
+    public void archiverUtilisateur(Long userId) {
+        Utilisateur utilisateur = utilisateurRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+        utilisateur.setArchive(true);
+        utilisateurRepository.save(utilisateur);
+    }
+
+    @Override
+    public void desarchiverUtilisateur(Long userId) {
+        Utilisateur utilisateur = utilisateurRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+        utilisateur.setArchive(false);
+        utilisateurRepository.save(utilisateur);
+    }
+
+    @Override
     public Utilisateur findUserByLogin(String login) {
         return utilisateurRepository.findUserByLogin(login);
     }
@@ -115,11 +141,29 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
+    public Utilisateur save(Utilisateur utilisateur) {
+        return utilisateurRepository.save(utilisateur);
+    }
+
+    @Override
     public void generatedExcelForUser(Long userId, HttpServletResponse response) throws Exception {
         Utilisateur utilisateur = utilisateurRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
 
         List<FicheIntervention> ficheInterventions = ficheRepository.findByUtilisateurId(userId);
+        
+        List<String> textContents = new ArrayList<>();
+
+        for (FicheIntervention fiche : ficheInterventions) {
+
+            List<Message> messages = messageRepository.findByFicheInterventionId(fiche.getId());
+
+            // Extraire le text_content de chaque message et l'ajouter à la liste
+            List<String> textesDeCetteFiche = messages.stream()
+                    .map(Message::getTextContent)
+                    .collect(Collectors.toList());
+            textContents.addAll(textesDeCetteFiche);
+        }
 
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("User Archive");
@@ -134,6 +178,11 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         ficheDataStyle.setAlignment(HorizontalAlignment.CENTER);
         ficheDataStyle.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
         ficheDataStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        HSSFCellStyle ChatDataStyle = workbook.createCellStyle();
+        ChatDataStyle.setAlignment(HorizontalAlignment.CENTER);
+        ChatDataStyle.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
+        ChatDataStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
         HSSFCellStyle headerStyle = workbook.createCellStyle();
         HSSFFont headerFont = workbook.createFont();
@@ -177,31 +226,32 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         }
         dataRowIndex++;
 
-        // Headers for Fiche Intervention Information
-        HSSFRow rowFiche = sheet.createRow(dataRowIndex++);
-        rowFiche.createCell(0).setCellValue("Date de Création");
-        rowFiche.createCell(1).setCellValue("Date de Demande");
-        rowFiche.createCell(2).setCellValue("Date d'Intervention");
-        rowFiche.createCell(3).setCellValue("Degré d'Urgence");
-        rowFiche.createCell(4).setCellValue("Durée d'Intervention");
-        rowFiche.createCell(5).setCellValue("État de la Fiche Finie");
-        rowFiche.createCell(6).setCellValue("Type de Maintenance");
-        rowFiche.createCell(7).setCellValue("Nom du Demandeur");
-        rowFiche.createCell(8).setCellValue("Travaux Non Réalisés");
-        rowFiche.createCell(9).setCellValue("Travaux Réalisés");
-        rowFiche.createCell(10).setCellValue("Description");
-        rowFiche.createCell(11).setCellValue("Localisation");
-        rowFiche.createCell(12).setCellValue("Nom");
-        rowFiche.createCell(13).setCellValue("Prénom");
-        rowFiche.createCell(14).setCellValue("Type d'Intervention");
-        rowFiche.createCell(15).setCellValue("Matériaux");
-
-        for (int i = 0; i <= 15; i++) {
-            rowFiche.getCell(i).setCellStyle(headerStyle);
-        }
-
         // Fiche Intervention Data
         for (FicheIntervention fiche : ficheInterventions) {
+            dataRowIndex++;
+
+            // Headers for Fiche Intervention Information
+            HSSFRow rowFiche = sheet.createRow(dataRowIndex++);
+            rowFiche.createCell(0).setCellValue("Date de Création");
+            rowFiche.createCell(1).setCellValue("Date de Demande");
+            rowFiche.createCell(2).setCellValue("Date d'Intervention");
+            rowFiche.createCell(3).setCellValue("Degré d'Urgence");
+            rowFiche.createCell(4).setCellValue("Durée d'Intervention");
+            rowFiche.createCell(5).setCellValue("État de la Fiche Finie");
+            rowFiche.createCell(6).setCellValue("Type de Maintenance");
+            rowFiche.createCell(7).setCellValue("Nom du Demandeur");
+            rowFiche.createCell(8).setCellValue("Travaux Non Réalisés");
+            rowFiche.createCell(9).setCellValue("Travaux Réalisés");
+            rowFiche.createCell(10).setCellValue("Description");
+            rowFiche.createCell(11).setCellValue("Localisation");
+            rowFiche.createCell(12).setCellValue("Nom");
+            rowFiche.createCell(13).setCellValue("Prénom");
+            rowFiche.createCell(14).setCellValue("Type d'Intervention");
+            rowFiche.createCell(15).setCellValue("Matériaux");
+
+            for (int i = 0; i <= 15; i++) {
+                rowFiche.getCell(i).setCellStyle(headerStyle);
+            }
             HSSFRow dataRowFiche = sheet.createRow(dataRowIndex++);
             dataRowFiche.createCell(0).setCellValue(fiche.getDateCreation().toString());
             dataRowFiche.createCell(1).setCellValue(fiche.getDateDemande().toString());
@@ -224,6 +274,24 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             for (int i = 0; i <= 15; i++) {
                 dataRowFiche.getCell(i).setCellStyle(ficheDataStyle);
             }
+
+            // Ajout d'un espace avant les messages
+            dataRowIndex++;
+
+            // En-tête pour les Messages
+            HSSFRow rowMessagesHeader = sheet.createRow(dataRowIndex++);
+            rowMessagesHeader.createCell(0).setCellValue("Commentaires du chat");
+            rowMessagesHeader.getCell(0).setCellStyle(headerStyle);
+
+            // Assurez-vous que la colonne est assez large pour afficher le contenu
+            sheet.setColumnWidth(0, 10000); // Ajustez la largeur selon le besoin
+
+            for (String textContent : textContents) {
+                HSSFRow dataRowMessage = sheet.createRow(dataRowIndex++);
+                dataRowMessage.createCell(0).setCellValue(textContent);
+                dataRowMessage.getCell(0).setCellStyle(ChatDataStyle);
+            }
+
         }
 
         ServletOutputStream ops = response.getOutputStream();

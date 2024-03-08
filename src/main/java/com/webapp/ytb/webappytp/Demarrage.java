@@ -586,6 +586,7 @@ public class Demarrage implements ApplicationRunner {
             ficheIntervention.setPoliceDisMateriauxUtilises(false);
             ficheIntervention.setPoliceDisTravauxNonRealises(true);
             ficheIntervention.setPoliceDisTravauxRealises(true);
+            ficheIntervention.setNiveauMateriauxUtilises(0);
             ficheRepository.save(ficheIntervention);
         }
     }

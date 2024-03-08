@@ -223,6 +223,8 @@ public class HomeController {
         return "fiche_nouvelle";
     }
 
+
+    
     // Ajouter une fiche avec id utilisateur
     @GetMapping("/niveauxFiche/{id}")
     public String ajoutficheId(Model model, @PathVariable Long id) {
@@ -553,6 +555,8 @@ public class HomeController {
         return "fiche_a_completer";
     }
 
+
+
     @PostMapping("/modifFicheParFormateur/{id}")
     public String modifFicheParFormateur(@ModelAttribute @Valid FicheIntervention fiche, Model model,
             @PathVariable Long id) {
@@ -659,6 +663,10 @@ public class HomeController {
         Boolean test = fiche.getPoliceDisMateriauxUtilises();
         System.out.println("test : " + test);
         fiche.setPoliceDisMateriauxUtilises(test);
+        fiche.setNiveauTravauxRealises(fiche.getNiveauTravauxRealises());
+        fiche.setNiveauTravauxNonRealises(fiche.getNiveauTravauxNonRealises());
+        fiche.setNiveauMateriauxUtilises(fiche.getNiveauMateriauxUtilises());
+
         ficheServ.modifier(fiche.getId(), fiche);
         //FicheIntervention createdFiche = ficheServ.creer(ficheOrigine);
         //model.addAttribute("createdFiche", createdFiche);
@@ -963,7 +971,7 @@ public class HomeController {
     // -----------------------------------------//
     @GetMapping("/")
     public String home(Model model) {
-        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
+        List<Utilisateur> utilisateurs = userServ.getUtilisateursNonArchives();
         model.addAttribute(UTILISATEURS, utilisateurs);
         return "accueil";
     }
@@ -992,7 +1000,7 @@ public class HomeController {
 
     @GetMapping("/accueil")
     public String redirectToAccueil(Model model) {
-        List<Utilisateur> utilisateurs = userServ.getUtilisateursByRole("USER");
+        List<Utilisateur> utilisateurs = userServ.getUtilisateursNonArchives();
         model.addAttribute(UTILISATEURS, utilisateurs);
         return "accueil";
     }
@@ -1005,7 +1013,9 @@ public class HomeController {
         for (Formation formation : formations) {
             for (Utilisateur utilisateur : formation.getUtilisateurs()) {
                 if (utilisateur.getRole().equals(UserRole.USER)) {
-                    utilisateurs.add(utilisateur);
+                    if (!utilisateur.isArchive()) {
+                        utilisateurs.add(utilisateur);
+                    }
                 }
             }
         }

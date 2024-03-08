@@ -12,6 +12,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -53,6 +55,9 @@ public class Utilisateur {
     @Enumerated(EnumType.STRING)
     private UserRole role; // (ADMIN, SUPERADMIN, USER)
 
+    @Column(length = 50)
+    private boolean archive;
+
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<FicheIntervention> ficheInterventions;
@@ -68,6 +73,4 @@ public class Utilisateur {
     @ManyToMany
     @JoinTable(name = "utilisateur_formation", joinColumns = @JoinColumn(name = "utilisateur_id"), inverseJoinColumns = @JoinColumn(name = "formation_id"))
     private List<Formation> formations;
-
-   
 }

@@ -2,6 +2,7 @@ package com.webapp.ytb.webappytp.service;
 
 import com.webapp.ytb.webappytp.modele.FicheIntervention;
 import com.webapp.ytb.webappytp.modele.Formation;
+import com.webapp.ytb.webappytp.modele.Message;
 import com.webapp.ytb.webappytp.modele.UserRole;
 import com.webapp.ytb.webappytp.modele.Utilisateur;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Demande;
@@ -10,6 +11,7 @@ import com.webapp.ytb.webappytp.modele.ElementsFiche.Intervention;
 import com.webapp.ytb.webappytp.modele.ElementsFiche.Maintenance;
 import com.webapp.ytb.webappytp.repository.FicheRepository;
 import com.webapp.ytb.webappytp.repository.FormationRepository;
+import com.webapp.ytb.webappytp.repository.MessageRepository;
 import com.webapp.ytb.webappytp.repository.UtilisateurRepository;
 
 import jakarta.servlet.ServletOutputStream;
@@ -34,7 +36,9 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -46,13 +50,15 @@ public class FormationServiceImpl implements FormationService {
     private final FormationRepository formationRepository;
     private final UtilisateurRepository utilisateurRepository;
     private final FicheRepository ficheRepository;
+    private final MessageRepository messageRepository;
 
     @Autowired
     public FormationServiceImpl(FormationRepository formationRepository, UtilisateurRepository utilisateurRepository,
-            FicheRepository ficheRepository) {
+            FicheRepository ficheRepository, MessageRepository messageRepository) {
         this.utilisateurRepository = utilisateurRepository;
         this.formationRepository = formationRepository;
         this.ficheRepository = ficheRepository;
+        this.messageRepository = messageRepository;
     }
 
     @Override
@@ -149,6 +155,28 @@ public class FormationServiceImpl implements FormationService {
             ficheInterventions.addAll(utilisateurFiches);
         }
 
+        Map<Utilisateur, List<String>> utilisateurMessagesMap = new HashMap<>();
+
+        for (Utilisateur utilisateur : utilisateurs) {
+            List<String> textContents = new ArrayList<>();
+
+            // Pour chaque utilisateur, récupérez les fiches et ensuite les messages
+            // associés
+            for (FicheIntervention fiche : ficheRepository.findByUtilisateurId(utilisateur.getId())) {
+                List<Message> messages = messageRepository.findByFicheInterventionId(fiche.getId());
+
+                for (Message message : messages) {
+                    textContents.add(message.getTextContent());
+                }
+            }
+
+            // Associer les text_contents récupérés à l'utilisateur actuel, si des messages
+            // existent
+            if (!textContents.isEmpty()) {
+                utilisateurMessagesMap.put(utilisateur, textContents);
+            }
+        }
+
         Formation formation = formationRepository.findById(formationId)
                 .orElseThrow(() -> new RuntimeException("Formation not found with ID: " + formationId));
 
@@ -185,6 +213,11 @@ public class FormationServiceImpl implements FormationService {
         userDataStyle.setAlignment(HorizontalAlignment.CENTER);
         userDataStyle.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
         userDataStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        HSSFCellStyle ChatDataStyle = workbook.createCellStyle();
+        ChatDataStyle.setAlignment(HorizontalAlignment.CENTER);
+        ChatDataStyle.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
+        ChatDataStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
         // Style pour les en-têtes des fiches
         HSSFCellStyle ficheHeaderStyle = workbook.createCellStyle();
@@ -250,36 +283,39 @@ public class FormationServiceImpl implements FormationService {
             dataRowUser.createCell(1).setCellValue(utilisateur.getPrenom());
             dataRowUser.createCell(2).setCellValue(utilisateur.getDescription());
             dataRowUser.createCell(3).setCellValue(utilisateur.getRole().toString());
+
             for (int i = 0; i < 4; i++) {
                 dataRowUser.getCell(i).setCellStyle(userDataStyle);
-            }
-            dataRowIndex++;
-
-            // Headers for Fiche Intervention Information
-            HSSFRow rowFiche = sheet.createRow(dataRowIndex++);
-            rowFiche.createCell(0).setCellValue("Date de Création");
-            rowFiche.createCell(1).setCellValue("Date de Demande");
-            rowFiche.createCell(2).setCellValue("Date d'Intervention");
-            rowFiche.createCell(3).setCellValue("Degré d'Urgence");
-            rowFiche.createCell(4).setCellValue("Durée d'Intervention");
-            rowFiche.createCell(5).setCellValue("État de la Fiche Finie");
-            rowFiche.createCell(6).setCellValue("Type de Maintenance");
-            rowFiche.createCell(7).setCellValue("Nom du Demandeur");
-            rowFiche.createCell(8).setCellValue("Travaux Non Réalisés");
-            rowFiche.createCell(9).setCellValue("Travaux Réalisés");
-            rowFiche.createCell(10).setCellValue("Description");
-            rowFiche.createCell(11).setCellValue("Localisation");
-            rowFiche.createCell(12).setCellValue("Nom");
-            rowFiche.createCell(13).setCellValue("Prénom");
-            rowFiche.createCell(14).setCellValue("Type d'Intervention");
-            rowFiche.createCell(15).setCellValue("Matériaux");
-
-            for (int i = 0; i <= 15; i++) {
-                rowFiche.getCell(i).setCellStyle(ficheHeaderStyle);
             }
 
             // Fiche Intervention Data
             for (FicheIntervention fiche : ficheInterventions) {
+
+                dataRowIndex++;
+
+                // Headers for Fiche Intervention Information
+                HSSFRow rowFiche = sheet.createRow(dataRowIndex++);
+                rowFiche.createCell(0).setCellValue("Date de Création");
+                rowFiche.createCell(1).setCellValue("Date de Demande");
+                rowFiche.createCell(2).setCellValue("Date d'Intervention");
+                rowFiche.createCell(3).setCellValue("Degré d'Urgence");
+                rowFiche.createCell(4).setCellValue("Durée d'Intervention");
+                rowFiche.createCell(5).setCellValue("État de la Fiche Finie");
+                rowFiche.createCell(6).setCellValue("Type de Maintenance");
+                rowFiche.createCell(7).setCellValue("Nom du Demandeur");
+                rowFiche.createCell(8).setCellValue("Travaux Non Réalisés");
+                rowFiche.createCell(9).setCellValue("Travaux Réalisés");
+                rowFiche.createCell(10).setCellValue("Description");
+                rowFiche.createCell(11).setCellValue("Localisation");
+                rowFiche.createCell(12).setCellValue("Nom");
+                rowFiche.createCell(13).setCellValue("Prénom");
+                rowFiche.createCell(14).setCellValue("Type d'Intervention");
+                rowFiche.createCell(15).setCellValue("Matériaux");
+
+                for (int i = 0; i <= 15; i++) {
+                    rowFiche.getCell(i).setCellStyle(ficheHeaderStyle);
+                }
+
                 HSSFRow dataRowFiche = sheet.createRow(dataRowIndex++);
                 dataRowFiche.createCell(0).setCellValue(fiche.getDateCreation().toString());
                 dataRowFiche.createCell(1).setCellValue(fiche.getDateDemande().toString());
@@ -302,8 +338,33 @@ public class FormationServiceImpl implements FormationService {
                 for (int i = 0; i <= 15; i++) {
                     dataRowFiche.getCell(i).setCellStyle(ficheDataStyle);
                 }
+
+                // Ajout d'un espace avant les messages
+                dataRowIndex++;
+
+                List<String> textContents = utilisateurMessagesMap.get(utilisateur); 
+
+                // Vérification si l'utilisateur a des messages avant de continuer
+                if (textContents != null && !textContents.isEmpty()) {
+                    // Ajout d'un espace avant les messages si nécessaire
+                    dataRowIndex++;
+
+                    // En-tête pour les Messages
+                    HSSFRow rowMessagesHeader = sheet.createRow(dataRowIndex++);
+                    rowMessagesHeader.createCell(0).setCellValue("Commentaires du chat");
+                    rowMessagesHeader.getCell(0).setCellStyle(ficheHeaderStyle);
+
+                    // Assurez-vous que la colonne est assez large pour afficher le contenu
+                    sheet.setColumnWidth(0, 10000); // Ajustez la largeur selon le besoin
+
+                    for (String textContent : textContents) {
+                        HSSFRow dataRowMessage = sheet.createRow(dataRowIndex++);
+                        dataRowMessage.createCell(0).setCellValue(textContent);
+                        dataRowMessage.getCell(0).setCellStyle(ChatDataStyle);
+                    }
+                }
+                dataRowIndex++;
             }
-            dataRowIndex++;
         }
 
         ServletOutputStream ops = response.getOutputStream();

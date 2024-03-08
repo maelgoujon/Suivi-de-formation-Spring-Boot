@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+
+
+
+  <legend th:fragment="legend (policeDis, couleur, champ, titre)">
+    <div class="row align-items-center">
+      <div class="col-auto d-flex align-items-center">
+        <button class="btn d-flex align-items-center" type="button" data-bs-toggle="collapse"
+          th:data-bs-target="'#imageNiveau'+ ${champ}" aria-expanded="false" th:aria-controls="'imageNiveau'+ ${champ}">
+          <img th:id="'ImageAAfficherOuNon' + ${champ}" class="display-5 imageIcon" src="/images/check.png" alt="Fait"
+            style="height: 1em;" />
+          <h2 th:text="${titre}" th:if="${policeDis}" th:id="'TitreSAAfficherOuNon'+ ${champ}"
+            class="display-5 TitreSection" th:style="'font-family: ' + 'OpenDyslexic' + '; color: ' + ${couleur}">
+
+          </h2>
+          <h2 th:text="${titre}" th:unless="${policeDis}" th:id="'TitreSAAfficherOuNon' + ${champ}"
+            class="display-5 TitreSection"
+            th:style="'font-family: ' + 'var(--bs-btn-font-family);' + '; color: ' + ${couleur}">
+
+          </h2>
+
+        </button>
+      </div>
+    </div>
+  </legend>
+
+
+  <div class="col" th:fragment="colNiveauTitre(champ, field)">
+    <fieldset>
+      <div class="titre">Niveau Titre</div>
+      <div th:with="fieldValue=${field}">
+        <div class="test">
+          <select class="selectTitreIcTxt form-select" th:id="'niveau' + ${champ}" th:name="'niveau' + ${champ}"
+            th:attr="data-champ=${champ}" th:onchange="updateTitreMateriaux()" th:object="${field}">
+            <option value="4" th:selected="${fiche[fieldValue] == 4}">Caché</option>
+            <option value="0" th:selected="${fiche[fieldValue] == 0}">Icone</option>
+            <option value="1" th:selected="${fiche[fieldValue] == 1}">Icone et texte</option>
+            <option value="2" th:selected="${fiche[fieldValue] == 2}">Texte</option>
+          </select>
+        </div>
+        <span th:text="${fiche[fieldValue]}"></span>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="col" th:fragment="colCouleurTitre(champ)">
+    <div class="titre">Couleur Texte</div>
+    <input type="color" class="colorPicker" th:value="${'fiche.couleur' + ${champ}}">
+    <input type="hidden" id="titlehidden" class="titlehidden" th:field="*{'couleur' + ${champ}}" />
+  </div>
+
+
+  <div class="col" th:fragment="colDislexique(champ)">
+    <div class="titre">Dislexique</div>
+    <input class="form-check-input" type="checkbox" th:checked="${'fiche.policeDis' + ${champ}}"
+      th:field="*${'policeDis' + ${champ}}">
+  </div>
+
+
+  <div class="col" th:fragment="selectIcones(champ)">
+    <section>
+      <div class="titre">Icone</div>
+      <div class="row">
+        <div class="scrollcards">
+          <div class="card" th:each="imageTitre, stat : ${'imagesTitre' + ${champ}}">
+            <input class="form-check-input" type="radio" name="'selectedImage' + ${champ}"
+              th:id="${imageTitre.nomImage}" th:value="${imageTitre.nomImage}" th:checked="${stat.first}"
+              onchange="actualiserImageTitre('${champ}')">
+            <label class="form-check-label" th:for="${imageTitre.nomImage}">
+              <img class="imageSlider" th:src="@{'/' + ${imageTitre.imageUrl}}" alt="Image Titre"
+                oncontextmenu="return false;" draggable="false" />
+              <div class="text-wrap" style="width: min-content;">
+                <h6 th:text="${imageTitre.nomImage}"></h6>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" id="'imageHidden' + ${champ}" class="'imageHidden' + ${champ}"
+        th:field="*{'imageTitre' + ${champ} + 'Url'}" />
+    </section>
+  </div>
+
+</body>
+
+</html>

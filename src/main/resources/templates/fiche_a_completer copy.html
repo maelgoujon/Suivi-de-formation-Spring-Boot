@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr" xml:lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <script src="/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/css/font-awesome.min.css" />
+    <title>Modifier Les Niveaux</title>
+    <link rel="icon" type="image/vnd.icon" href="/images/cercle.ico">
+
+
+    <style>
+        @font-face {
+            font-family: 'OpenDyslexic';
+            src: url('/fonts/OpenDyslexic-Regular.otf') format('opentype');
+        }
+
+        .card-block {
+            padding: 10px;
+        }
+
+        .scrollcards {
+            background-color: #fff;
+            overflow: auto;
+            white-space: nowrap;
+        }
+
+
+        div.scrollcards .card {
+            display: inline-block;
+            padding: 14px;
+            text-decoration: none;
+            height: auto;
+            margin-bottom: 1rem;
+
+        }
+
+        .logo {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        .imageSlider {
+            max-height: 10vh;
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        .imageListe {
+            max-height: 20vh;
+            max-width: 100%;
+            object-fit: contain;
+            margin: 1rem;
+        }
+
+        .images-selector {
+            display: none;
+            height: fit-content;
+            max-height: 80vh;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            position: fixed;
+            top: 5%;
+            left: 5%;
+            right: 5%;
+            bottom: 5%;
+            background-color: rgb(255, 255, 255);
+            z-index: 999;
+            overflow: auto;
+            grid-template-columns: repeat(3, 1fr);
+            max-width: 85vw;
+            margin: 0 auto;
+            border-radius: 3%;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <section class="h-100 p-5 text-white bg-dark rounded-3" style="margin-top: calc(var(--bs-gutter-x) * .5);">
+            <div class="container">
+                <h1 class="display-4">MODIFIER LES NIVEAUX
+                </h1>
+            </div>
+        </section>
+
+
+
+        <form th:action="@{/modifFicheParFormateur/{id}(id=${fiche.id})}" th:object="${fiche}" method="post"
+            id="ficheForm" class="fiche-form">
+
+
+            <hr />
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col">
+                            <a href="/imagestitres/liste" class="btn btn-dark">Modifier les images des titres</a>
+                        </div>
+                        <div class="col">
+                            <a href="/materiaux/liste" class="btn btn-dark">Modifier les materiaux</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--------------------------Intervenant--------------------------------------->
+            <hr />
+            <legend>
+                <div class="row align-items-center">
+                    <div class="col-auto d-flex align-items-center">
+                        <button class="btn d-flex align-items-center" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#imageNiveauIntervenant" aria-expanded="false"
+                            aria-controls="imageNiveauIntervenant">
+                            <img id="ImageAAfficherOuNonIntervenant" class="display-5 imageIcon" src="/images/check.png"
+                                alt="Fait" style="height: 1em;" />
+                            <h2 id="TitreSAAfficherOuNonIntervenant" class="display-5 TitreSection"
+                                th:style="'color: ' + ${fiche.Intervenant.couleurTitreIntervenant}">Intervenant</h2>
+                        </button>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="imageNiveauIntervenant">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col">
+
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div class="test">
+                                                        <select class="selectTitreIcTxt" id="niveauTitreIntervenant"
+                                                            name="niveauTitreIntervenant"
+                                                            th:field="${fiche.Intervenant.niveauTitreIntervenant}"
+                                                            onchange="updateTitre('Intervenant')">
+                                                            <option value="4">Caché</option>
+                                                            <option value="0">Icone</option>
+                                                            <option value="1" selected>Icone et texte</option>
+                                                            <option value="2">Texte</option>
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Couleur Texte</div>
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Intervenant.couleurTitreIntervenant}">
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
+                                                th:field="*{Intervenant.couleurTitreIntervenant}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div class="row">
+                                                    <div class="scrollcards">
+                                                        <div class="card"
+                                                            th:each="imageTitre, stat : ${imagesTitreIntervenant}">
+                                                            <input class="form-check-input" type="radio"
+                                                                name="selectedImageIntervenant"
+                                                                th:id="${imageTitre.nomImage}"
+                                                                th:value="${imageTitre.nomImage}"
+                                                                th:checked="${stat.first}"
+                                                                onchange="actualiserImageTitre('Intervenant')">
+                                                            <label class="form-check-label"
+                                                                th:for="${imageTitre.nomImage}">
+                                                                <img class="imageSlider"
+                                                                    th:src="@{'/' + ${imageTitre.imageUrl}}"
+                                                                    alt="Image Titre" oncontextmenu="return false;"
+                                                                    draggable="false" />
+                                                                <div class="text-wrap" style="width: min-content;">
+                                                                    <h6 th:text="${imageTitre.nomImage}"></h6>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <input type="hidden" id="imageHiddenIntervenant"
+                                                    class="imageHiddenIntervenant"
+                                                    th:field="*{Intervenant.imageTitreIntervenantUrl}"
+                                                    value="/images/eleve.png" />
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </legend>
+            <!-----------------------Prénom et Nom--------------------------------------->
+            <div class="row">
+                <!-----------------------Prénom--------------------------------------->
+                <div class="col-md-6 mb-3">
+                    <button class="btn d-flex align-items-center" style="height: 1.5em;" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#imageNiveauIntervenantPrenom" aria-expanded="false"
+                        aria-controls="imageNiveauIntervenantPrenom">
+                        <img id="ImageAAfficherOuNonIntervenantPrenom" class="display-8" src="/images/check.png"
+                            alt="Fait" style="height: 1em;" />
+                        <label id="TitreSAAfficherOuNonIntervenantPrenom" class="TitreSection" for="firstName"
+                            style="cursor: pointer;"
+                            th:style="'color: ' + ${fiche.Intervenant.couleurPrenom}">Prénom</label>
+                    </button>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="imageNiveauIntervenantPrenom">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='IntervenantPrenom')">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <input type="hidden" id="niveauTitreHiddenIntervenantPrenom"
+                                                name="niveauTitreHiddenIntervenantPrenom"
+                                                th:field="${fiche.Intervenant.niveauTitreIntervenantPrenom}" />
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Couleur Texte</div>
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Intervenant.couleurPrenom}" />
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
+                                                th:field="*{Intervenant.couleurPrenom}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div
+                                                    th:replace="intervenant_fragment.html::scrollcards(field='IntervenantPrenom')">
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <input type="hidden" id="imageHiddenIntervenantPrenom"
+                                            class="imageHiddenIntervenantPrenom"
+                                            th:field="*{Intervenant.imageTitreIntervenantPrenomUrl}"
+                                            value="/images/eleve.png" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <input th:placeholder="${user.prenom}" type="text" class="form-control" id="firstName" disabled>
+                </div>
+                <!-----------------------Nom--------------------------------------->
+                <div class="col-md-6 mb-3">
+                    <button class="btn d-flex align-items-center" style="height: 1.5em;" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#imageNiveauIntervenantNom" aria-expanded="false"
+                        aria-controls="imageNiveauIntervenantNom">
+                        <img id="ImageAAfficherOuNonIntervenantNom" class="display-8" src="/images/check.png" alt="Fait"
+                            style="height: 1em;" />
+                        <label id="TitreSAAfficherOuNonIntervenantNom" class="TitreSection" for="lastName"
+                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Intervenant.couleurNom}">Nom</label>
+                    </button>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="imageNiveauIntervenantNom">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='IntervenantNom')">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <input type="hidden" id="niveauTitreHiddenIntervenantNom"
+                                                name="niveauTitreHiddenIntervenantNom"
+                                                th:field="${fiche.Intervenant.niveauTitreIntervenantNom}" />
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Couleur Texte</div>
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Intervenant.couleurNom}">
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
+                                                th:field="*{Intervenant.couleurNom}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div
+                                                    th:replace="intervenant_fragment.html::scrollcards(field='IntervenantNom')">
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <input type="hidden" id="imageHiddenIntervenantNom"
+                                            class="imageHiddenIntervenantNom"
+                                            th:field="*{Intervenant.imageTitreIntervenantNomUrl}"
+                                            value="/images/eleve.png" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="text" class="form-control" id="lastName" th:placeholder="${user.nom}" disabled>
+                </div>
+            </div>
+            <!--------------------------Demande--------------------------------------->
+            <hr />
+            <legend>
+                <div class="row align-items-center">
+                    <div class="col-auto d-flex align-items-center">
+                        <button class="btn d-flex align-items-center" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#imageNiveauDemande" aria-expanded="false"
+                            aria-controls="imageNiveauDemande">
+                            <img id="ImageAAfficherOuNonDemande" class="display-5 imageIcon" src="/images/check.png"
+                                alt="Fait" style="height: 1em;" />
+                            <h2 id="TitreSAAfficherOuNonDemande" class="display-5 TitreSection"
+                                th:style="'color: ' + ${fiche.Demande.couleurTitreDemande}">Demande</h2>
+                        </button>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="imageNiveauDemande">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div class="test">
+                                                        <select class="selectTitreIcTxt" id="niveauTitreDemande"
+                                                            name="niveauTitreDemande"
+                                                            th:field="${fiche.Demande.niveauTitreDemande}"
+                                                            onchange="updateTitre('Demande')">
+                                                            <option value="4">Caché</option>
+                                                            <option value="0">Icone</option>
+                                                            <option value="1">Icone et texte</option>
+                                                            <option value="2">Texte</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Couleur Texte</div>
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Demande.couleurTitreDemande}">
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
+                                                th:field="*{Demande.couleurTitreDemande}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div class="row">
+                                                    <div class="scrollcards">
+                                                        <div class="card"
+                                                            th:each="imageTitre, stat : ${imagesTitreDemande}">
+                                                            <input class="form-check-input" type="radio"
+                                                                name="selectedImageDemande"
+                                                                th:id="${imageTitre.nomImage}"
+                                                                th:value="${imageTitre.nomImage}"
+                                                                th:checked="${stat.first}"
+                                                                onchange="actualiserImageTitre('Demande')">
+                                                            <label class="form-check-label"
+                                                                th:for="${imageTitre.nomImage}">
+                                                                <img class="imageSlider"
+                                                                    th:src="@{'/' + ${imageTitre.imageUrl}}"
+                                                                    alt="Image Titre" oncontextmenu="return false;"
+                                                                    draggable="false" />
+                                                                <div class="text-wrap" style="width: min-content;">
+                                                                    <h6 th:text="${imageTitre.nomImage}"></h6>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" id="imageHiddenDemande" class="imageHiddenDemande"
+                                                    th:field="*{Demande.imageTitreDemandeUrl}" />
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </legend>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <button class="btn d-flex align-items-center" style="height: 1.5em;" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#imageNiveauDemandeNom" aria-expanded="false"
+                        aria-controls="imageNiveauDemandeNom">
+                        <img id="ImageAAfficherOuNonDemandeNom" class="display-8" src="/images/check.png" alt="Fait"
+                            style="height: 1em;" />
+                        <label id="TitreSAAfficherOuNonDemandeNom" class="TitreSection" for="disabledNomDemandeur"
+                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Demande.couleurNomDemandeur}">Nom du
+                            demandeur</label>
+                    </button>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="imageNiveauDemandeNom">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='DemandeNom')">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <input type="hidden" id="niveauTitreHiddenDemandeNom"
+                                                name="niveauTitreHiddenDemandeNom"
+                                                th:field="${fiche.Demande.niveauTitreDemandeNom}" />
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Couleur Texte</div>
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Demande.couleurNomDemandeur}">
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
+                                                th:field="*{Demande.couleurNomDemandeur}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div
+                                                    th:replace="intervenant_fragment.html::scrollcards(field='DemandeNom')">
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <input type="hidden" id="imageHiddenDemandeNom" class="imageHiddenDemandeNom"
+                                            th:field="*{Demande.imageTitreDemandeNomUrl}" value="/images/eleve.png" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="text" id="disabledNomDemandeur" class="form-control"
+                        th:field="*{demande.nomDemandeur}">
+
+
+                    <button class="btn d-flex align-items-center" style="height: 1.5em;" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#imageNiveauDemandeDegreUrgence" aria-expanded="false"
+                        aria-controls="imageNiveauDemandeDegreUrgence">
+                        <img id="ImageAAfficherOuNonDemandeDegreUrgence" class="display-8" src="/images/check.png"
+                            alt="Fait" style="height: 1em;" />
+                        <label id="TitreSAAfficherOuNonDemandeDegreUrgence" class="TitreSection"
+                            for="disabledDegreDemandeDegreUrgence" style="cursor: pointer;"
+                            th:style="'color: ' + ${fiche.Demande.couleurDegreUrgence}">Degré d'urgence</label>
+                    </button>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="imageNiveauDemandeDegreUrgence">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='DemandeDegreUrgence')">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <input type="hidden" id="niveauTitreHiddenDemandeDegreUrgence"
+                                                name="niveauTitreHiddenDemandeDegreUrgence"
+                                                th:field="${fiche.Demande.niveauTitreDemandeDegreUrgence}" />
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Couleur Texte</div>
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Demande.couleurDegreUrgence}">
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
+                                                th:field="*{Demande.couleurDegreUrgence}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div
+                                                    th:replace="intervenant_fragment.html::scrollcards(field='DemandeDegreUrgence')">
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <input type="hidden" id="imageHiddenDemandeDegreUrgence"
+                                            class="imageHiddenDemandeDegreUrgence"
+                                            th:field="*{Demande.imageTitreDemandeDegreUrgenceUrl}"
+                                            value="/images/eleve.png" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="text" id="disabledDegreUrgence" class="form-control"
+                        th:field="*{demande.degreUrgence}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <button class="btn d-flex align-items-center" style="height: 1.5em;" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#imageNiveauDemandeDate" aria-expanded="false"
+                        aria-controls="imageNiveauDemandeDate">
+                        <img id="ImageAAfficherOuNonDemandeDate" class="display-8" src="/images/check.png" alt="Fait"
+                            style="height: 1em;" />
+                        <label id="TitreSAAfficherOuNonDemandeDate" class="TitreSection" for="disabledDegreDemandeDate"
+                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Demande.couleurDateDemande}">Date de
+                            la demande</label>
+                    </button>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="imageNiveauDemandeDate">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='DemandeDate')">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <input type="hidden" id="niveauTitreHiddenDemandeDate"
+                                                name="niveauTitreHiddenDemandeDate"
+                                                th:field="${fiche.demande.niveauTitreDemandeDate}" />
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Couleur Texte</div>
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Demande.couleurDateDemande}">
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
+                                                th:field="*{demande.couleurDateDemande}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div
+                                                    th:replace="intervenant_fragment.html::scrollcards(field='DemandeDate')">
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <input type="hidden" id="imageHiddenDemandeDate" class="imageHiddenDemandeDate"
+                                            th:field="*{demande.imageTitreDemandeDateUrl}" value="/images/eleve.png" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="text" id="disabledDateDemande" name="disabledDateDemande" class="form-control"
+                        th:field="*{demande.dateDemande}" />
+
+
+
+
+                    <button class="btn d-flex align-items-center" style="height: 1.5em;" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#imageNiveauDemandeLocalisation" aria-expanded="false"
+                        aria-controls="imageNiveauDemandeLocalisation">
+                        <img id="ImageAAfficherOuNonDemandeLocalisation" class="display-8" src="/images/check.png"
+                            alt="Fait" style="height: 1em;" />
+                        <label id="TitreSAAfficherOuNonDemandeLocalisation" class="TitreSection"
+                            for="disabledLocalisation" style="cursor: pointer;"
+                            th:style="'color: ' + ${fiche.Demande.couleurLocalisation}">Localisation</label>
+                    </button>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="imageNiveauDemandeLocalisation">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='DemandeLocalisation')">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <input type="hidden" id="niveauTitreHiddenDemandeLocalisation"
+                                                name="niveauTitreHiddenDemandeLocalisation"
+                                                th:field="${fiche.demande.niveauTitreDemandeLocalisation}" />
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Couleur Texte</div>
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Demande.couleurLocalisation}">
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
+                                                th:field="*{demande.couleurLocalisation}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div
+                                                    th:replace="intervenant_fragment.html::scrollcards(field='DemandeLocalisation')">
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <input type="hidden" id="imageHiddenDemandeLocalisation"
+                                            class="imageHiddenDemandeLocalisation"
+                                            th:field="*{demande.imageTitreDemandeLocalisationUrl}"
+                                            value="/images/eleve.png" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="text" id="disabledLocalisation" name="disabledLocalisation" class="form-control"
+                        th:field="*{demande.localisation}" />
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+
+                    <button class="btn d-flex align-items-center" style="height: 1.5em;" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#imageNiveauDemandeDescription" aria-expanded="false"
+                        aria-controls="imageNiveauDemandeDescription">
+                        <img id="ImageAAfficherOuNonDemandeDescription" class="display-8" src="/images/check.png"
+                            alt="Fait" style="height: 1em;" />
+                        <label id="TitreSAAfficherOuNonDemandeDescription" class="TitreSection"
+                            for="disabledDescription" style="cursor: pointer;"
+                            th:style="'color: ' + ${fiche.Demande.couleurDescription}">Description</label>
+                    </button>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="imageNiveauDemandeDescription">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='DemandeDescription')">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <input type="hidden" id="niveauTitreHiddenDemandeDescription"
+                                                name="niveauTitreHiddenDemandeDescription"
+                                                th:field="${fiche.demande.niveauTitreDemandeDescription}" />
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Couleur Texte</div>
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Demande.couleurDescription}">
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
+                                                th:field="*{demande.couleurDescription}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div
+                                                    th:replace="intervenant_fragment.html::scrollcards(field='DemandeDescription')">
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <input type="hidden" id="imageHiddenDemandeDescription"
+                                            class="imageHiddenDemandeDescription"
+                                            th:field="*{demande.imageTitreDemandeDescriptionUrl}"
+                                            value="/images/eleve.png" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <textarea rows="10" id="disabledDescription" name="disabledDescription" class="form-control"
+                        th:field="*{demande.description}"></textarea>
+                </div>
+            </div>
+
+            <!--------------------------Intervention--------------------------------------->
+            <hr />
+            <legend>
+                <div class="row align-items-center">
+                    <div class="col-auto d-flex align-items-center">
+                        <button class="btn d-flex align-items-center" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#imageNiveauIntervention" aria-expanded="false"
+                            aria-controls="imageNiveauIntervention">
+                            <img id="ImageAAfficherOuNonIntervention" class="display-5 imageIcon"
+                                src="/images/check.png" alt="Fait" style="height: 1em;" />
+                            <h2 id="TitreSAAfficherOuNonIntervention" class="display-5 TitreSection"
+                                th:style="'color: ' + ${fiche.Intervention.couleurTitreIntervention}">Intervention</h2>
+                        </button>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="imageNiveauIntervention">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div class="test">
+                                                        <select class="selectTitreIcTxt" id="niveauTitreIntervention"
+                                                            name="niveauTitreIntervention"
+                                                            th:field="${fiche.intervention.niveauTitreIntervention}"
+                                                            onchange="updateTitre('Intervention')">
+                                                            <option value="4">Caché</option>
+                                                            <option value="0">Icone</option>
+                                                            <option value="1" selected>Icone et texte</option>
+                                                            <option value="2">Texte</option>
+                                                        </select>
+
+
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Couleur Texte</div>
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Intervention.couleurTitreIntervention}">
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
+                                                th:field="*{Intervention.couleurTitreIntervention}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div class="row">
+                                                    <div class="scrollcards">
+                                                        <div class="card"
+                                                            th:each="imageTitre, stat : ${imagesTitreIntervention}">
+                                                            <input class="form-check-input" type="radio"
+                                                                name="selectedImageIntervention"
+                                                                th:id="${imageTitre.nomImage}"
+                                                                th:value="${imageTitre.nomImage}"
+                                                                th:checked="${stat.first}"
+                                                                onchange="actualiserImageTitre('Intervention')">
+                                                            <label class="form-check-label"
+                                                                th:for="${imageTitre.nomImage}">
+                                                                <img class="imageSlider"
+                                                                    th:src="@{'/' + ${imageTitre.imageUrl}}"
+                                                                    alt="Image Titre" oncontextmenu="return false;"
+                                                                    draggable="false" />
+                                                                <div class="text-wrap" style="width: min-content;">
+                                                                    <h6 th:text="${imageTitre.nomImage}"></h6>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" id="imageHiddenIntervention"
+                                                    class="imageHiddenIntervention"
+                                                    th:field="*{Intervention.imageTitreInterventionUrl}"
+                                                    value="/images/eleve.png" />
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </legend>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+
+
+                    <button class="btn d-flex align-items-center" style="height: 1.5em;" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#imageNiveauInterventionDate" aria-expanded="false"
+                        aria-controls="imageNiveauInterventionDate">
+                        <img id="ImageAAfficherOuNonInterventionDate" class="display-8" src="/images/check.png"
+                            alt="Fait" style="height: 1em;" />
+                        <label id="TitreSAAfficherOuNonInterventionDate" class="TitreSection" for="newDateIntervention"
+                            style="cursor: pointer;"
+                            th:style="'color: ' + ${fiche.Intervention.couleurDateIntervention}">Date de
+                            l'intervention</label>
+                    </button>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="imageNiveauInterventionDate">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='InterventionDate')">
+                                                    </div>
+                                                    <input type="hidden" id="niveauTitreHiddenInterventionDate"
+                                                        name="niveauTitreHiddenInterventionDate"
+                                                        th:field="${fiche.intervention.niveauDateIntervention}" />
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Couleur Texte</div>
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Intervention.couleurDateIntervention}">
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
+                                                th:field="*{intervention.couleurDateIntervention}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div
+                                                    th:replace="intervenant_fragment.html::scrollcards(field='InterventionDate')">
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <input type="hidden" id="imageHiddenInterventionDate"
+                                            class="imageHiddenInterventionDate"
+                                            th:field="*{Intervention.imageDateInterventionUrl}"
+                                            value="/images/eleve.png" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="text" id="newDateIntervention" name="newDateIntervention" class="form-control"
+                        th:field="*{intervention.dateIntervention}" disabled />
+
+
+
+
+                    <button class="btn d-flex align-items-center" style="height: 1.5em;" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#imageNiveauInterventionDuree" aria-expanded="false"
+                        aria-controls="imageNiveauInterventionDuree">
+                        <img id="ImageAAfficherOuNonInterventionDuree" class="display-8" src="/images/check.png"
+                            alt="Fait" style="height: 1em;" />
+                        <label id="TitreSAAfficherOuNonInterventionDuree" class="TitreSection"
+                            for="newDureeIntervention" style="cursor: pointer;"
+                            th:style="'color: ' + ${fiche.Intervention.couleurDureeIntervention}">Durée de
+                            l'intervention</label>
+                    </button>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="imageNiveauInterventionDuree">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='InterventionDuree')">
+                                                    </div>
+                                                    <input type="hidden" id="niveauTitreHiddenInterventionDuree"
+                                                        name="niveauTitreHiddenInterventionDuree"
+                                                        th:field="${fiche.intervention.niveauDureeIntervention}" />
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Couleur Texte</div>
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Intervention.couleurDureeIntervention}">
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
+                                                th:field="*{intervention.couleurDureeIntervention}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div
+                                                    th:replace="intervenant_fragment.html::scrollcards(field='InterventionDuree')">
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <input type="hidden" id="imageHiddenInterventionDuree"
+                                            class="imageHiddenInterventionDuree"
+                                            th:field="*{Intervention.imageDureeInterventionUrl}"
+                                            value="/images/eleve.png" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="text" id="newDureeIntervention" name="newDureeIntervention" class="form-control"
+                        th:field="*{intervention.dureeIntervention}" disabled>
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <button class="btn d-flex align-items-center" style="height: 1.5em;" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#imageNiveauInterventionType" aria-expanded="false"
+                        aria-controls="imageNiveauInterventionType">
+                        <img id="ImageAAfficherOuNonInterventionType" class="display-8" src="/images/check.png"
+                            alt="Fait" style="height: 1em;" />
+                        <label id="TitreSAAfficherOuNonInterventionType" class="TitreSection" for="newTypeIntervention"
+                            style="cursor: pointer;"
+                            th:style="'color: ' + ${fiche.Intervention.couleurTypeIntervention}">Type
+                            d'intervention</label>
+                    </button>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="imageNiveauInterventionType">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='InterventionType')">
+                                                    </div>
+                                                    <input type="hidden" id="niveauTitreHiddenInterventionType"
+                                                        name="niveauTitreHiddenInterventionType"
+                                                        th:field="${fiche.intervention.niveauTypeIntervention}" />
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Couleur Texte</div>
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Intervention.couleurTypeIntervention}">
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
+                                                th:field="*{intervention.couleurTypeIntervention}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div
+                                                    th:replace="intervenant_fragment.html::scrollcards(field='InterventionType')">
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <input type="hidden" id="imageHiddenInterventionType"
+                                            class="imageHiddenInterventionType"
+                                            th:field="*{Intervention.imageTypeInterventionUrl}"
+                                            value="/images/eleve.png" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="disabledTypeIntervention" th:each="nature : ${typeInterventionList}">
+                        <div class="media form-check">
+                            <input class="form-check-input" type="radio" name="intervention" th:value="${nature.name()}"
+                                th:id="${'radio-' + nature}" th:field="*{intervention.TypeIntervention}" />
+                            <img class="align-self-start mr-3 logo"
+                                th:src="${'/images/' + nature.name().toLowerCase() + '.png'}"
+                                th:alt="${'/images/' + nature.name().toLowerCase() + '.png'}" />
+                            <label th:for="${'radio-' + nature}"
+                                th:text="${#strings.capitalize(nature.name().toLowerCase().replace('_', ' '))}"></label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+
+                    <button class="btn d-flex align-items-center" style="height: 1.5em;" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#imageNiveauMaintenanceType" aria-expanded="false"
+                        aria-controls="imageNiveauMaintenanceType">
+                        <img id="ImageAAfficherOuNonMaintenanceType" class="display-8" src="/images/check.png"
+                            alt="Fait" style="height: 1em;" />
+                        <label id="TitreSAAfficherOuNonMaintenanceType" class="TitreSection" for="newMaintenanceType"
+                            style="cursor: pointer;"
+                            th:style="'color: ' + ${fiche.Maintenance.CouleurMaintenanceType}">Type de
+                            maintenance</label>
+                    </button>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="collapse multi-collapse" id="imageNiveauMaintenanceType">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='MaintenanceType')">
+                                                    </div>
+                                                    <input type="hidden" id="niveauTitreHiddenMaintenanceType"
+                                                        name="niveauTitreHiddenMaintenanceType"
+                                                        th:field="${fiche.maintenance.NiveauMaintenanceType}" />
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col">
+                                            <div class="titre">Couleur Texte</div>
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Maintenance.CouleurMaintenanceType}">
+                                            <input type="hidden" id="titlehidden" class="titlehidden"
+                                                th:field="*{maintenance.CouleurMaintenanceType}" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <section>
+                                                <div class="titre">Icone</div>
+                                                <div
+                                                    th:replace="intervenant_fragment.html::scrollcards(field='MaintenanceType')">
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <input type="hidden" id="imageHiddenMaintenanceType"
+                                            class="imageHiddenMaintenanceType"
+                                            th:field="*{Maintenance.imageTypeMaintenanceUrl}"
+                                            value="/images/eleve.png" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div id="newMaintenanceType" th:each="type : ${maintenanceList}">
+                        <div class="media form-check">
+                            <input class="form-check-input" type="radio" name="maintenanceType" th:value="${type}"
+                                th:id="${'radio-' + type.name()}" th:field="*{maintenance.maintenanceType}" />
+                            <img class="align-self-start mr-3 logo"
+                                th:src="${'/images/' + type.name().toLowerCase() + '.png'}"
+                                th:alt="${'/images/' + type.name().toLowerCase() + '.png'}">
+                            <label th:for="${'radio-' + type.name()}"></label>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <!--------------------------Travaux réalisés--------------------------------------->
+            <hr />
+
+            <div
+                th:replace="fragments/titreFiche.html :: legend(policeDis=${fiche.policeDisTravauxRealises}, couleur=${fiche.couleurTravauxRealises},champ='TravauxRealises', titre='Travaux réalisés')">
+            </div>
+
+
+            <div class="row align-items-center">
+
+                <div class="row">
+                    <div class="col">
+                        <div class="collapse multi-collapse" id="imageNiveauTravauxRealises">
+                            <div class="card card-body">
+                                <div class="row">
+                                    <div
+                                        th:replace="fragments/titreFiche.html :: colNiveauTitre(champ='TravauxRealises')">
+                                    </div>
+
+                                    <div
+                                        th:replace="fragments/titreFiche.html :: colCouleurTitre(champ='TravauxRealises')">
+                                    </div>
+
+                                    <div
+                                        th:replace="fragments/titreFiche.html :: colDislexique(champ='TravauxRealises')">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div
+                                        th:replace="fragments/titreFiche.html :: selectIcones(champ='TravauxRealises')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <textarea rows="10" id="newTravauxRealises" class="form-control" name="newTravauxRealises"
+                        onkeydown="handleDescriptionKeyDown(event)" th:text="${fiche.travauxRealises}"
+                        disabled></textarea>
+                </div>
+            </div>
+
+            <!--------------------------Travaux NON réalisés--------------------------------------->
+            <hr />
+            <div
+                th:replace="fragments/titreFiche.html :: legend(policeDis=${fiche.policeDisTravauxNonRealises}, couleur=${fiche.couleurTravauxNonRealises},champ='TravauxNonRealises', titre='Travaux non réalisés')">
+            </div>
+
+            <div class="row align-items-center">
+
+                <div class="row">
+                    <div class="col">
+                        <div class="collapse multi-collapse" id="imageNiveauTravauxNonRealises">
+                            <div class="card card-body">
+                                <div class="row">
+                                    <div
+                                        th:replace="fragments/titreFiche.html :: colNiveauTitre(champ='TravauxNonRealises')">
+                                    </div>
+
+                                    <div
+                                        th:replace="fragments/titreFiche.html :: colCouleurTitre(champ='TravauxNonRealises')">
+                                    </div>
+
+                                    <div
+                                        th:replace="fragments/titreFiche.html :: colDislexique(champ='TravauxNonRealises')">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div
+                                        th:replace="fragments/titreFiche.html :: selectIcones(champ='TravauxNonRealises')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <textarea rows="10" id="newTravauxNonRealises" class="form-control" name="newTravauxNonRealises"
+                        onkeydown="handleDescriptionKeyDown(event)" th:text="${fiche.travauxNonRealises}"
+                        disabled></textarea>
+                </div>
+            </div>
+
+            <!--------------------------Matériaux--------------------------------------->
+            <hr />
+
+
+            <div
+                th:replace="fragments/titreFiche.html :: legend(policeDis=${fiche.policeDisMateriauxUtilises}, couleur=${fiche.couleurMateriauxUtilises},champ='MateriauxUtilises', titre='Matériaux Utilisés')">
+            </div>
+
+
+
+            <div class="row">
+                <div class="col">
+
+
+                    <div class="collapse multi-collapse" id="imageNiveauMateriauxUtilises">
+                        <div class="card card-body">
+                            <div class="row">
+                                <div
+                                    th:replace="fragments/titreFiche.html :: colNiveauTitre(champ='MateriauxUtilises')">
+                                </div>
+
+                                <div
+                                    th:replace="fragments/titreFiche.html :: colCouleurTitre(champ='MateriauxUtilises')">
+                                </div>
+
+                                <div th:replace="fragments/titreFiche.html :: colDislexique(champ='MateriauxUtilises')">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div th:replace="fragments/titreFiche.html :: selectIcones(champ='MateriauxUtilises')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <div class="materiaux_vertical">
+                        <div class="noPrint"></div>
+                        <div class="container">
+                            <div class="row">
+                                <th:block th:each="sectionNumber : ${#numbers.sequence(0,5)}">
+                                    <div class="col-6 col-sm-6 col-lg-4 mb-4 flex-fill ">
+                                        <div id="case"
+                                            style="border: 2px solid #212529;border-radius: 0.4rem; height: 100%;">
+                                            <button type="button" class="btn btn-dark btn-sm" style="width: 100%;">
+                                                Selectionner le matériau
+                                            </button>
+                                            <div class="w-100"></div>
+                                            <img alt="image selectionnée"
+                                                style="max-height: 15vh; max-width: 80vw; width: 100%; object-fit: contain;margin: 1rem;height: inherit;"
+                                                class="rounded mx-auto d-block" />
+                                            <div class="w-100"></div>
+                                            <input type="text" class="form-control mx-auto d-block"
+                                                aria-describedby="basic-addon2">
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-container"
+                style="height: 10vh;width: 100%;margin-bottom: calc(var(--bs-gutter-x) * .5);">
+                <button class="btn btn-dark" type="submit" style="height: inherit;width: inherit;">Terminer</button>
+            </div>
+
+
+
+        </form>
+        </main>
+
+    </div>
+</body>
+<script>
+    function actualiserImageTitre(suffixe) {
+        // Récupérer l'image sélectionnée
+        var selectedImage = document.querySelector('input[name="selectedImage' + suffixe + '"]:checked');
+        var imagehidden = document.getElementById('imageHidden' + suffixe);
+        if (selectedImage) {
+            var selectedImageLabel = document.querySelector('label[for="' + selectedImage.id + '"]');
+            var selectedImageSrc = selectedImageLabel.querySelector('img').getAttribute('src');
+
+            // Remplacer l'image ImageAAfficherOuNonSuffixe
+            var imageAAfficherOuNonIntervenant = document.getElementById('ImageAAfficherOuNon' + suffixe);
+            imageAAfficherOuNonIntervenant.src = selectedImageSrc;
+            imagehidden.value = selectedImageSrc;
+        }
+    }
+
+    //TODO : mixer avec les autres titres
+    //seulement utilisé pour les prenom et nom de l'intervenant
+    function updateHiddenNiveau(suffixe) {
+        var selectTitreIcTxt = document.getElementById('fragmentNiveauTitre' + suffixe); //fragmentNiveauTitre n existe pas, inutile
+        var niveau = selectTitreIcTxt.value;
+        var imageIcon = document.getElementById('ImageAAfficherOuNon' + suffixe);
+        var titreSection = document.getElementById('TitreSAAfficherOuNon' + suffixe);
+        var niveauTitre = document.getElementById('niveauTitreHidden' + suffixe);
+        switch (niveau) {
+            case '0':
+                imageIcon.style.display = 'block';
+                titreSection.style.display = 'none';
+                niveauTitre.value = '0';
+                break;
+            case '1':
+                imageIcon.style.display = 'block';
+                titreSection.style.display = 'block';
+                niveauTitre.value = '1';
+                break;
+            case '2':
+                imageIcon.style.display = 'none';
+                titreSection.style.display = 'block';
+                niveauTitre.value = '2';
+                break;
+        }
+    }
+
+
+    function updateTitre(prefix) {
+        var selectTitreIcTxt = document.getElementById('niveauTitre' + prefix);
+        var niveau = selectTitreIcTxt.value;
+        var imageIcon = document.getElementById('ImageAAfficherOuNon' + prefix);
+        var titreSection = document.getElementById('TitreSAAfficherOuNon' + prefix);
+        var niveauTitre = document.getElementById('niveauTitreHidden' + prefix);
+
+        switch (niveau) {
+            case '0':
+                imageIcon.style.display = 'none';
+                titreSection.style.display = 'none';
+                niveauTitre.value = '0';
+                break;
+            case '1':
+                imageIcon.style.display = 'none';
+                titreSection.style.display = 'block';
+                niveauTitre.value = '1';
+                break;
+            case '2':
+                imageIcon.style.display = 'none';
+                titreSection.style.display = 'block';
+                niveauTitre.value = '2';
+                break;
+        }
+    }
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+
+
+
+
+        var colorPickers = Array.from(document.getElementsByClassName('colorPicker'));
+        var titlehiddens = Array.from(document.getElementsByClassName('titlehidden'));
+        var titresSection = Array.from(document.getElementsByClassName('TitreSection'));
+
+        colorPickers.forEach((colorPicker, index) => {
+            colorPicker.addEventListener('change', function () {
+                titlehiddens[index].value = this.value;
+                titresSection[index].style.color = this.value;
+            });
+        });
+
+        //On check la premiere image de chaque section
+        actualiserImageTitre('Intervenant');
+        actualiserImageTitre('Demande');
+        actualiserImageTitre('Intervention');
+        actualiserImageTitre('Materiaux');
+        actualiserImageTitre('TravauxRealises');
+        actualiserImageTitre('TravauxNonRealises');
+        //actualiserImageTitre('MateriauxUtilises')
+        actualiserImageTitre('IntervenantPrenom')
+        actualiserImageTitre('IntervenantNom')
+        actualiserImageTitre('DemandeNom')
+        actualiserImageTitre('DemandeDegreUrgence')
+        actualiserImageTitre('DemandeDate')
+        actualiserImageTitre('DemandeLocalisation')
+        actualiserImageTitre('DemandeDescription')
+        actualiserImageTitre('InterventionDate')
+        actualiserImageTitre('InterventionDuree')
+        actualiserImageTitre('InterventionType')
+        actualiserImageTitre('MaintenanceType')
+
+        // faire updateTitre sur tous les selecteurs TravauxNonRealises, TravauxRealises, MateriauxUtilises
+        //updateTitre('TravauxRealises');
+        //updateTitre('TravauxNonRealises');
+        //updateTitre('MateriauxUtilises');
+
+
+
+        const dateDemandeInput = document.getElementById('dateDemande');
+
+        dateDemandeInput.addEventListener('input', function () {
+            let inputValue = dateDemandeInput.value;
+            if (inputValue.length === 2 || inputValue.length === 5) {
+                inputValue += '/';
+            }
+
+            if (inputValue.length > 10) {
+                inputValue = inputValue.slice(0, 10);
+            }
+
+            dateDemandeInput.value = inputValue;
+        });
+
+
+    });
+
+    // Add this script to format all date inputs when the page is loaded
+    document.addEventListener('DOMContentLoaded', function () {
+        const dateInputs = document.querySelectorAll('input[type="date"]');
+        dateInputs.forEach(function (input) {
+            input.value = formatDate(input.value);
+        });
+    });
+
+    // Function to format date as dd/MM/yyyy
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+</script>
+
+
+</html>

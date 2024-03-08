@@ -62,6 +62,10 @@ public class FicheServiceImpl implements FicheService {
                 existingFiche.setPoliceDisMateriauxUtilises(fiche.getPoliceDisMateriauxUtilises());
                 existingFiche.setPoliceDisTravauxRealises(fiche.getPoliceDisTravauxRealises());
                 existingFiche.setPoliceDisTravauxNonRealises(fiche.getPoliceDisTravauxNonRealises());
+
+                existingFiche.setNiveauTravauxRealises(fiche.getNiveauTravauxRealises());
+                existingFiche.setNiveauTravauxNonRealises(fiche.getNiveauTravauxNonRealises());
+                existingFiche.setNiveauMateriauxUtilises(fiche.getNiveauMateriauxUtilises());
                 
                 
 
