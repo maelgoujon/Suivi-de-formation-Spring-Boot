@@ -1,7 +1,9 @@
 package com.webapp.ytb.webappytp.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -17,9 +19,15 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
         private final UserDetailsService userDetailsService;
+        private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+        private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
-        public SecurityConfig(UserDetailsService userDetailsService) {
+        public SecurityConfig(UserDetailsService userDetailsService,
+                        @Lazy CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler,
+                        @Lazy CustomAuthenticationFailureHandler customAuthenticationFailureHandler) {
                 this.userDetailsService = userDetailsService;
+                this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
+                this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
         }
 
         @Bean
@@ -56,7 +64,7 @@ public class SecurityConfig {
                                                 .requestMatchers("/mdpmodif/{id}").hasRole("SUPERADMIN")
                                                 .requestMatchers("/formation").hasRole("SUPERADMIN")
                                                 .requestMatchers("/nombre_essais").hasRole("SUPERADMIN")
-                                        .requestMatchers("/session/creer").hasRole("ADMIN")
+                                                .requestMatchers("/session/creer").hasRole("ADMIN")
                                                 .requestMatchers("/materiaux").hasRole("ADMIN")
                                                 .requestMatchers("/suivi_progression/{userid}").hasRole("CIP")
                                                 .requestMatchers("/suivi_progression").hasRole("USER")
@@ -69,7 +77,8 @@ public class SecurityConfig {
                                 .formLogin(formLogin -> formLogin
                                                 .loginPage("/accueil")
                                                 .loginProcessingUrl("/login")
-                                                .defaultSuccessUrl("/redirectByRole")
+                                                .successHandler(customAuthenticationSuccessHandler)
+                                                .failureHandler(customAuthenticationFailureHandler)
                                                 .permitAll())
                                 .logout(logout -> logout.logoutUrl("/log_out").permitAll())
                                 .userDetailsService(userDetailsService)

@@ -369,6 +369,7 @@ public class Demarrage implements ApplicationRunner {
             michel.setNiveau(1);
             michel.setPhotoBase64(apprenti);
             michel.setDescription("Description de Michel Michel");
+            michel.setNombreEssais(5);
             utilisateurRepository.save(michel);
         }
     }
@@ -388,6 +389,7 @@ public class Demarrage implements ApplicationRunner {
             johnSmith.setNiveau(1);
             johnSmith.setPhotoBase64(apprenti);
             johnSmith.setDescription("Description de John Smith");
+            johnSmith.setNombreEssais(5);
             utilisateurRepository.save(johnSmith);
         }
     }
@@ -406,6 +408,7 @@ public class Demarrage implements ApplicationRunner {
             janeDoe.setNiveau(1);
             janeDoe.setPhotoBase64(apprentie);
             janeDoe.setDescription("Description de Jane Doe");
+            janeDoe.setNombreEssais(5);
             utilisateurRepository.save(janeDoe);
         }
     }
@@ -424,6 +427,7 @@ public class Demarrage implements ApplicationRunner {
             aliceJohnson.setNiveau(1);
             aliceJohnson.setPhotoBase64(apprentie);
             aliceJohnson.setDescription("Description d'Alice Johnson");
+            aliceJohnson.setNombreEssais(5);
             utilisateurRepository.save(aliceJohnson);
         }
     }
@@ -442,6 +446,7 @@ public class Demarrage implements ApplicationRunner {
             paulWilliams.setNiveau(1);
             paulWilliams.setPhotoBase64(apprenti);
             paulWilliams.setDescription("Description de Paul Williams");
+            paulWilliams.setNombreEssais(5);
             utilisateurRepository.save(paulWilliams);
         }
     }
@@ -460,6 +465,7 @@ public class Demarrage implements ApplicationRunner {
             emilyBrown.setNiveau(1);
             emilyBrown.setPhotoBase64(apprentie);
             emilyBrown.setDescription("Description d'Emily Brown");
+            emilyBrown.setNombreEssais(5);
             utilisateurRepository.save(emilyBrown);
         }
     }
@@ -478,6 +484,7 @@ public class Demarrage implements ApplicationRunner {
             pierreDupont.setNiveau(1);
             pierreDupont.setPhotoBase64(apprenti);
             pierreDupont.setDescription("Description de Pierre Dupont");
+            pierreDupont.setNombreEssais(5);
             utilisateurRepository.save(pierreDupont);
         }
     }

@@ -66,9 +66,19 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Demander de l'aide à un formateur <img type="button" src="/images/son.png" alt="Lire le nom"
-                            onclick="lireTexte('Demander de l\'aide à un formateur')" style="width: 20px;"></p>
+                    <p th:if="${session.NOMBRE_ESSAIS == 0}">
+                        Vous avez épuisé vos tentatives de connexion. Demandez de l'aide à un formateur.
+                        <img type="button" src="/images/son.png" alt="Lire le nom"
+                            onclick="lireTexte('Vous avez épuisé vos tentatives de connexion. Demandez de l\aide à un formateur.')"
+                            style="width: 20px;">
+                    </p>
+                    <p th:if="${session.NOMBRE_ESSAIS != 0}">
+                        Demander de l'aide à un formateur.
+                        <img type="button" src="/images/son.png" alt="Lire le nom"
+                            onclick="lireTexte('Demander de l\'aide à un formateur')" style="width: 20px;">
+                    </p>
                 </div>
+
             </div>
         </div>
     </div>
@@ -110,12 +120,15 @@
             <div class="row">
                 <div class="col-12 d-flex justify-content-center">
                     <!-- Message d'erreur -->
-                    <div th:if="${param.error}" class="alert alert-danger d-flex align-items-center" role="alert">
-                        <img src="/images/alert.png" alt="Mauvais Mot de Passe" width="30" height="30" class="me-3">
-                        <div>
-                            Mot de passe invalide.
-                        </div>
+                    <div th:if="${session.SPRING_SECURITY_LAST_EXCEPTION}"
+                        class="alert alert-danger d-flex align-items-center" role="alert"
+                        th:attr="data-error-message=${session.SPRING_SECURITY_LAST_EXCEPTION}">
+                        <img src="/images/alert.png" alt="Alerte" width="30" height="30" class="me-3">
+                        <div th:text="${session.SPRING_SECURITY_LAST_EXCEPTION}">Message d'erreur par défaut</div>
                     </div>
+
+
+
                 </div>
             </div>
 
@@ -130,71 +143,85 @@
                 </div>
             </div>
             <div class="row row-cols-1 row-cols-md-3 g-4">
-                <div th:each="utilisateur : ${utilisateurs}" class="col">
-                    <div class="card-container">
-                        <!-- Flippable card -->
-                        <div class="card-flip">
-                            <!-- Front of the card -->
-                            <div class="card card-front">
-                                <div
-                                    th:if="${utilisateur.photoBase64 != null and not #strings.isEmpty(utilisateur.photoBase64)}">
-                                    <img class="card-img-top" th:src="${utilisateur.photoBase64}"
-                                        alt="Photo de profil" />
+                <div th:each="utilisateur : ${utilisateurs}" class="col"
+                    th:attr="data-essais-restants=${session.NOMBRE_ESSAIS}">
+                    <div class="card-click-handler">
+                        <div class="card-container"
+                            th:classappend="${session.NOMBRE_ESSAIS == 0} ? 'disabled-card' : ''">
+                            <!-- Flippable card -->
+                            <div class="card-flip">
+                                <!-- Front of the card -->
+                                <div class="card card-front">
+                                    <div
+                                        th:if="${utilisateur.photoBase64 != null and not #strings.isEmpty(utilisateur.photoBase64)}">
+                                        <img class="card-img-top" th:src="${utilisateur.photoBase64}"
+                                            alt="Photo de profil" />
+                                    </div>
+                                    <div
+                                        th:if="${utilisateur.photoBase64 == null or #strings.isEmpty(utilisateur.photoBase64)}">
+                                        <img class="card-img-top" src="/images/icone_profil.png"
+                                            alt="Photo de profil par défaut" />
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-nom" th:text="${utilisateur.nom}">Nom de l'utilisateur</p>
+                                        <p class="card-prenom" th:text="${utilisateur.prenom}">Prénom de l'utilisateur
+                                        </p>
+                                    </div>
                                 </div>
-                                <div
-                                    th:if="${utilisateur.photoBase64 == null or #strings.isEmpty(utilisateur.photoBase64)}">
-                                    <img class="card-img-top" src="/images/icone_profil.png"
-                                        alt="Photo de profil par défaut" />
-                                </div>
-                                <div class="card-body">
-                                    <p class="card-nom" th:text="${utilisateur.nom}">Nom de l'utilisateur</p>
-                                    <p class="card-prenom" th:text="${utilisateur.prenom}">Prénom de l'utilisateur</p>
-                                </div>
-                            </div>
-                            <!-- Back of the card -->
-                            <div class="card card-back">
-                                <!-- Content for the back of the card -->
-                                <div class="card-body">
-                                    <form id="loginForm" th:action="@{/login}" th:object="${monFormulaire}"
-                                        method="post">
-                                        <input type="hidden" required id="username" name="username"
-                                            class="hiddenLoginField" th:value="${utilisateur.login}">
-                                        <input type="hidden" class="password" name="password">
-                                        <fieldset>
-                                            <div class="container">
-                                                <div class="row justify-content-center">
-                                                    <div class="col-4 text-center pattern-dot" data-number="1"></div>
-                                                    <div class="col-4 text-center pattern-dot" data-number="2"></div>
-                                                    <div class="col-4 text-center pattern-dot" data-number="3"></div>
-                                                </div>
-                                                <div class="row justify-content-center">
-                                                    <div class="col-4 text-center pattern-dot" data-number="4"></div>
-                                                    <div class="col-4 text-center pattern-dot" data-number="5"></div>
-                                                    <div class="col-4 text-center pattern-dot" data-number="6"></div>
-                                                </div>
-                                                <div class="row justify-content-center">
-                                                    <div class="col-4 text-center pattern-dot" data-number="7"></div>
-                                                    <div class="col-4 text-center pattern-dot" data-number="8"></div>
-                                                    <div class="col-4 text-center pattern-dot" data-number="9"></div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col text-center">
-                                                        <button class="btn btn-secondary mt-3" type="button"
-                                                            onclick="resetPattern()">Annuler</button>
+                                <!-- Back of the card -->
+                                <div class="card card-back">
+                                    <!-- Content for the back of the card -->
+                                    <div class="card-body">
+                                        <form id="loginForm" th:action="@{/login}" th:object="${monFormulaire}"
+                                            method="post">
+                                            <input type="hidden" required id="username" name="username"
+                                                class="hiddenLoginField" th:value="${utilisateur.login}">
+                                            <input type="hidden" class="password" name="password">
+                                            <fieldset>
+                                                <div class="container">
+                                                    <div class="row justify-content-center">
+                                                        <div class="col-4 text-center pattern-dot" data-number="1">
+                                                        </div>
+                                                        <div class="col-4 text-center pattern-dot" data-number="2">
+                                                        </div>
+                                                        <div class="col-4 text-center pattern-dot" data-number="3">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row justify-content-center">
+                                                        <div class="col-4 text-center pattern-dot" data-number="4">
+                                                        </div>
+                                                        <div class="col-4 text-center pattern-dot" data-number="5">
+                                                        </div>
+                                                        <div class="col-4 text-center pattern-dot" data-number="6">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row justify-content-center">
+                                                        <div class="col-4 text-center pattern-dot" data-number="7">
+                                                        </div>
+                                                        <div class="col-4 text-center pattern-dot" data-number="8">
+                                                        </div>
+                                                        <div class="col-4 text-center pattern-dot" data-number="9">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col text-center">
+                                                            <button class="btn btn-secondary mt-3" type="button"
+                                                                onclick="resetPattern()">Annuler</button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col text-center">
-                                                <button class="connecter btn btn-primary mt-3" type="button">Se
-                                                    Connecter</button>
-                                            </div>
-                                        </fieldset>
-                                    </form>
-                                    <div class="icon-container text-center mt-2">
-                                        <a class="btn arrow_return_left" type="button" href="/">
-                                            <img src="/images/arrow_return_left.png" alt="Retourner la carte" width="40"
-                                                height="40">
-                                        </a>
+                                                <div class="col text-center">
+                                                    <button class="connecter btn btn-primary mt-3" type="button">Se
+                                                        Connecter</button>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                        <div class="icon-container text-center mt-2">
+                                            <a class="btn arrow_return_left" type="button" href="/">
+                                                <img src="/images/arrow_return_left.png" alt="Retourner la carte"
+                                                    width="40" height="40">
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -212,6 +239,10 @@
             }
 
             document.addEventListener("DOMContentLoaded", function () {
+                const essaisRestants = parseInt('{{session.NOMBRE_ESSAIS}}', 10);
+                if (essaisRestants === 0) {
+                    new bootstrap.Modal(document.getElementById('modalMdpOublie')).show();
+                }
                 const cardContainers = document.querySelectorAll('.card-container');
                 cardContainers.forEach(container => {
                     let password = []; // Créer un tableau de mot de passe unique pour chaque conteneur de carte
@@ -266,6 +297,22 @@
 
                 const popovers = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
                 popovers.map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+
+                // Lecture du message d'erreur s'il existe
+                const errorMessageDiv = document.querySelector('.alert-danger[data-error-message]');
+                if (errorMessageDiv) {
+                    const message = errorMessageDiv.getAttribute('data-error-message');
+                    lireTexte(message);
+                }
+                // Ajoutez une écoute sur chaque conteneur de carte pour gérer le clic
+                document.querySelectorAll('.card-click-handler').forEach(handler => {
+                    handler.addEventListener('click', function () {
+                        const essaisRestants = this.getAttribute('data-essais-restants');
+                        if (essaisRestants === '0') {
+                            new bootstrap.Modal(document.getElementById('modalMdpOublie')).show();
+                        }
+                    });
+                });
             });
 
         </script>

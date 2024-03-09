@@ -46,4 +46,9 @@ public interface UtilisateurService {
 
     public Utilisateur save(Utilisateur utilisateur);
 
+    public void decrementerNombreEssais(String login);
+
+    public int getNombreEssais(String login);
+
+    public void resetNombreEssais(String login);
 }

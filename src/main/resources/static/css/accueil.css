@@ -89,6 +89,10 @@
     background-color: #f0f0f0; /* Couleur de fond grise pour les utilisateurs archivés */
 }
 
+.disabled-card {
+    pointer-events: none; /* Empêche les clics */
+    opacity: 0.5; /* Visuel désactivé */
+}
 
 @media (max-width: 576px) {
     .card-body {

@@ -10,19 +10,14 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.management.relation.Role;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -54,13 +49,13 @@ import com.webapp.ytb.webappytp.service.FicheServiceImpl;
 import com.webapp.ytb.webappytp.service.UtilisateurServiceImpl;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import com.webapp.ytb.webappytp.service.FormationService;
 import com.webapp.ytb.webappytp.service.ImagesTitresServiceImpl;
-import com.webapp.ytb.webappytp.service.MessageService;
 
 @Controller
 public class HomeController {
@@ -223,8 +218,6 @@ public class HomeController {
         return "fiche_nouvelle";
     }
 
-
-    
     // Ajouter une fiche avec id utilisateur
     @GetMapping("/niveauxFiche/{id}")
     public String ajoutficheId(Model model, @PathVariable Long id) {
@@ -548,28 +541,22 @@ public class HomeController {
         fiche.setIntervention(ficheExistante.getIntervention());
         fiche.setMaintenance(ficheExistante.getMaintenance());
         fiche.setUtilisateur(ficheExistante.getUtilisateur());
-    
 
         model.addAttribute(FICHE, fiche);
         model.addAttribute("user", ficheServ.lire(id).getIntervenant());
         return "fiche_a_completer";
     }
 
-
-
     @PostMapping("/modifFicheParFormateur/{id}")
     public String modifFicheParFormateur(@ModelAttribute @Valid FicheIntervention fiche, Model model,
             @PathVariable Long id) {
         FicheIntervention ficheOrigine = ficheRepository.findById(id).get();
-
-        
 
         Demande demande = ficheOrigine.getDemande();
         Intervenant intervenant = ficheOrigine.getIntervenant();
         Intervention intervention = ficheOrigine.getIntervention();
         Maintenance maintenance;
         Utilisateur user = userServ.findById(ficheOrigine.getUtilisateur().getId());
-
 
         if (fiche.getMaintenance().getMaintenanceType() != null) {
             maintenance = ficheOrigine.getMaintenance();
@@ -648,8 +635,6 @@ public class HomeController {
         // Materiaux
         fiche.setNiveauMateriauxUtilises(fiche.getNiveauMateriauxUtilises());
         fiche.setImageTitreMateriauxUtilisesUrl(fiche.getImageTitreMateriauxUtilisesUrl());
-        
-
 
         // on mets les objets dans la fiche
         fiche.setDemande(demande);
@@ -668,8 +653,8 @@ public class HomeController {
         fiche.setNiveauMateriauxUtilises(fiche.getNiveauMateriauxUtilises());
 
         ficheServ.modifier(fiche.getId(), fiche);
-        //FicheIntervention createdFiche = ficheServ.creer(ficheOrigine);
-        //model.addAttribute("createdFiche", createdFiche);
+        // FicheIntervention createdFiche = ficheServ.creer(ficheOrigine);
+        // model.addAttribute("createdFiche", createdFiche);
         return "redirect:/redirectByRole";
     }
 
@@ -1021,7 +1006,7 @@ public class HomeController {
         }
         model.addAttribute(UTILISATEURS, utilisateurs);
         return "accueil_admin";
-        
+
     }
 
     @GetMapping("/accueil_superadmin")
@@ -1029,8 +1014,9 @@ public class HomeController {
         List<Utilisateur> utilisateurs = userServ.getAllUtilisateurs();
         model.addAttribute(UTILISATEURS, utilisateurs);
         return "/accueil_superadmin";
-        
+
     }
+
     @GetMapping("/profil_apprenti/{id}")
     public String redirectToprofil(@PathVariable Long id, Model model,
             @AuthenticationPrincipal UserDetails userDetails) {
@@ -1140,9 +1126,10 @@ public class HomeController {
         model.addAttribute(FICHE_INTERVENTION, ficheIntervention);
         return "recordaffichage";
     }
+
     @GetMapping("/nombre_essais")
     public String afficherPageNombreEssais(Model model) {
-        
+
         return "nombre_essais";
     }
 

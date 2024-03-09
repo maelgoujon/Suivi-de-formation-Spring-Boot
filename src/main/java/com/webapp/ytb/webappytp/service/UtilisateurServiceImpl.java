@@ -16,6 +16,7 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +60,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public List<Utilisateur> lire() {
-        return utilisateurRepository.findAll();
+        return utilisateurRepository.findAll(Sort.by("login"));
     }
 
     @Override
@@ -100,12 +101,12 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public List<Utilisateur> getUtilisateursByRole(String roleStr) {
         UserRole role = UserRole.valueOf(roleStr); // Convertit la chaîne en énumération
-        return utilisateurRepository.findByRole(role);
+        return utilisateurRepository.findByRoleSorted(role);
     }
 
     @Override
     public List<Utilisateur> getUtilisateursNonArchives() {
-        return utilisateurRepository.findByRoleAndArchive(UserRole.USER, false);
+        return utilisateurRepository.findByRoleAndArchiveSorted(UserRole.USER, false);
     }
 
     @Override
@@ -146,12 +147,44 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
+    public void decrementerNombreEssais(String login) {
+        Utilisateur utilisateur = findUserByLogin(login);
+        if (utilisateur != null) {
+            int essaisActuels = utilisateur.getNombreEssais();
+            utilisateur.setNombreEssais(Math.max(0, essaisActuels - 1)); // Prévenir d'aller en dessous de 0
+            save(utilisateur);
+        }
+    }
+
+    public int getNombreEssais(String login) {
+        Utilisateur utilisateur = findUserByLogin(login);
+        if (utilisateur != null) {
+            return utilisateur.getNombreEssais();
+        }
+        return -1; // Ou une autre valeur par défaut signifiant "utilisateur non trouvé"
+    }
+
+    @Override
+    public void resetNombreEssais(String login) {
+        System.out.println("Tentative de réinitialisation des essais pour l'utilisateur : " + login);
+        Utilisateur utilisateur = utilisateurRepository.findUserByLogin(login);
+        if (utilisateur != null) {
+            utilisateur.setNombreEssais(5);
+            utilisateurRepository.save(utilisateur);
+            System.out.println("Le nombre d'essais a été réinitialisé pour l'utilisateur : " + login);
+        } else {
+            System.out.println("Utilisateur non trouvé : " + login);
+        }
+    }
+    
+
+    @Override
     public void generatedExcelForUser(Long userId, HttpServletResponse response) throws Exception {
         Utilisateur utilisateur = utilisateurRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
 
         List<FicheIntervention> ficheInterventions = ficheRepository.findByUtilisateurId(userId);
-        
+
         List<String> textContents = new ArrayList<>();
 
         for (FicheIntervention fiche : ficheInterventions) {
@@ -299,6 +332,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         workbook.close();
         ops.close();
     }
+
     // Méthode pour récupérer le nombre d'essais depuis la base de données
     @Override
     public int getNombreEssais() {
