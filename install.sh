@@ -141,19 +141,35 @@ function wifi_hotspot_install {
 }
 
 function wifi_hotspot_configure {
+    # delete all the connections
+    nmcli --fields UUID,TIMESTAMP-REAL con show | grep never |  awk '{print $1}' | while read line; do nmcli con delete uuid  $line;    done # delete all the connections
+    nmcli connection delete HostspotCC
     # ask user for the name of the hotspot and the password
     echo "### Entrez le nom du hotspot wifi (SSID):"
     read ssid
     echo "### Entrez le mot de passe du hotspot wifi:"
     read -s -r wifi_password
     echo "### Configuration du hotspot en cours..."
-    nmcli d wifi hotspot ifname wlp3s0 ssid $ssid password $wifi_password
+    # configure the hotspot
+    nmcli d # list the network interfaces
+    # demander à l'utilisateur de choisir l'interface réseau wifi
+    echo "### Entrez le nom de l'interface réseau wifi: (en général wlanXXX ou wlpXXX)"
+    read wifi_interface
+    
+    # configure the hotspot
+    nmcli dev wifi hotspot ifname $wifi_interface con-name HostspotCC ssid $ssid password $wifi_password
+    # autoconnect
+    nmcli con modify HostspotCC connection.autoconnect yes
+    
+    nmcli con up HostspotCC
+    
     # check if the hotspot is configured
     if [ $? -eq 0 ]; then
         echo "### Hotspot configuré avec succès!"
     else
         echo "### Echec de la configuration du hotspot!"
     fi
+    
 }
 
 function configure_service {
@@ -190,19 +206,45 @@ function iptables_install {
             echo "### Echec installation iptables!"
         fi
     fi
+    if [ -x /usr/sbin/iptables-save ]; then
+        echo "### iptables-persistent est déjà installé!"
+    else
+        echo "### iptables-persistent n'est pas installé, installation en cours..."
+        
+        apt-get install iptables-persistent -y
+        # check if iptables-persistent is installed
+        if [ $? -eq 0 ]; then
+            echo "### iptables-persistent installé avec succès"
+        else
+            echo "### Echec installation iptables-persistent!"
+        fi
+    fi
+    #netfilter-persistent
+    if [ -x /usr/sbin/netfilter-persistent ]; then
+        echo "### netfilter-persistent est déjà installé!"
+    else
+        echo "### netfilter-persistent n'est pas installé, installation en cours..."
+        
+        apt-get install netfilter-persistent -y
+        # check if netfilter-persistent is installed
+        if [ $? -eq 0 ]; then
+            echo "### netfilter-persistent installé avec succès"
+        else
+            echo "### Echec installation netfilter-persistent!"
+        fi
+    fi
 }
 
 function configure_iptables {
     function reset_iptables {
         echo "### Supprimer les règles actuelles..."
-        # Vider les règles actuelles
-        iptables -F
-        # Supprimer les chaînes personnalisées
-        iptables -X
-        # Supprimer les regles de redirection
-        iptables -t nat -F
-        # supprimer les chaînes personnalisées de redirection
-        iptables -t nat -X
+        iptables -F  # Flush les règles iptables actuelles
+        iptables -X  # Efface toutes les chaines personnalisées
+        iptables -t nat -F  # Supprime les règles iptables NAT
+        iptables -t mangle -F  # Supprime les règles iptables MANGLE
+        iptables -P INPUT ACCEPT  # Rétablit la politique par défaut pour l'entrée
+        iptables -P FORWARD ACCEPT  # Rétablit la politique par défaut pour le forwarding
+        iptables -P OUTPUT ACCEPT  # Rétablit la politique par défaut pour le sortant
         # Sauvegarder les règles
         sudo -s iptables-save -c
     }
@@ -214,35 +256,32 @@ function configure_iptables {
     fi
     function set_rules {
         echo "### Configuration des règles iptables..."
-        iptables -A INPUT -p tcp --dport 8081 -j ACCEPT
-        iptables -A INPUT -p tcp --dport 5432 -j ACCEPT
-        iptables -A INPUT -s 127.0.0.1/32 -p tcp --dport 8081 -j ACCEPT
-        iptables -A INPUT -s 127.0.0.1/32 -p tcp --dport 5432 -j ACCEPT
-        sudo -s iptables-save -c
-        
-        
-        
-        
-        # Autoriser les connexions au port 22 (SSH), 443 (HTTPS), 80 (HTTP) et 8081 (Application APEAJ)
-        iptables -A INPUT -p tcp --dport 80 -j ACCEPT
-        iptables -A INPUT -p tcp --dport 443 -j ACCEPT
-        iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-        iptables -A INPUT -p tcp --dport 8081 -j ACCEPT
-        
-        iptables -A OUTPUT -j ACCEPT
-        iptables -N IN_REPLY
-        iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-        iptables -A INPUT -j IN_REPLY
-        iptables -A IN_REPLY -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
-        
-        iptables -P INPUT DROP
+        # Allow all outbound traffic
         iptables -P OUTPUT ACCEPT
-        iptables -P FORWARD ACCEPT
         
-        # Rediriger le port HTTP (80) vers 8081
-        iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination :8081
-        # Rediriger le port HTTPS (443) vers 8081
-        iptables -t nat -A PREROUTING -p tcp --dport 443 -j DNAT --to-destination :8081
+        # Create a chain called "INPUT_ALLOWED"
+        iptables -N INPUT_ALLOWED
+        
+        # Add rules to the new chain
+        iptables -A INPUT_ALLOWED -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+        iptables -A INPUT_ALLOWED -i lo -j ACCEPT  # Allow loopback traffic
+        iptables -A INPUT_ALLOWED -p tcp --dport 80 -j ACCEPT   # Allow port 80 (HTTP)
+        iptables -A INPUT_ALLOWED -p tcp --dport 443 -j ACCEPT   # Allow port 443 (HTTPS)
+        iptables -A INPUT_ALLOWED -p tcp --dport 8081 -j ACCEPT   # Allow port 8081
+        iptables -A INPUT_ALLOWED -p tcp --dport 22 -j ACCEPT   # Allow port 22 (SSH)
+        
+        # Set the default policy for incoming connections
+        iptables -P INPUT DROP
+        
+        # redirect HTTP and HTTPS traffic to port 8081
+        iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination :8081   # Redirect HTTP (port 80)
+        iptables -t nat -A PREROUTING -p tcp --dport 443 -j DNAT --to-destination :8081   # Redirect HTTPS (port 443) to 8081
+        
+        # Redirect all traffic to our new chain and allow specific ports
+        iptables -A INPUT -j INPUT_ALLOWED
+        iptables-save > /etc/iptables/rules.v4
+        service netfilter-persistent save
+        service netfilter-persistent reload
     }
     set_rules
     if [ $? -eq 0 ]; then
@@ -259,9 +298,11 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
+echo ""
 echo "#################################################################"
 echo "##################### Installation démarrée #####################"
 echo "#################################################################"
+echo ""
 
 # Update the system
 echo "### Mise à jour du système en cours..."
@@ -280,65 +321,82 @@ if [ -f /etc/systemd/system/apeaj.service ]; then
 fi
 
 # Install sudo
+echo ""
 echo "#################################################################"
 echo "#################### Installation de sudo #######################"
 echo "#################################################################"
+echo ""
 
 sudo_install
 
 # Install PostgreSQL
+echo ""
 echo "#################################################################"
 echo "#################### Installation PostgreSQL ####################"
 echo "#################################################################"
+echo ""
 
 postgres_install
-
+echo ""
 # Configure PostgreSQL
 echo "#################################################################"
 echo "#################### Configuration PostgreSQL ###################"
 echo "#################################################################"
+echo ""
 
 configure_postgresql
 
 # Install openjdk-17
+echo ""
 echo "#################################################################"
 echo "#################### Installation OpenJDK 17 ####################"
 echo "#################################################################"
+echo ""
 
 openjdk17_install
 
 # Installation Network Manager
+echo ""
 echo "#################################################################"
 echo "#################### Installation Network Manager ###############"
 echo "#################################################################"
+echo ""
 
 wifi_hotspot_install
 
 # Configuration du hotspot wifi
+echo ""
 echo "#################################################################"
 echo "#################### Configuration du hotspot wifi ###############"
 echo "#################################################################"
+echo ""
 
 wifi_hotspot_configure
 
 # Installation iptables
+echo ""
 echo "#################################################################"
 echo "#################### Installation iptables ######################"
 echo "#################################################################"
+echo ""
 
 iptables_install
 
 # Configuration des règles iptables
+echo ""
 echo "#################################################################"
 echo "#################### Configuration des règles iptables #########"
 echo "#################################################################"
+echo ""
 
 configure_iptables
 
 # Setup images directory
+echo ""
 echo "#################################################################"
 echo "############# Repertoire des images préenregistrées #############"
 echo "#################################################################"
+echo ""
 
 if [ -d /home/etu/images ]; then
     echo "### Le répertoire des images existe déjà!, suppression en cours..."
@@ -363,8 +421,10 @@ else
 fi
 
 # Configure service to start at boot
+echo ""
 echo "#################################################################"
 echo "#################### Configuration du service ###################"
 echo "#################################################################"
+echo ""
 
 configure_service

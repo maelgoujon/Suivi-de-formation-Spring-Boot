@@ -32,6 +32,11 @@ sudo rm -rf /etc/NetworkManager /var/lib/NetworkManager
 
 
 echo "Resetting iptables and redirect"
-sudo iptables -F
-sudo iptables -t nat -F
-sudo -s iptables-save -c
+iptables -F  # Flush les règles iptables actuelles
+iptables -X  # Efface toutes les chaines personnalisées
+iptables -t nat -F  # Supprime les règles iptables NAT
+iptables -t mangle -F  # Supprime les règles iptables MANGLE
+iptables -P INPUT ACCEPT  # Rétablit la politique par défaut pour l'entrée
+iptables -P FORWARD ACCEPT  # Rétablit la politique par défaut pour le forwarding
+iptables -P OUTPUT ACCEPT  # Rétablit la politique par défaut pour le sortant
+service iptables restart  # Redémarrer les services iptables
