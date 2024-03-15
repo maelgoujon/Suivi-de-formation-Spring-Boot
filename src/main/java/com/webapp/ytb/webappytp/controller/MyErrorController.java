@@ -29,12 +29,12 @@ public class MyErrorController implements ErrorController {
             int statusCode = Integer.parseInt(status.toString());
 
             if (statusCode == HttpStatus.FORBIDDEN.value()) {
-                return "error403"; // Page d'erreur personnalisée pour le statut 403
+                return "errors/error403"; // Page d'erreur personnalisée pour le statut 403
             } else if (statusCode == HttpStatus.NOT_FOUND.value()) {
-                return "error404"; // Page d'erreur personnalisée pour le statut 404
+                return "errors/error404"; // Page d'erreur personnalisée pour le statut 404
             }
         }
 
-        return "error"; // Page d'erreur générale
+        return "/errors/error"; // Page d'erreur générale
     }
 }

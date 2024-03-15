@@ -52,7 +52,7 @@ public class UtilisateurController {
         model.addAttribute("roles", roles);
         model.addAttribute("allFormations", allFormations);
         model.addAttribute("utilisateur", new Utilisateur());
-        return "nouvelUtilisateur";
+        return "utilisateurs/nouvelUtilisateur";
     }
 
     @PostMapping("/creer")
@@ -86,7 +86,7 @@ public class UtilisateurController {
     public String afficherDetailsUtilisateur(@PathVariable Long id, Model model) {
         Utilisateur utilisateur = utilisateurService.findById(id);
         model.addAttribute("utilisateur", utilisateur);
-        return "detailsUtilisateur";
+        return "utilisateurs/detailsUtilisateur";
     }
 
     @GetMapping("/profils")
@@ -101,7 +101,7 @@ public class UtilisateurController {
         Utilisateur utilisateur = utilisateurService.findById(id);
 
         model.addAttribute("utilisateur", utilisateur);
-        return "modif";
+        return "utilisateurs/modif";
     }
 
     @PostMapping("/modifier/{id}")
@@ -141,7 +141,7 @@ public class UtilisateurController {
     public String afficherFormulaireModificationMotDePasse(@PathVariable Long id, Model model) {
         Utilisateur utilisateur = utilisateurService.findById(id);
         model.addAttribute("utilisateur", utilisateur);
-        return "mdpmodif";
+        return "utilisateurs/mdpmodif";
     }
 
     // ToDo: Fix the delete method
@@ -232,7 +232,7 @@ public class UtilisateurController {
     public String afficherPageNombreEssais(Model model) {
         int nombreEssaisActuel = utilisateurService.getNombreEssais(); 
         model.addAttribute("nombreEssaisActuel", nombreEssaisActuel);
-        return "nombre_essais";
+        return "utilisateurs/nombre_essais";
     }
 
     @PostMapping("/nombre_essais")

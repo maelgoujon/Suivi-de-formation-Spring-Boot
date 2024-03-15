@@ -69,7 +69,7 @@ public class SessionController {
                 model.addAttribute("allFormations", formationService.getFormationsByUserId(userId));
                 model.addAttribute("demande", demande);
 
-                return "session";
+                return "sessions/session";
         }
 
         @PostMapping("/session/creer")

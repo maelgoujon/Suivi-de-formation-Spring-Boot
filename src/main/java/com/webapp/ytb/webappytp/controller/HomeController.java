@@ -215,7 +215,7 @@ public class HomeController {
 
         model.addAttribute(FICHE, fiche);
         model.addAttribute("user", userServ.findById(id));
-        return "fiche_nouvelle";
+        return "fiches/fiche_nouvelle";
     }
 
     // Ajouter une fiche avec id utilisateur
@@ -544,7 +544,7 @@ public class HomeController {
 
         model.addAttribute(FICHE, fiche);
         model.addAttribute("user", ficheServ.lire(id).getIntervenant());
-        return "fiche_a_completer";
+        return "fiches/fiche_a_completer";
     }
 
     @PostMapping("/modifFicheParFormateur/{id}")
@@ -762,7 +762,7 @@ public class HomeController {
         model.addAttribute(FICHE_INTERVENTION, ficheIntervention);
         model.addAttribute("materiauxAmenagementList", materiauxAmenagementList);
         model.addAttribute("color", "#8fabd9");
-        return "fiche_complete";
+        return "fiches/fiche_complete";
     }
 
     // modifier la fiche no
@@ -797,7 +797,7 @@ public class HomeController {
         model.addAttribute(FICHE_INTERVENTION, ficheIntervention);
         model.addAttribute("color", "#8fabd9");
 
-        return "fiche_modifier";
+        return "fiches/fiche_modifier";
     }
 
     @PostMapping("/updateFiche/{id}")
@@ -958,7 +958,7 @@ public class HomeController {
     public String home(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursNonArchives();
         model.addAttribute(UTILISATEURS, utilisateurs);
-        return "accueil";
+        return "accueils/accueil";
     }
 
     @GetMapping("/redirectByRole")
@@ -987,7 +987,7 @@ public class HomeController {
     public String redirectToAccueil(Model model) {
         List<Utilisateur> utilisateurs = userServ.getUtilisateursNonArchives();
         model.addAttribute(UTILISATEURS, utilisateurs);
-        return "accueil";
+        return "/accueils/accueil";
     }
 
     @GetMapping("/accueil_admin")
@@ -1005,7 +1005,7 @@ public class HomeController {
             }
         }
         model.addAttribute(UTILISATEURS, utilisateurs);
-        return "accueil_admin";
+        return "/accueils/accueil_admin";
 
     }
 
@@ -1013,7 +1013,7 @@ public class HomeController {
     public String superadmin(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         List<Utilisateur> utilisateurs = userServ.getAllUtilisateurs();
         model.addAttribute(UTILISATEURS, utilisateurs);
-        return "/accueil_superadmin";
+        return "/accueils/accueil_superadmin";
 
     }
 
@@ -1025,7 +1025,7 @@ public class HomeController {
         model.addAttribute(UTILISATEUR_CONNECTE_ROLE, role);
         Utilisateur utilisateur = userServ.findById(id);
         model.addAttribute(UTILISATEUR, utilisateur);
-        return "profil_apprenti";
+        return "utilisateurs/profil_apprenti";
     }
 
     // Page de modification de profil par le superadmin
@@ -1043,7 +1043,7 @@ public class HomeController {
             model.addAttribute("allFormations", allFormations);
             // Vérifiez si le rôle du compte sélectionné est USER
 
-            return "/modif";
+            return "utilisateurs/modif";
         } else {
             // Si l'utilisateur connecté n'est pas superadmin -> accueil
             return REDIRECT_ACCUEIL;
@@ -1059,7 +1059,7 @@ public class HomeController {
     public String mdpmodif(@PathVariable Long id, Model model) {
         Utilisateur utilisateur = userServ.findById(id);
         model.addAttribute(UTILISATEUR, utilisateur);
-        return "mdpmodif";
+        return "utilisateurs/mdpmodif";
     }
 
     // deconnection
@@ -1079,7 +1079,7 @@ public class HomeController {
         model.addAttribute("userrr", userrr);
         model.addAttribute(FICHE, new FicheIntervention());
         model.addAttribute(FICHES, fiches);
-        return "select_fiche";
+        return "accueils/select_fiche";
     }
 
     public String getCurrentUserRole() {
@@ -1097,7 +1097,7 @@ public class HomeController {
 
             model.addAttribute(UTILISATEUR, utilisateur);
             model.addAttribute(FICHES, fiches);
-            return "suivi_progression";
+            return "utilisateurs/suivi_progression";
         } else {
             return REDIRECT_ACCUEIL;
         }
@@ -1110,27 +1110,27 @@ public class HomeController {
 
         model.addAttribute(UTILISATEUR, utilisateur);
         model.addAttribute(FICHES, fiches);
-        return "suivi_progression";
+        return "utilisateurs/suivi_progression";
     }
 
     @GetMapping("/record/{ficheId}")
     public String recordFiche(@PathVariable Long ficheId, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(ficheId);
         model.addAttribute(FICHE_INTERVENTION, ficheIntervention);
-        return "record";
+        return "record/record";
     }
 
     @GetMapping("/recordaffichage/{ficheId}")
     public String recordaffichage(@PathVariable Long ficheId, Model model) {
         FicheIntervention ficheIntervention = ficheServ.lire(ficheId);
         model.addAttribute(FICHE_INTERVENTION, ficheIntervention);
-        return "recordaffichage";
+        return "record/recordaffichage";
     }
 
     @GetMapping("/nombre_essais")
     public String afficherPageNombreEssais(Model model) {
 
-        return "nombre_essais";
+        return "utilisateurs/nombre_essais";
     }
 
     @GetMapping("/fiche/evaluation/{id}")
@@ -1165,7 +1165,7 @@ public class HomeController {
         model.addAttribute(FICHE, new FicheIntervention());
         model.addAttribute(FICHES, fiches); // Ajout de la liste des fiches
         model.addAttribute(UTILISATEUR_CONNECTE_ROLE, utilisateurConnecteRole);
-        return "liste_fiche";
+        return "fiches/liste_fiche";
     }
 
     @GetMapping("/fiche/liste_fiche")
@@ -1183,7 +1183,7 @@ public class HomeController {
             model.addAttribute("users", users);
             model.addAttribute(FICHES, fiches); // Ajout de la liste des fiches
             model.addAttribute(UTILISATEUR_CONNECTE_ROLE, utilisateurConnecteRole);
-            return "liste_fiche";
+            return "fiches/liste_fiche";
         } else {
             return REDIRECT_ACCUEIL;
         }

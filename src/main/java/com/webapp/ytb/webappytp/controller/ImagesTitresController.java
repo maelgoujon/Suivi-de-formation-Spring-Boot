@@ -59,7 +59,7 @@ public class ImagesTitresController {
         model.addAttribute(MAX_FILE_SIZE_STRING, parseFileSize(MAX_FILE_SIZE));
         model.addAttribute("allImages", allImages);
         model.addAttribute("imageTitre", new ImagesTitres());
-        return "ajout_imageTitre";
+        return "imagesTitres/ajout_imageTitre";
     }
 
     @GetMapping("/liste")
@@ -68,7 +68,7 @@ public class ImagesTitresController {
         model.addAttribute(MAX_FILE_SIZE_STRING, parseFileSize(MAX_FILE_SIZE));
         model.addAttribute("allImages", allImages);
         model.addAttribute("imageTitre", new ImagesTitres());
-        return "liste_imagesTitres";
+        return "imagesTitres/liste_imagesTitres";
     }
 
     @PostMapping("/uploadImagesTitres")
@@ -174,7 +174,7 @@ public class ImagesTitresController {
             model.addAttribute("image", existingImage);
             model.addAttribute(MAX_FILE_SIZE_STRING, parseFileSize(MAX_FILE_SIZE));
             model.addAttribute("id", id);
-            return "modifier_imagestitres";
+            return "imagesTitres/modifier_imagestitres";
         } else {
             return REDIRECT_IMAGE_LIST;
         }

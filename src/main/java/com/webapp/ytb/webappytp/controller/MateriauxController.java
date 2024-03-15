@@ -54,7 +54,7 @@ public class MateriauxController {
         model.addAttribute(MAX_FILE_SIZE_STRING, parseFileSize(MAX_FILE_SIZE));
         model.addAttribute("allImages", allImages);
         model.addAttribute("materiau", new Materiaux());
-        return "ajout_materiau";
+        return "materiaux/ajout_materiau";
     }
 
     @GetMapping("/liste")
@@ -63,7 +63,7 @@ public class MateriauxController {
         model.addAttribute(MAX_FILE_SIZE_STRING, parseFileSize(MAX_FILE_SIZE));
         model.addAttribute("allImages", allImages);
         model.addAttribute("materiau", new Materiaux());
-        return "liste_materiaux";
+        return "materiaux/liste_materiaux";
     }
 
     @PostMapping("/uploadMateriaux")
@@ -187,7 +187,7 @@ public class MateriauxController {
             model.addAttribute(MAX_FILE_SIZE_STRING, parseFileSize(MAX_FILE_SIZE));
             model.addAttribute("image", existingImage);
             model.addAttribute("id", id);
-            return "modifier_materiau";
+            return "materiaux/modifier_materiau";
         } else {
             return REDIRECT_MATERIAUX_LISTE;
         }

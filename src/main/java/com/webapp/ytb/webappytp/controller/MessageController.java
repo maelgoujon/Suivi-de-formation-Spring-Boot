@@ -53,12 +53,12 @@ public class MessageController {
             List<Message> messages = new ArrayList<Message>();
             messages.add(message);
             model.addAttribute("messages", messages);
-            return "chat";
+            return "chat/chat";
         } else {
             List<Message> messages = messageService.lireParFiche(id);
             model.addAttribute("messages", messages);
             model.addAttribute("id", id);
-            return "chat";
+            return "chat/chat";
         }
 
     }

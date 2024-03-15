@@ -19,7 +19,7 @@
             font-family: 'OpenDyslexic';
             src: url('/fonts/OpenDyslexic-Regular.otf') format('opentype');
         }
-        
+
         .card-block {
             padding: 10px;
         }
@@ -93,9 +93,10 @@
 
 
 
-        <form th:action="@{/modifFicheParFormateur/{id}(id=${fiche.id})}" th:object="${fiche}" method="post" id="ficheForm" class="fiche-form">
+        <form th:action="@{/modifFicheParFormateur/{id}(id=${fiche.id})}" th:object="${fiche}" method="post"
+            id="ficheForm" class="fiche-form">
 
-            
+
             <hr />
 
 
@@ -121,9 +122,10 @@
                         <button class="btn d-flex align-items-center" type="button" data-bs-toggle="collapse"
                             data-bs-target="#imageNiveauIntervenant" aria-expanded="false"
                             aria-controls="imageNiveauIntervenant">
-                            <img id="ImageAAfficherOuNonTitreIntervenant" class="display-5 imageIcon" src="/images/check.png"
+                            <img id="ImageAAfficherOuNonIntervenant" class="display-5 imageIcon" src="/images/check.png"
                                 alt="Fait" style="height: 1em;" />
-                            <h2 id="TitreSAAfficherOuNonTitreIntervenant" class="display-5 TitreSection" th:style="'color: ' + ${fiche.Intervenant.couleurTitreIntervenant}">Intervenant</h2>
+                            <h2 id="TitreSAAfficherOuNonIntervenant" class="display-5 TitreSection"
+                                th:style="'color: ' + ${fiche.Intervenant.couleurTitreIntervenant}">Intervenant</h2>
                         </button>
                     </div>
                     <div class="row">
@@ -132,23 +134,29 @@
                                 <div class="card card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <div class="titre">Niveau Titre</div>
-                                            <select class="selectTitreIcTxt form-select" id="niveauTitreIntervenant" name="niveauTitreIntervenant"
-                                                th:attr="data-champ=TitreIntervenant" th:onchange="updateTitreMateriaux()" th:field="${fiche.Intervenant.niveauTitreIntervenant}">
-                                                <option value="4" th:selected="${fiche.Intervenant.niveauTitreIntervenant == 4}">Caché</option>
-                                                <option value="0" th:selected="${fiche.Intervenant.niveauTitreIntervenant == 0}">Icone</option>
-                                                <option value="1" th:selected="${fiche.Intervenant.niveauTitreIntervenant == 1}">Icone et texte</option>
-                                                <option value="2" th:selected="${fiche.Intervenant.niveauTitreIntervenant == 2}">Texte</option>
-                                            </select>
-                                            <input type="hidden" id="niveauTitreHiddenTitreIntervenant"
-                                                name="niveauTitreHiddenTitreIntervenant"
-                                                th:field="${fiche.Intervenant.niveauTitreIntervenant}" />
+
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div class="test">
+                                                        <select class="selectTitreIcTxt" id="niveauTitreIntervenant"
+                                                            name="niveauTitreIntervenant"
+                                                            th:field="${fiche.Intervenant.niveauTitreIntervenant}"
+                                                            onchange="updateTitre('Intervenant')">
+                                                            <option value="4">Caché</option>
+                                                            <option value="0">Icone</option>
+                                                            <option value="1" selected>Icone et texte</option>
+                                                            <option value="2">Texte</option>
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                            </fieldset>
                                         </div>
-
-
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.Intervenant.couleurTitreIntervenant}">
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Intervenant.couleurTitreIntervenant}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Intervenant.couleurTitreIntervenant}" />
                                         </div>
@@ -162,11 +170,11 @@
                                                         <div class="card"
                                                             th:each="imageTitre, stat : ${imagesTitreIntervenant}">
                                                             <input class="form-check-input" type="radio"
-                                                                name="selectedImageTitreIntervenant"
+                                                                name="selectedImageIntervenant"
                                                                 th:id="${imageTitre.nomImage}"
                                                                 th:value="${imageTitre.nomImage}"
                                                                 th:checked="${stat.first}"
-                                                                onchange="actualiserImageTitre('TitreIntervenant')">
+                                                                onchange="actualiserImageTitre('Intervenant')">
                                                             <label class="form-check-label"
                                                                 th:for="${imageTitre.nomImage}">
                                                                 <img class="imageSlider"
@@ -181,8 +189,8 @@
                                                     </div>
                                                 </div>
 
-                                                <input type="hidden" id="imageHiddenTitreIntervenant"
-                                                    class="imageHiddenTitreIntervenant"
+                                                <input type="hidden" id="imageHiddenIntervenant"
+                                                    class="imageHiddenIntervenant"
                                                     th:field="*{Intervenant.imageTitreIntervenantUrl}"
                                                     value="/images/eleve.png" />
                                             </section>
@@ -201,10 +209,11 @@
                     <button class="btn d-flex align-items-center" style="height: 1.5em;" type="button"
                         data-bs-toggle="collapse" data-bs-target="#imageNiveauIntervenantPrenom" aria-expanded="false"
                         aria-controls="imageNiveauIntervenantPrenom">
-                        <img id="ImageAAfficherOuNonTitreIntervenantPrenom" class="display-8" src="/images/check.png"
+                        <img id="ImageAAfficherOuNonIntervenantPrenom" class="display-8" src="/images/check.png"
                             alt="Fait" style="height: 1em;" />
-                        <label id="TitreSAAfficherOuNonTitreIntervenantPrenom" class="TitreSection" for="firstName"
-                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Intervenant.couleurPrenom}">Prénom</label>
+                        <label id="TitreSAAfficherOuNonIntervenantPrenom" class="TitreSection" for="firstName"
+                            style="cursor: pointer;"
+                            th:style="'color: ' + ${fiche.Intervenant.couleurPrenom}">Prénom</label>
                     </button>
 
                     <div class="row">
@@ -213,22 +222,22 @@
                                 <div class="card card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <div class="titre">Niveau Titre</div>
-                                            <select class="selectTitreIcTxt form-select" id="niveauTitreIntervenantPrenom" name="niveauTitreIntervenantPrenom"
-                                                th:attr="data-champ=TitreIntervenantPrenom" th:onchange="updateTitreMateriaux()" th:field="${fiche.Intervenant.niveauTitreIntervenantPrenom}">
-                                                <option value="0" th:selected="${fiche.Intervenant.niveauTitreIntervenantPrenom == 0}">Icone</option>
-                                                <option value="1" th:selected="${fiche.Intervenant.niveauTitreIntervenantPrenom == 1}">Icone et texte</option>
-                                                <option value="2" th:selected="${fiche.Intervenant.niveauTitreIntervenantPrenom == 2}">Texte</option>
-                                            </select>
-                                            <input type="hidden" id="niveauTitreHiddenTitreIntervenantPrenom"
-                                                name="niveauTitreHiddenTitreIntervenantPrenom"
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='IntervenantPrenom')">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <input type="hidden" id="niveauTitreHiddenIntervenantPrenom"
+                                                name="niveauTitreHiddenIntervenantPrenom"
                                                 th:field="${fiche.Intervenant.niveauTitreIntervenantPrenom}" />
                                         </div>
-
-
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.Intervenant.couleurPrenom}" />
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Intervenant.couleurPrenom}" />
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Intervenant.couleurPrenom}" />
                                         </div>
@@ -237,34 +246,13 @@
                                         <div class="col">
                                             <section>
                                                 <div class="titre">Icone</div>
-                                                <div class="row">
-                                                    <div class="scrollcards">
-                                                        <div class="card"
-                                                            th:each="imageTitre, stat : ${imagesTitreIntervenantPrenom}">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="selectedImageTitreIntervenantPrenom"
-                                                                th:id="${imageTitre.nomImage}"
-                                                                th:value="${imageTitre.nomImage}"
-                                                                th:checked="${stat.first}"
-                                                                onchange="actualiserImageTitre('TitreIntervenantPrenom')">
-                                                            <label class="form-check-label"
-                                                                th:for="${imageTitre.nomImage}">
-                                                                <img class="imageSlider"
-                                                                    th:src="@{'/' + ${imageTitre.imageUrl}}"
-                                                                    alt="Image Titre" oncontextmenu="return false;"
-                                                                    draggable="false" />
-                                                                <div class="text-wrap" style="width: min-content;">
-                                                                    <h6 th:text="${imageTitre.nomImage}"></h6>
-                                                                </div>
-                                                            </label>
-                                                        </div>
-                                                    </div>
+                                                <div
+                                                    th:replace="intervenant_fragment.html::scrollcards(field='IntervenantPrenom')">
                                                 </div>
-
                                             </section>
                                         </div>
-                                        <input type="hidden" id="imageHiddenTitreIntervenantPrenom"
-                                            class="imageHiddenTitreIntervenantPrenom"
+                                        <input type="hidden" id="imageHiddenIntervenantPrenom"
+                                            class="imageHiddenIntervenantPrenom"
                                             th:field="*{Intervenant.imageTitreIntervenantPrenomUrl}"
                                             value="/images/eleve.png" />
                                     </div>
@@ -282,9 +270,9 @@
                     <button class="btn d-flex align-items-center" style="height: 1.5em;" type="button"
                         data-bs-toggle="collapse" data-bs-target="#imageNiveauIntervenantNom" aria-expanded="false"
                         aria-controls="imageNiveauIntervenantNom">
-                        <img id="ImageAAfficherOuNonTitreIntervenantNom" class="display-8" src="/images/check.png" alt="Fait"
+                        <img id="ImageAAfficherOuNonIntervenantNom" class="display-8" src="/images/check.png" alt="Fait"
                             style="height: 1em;" />
-                        <label id="TitreSAAfficherOuNonTitreIntervenantNom" class="TitreSection" for="lastName"
+                        <label id="TitreSAAfficherOuNonIntervenantNom" class="TitreSection" for="lastName"
                             style="cursor: pointer;" th:style="'color: ' + ${fiche.Intervenant.couleurNom}">Nom</label>
                     </button>
 
@@ -294,22 +282,22 @@
                                 <div class="card card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <div class="titre">Niveau Titre</div>
-                                            <select class="selectTitreIcTxt form-select" id="niveauTitreIntervenantNom" name="niveauTitreIntervenantNom"
-                                                th:attr="data-champ=TitreIntervenantNom" th:onchange="updateTitreMateriaux()" th:field="${fiche.Intervenant.niveauTitreIntervenantNom}">
-                                                <option value="0" th:selected="${fiche.Intervenant.niveauTitreIntervenantNom == 0}">Icone</option>
-                                                <option value="1" th:selected="${fiche.Intervenant.niveauTitreIntervenantNom == 1}">Icone et texte</option>
-                                                <option value="2" th:selected="${fiche.Intervenant.niveauTitreIntervenantNom == 2}">Texte</option>
-                                            </select>
-                                            <input type="hidden" id="niveauTitreHiddenTitreIntervenantNom"
-                                                name="niveauTitreHiddenTitreIntervenantNom"
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='IntervenantNom')">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <input type="hidden" id="niveauTitreHiddenIntervenantNom"
+                                                name="niveauTitreHiddenIntervenantNom"
                                                 th:field="${fiche.Intervenant.niveauTitreIntervenantNom}" />
                                         </div>
-
-                                        
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.Intervenant.couleurNom}">
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Intervenant.couleurNom}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Intervenant.couleurNom}" />
                                         </div>
@@ -318,34 +306,13 @@
                                         <div class="col">
                                             <section>
                                                 <div class="titre">Icone</div>
-                                                <div class="row">
-                                                    <div class="scrollcards">
-                                                        <div class="card"
-                                                            th:each="imageTitre, stat : ${imagesTitreIntervenantNom}">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="selectedImageTitreIntervenantNom"
-                                                                th:id="${imageTitre.nomImage}"
-                                                                th:value="${imageTitre.nomImage}"
-                                                                th:checked="${stat.first}"
-                                                                onchange="actualiserImageTitre('TitreIntervenantNom')">
-                                                            <label class="form-check-label"
-                                                                th:for="${imageTitre.nomImage}">
-                                                                <img class="imageSlider"
-                                                                    th:src="@{'/' + ${imageTitre.imageUrl}}"
-                                                                    alt="Image Titre" oncontextmenu="return false;"
-                                                                    draggable="false" />
-                                                                <div class="text-wrap" style="width: min-content;">
-                                                                    <h6 th:text="${imageTitre.nomImage}"></h6>
-                                                                </div>
-                                                            </label>
-                                                        </div>
-                                                    </div>
+                                                <div
+                                                    th:replace="intervenant_fragment.html::scrollcards(field='IntervenantNom')">
                                                 </div>
-
                                             </section>
                                         </div>
-                                        <input type="hidden" id="imageHiddenTitreIntervenantNom"
-                                            class="imageHiddenTitreIntervenantNom"
+                                        <input type="hidden" id="imageHiddenIntervenantNom"
+                                            class="imageHiddenIntervenantNom"
                                             th:field="*{Intervenant.imageTitreIntervenantNomUrl}"
                                             value="/images/eleve.png" />
                                     </div>
@@ -365,9 +332,10 @@
                         <button class="btn d-flex align-items-center" type="button" data-bs-toggle="collapse"
                             data-bs-target="#imageNiveauDemande" aria-expanded="false"
                             aria-controls="imageNiveauDemande">
-                            <img id="ImageAAfficherOuNonTitreDemande" class="display-5 imageIcon" src="/images/check.png"
+                            <img id="ImageAAfficherOuNonDemande" class="display-5 imageIcon" src="/images/check.png"
                                 alt="Fait" style="height: 1em;" />
-                            <h2 id="TitreSAAfficherOuNonTitreDemande" class="display-5 TitreSection" th:style="'color: ' + ${fiche.Demande.couleurTitreDemande}">Demande</h2>
+                            <h2 id="TitreSAAfficherOuNonDemande" class="display-5 TitreSection"
+                                th:style="'color: ' + ${fiche.Demande.couleurTitreDemande}">Demande</h2>
                         </button>
                     </div>
                     <div class="row">
@@ -375,25 +343,28 @@
                             <div class="collapse multi-collapse" id="imageNiveauDemande">
                                 <div class="card card-body">
                                     <div class="row">
-
                                         <div class="col">
-                                            <div class="titre">Niveau Titre</div>
-                                            <select class="selectTitreIcTxt form-select" id="niveauTitreDemande" name="niveauTitreDemande"
-                                                th:attr="data-champ=TitreDemande" th:onchange="updateTitreMateriaux()" th:field="${fiche.demande.niveauTitreDemande}">
-                                                <option value="4" th:selected="${fiche.demande.niveauTitreDemande == 4}">Caché</option>
-                                                <option value="0" th:selected="${fiche.demande.niveauTitreDemande == 0}">Icone</option>
-                                                <option value="1" th:selected="${fiche.Demande.niveauTitreDemande == 1}">Icone et texte</option>
-                                                <option value="2" th:selected="${fiche.Demande.niveauTitreDemande == 2}">Texte</option>
-                                            </select>
-                                            <input type="hidden" id="niveauTitreHiddenTitreDemande"
-                                                name="niveauTitreHiddenTitreDemande"
-                                                th:field="${fiche.Demande.niveauTitreDemande}" />
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div class="test">
+                                                        <select class="selectTitreIcTxt" id="niveauTitreDemande"
+                                                            name="niveauTitreDemande"
+                                                            th:field="${fiche.Demande.niveauTitreDemande}"
+                                                            onchange="updateTitre('Demande')">
+                                                            <option value="4">Caché</option>
+                                                            <option value="0">Icone</option>
+                                                            <option value="1">Icone et texte</option>
+                                                            <option value="2">Texte</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
                                         </div>
-
-
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.Demande.couleurTitreDemande}">
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Demande.couleurTitreDemande}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Demande.couleurTitreDemande}" />
                                         </div>
@@ -407,11 +378,11 @@
                                                         <div class="card"
                                                             th:each="imageTitre, stat : ${imagesTitreDemande}">
                                                             <input class="form-check-input" type="radio"
-                                                                name="selectedImageTitreDemande"
+                                                                name="selectedImageDemande"
                                                                 th:id="${imageTitre.nomImage}"
                                                                 th:value="${imageTitre.nomImage}"
                                                                 th:checked="${stat.first}"
-                                                                onchange="actualiserImageTitre('TitreDemande')">
+                                                                onchange="actualiserImageTitre('Demande')">
                                                             <label class="form-check-label"
                                                                 th:for="${imageTitre.nomImage}">
                                                                 <img class="imageSlider"
@@ -425,7 +396,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <input type="hidden" id="imageHiddenTitreDemande" class="imageHiddenDemande"
+                                                <input type="hidden" id="imageHiddenDemande" class="imageHiddenDemande"
                                                     th:field="*{Demande.imageTitreDemandeUrl}" />
                                             </section>
                                         </div>
@@ -445,7 +416,8 @@
                         <img id="ImageAAfficherOuNonDemandeNom" class="display-8" src="/images/check.png" alt="Fait"
                             style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonDemandeNom" class="TitreSection" for="disabledNomDemandeur"
-                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Demande.couleurNomDemandeur}">Nom du demandeur</label>
+                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Demande.couleurNomDemandeur}">Nom du
+                            demandeur</label>
                     </button>
 
                     <div class="row">
@@ -454,21 +426,22 @@
                                 <div class="card card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <div class="titre">Niveau Titre</div>
-                                            <select class="selectTitreIcTxt form-select" id="niveauDemandeNom" name="niveauDemandeNom"
-                                                th:attr="data-champ=DemandeNom" th:onchange="updateTitreMateriaux()" th:field="${fiche.demande.niveauTitreDemandeNom}">
-                                                <option value="0" th:selected="${fiche.demande.niveauTitreDemandeNom == 0}">Icone</option>
-                                                <option value="1" th:selected="${fiche.Demande.niveauTitreDemandeNom == 1}">Icone et texte</option>
-                                                <option value="2" th:selected="${fiche.Demande.niveauTitreDemandeNom == 2}">Texte</option>
-                                            </select>
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='DemandeNom')">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
                                             <input type="hidden" id="niveauTitreHiddenDemandeNom"
                                                 name="niveauTitreHiddenDemandeNom"
                                                 th:field="${fiche.Demande.niveauTitreDemandeNom}" />
                                         </div>
-
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.Demande.couleurNomDemandeur}">
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Demande.couleurNomDemandeur}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Demande.couleurNomDemandeur}" />
                                         </div>
@@ -479,6 +452,7 @@
                                                 <div class="titre">Icone</div>
                                                 <div
                                                     th:replace="intervenant_fragment.html::scrollcards(field='DemandeNom')">
+                                                </div>
                                             </section>
                                         </div>
                                         <input type="hidden" id="imageHiddenDemandeNom" class="imageHiddenDemandeNom"
@@ -498,7 +472,8 @@
                         <img id="ImageAAfficherOuNonDemandeDegreUrgence" class="display-8" src="/images/check.png"
                             alt="Fait" style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonDemandeDegreUrgence" class="TitreSection"
-                            for="disabledDegreDemandeDegreUrgence" style="cursor: pointer;" th:style="'color: ' + ${fiche.Demande.couleurDegreUrgence}">Degré d'urgence</label>
+                            for="disabledDegreDemandeDegreUrgence" style="cursor: pointer;"
+                            th:style="'color: ' + ${fiche.Demande.couleurDegreUrgence}">Degré d'urgence</label>
                     </button>
 
                     <div class="row">
@@ -506,23 +481,23 @@
                             <div class="collapse multi-collapse" id="imageNiveauDemandeDegreUrgence">
                                 <div class="card card-body">
                                     <div class="row">
-
                                         <div class="col">
-                                            <div class="titre">Niveau Titre</div>
-                                            <select class="selectTitreIcTxt form-select" id="niveauDemandeDegreUrgence" name="niveauDemandeDegreUrgence"
-                                                th:attr="data-champ=DemandeDegreUrgence" th:onchange="updateTitreMateriaux()" th:field="${fiche.demande.niveauTitreDemandeDegreUrgence}">
-                                                <option value="0" th:selected="${fiche.demande.niveauTitreDemandeDegreUrgence == 0}">Icone</option>
-                                                <option value="1" th:selected="${fiche.Demande.niveauTitreDemandeDegreUrgence == 1}">Icone et texte</option>
-                                                <option value="2" th:selected="${fiche.Demande.niveauTitreDemandeDegreUrgence == 2}">Texte</option>
-                                            </select>
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='DemandeDegreUrgence')">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
                                             <input type="hidden" id="niveauTitreHiddenDemandeDegreUrgence"
                                                 name="niveauTitreHiddenDemandeDegreUrgence"
                                                 th:field="${fiche.Demande.niveauTitreDemandeDegreUrgence}" />
                                         </div>
-
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.Demande.couleurDegreUrgence}">
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Demande.couleurDegreUrgence}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Demande.couleurDegreUrgence}" />
                                         </div>
@@ -533,6 +508,7 @@
                                                 <div class="titre">Icone</div>
                                                 <div
                                                     th:replace="intervenant_fragment.html::scrollcards(field='DemandeDegreUrgence')">
+                                                </div>
                                             </section>
                                         </div>
                                         <input type="hidden" id="imageHiddenDemandeDegreUrgence"
@@ -554,7 +530,8 @@
                         <img id="ImageAAfficherOuNonDemandeDate" class="display-8" src="/images/check.png" alt="Fait"
                             style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonDemandeDate" class="TitreSection" for="disabledDegreDemandeDate"
-                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Demande.couleurDateDemande}">Date de la demande</label>
+                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Demande.couleurDateDemande}">Date de
+                            la demande</label>
                     </button>
 
                     <div class="row">
@@ -563,22 +540,22 @@
                                 <div class="card card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <div class="titre">Niveau Titre</div>
-                                            <select class="selectTitreIcTxt form-select" id="niveauDemandeDate" name="niveauDemandeDate"
-                                                th:attr="data-champ=DemandeDate" th:onchange="updateTitreMateriaux()" th:field="${fiche.demande.niveauTitreDemandeDate}">
-                                                <option value="0" th:selected="${fiche.demande.niveauTitreDemandeDate == 0}">Icone</option>
-                                                <option value="1" th:selected="${fiche.demande.niveauTitreDemandeDate == 1}">Icone et texte</option>
-                                                <option value="2" th:selected="${fiche.demande.niveauTitreDemandeDate == 2}">Texte</option>
-                                            </select>
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='DemandeDate')">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
                                             <input type="hidden" id="niveauTitreHiddenDemandeDate"
                                                 name="niveauTitreHiddenDemandeDate"
                                                 th:field="${fiche.demande.niveauTitreDemandeDate}" />
                                         </div>
-
-                                        
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.Demande.couleurDateDemande}">
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Demande.couleurDateDemande}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{demande.couleurDateDemande}" />
                                         </div>
@@ -589,6 +566,7 @@
                                                 <div class="titre">Icone</div>
                                                 <div
                                                     th:replace="intervenant_fragment.html::scrollcards(field='DemandeDate')">
+                                                </div>
                                             </section>
                                         </div>
                                         <input type="hidden" id="imageHiddenDemandeDate" class="imageHiddenDemandeDate"
@@ -610,7 +588,8 @@
                         <img id="ImageAAfficherOuNonDemandeLocalisation" class="display-8" src="/images/check.png"
                             alt="Fait" style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonDemandeLocalisation" class="TitreSection"
-                            for="disabledLocalisation" style="cursor: pointer;" th:style="'color: ' + ${fiche.Demande.couleurLocalisation}">Localisation</label>
+                            for="disabledLocalisation" style="cursor: pointer;"
+                            th:style="'color: ' + ${fiche.Demande.couleurLocalisation}">Localisation</label>
                     </button>
 
                     <div class="row">
@@ -619,21 +598,22 @@
                                 <div class="card card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <div class="titre">Niveau Titre</div>
-                                            <select class="selectTitreIcTxt form-select" id="niveauDemandeLocalisation" name="niveauDemandeLocalisation"
-                                                th:attr="data-champ=DemandeLocalisation" th:onchange="updateTitreMateriaux()" th:field="${fiche.demande.niveauTitreDemandeLocalisation}">
-                                                <option value="0" th:selected="${fiche.demande.niveauTitreDemandeLocalisation == 0}">Icone</option>
-                                                <option value="1" th:selected="${fiche.demande.niveauTitreDemandeLocalisation == 1}">Icone et texte</option>
-                                                <option value="2" th:selected="${fiche.demande.niveauTitreDemandeLocalisation == 2}">Texte</option>
-                                            </select>
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='DemandeLocalisation')">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
                                             <input type="hidden" id="niveauTitreHiddenDemandeLocalisation"
                                                 name="niveauTitreHiddenDemandeLocalisation"
                                                 th:field="${fiche.demande.niveauTitreDemandeLocalisation}" />
                                         </div>
-
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.Demande.couleurLocalisation}">
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Demande.couleurLocalisation}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{demande.couleurLocalisation}" />
                                         </div>
@@ -644,6 +624,7 @@
                                                 <div class="titre">Icone</div>
                                                 <div
                                                     th:replace="intervenant_fragment.html::scrollcards(field='DemandeLocalisation')">
+                                                </div>
                                             </section>
                                         </div>
                                         <input type="hidden" id="imageHiddenDemandeLocalisation"
@@ -668,7 +649,8 @@
                         <img id="ImageAAfficherOuNonDemandeDescription" class="display-8" src="/images/check.png"
                             alt="Fait" style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonDemandeDescription" class="TitreSection"
-                            for="disabledDescription" style="cursor: pointer;" th:style="'color: ' + ${fiche.Demande.couleurDescription}">Description</label>
+                            for="disabledDescription" style="cursor: pointer;"
+                            th:style="'color: ' + ${fiche.Demande.couleurDescription}">Description</label>
                     </button>
 
                     <div class="row">
@@ -676,22 +658,23 @@
                             <div class="collapse multi-collapse" id="imageNiveauDemandeDescription">
                                 <div class="card card-body">
                                     <div class="row">
-
                                         <div class="col">
-                                            <div class="titre">Niveau Titre</div>
-                                            <select class="selectTitreIcTxt form-select" id="niveauDemandeDescription" name="niveauDemandeDescription"
-                                                th:attr="data-champ=DemandeDescription" th:onchange="updateTitreMateriaux()" th:field="${fiche.intervention.niveauTypeIntervention}">
-                                                <option value="0" th:selected="${fiche.intervention.NiveauTypeIntervention == 0}">Icone</option>
-                                                <option value="1" th:selected="${fiche.intervention.NiveauTypeIntervention == 1}">Icone et texte</option>
-                                                <option value="2" th:selected="${fiche.intervention.NiveauTypeIntervention == 2}">Texte</option>
-                                            </select>
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='DemandeDescription')">
+                                                    </div>
+                                                </div>
+                                            </fieldset>
                                             <input type="hidden" id="niveauTitreHiddenDemandeDescription"
                                                 name="niveauTitreHiddenDemandeDescription"
                                                 th:field="${fiche.demande.niveauTitreDemandeDescription}" />
                                         </div>
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.Demande.couleurDescription}">
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Demande.couleurDescription}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{demande.couleurDescription}" />
                                         </div>
@@ -702,6 +685,7 @@
                                                 <div class="titre">Icone</div>
                                                 <div
                                                     th:replace="intervenant_fragment.html::scrollcards(field='DemandeDescription')">
+                                                </div>
                                             </section>
                                         </div>
                                         <input type="hidden" id="imageHiddenDemandeDescription"
@@ -724,37 +708,43 @@
                 <div class="row align-items-center">
                     <div class="col-auto d-flex align-items-center">
                         <button class="btn d-flex align-items-center" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#imageNiveauTitreIntervention" aria-expanded="false"
-                            aria-controls="imageNiveauTitreIntervention">
-                            <img id="ImageAAfficherOuNonTitreIntervention" class="display-5 imageIcon"
+                            data-bs-target="#imageNiveauIntervention" aria-expanded="false"
+                            aria-controls="imageNiveauIntervention">
+                            <img id="ImageAAfficherOuNonIntervention" class="display-5 imageIcon"
                                 src="/images/check.png" alt="Fait" style="height: 1em;" />
-                            <h2 id="TitreSAAfficherOuNonTitreIntervention" class="display-5 TitreSection" th:style="'color: ' + ${fiche.Intervention.couleurTitreIntervention}">Intervention</h2>
+                            <h2 id="TitreSAAfficherOuNonIntervention" class="display-5 TitreSection"
+                                th:style="'color: ' + ${fiche.Intervention.couleurTitreIntervention}">Intervention</h2>
                         </button>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <div class="collapse multi-collapse" id="imageNiveauTitreIntervention">
+                            <div class="collapse multi-collapse" id="imageNiveauIntervention">
                                 <div class="card card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <div class="titre">Niveau Titre</div>
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div class="test">
+                                                        <select class="selectTitreIcTxt" id="niveauTitreIntervention"
+                                                            name="niveauTitreIntervention"
+                                                            th:field="${fiche.intervention.niveauTitreIntervention}"
+                                                            onchange="updateTitre('Intervention')">
+                                                            <option value="4">Caché</option>
+                                                            <option value="0">Icone</option>
+                                                            <option value="1" selected>Icone et texte</option>
+                                                            <option value="2">Texte</option>
+                                                        </select>
 
-                                            <select class="selectTitreIcTxt form-select" id="niveauTitreIntervention" name="niveauTitreIntervention"
-                                                th:attr="data-champ=TitreIntervention" th:onchange="updateTitreMateriaux()" th:field="${fiche.intervention.niveauTitreIntervention}">
-                                                <option value="4" th:selected="${fiche.intervention.NiveauTitreIntervention == 4}">Caché</option>
-                                                <option value="0" th:selected="${fiche.intervention.niveauTitreIntervention == 0}">Icone</option>
-                                                <option value="1" th:selected="${fiche.intervention.niveauTitreIntervention == 1}">Icone et texte</option>
-                                                <option value="2" th:selected="${fiche.intervention.niveauTitreIntervention == 2}">Texte</option>
-                                            </select>
 
-                                            <input type="hidden" id="niveauTitreHiddenTitreIntervention"
-                                                        name="niveauTitreHiddenTitreIntervention"
-                                                        th:field="${fiche.intervention.niveauTitreIntervention}" />
+                                                    </div>
+                                                </div>
+                                            </fieldset>
                                         </div>
-                                        
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.Intervention.couleurTitreIntervention}">
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Intervention.couleurTitreIntervention}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{Intervention.couleurTitreIntervention}" />
                                         </div>
@@ -768,11 +758,11 @@
                                                         <div class="card"
                                                             th:each="imageTitre, stat : ${imagesTitreIntervention}">
                                                             <input class="form-check-input" type="radio"
-                                                                name="selectedImageTitreIntervention"
+                                                                name="selectedImageIntervention"
                                                                 th:id="${imageTitre.nomImage}"
                                                                 th:value="${imageTitre.nomImage}"
                                                                 th:checked="${stat.first}"
-                                                                onchange="actualiserImageTitre('TitreIntervention')">
+                                                                onchange="actualiserImageTitre('Intervention')">
                                                             <label class="form-check-label"
                                                                 th:for="${imageTitre.nomImage}">
                                                                 <img class="imageSlider"
@@ -786,7 +776,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <input type="hidden" id="imageHiddenTitreIntervention"
+                                                <input type="hidden" id="imageHiddenIntervention"
                                                     class="imageHiddenIntervention"
                                                     th:field="*{Intervention.imageTitreInterventionUrl}"
                                                     value="/images/eleve.png" />
@@ -811,7 +801,9 @@
                         <img id="ImageAAfficherOuNonInterventionDate" class="display-8" src="/images/check.png"
                             alt="Fait" style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonInterventionDate" class="TitreSection" for="newDateIntervention"
-                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Intervention.couleurDateIntervention}">Date de l'intervention</label>
+                            style="cursor: pointer;"
+                            th:style="'color: ' + ${fiche.Intervention.couleurDateIntervention}">Date de
+                            l'intervention</label>
                     </button>
 
                     <div class="row">
@@ -820,22 +812,22 @@
                                 <div class="card card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <div class="titre">Niveau Titre</div>
-                                            <select class="selectTitreIcTxt form-select" id="niveauInterventionDate" name="niveauInterventionDate"
-                                                th:attr="data-champ=InterventionDate" th:onchange="updateTitreMateriaux()" th:field="${fiche.intervention.niveauTypeIntervention}">
-                                                <option value="0" th:selected="${fiche.intervention.NiveauTypeIntervention == 0}">Icone</option>
-                                                <option value="1" th:selected="${fiche.intervention.NiveauTypeIntervention == 1}">Icone et texte</option>
-                                                <option value="2" th:selected="${fiche.intervention.NiveauTypeIntervention == 2}">Texte</option>
-                                            </select>
-
-                                            <input type="hidden" id="niveauTitreHiddenInterventionDate"
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='InterventionDate')">
+                                                    </div>
+                                                    <input type="hidden" id="niveauTitreHiddenInterventionDate"
                                                         name="niveauTitreHiddenInterventionDate"
-                                                        th:field="${fiche.intervention.niveauDureeIntervention}" />
+                                                        th:field="${fiche.intervention.niveauDateIntervention}" />
+                                                </div>
+                                            </fieldset>
                                         </div>
-
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.Intervention.couleurDateIntervention}">
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Intervention.couleurDateIntervention}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{intervention.couleurDateIntervention}" />
                                         </div>
@@ -846,6 +838,7 @@
                                                 <div class="titre">Icone</div>
                                                 <div
                                                     th:replace="intervenant_fragment.html::scrollcards(field='InterventionDate')">
+                                                </div>
                                             </section>
                                         </div>
                                         <input type="hidden" id="imageHiddenInterventionDate"
@@ -858,7 +851,7 @@
                         </div>
                     </div>
                     <input type="text" id="newDateIntervention" name="newDateIntervention" class="form-control"
-                        th:field="*{intervention.dateIntervention}" disabled/>
+                        th:field="*{intervention.dateIntervention}" disabled />
 
 
 
@@ -869,7 +862,9 @@
                         <img id="ImageAAfficherOuNonInterventionDuree" class="display-8" src="/images/check.png"
                             alt="Fait" style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonInterventionDuree" class="TitreSection"
-                            for="newDureeIntervention" style="cursor: pointer;" th:style="'color: ' + ${fiche.Intervention.couleurDureeIntervention}">Durée de l'intervention</label>
+                            for="newDureeIntervention" style="cursor: pointer;"
+                            th:style="'color: ' + ${fiche.Intervention.couleurDureeIntervention}">Durée de
+                            l'intervention</label>
                     </button>
 
                     <div class="row">
@@ -878,22 +873,22 @@
                                 <div class="card card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <div class="titre">Niveau Titre</div>
-                                            <select class="selectTitreIcTxt form-select" id="niveauInterventionDuree" name="niveauInterventionDuree"
-                                                th:attr="data-champ=InterventionDuree" th:onchange="updateTitreMateriaux()" th:field="${fiche.intervention.niveauTypeIntervention}">
-                                                <option value="0" th:selected="${fiche.intervention.NiveauTypeIntervention == 0}">Icone</option>
-                                                <option value="1" th:selected="${fiche.intervention.NiveauTypeIntervention == 1}">Icone et texte</option>
-                                                <option value="2" th:selected="${fiche.intervention.NiveauTypeIntervention == 2}">Texte</option>
-                                            </select>
-
-                                            <input type="hidden" id="niveauTitreHiddenInterventionDuree"
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="intervenant_fragment.html::intervenantFragment(field='InterventionDuree')">
+                                                    </div>
+                                                    <input type="hidden" id="niveauTitreHiddenInterventionDuree"
                                                         name="niveauTitreHiddenInterventionDuree"
                                                         th:field="${fiche.intervention.niveauDureeIntervention}" />
+                                                </div>
+                                            </fieldset>
                                         </div>
-
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.Intervention.couleurDureeIntervention}">
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Intervention.couleurDureeIntervention}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{intervention.couleurDureeIntervention}" />
                                         </div>
@@ -903,7 +898,8 @@
                                             <section>
                                                 <div class="titre">Icone</div>
                                                 <div
-                                                    th:replace="intervenant_fragment.html::scrollcards(field='InterventionDuree')">
+                                                    th:replace="fragments/intervenant_fragment.html::scrollcards(field='InterventionDuree')">
+                                                </div>
                                             </section>
                                         </div>
                                         <input type="hidden" id="imageHiddenInterventionDuree"
@@ -923,38 +919,38 @@
                 <div class="col-md-4 mb-3">
 
                     <button class="btn d-flex align-items-center" style="height: 1.5em;" type="button"
-                        data-bs-toggle="collapse" data-bs-target="#imageNiveauTypeIntervention" aria-expanded="false"
-                        aria-controls="imageNiveauTypeIntervention">
+                        data-bs-toggle="collapse" data-bs-target="#imageNiveauInterventionType" aria-expanded="false"
+                        aria-controls="imageNiveauInterventionType">
                         <img id="ImageAAfficherOuNonInterventionType" class="display-8" src="/images/check.png"
                             alt="Fait" style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonInterventionType" class="TitreSection" for="newTypeIntervention"
-                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Intervention.couleurTypeIntervention}">Type d'intervention</label>
+                            style="cursor: pointer;"
+                            th:style="'color: ' + ${fiche.Intervention.couleurTypeIntervention}">Type
+                            d'intervention</label>
                     </button>
+
                     <div class="row">
                         <div class="col">
-                            <div class="collapse multi-collapse" id="imageNiveauTypeIntervention">
+                            <div class="collapse multi-collapse" id="imageNiveauInterventionType">
                                 <div class="card card-body">
-                                    
                                     <div class="row">
-
-
                                         <div class="col">
-                                            <div class="titre">Niveau Titre</div>
-                                            <select class="selectTitreIcTxt form-select" id="niveauInterventionType" name="niveauInterventionType"
-                                                th:attr="data-champ=InterventionType" th:onchange="updateTitreMateriaux()" th:field="${fiche.intervention.niveauTypeIntervention}">
-                                                <option value="0" th:selected="${fiche.intervention.NiveauTypeIntervention == 0}">Icone</option>
-                                                <option value="1" th:selected="${fiche.intervention.NiveauTypeIntervention == 1}">Icone et texte</option>
-                                                <option value="2" th:selected="${fiche.intervention.NiveauTypeIntervention == 2}">Texte</option>
-                                            </select>
-
-                                            <input type="hidden" id="niveauTitreHiddenInterventionType"
-                                                            name="niveauTitreHiddenInterventionType"
-                                                            th:field="${fiche.intervention.niveauTypeIntervention}" />
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="fragments/intervenant_fragment.html::intervenantFragment(field='InterventionType')">
+                                                    </div>
+                                                    <input type="hidden" id="niveauTitreHiddenInterventionType"
+                                                        name="niveauTitreHiddenInterventionType"
+                                                        th:field="${fiche.intervention.niveauTypeIntervention}" />
+                                                </div>
+                                            </fieldset>
                                         </div>
-
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.Intervention.couleurTypeIntervention}">
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Intervention.couleurTypeIntervention}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{intervention.couleurTypeIntervention}" />
                                         </div>
@@ -964,7 +960,8 @@
                                             <section>
                                                 <div class="titre">Icone</div>
                                                 <div
-                                                    th:replace="intervenant_fragment.html::scrollcards(field='InterventionType')">
+                                                    th:replace="fragments/intervenant_fragment.html::scrollcards(field='InterventionType')">
+                                                </div>
                                             </section>
                                         </div>
                                         <input type="hidden" id="imageHiddenInterventionType"
@@ -977,8 +974,7 @@
                         </div>
                     </div>
 
-                    <div id="disabledTypeIntervention"
-                        th:each="nature : ${typeInterventionList}">
+                    <div id="disabledTypeIntervention" th:each="nature : ${typeInterventionList}">
                         <div class="media form-check">
                             <input class="form-check-input" type="radio" name="intervention" th:value="${nature.name()}"
                                 th:id="${'radio-' + nature}" th:field="*{intervention.TypeIntervention}" />
@@ -1001,10 +997,10 @@
                         <img id="ImageAAfficherOuNonMaintenanceType" class="display-8" src="/images/check.png"
                             alt="Fait" style="height: 1em;" />
                         <label id="TitreSAAfficherOuNonMaintenanceType" class="TitreSection" for="newMaintenanceType"
-                            style="cursor: pointer;" th:style="'color: ' + ${fiche.Maintenance.CouleurMaintenanceType}">Type de maintenance</label>
+                            style="cursor: pointer;"
+                            th:style="'color: ' + ${fiche.Maintenance.CouleurMaintenanceType}">Type de
+                            maintenance</label>
                     </button>
-
-
 
                     <div class="row">
                         <div class="col">
@@ -1012,23 +1008,22 @@
                                 <div class="card card-body">
                                     <div class="row">
                                         <div class="col">
-                                            <div class="titre">Niveau Titre</div>
-                                            <select class="selectTitreIcTxt form-select" id="niveauMaintenanceType" name="niveauMaintenanceType"
-                                                th:attr="data-champ=MaintenanceType" th:onchange="updateTitreMateriaux()" th:field="${fiche.maintenance.NiveauMaintenanceType}">
-                                                <option value="0" th:selected="${fiche.maintenance.NiveauMaintenanceType == 0}">Icone</option>
-                                                <option value="1" th:selected="${fiche.maintenance.NiveauMaintenanceType == 1}">Icone et texte</option>
-                                                <option value="2" th:selected="${fiche.maintenance.NiveauMaintenanceType == 2}">Texte</option>
-                                            </select>
-
-                                            <input type="hidden" id="niveauTitreHiddenMaintenanceType"
-                                                            name="niveauTitreHiddenMaintenanceType"
-                                                            th:field="${fiche.maintenance.NiveauMaintenanceType}" />
+                                            <fieldset>
+                                                <div>
+                                                    <div class="titre">Niveau Titre</div>
+                                                    <div
+                                                        th:replace="fragments/intervenant_fragment.html::intervenantFragment(field='MaintenanceType')">
+                                                    </div>
+                                                    <input type="hidden" id="niveauTitreHiddenMaintenanceType"
+                                                        name="niveauTitreHiddenMaintenanceType"
+                                                        th:field="${fiche.maintenance.NiveauMaintenanceType}" />
+                                                </div>
+                                            </fieldset>
                                         </div>
-                                        
-
                                         <div class="col">
                                             <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.Maintenance.CouleurMaintenanceType}">
+                                            <input type="color" class="colorPicker"
+                                                th:value="${fiche.Maintenance.CouleurMaintenanceType}">
                                             <input type="hidden" id="titlehidden" class="titlehidden"
                                                 th:field="*{maintenance.CouleurMaintenanceType}" />
                                         </div>
@@ -1038,7 +1033,8 @@
                                             <section>
                                                 <div class="titre">Icone</div>
                                                 <div
-                                                    th:replace="intervenant_fragment.html::scrollcards(field='MaintenanceType')">
+                                                    th:replace="fragments/intervenant_fragment.html::scrollcards(field='MaintenanceType')">
+                                                </div>
                                             </section>
                                         </div>
                                         <input type="hidden" id="imageHiddenMaintenanceType"
@@ -1055,8 +1051,7 @@
 
 
 
-                    <div id="newMaintenanceType"
-                        th:each="type : ${maintenanceList}">
+                    <div id="newMaintenanceType" th:each="type : ${maintenanceList}">
                         <div class="media form-check">
                             <input class="form-check-input" type="radio" name="maintenanceType" th:value="${type}"
                                 th:id="${'radio-' + type.name()}" th:field="*{maintenance.maintenanceType}" />
@@ -1075,247 +1070,154 @@
             <!--------------------------Travaux réalisés--------------------------------------->
             <hr />
 
-            <legend>
-                <div class="row align-items-center">
-                    <div
-                    th:replace="fragments/titreFiche.html :: legend(policeDis=${fiche.policeDisTravauxRealises}, couleur=${fiche.couleurTravauxRealises},champ='TravauxRealises', titre='Travaux Réalisés')">
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="collapse multi-collapse" id="imageNiveauTravauxRealises">
-                                <div class="card card-body">
-                                    <div class="row">
-                                        <div th:replace="fragments/titreFiche.html :: colNiveauTitre(champ='TravauxRealises',field='niveauTravauxRealises')">
-                                        </div>
-                                        <input type="hidden" id="niveauTitreHiddenTravauxRealises"
-                                                        name="niveauTitreHiddenTravauxRealises"
-                                                        th:field="${fiche.NiveauTravauxRealises}" />
-                                        <div class="col">
-                                            <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.couleurTravauxRealises}">
-                                            <input type="hidden" id="titlehidden" class="titlehidden"
-                                                th:field="*{couleurTravauxRealises}" />
-                                        </div>
-                                        <div class="col">
-                                            <div class="titre">Dislexique</div>
-                                            <input class="form-check-input" type="checkbox" th:checked="${fiche.policeDisTravauxRealises}" th:field="*{policeDisTravauxRealises}">
-                                        </div>
+            <div
+                th:replace="fragments/titreFiche.html :: legend(policeDis=${fiche.policeDisTravauxRealises}, couleur=${fiche.couleurTravauxRealises},champ='TravauxRealises', titre='Travaux réalisés')">
+            </div>
+
+
+            <div class="row align-items-center">
+
+                <div class="row">
+                    <div class="col">
+                        <div class="collapse multi-collapse" id="imageNiveauTravauxRealises">
+                            <div class="card card-body">
+                                <div class="row">
+                                    <div
+                                        th:replace="fragments/titreFiche.html :: colNiveauTitre(champ='TravauxRealises')">
                                     </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <section>
-                                                <div class="titre">Icone</div>
-                                                <div class="row">
-                                                    <div class="scrollcards">
-                                                        <div class="card"
-                                                            th:each="imageTitre, stat : ${imagesTitreTravauxRealises}">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="selectedImageTravauxRealises"
-                                                                th:id="${imageTitre.nomImage}"
-                                                                th:value="${imageTitre.nomImage}"
-                                                                th:checked="${stat.first}"
-                                                                onchange="actualiserImageTitre('TravauxRealises')">
-                                                            <label class="form-check-label"
-                                                                th:for="${imageTitre.nomImage}">
-                                                                <img class="imageSlider"
-                                                                    th:src="@{'/' + ${imageTitre.imageUrl}}"
-                                                                    alt="Image Titre" oncontextmenu="return false;"
-                                                                    draggable="false" />
-                                                                <div class="text-wrap" style="width: min-content;">
-                                                                    <h6 th:text="${imageTitre.nomImage}"></h6>
-                                                                </div>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <input type="hidden" id="imageHiddenTravauxRealises"
-                                                    class="imageHiddenTravauxRealises"
-                                                    th:field="*{imageTitreTravauxRealisesUrl}" />
-                                            </section>
-                                        </div>
+
+                                    <div
+                                        th:replace="fragments/titreFiche.html :: colCouleurTitre(champ='TravauxRealises')">
+                                    </div>
+
+                                    <div
+                                        th:replace="fragments/titreFiche.html :: colDislexique(champ='TravauxRealises')">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div
+                                        th:replace="fragments/titreFiche.html :: selectIcones(champ='TravauxRealises')">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <textarea rows="10" id="newTravauxRealises" class="form-control" name="newTravauxRealises"
-                            onkeydown="handleDescriptionKeyDown(event)" th:text="${fiche.travauxRealises}" disabled></textarea>
-                    </div>
                 </div>
-            </legend>
+
+                <div class="form-group">
+                    <textarea rows="10" id="newTravauxRealises" class="form-control" name="newTravauxRealises"
+                        onkeydown="handleDescriptionKeyDown(event)" th:text="${fiche.travauxRealises}"
+                        disabled></textarea>
+                </div>
+            </div>
 
             <!--------------------------Travaux NON réalisés--------------------------------------->
             <hr />
-            <legend>
-                <div class="row align-items-center">
-                    <div
-                    th:replace="fragments/titreFiche.html :: legend(policeDis=${fiche.policeDisTravauxNonRealises}, couleur=${fiche.couleurTravauxNonRealises},champ='TravauxNonRealises', titre='Travaux Non Réalisés')">
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="collapse multi-collapse" id="imageNiveauTravauxNonRealises">
-                                <div class="card card-body">
-                                    <div class="row">
+            <div
+                th:replace="fragments/titreFiche.html :: legend(policeDis=${fiche.policeDisTravauxNonRealises}, couleur=${fiche.couleurTravauxNonRealises},champ='TravauxNonRealises', titre='Travaux non réalisés')">
+            </div>
 
-                                        <div th:replace="fragments/titreFiche.html :: colNiveauTitre(champ='TravauxNonRealises',field='niveauTravauxNonRealises')">
-                                        </div>
-                                        <input type="text" id="niveauTitreHiddenTravauxNonRealises"
-                                                        name="niveauTitreHiddenTravauxNonRealises"
-                                                        th:field="${fiche.NiveauTravauxNonRealises}" />
+            <div class="row align-items-center">
 
-
-                                        <div class="col">
-                                            <div class="titre">Couleur Texte</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.couleurTravauxNonRealises}">
-                                            <input type="hidden" id="titlehidden" class="titlehidden"
-                                                th:field="*{couleurTravauxNonRealises}" />
-                                        </div>
-                                        <div class="col">
-                                            <div class="titre">Dislexique</div>
-                                            <input class="form-check-input" type="checkbox" th:checked="${fiche.policeDisTravauxNonRealises}" th:field="*{policeDisTravauxNonRealises}">
-                                        </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="collapse multi-collapse" id="imageNiveauTravauxNonRealises">
+                            <div class="card card-body">
+                                <div class="row">
+                                    <div
+                                        th:replace="fragments/titreFiche.html :: colNiveauTitre(champ='TravauxNonRealises')">
                                     </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <section>
-                                                <div class="titre">Icone</div>
-                                                <div class="row">
-                                                    <div class="scrollcards">
-                                                        <div class="card"
-                                                            th:each="imageTitre, stat : ${imagesTitreTravauxNonRealises}">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="selectedImageTravauxNonRealises"
-                                                                th:id="${imageTitre.nomImage}"
-                                                                th:value="${imageTitre.nomImage}"
-                                                                th:checked="${stat.first}"
-                                                                onchange="actualiserImageTitre('TravauxNonRealises')">
-                                                            <label class="form-check-label"
-                                                                th:for="${imageTitre.nomImage}">
-                                                                <img class="imageSlider"
-                                                                    th:src="@{'/' + ${imageTitre.imageUrl}}"
-                                                                    alt="Image Titre" oncontextmenu="return false;"
-                                                                    draggable="false" />
-                                                                <div class="text-wrap" style="width: min-content;">
-                                                                    <h6 th:text="${imageTitre.nomImage}"></h6>
-                                                                </div>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <input type="hidden" id="imageHiddenTravauxNonRealises"
-                                                    class="imageHiddenTravauxNonRealises"
-                                                    th:field="*{imageTitreTravauxNonRealisesUrl}" />
-                                            </section>
-                                        </div>
+
+                                    <div
+                                        th:replace="fragments/titreFiche.html :: colCouleurTitre(champ='TravauxNonRealises')">
+                                    </div>
+
+                                    <div
+                                        th:replace="fragments/titreFiche.html :: colDislexique(champ='TravauxNonRealises')">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div
+                                        th:replace="fragments/titreFiche.html :: selectIcones(champ='TravauxNonRealises')">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <textarea rows="10" id="newTravauxNonRealises" class="form-control" name="newTravauxNonRealises"
-                            onkeydown="handleDescriptionKeyDown(event)" th:text="${fiche.travauxNonRealises}" disabled></textarea>
-                    </div>
                 </div>
-            </legend>
+                <div class="form-group">
+                    <textarea rows="10" id="newTravauxNonRealises" class="form-control" name="newTravauxNonRealises"
+                        onkeydown="handleDescriptionKeyDown(event)" th:text="${fiche.travauxNonRealises}"
+                        disabled></textarea>
+                </div>
+            </div>
 
             <!--------------------------Matériaux--------------------------------------->
             <hr />
-            <legend>
-                <div class="row align-items-center">
-                    <div
-                    th:replace="fragments/titreFiche.html :: legend(policeDis=${fiche.policeDisMateriauxUtilises}, couleur=${fiche.couleurMateriauxUtilises},champ='MateriauxUtilises', titre='Matériaux Utilisés')">
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="collapse multi-collapse" id="imageNiveauMateriauxUtilises">
-                                <div class="card card-body">
-                                    <div class="row">
-                                        <div
-                                    th:replace="fragments/titreFiche.html :: colNiveauTitre(champ='MateriauxUtilises',field='niveauMateriauxUtilises')">
+
+
+            <div
+                th:replace="fragments/titreFiche.html :: legend(policeDis=${fiche.policeDisMateriauxUtilises}, couleur=${fiche.couleurMateriauxUtilises},champ='MateriauxUtilises', titre='Matériaux Utilisés')">
+            </div>
+
+
+
+            <div class="row">
+                <div class="col">
+
+
+                    <div class="collapse multi-collapse" id="imageNiveauMateriauxUtilises">
+                        <div class="card card-body">
+                            <div class="row">
+                                <div
+                                    th:replace="fragments/titreFiche.html :: colNiveauTitre(champ='MateriauxUtilises')">
                                 </div>
-                                <input type="hidden" id="niveauTitreHiddenMateriauxUtilises"
-                                                        name="niveauTitreHiddenMateriauxUtilises"
-                                                        th:field="${fiche.NiveauMateriauxUtilises}" />
-                                        <div class="col">
-                                            <div class="titre">Couleur</div>
-                                            <input type="color" class="colorPicker" th:value="${fiche.couleurMateriauxUtilises}">
-                                            <input type="hidden" id="titlehidden" class="titlehidden"
-                                                th:field="*{couleurMateriauxUtilises}" />
-                                        </div>
-                                        <div class="col">
-                                            <div class="titre">Dislexique</div>
-                                            <input class="form-check-input" type="checkbox" th:checked="${fiche.policeDisMateriauxUtilises}" th:field="*{policeDisMateriauxUtilises}">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <section>
-                                                <div class="titre">Icone</div>
-                                                <div class="row">
-                                                    <div class="scrollcards">
-                                                        <div class="card"
-                                                            th:each="imageTitre, stat : ${imagesTitreMateriauxUtilises}">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="selectedImageMateriauxUtilises"
-                                                                th:id="${imageTitre.nomImage}"
-                                                                th:value="${imageTitre.nomImage}"
-                                                                th:checked="${stat.first}"
-                                                                onchange="actualiserImageTitre('MateriauxUtilises')">
-                                                            <label class="form-check-label"
-                                                                th:for="${imageTitre.nomImage}">
-                                                                <img class="imageSlider"
-                                                                    th:src="@{'/' + ${imageTitre.imageUrl}}"
-                                                                    alt="Image Titre" oncontextmenu="return false;"
-                                                                    draggable="false" />
-                                                                <div class="text-wrap" style="width: min-content;">
-                                                                    <h6 th:text="${imageTitre.nomImage}"></h6>
-                                                                </div>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <input type="hidden" id="imageHiddenMateriauxUtilises"
-                                                    class="imageHiddenMateriauxUtilises"
-                                                    th:field="*{imageTitreMateriauxUtilisesUrl}" />
-                                            </section>
-                                        </div>
-                                    </div>
+
+                                <div
+                                    th:replace="fragments/titreFiche.html :: colCouleurTitre(champ='MateriauxUtilises')">
+                                </div>
+
+                                <div th:replace="fragments/titreFiche.html :: colDislexique(champ='MateriauxUtilises')">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div th:replace="fragments/titreFiche.html :: selectIcones(champ='MateriauxUtilises')">
                                 </div>
                             </div>
                         </div>
-                        <div class="materiaux_vertical">
+                    </div>
 
-                            <div class="noPrint"></div>
-                            <div class="container">
-                                <div class="row">
-                                    <th:block th:each="sectionNumber : ${#numbers.sequence(0,5)}">
-                                        <div class="col-6 col-sm-6 col-lg-4 mb-4 flex-fill ">
-                                            <div id="case"
-                                                style="border: 2px solid #212529;border-radius: 0.4rem; height: 100%;">
-                                                <button type="button" class="btn btn-dark btn-sm" style="width: 100%;">
-                                                    Selectionner le matériau
-                                                </button>
-                                                <div class="w-100"></div>
-                                                <img alt="image selectionnée"
-                                                    style="max-height: 15vh; max-width: 80vw; width: 100%; object-fit: contain;margin: 1rem;height: inherit;"
-                                                    class="rounded mx-auto d-block"  />
-                                                <div class="w-100"></div>
-                                                <input type="text" class="form-control mx-auto d-block"
-                                                    aria-describedby="basic-addon2">
-                                            </div>
+
+
+
+
+
+                    <div class="materiaux_vertical">
+                        <div class="noPrint"></div>
+                        <div class="container">
+                            <div class="row">
+                                <th:block th:each="sectionNumber : ${#numbers.sequence(0,5)}">
+                                    <div class="col-6 col-sm-6 col-lg-4 mb-4 flex-fill ">
+                                        <div id="case"
+                                            style="border: 2px solid #212529;border-radius: 0.4rem; height: 100%;">
+                                            <button type="button" class="btn btn-dark btn-sm" style="width: 100%;">
+                                                Selectionner le matériau
+                                            </button>
+                                            <div class="w-100"></div>
+                                            <img alt="image selectionnée"
+                                                style="max-height: 15vh; max-width: 80vw; width: 100%; object-fit: contain;margin: 1rem;height: inherit;"
+                                                class="rounded mx-auto d-block" />
+                                            <div class="w-100"></div>
+                                            <input type="text" class="form-control mx-auto d-block"
+                                                aria-describedby="basic-addon2">
                                         </div>
-                                </div>
+                                    </div>
                                 </th:block>
                             </div>
                         </div>
                     </div>
-
                 </div>
-
-            </legend>
+            </div>
 
             <div class="submit-container"
                 style="height: 10vh;width: 100%;margin-bottom: calc(var(--bs-gutter-x) * .5);">
@@ -1330,29 +1232,16 @@
     </div>
 </body>
 <script>
-
-    
-
-
     function actualiserImageTitre(suffixe) {
         // Récupérer l'image sélectionnée
         var selectedImage = document.querySelector('input[name="selectedImage' + suffixe + '"]:checked');
-        if (!selectedImage) {
-            console.log('input[name="selectedImage' + suffixe + '"]:checked n existe pas');
-        }
         var imagehidden = document.getElementById('imageHidden' + suffixe);
-        if (!imagehidden) {
-            console.log('imageHidden' + suffixe + ' n existe pas');
-        }
         if (selectedImage) {
             var selectedImageLabel = document.querySelector('label[for="' + selectedImage.id + '"]');
             var selectedImageSrc = selectedImageLabel.querySelector('img').getAttribute('src');
 
             // Remplacer l'image ImageAAfficherOuNonSuffixe
             var imageAAfficherOuNonIntervenant = document.getElementById('ImageAAfficherOuNon' + suffixe);
-            if (!imageAAfficherOuNonIntervenant) {
-                console.log('ImageAAfficherOuNon' + suffixe + ' n existe pas dommage');
-            }
             imageAAfficherOuNonIntervenant.src = selectedImageSrc;
             imagehidden.value = selectedImageSrc;
         }
@@ -1362,25 +1251,10 @@
     //seulement utilisé pour les prenom et nom de l'intervenant
     function updateHiddenNiveau(suffixe) {
         var selectTitreIcTxt = document.getElementById('fragmentNiveauTitre' + suffixe); //fragmentNiveauTitre n existe pas, inutile
-        if (!selectTitreIcTxt) {
-            console.log('fragmentNiveauTitre' + suffixe + ' n existe pas');
-        }
         var niveau = selectTitreIcTxt.value;
-        if (niveau == null) {
-            console.log('niveau est null');
-        }
         var imageIcon = document.getElementById('ImageAAfficherOuNon' + suffixe);
-        if (!imageIcon) {
-            console.log('ImageAAfficherOuNon' + suffixe + ' n existe pas');
-        }
         var titreSection = document.getElementById('TitreSAAfficherOuNon' + suffixe);
-        if (!titreSection) {
-            console.log('TitreSAAfficherOuNon' + suffixe + ' n existe pas');
-        }
         var niveauTitre = document.getElementById('niveauTitreHidden' + suffixe);
-        if (!niveauTitre) {
-            console.log('niveauTitreHidden' + suffixe + ' n existe pas');
-        }
         switch (niveau) {
             case '0':
                 imageIcon.style.display = 'block';
@@ -1402,35 +1276,20 @@
 
 
     function updateTitre(prefix) {
-        var selectTitreIcTxt = document.getElementById('niveau' + prefix);
-        if (!selectTitreIcTxt){
-            console.log('1) niveau' + prefix + ' n existe pas');
-        }
+        var selectTitreIcTxt = document.getElementById('niveauTitre' + prefix);
         var niveau = selectTitreIcTxt.value;
-        if (niveau == null) {
-            console.log('2) niveau est null');
-        }
         var imageIcon = document.getElementById('ImageAAfficherOuNon' + prefix);
-        if (!imageIcon) {
-            console.log('3) ImageAAfficherOuNon' + prefix +' n existe pas');
-        }
         var titreSection = document.getElementById('TitreSAAfficherOuNon' + prefix);
-        if (!titreSection) {
-            console.log('4) TitreSAAfficherOuNon' + prefix + ' n existe pas');
-        }
         var niveauTitre = document.getElementById('niveauTitreHidden' + prefix);
-        if (!niveauTitre) {
-            console.log('5) niveauTitreHidden' + prefix + ' n existe pas');
-        }
 
         switch (niveau) {
             case '0':
-                imageIcon.style.display = 'block';
+                imageIcon.style.display = 'none';
                 titreSection.style.display = 'none';
                 niveauTitre.value = '0';
                 break;
             case '1':
-                imageIcon.style.display = 'block';
+                imageIcon.style.display = 'none';
                 titreSection.style.display = 'block';
                 niveauTitre.value = '1';
                 break;
@@ -1439,76 +1298,12 @@
                 titreSection.style.display = 'block';
                 niveauTitre.value = '2';
                 break;
-            case '4':
-                imageIcon.style.display = 'none';
-                titreSection.style.display = 'block';
-                titreSection.style.textDecoration = 'line-through';
-                niveauTitre.value = '4';
-                break;
         }
     }
-
-
-    function updateTitreMateriaux(){
-        // On récupère le suffixe depuis l'élément select
-        var selectElement = event.target;
-        var suffixe = selectElement.getAttribute('data-champ');
-        
-        // On mets à jour les images des titres
-        var imageMateriauxUtilises = document.getElementById('ImageAAfficherOuNon' + suffixe);
-        if (!imageMateriauxUtilises) {
-            console.log('ImageAAfficherOuNon' + suffixe + ' n existe pas');
-        }
-        var titreMateriauxUtilises = document.getElementById('TitreSAAfficherOuNon' + suffixe);
-        if (!titreMateriauxUtilises) {
-            console.log('TitreSAAfficherOuNon' + suffixe + ' n existe pas');
-        }
-        var niveauTitreMateriauxUtilises = document.getElementById('niveau' + suffixe);
-        if (!niveauTitreMateriauxUtilises) {
-            console.log('niveau' + suffixe + ' n existe pas');
-        }
-        if (niveauTitreMateriauxUtilises.value == '0') {
-            imageMateriauxUtilises.style.display = 'block';
-            titreMateriauxUtilises.style.display = 'none';
-        } else if (niveauTitreMateriauxUtilises.value == '1') {
-            imageMateriauxUtilises.style.display = 'block';
-            titreMateriauxUtilises.style.display = 'block';
-            titreMateriauxUtilises.style.textDecoration = 'none';
-        } else if (niveauTitreMateriauxUtilises.value == '2') {
-            imageMateriauxUtilises.style.display = 'none';
-            titreMateriauxUtilises.style.display = 'block';
-            titreMateriauxUtilises.style.textDecoration = 'none';
-        } else if (niveauTitreMateriauxUtilises.value == '4') {
-            imageMateriauxUtilises.style.display = 'none';
-            titreMateriauxUtilises.style.display = 'block';
-            //on barre le titre
-            titreMateriauxUtilises.style.textDecoration = 'line-through';
-        }
-    }
-    
 
 
 
     document.addEventListener('DOMContentLoaded', function () {
-
-        
-        updateTitre('TravauxRealises');
-        updateTitre('TravauxNonRealises');
-        updateTitre('MateriauxUtilises');
-        updateTitre('MaintenanceType');
-        updateTitre('InterventionType');
-        updateTitre('InterventionDuree');
-        updateTitre('InterventionDate');
-        updateTitre('TitreIntervention');
-        updateTitre('DemandeDescription');
-        updateTitre('DemandeLocalisation');
-        updateTitre('DemandeDate');
-        updateTitre('DemandeDegreUrgence');
-        updateTitre('DemandeNom');
-        updateTitre('TitreDemande');
-        updateTitre('TitreIntervenantNom');
-        updateTitre('TitreIntervenantPrenom');
-        updateTitre('TitreIntervenant');
 
 
 
@@ -1526,15 +1321,15 @@
         });
 
         //On check la premiere image de chaque section
-        actualiserImageTitre('TitreIntervenant');
-        actualiserImageTitre('TitreDemande');
-        actualiserImageTitre('TitreIntervention');
-        //actualiserImageTitre('Materiaux');
+        actualiserImageTitre('Intervenant');
+        actualiserImageTitre('Demande');
+        actualiserImageTitre('Intervention');
+        actualiserImageTitre('Materiaux');
         actualiserImageTitre('TravauxRealises');
         actualiserImageTitre('TravauxNonRealises');
-        actualiserImageTitre('MateriauxUtilises')
-        actualiserImageTitre('TitreIntervenantPrenom')
-        actualiserImageTitre('TitreIntervenantNom')
+        //actualiserImageTitre('MateriauxUtilises')
+        actualiserImageTitre('IntervenantPrenom')
+        actualiserImageTitre('IntervenantNom')
         actualiserImageTitre('DemandeNom')
         actualiserImageTitre('DemandeDegreUrgence')
         actualiserImageTitre('DemandeDate')
@@ -1545,9 +1340,27 @@
         actualiserImageTitre('InterventionType')
         actualiserImageTitre('MaintenanceType')
 
-        
+        // faire updateTitre sur tous les selecteurs TravauxNonRealises, TravauxRealises, MateriauxUtilises
+        //updateTitre('TravauxRealises');
+        //updateTitre('TravauxNonRealises');
+        //updateTitre('MateriauxUtilises');
 
 
+
+        const dateDemandeInput = document.getElementById('dateDemande');
+
+        dateDemandeInput.addEventListener('input', function () {
+            let inputValue = dateDemandeInput.value;
+            if (inputValue.length === 2 || inputValue.length === 5) {
+                inputValue += '/';
+            }
+
+            if (inputValue.length > 10) {
+                inputValue = inputValue.slice(0, 10);
+            }
+
+            dateDemandeInput.value = inputValue;
+        });
 
 
     });

@@ -115,7 +115,7 @@ public class FormationController {
         List<Formation> allFormations = formationService.lire();
         model.addAttribute("allFormations", allFormations);
 
-        return "liste_formations";
+        return "formations/liste_formations";
     }
 
     @GetMapping("/excel/{idFormation}")
