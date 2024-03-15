@@ -290,7 +290,7 @@ public class FormationServiceImpl implements FormationService {
 
             // Fiche Intervention Data
             for (FicheIntervention fiche : ficheInterventions) {
-
+                List<Message> messages = messageRepository.findByFicheInterventionId(fiche.getId());
                 dataRowIndex++;
 
                 // Headers for Fiche Intervention Information
@@ -342,7 +342,7 @@ public class FormationServiceImpl implements FormationService {
                 // Ajout d'un espace avant les messages
                 dataRowIndex++;
 
-                List<String> textContents = utilisateurMessagesMap.get(utilisateur); 
+                List<String> textContents = utilisateurMessagesMap.get(utilisateur);
 
                 // Vérification si l'utilisateur a des messages avant de continuer
                 if (textContents != null && !textContents.isEmpty()) {
@@ -353,14 +353,17 @@ public class FormationServiceImpl implements FormationService {
                     HSSFRow rowMessagesHeader = sheet.createRow(dataRowIndex++);
                     rowMessagesHeader.createCell(0).setCellValue("Commentaires du chat");
                     rowMessagesHeader.getCell(0).setCellStyle(ficheHeaderStyle);
+                    rowMessagesHeader.createCell(1).setCellValue("Utilisateur du chat");
+                    rowMessagesHeader.getCell(1).setCellStyle(ficheHeaderStyle);
 
-                    // Assurez-vous que la colonne est assez large pour afficher le contenu
-                    sheet.setColumnWidth(0, 10000); // Ajustez la largeur selon le besoin
+                    sheet.setColumnWidth(0, 10000);
 
-                    for (String textContent : textContents) {
+                    for (Message message : messages) {
                         HSSFRow dataRowMessage = sheet.createRow(dataRowIndex++);
-                        dataRowMessage.createCell(0).setCellValue(textContent);
+                        dataRowMessage.createCell(0).setCellValue(message.getTextContent());
+                        dataRowMessage.createCell(1).setCellValue(message.getSender().getLogin());
                         dataRowMessage.getCell(0).setCellStyle(ChatDataStyle);
+                        dataRowMessage.getCell(1).setCellStyle(ChatDataStyle);
                     }
                 }
                 dataRowIndex++;

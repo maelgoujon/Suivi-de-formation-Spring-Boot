@@ -190,7 +190,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         for (FicheIntervention fiche : ficheInterventions) {
 
             List<Message> messages = messageRepository.findByFicheInterventionId(fiche.getId());
-
             // Extraire le text_content de chaque message et l'ajouter à la liste
             List<String> textesDeCetteFiche = messages.stream()
                     .map(Message::getTextContent)
@@ -261,6 +260,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
         // Fiche Intervention Data
         for (FicheIntervention fiche : ficheInterventions) {
+            List<Message> messages = messageRepository.findByFicheInterventionId(fiche.getId());
             dataRowIndex++;
 
             // Headers for Fiche Intervention Information
@@ -315,14 +315,18 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             HSSFRow rowMessagesHeader = sheet.createRow(dataRowIndex++);
             rowMessagesHeader.createCell(0).setCellValue("Commentaires du chat");
             rowMessagesHeader.getCell(0).setCellStyle(headerStyle);
+            rowMessagesHeader.createCell(1).setCellValue("Utilisateur du chat");
+            rowMessagesHeader.getCell(1).setCellStyle(headerStyle);
 
             // Assurez-vous que la colonne est assez large pour afficher le contenu
             sheet.setColumnWidth(0, 10000); // Ajustez la largeur selon le besoin
 
-            for (String textContent : textContents) {
+            for (Message message : messages) {
                 HSSFRow dataRowMessage = sheet.createRow(dataRowIndex++);
-                dataRowMessage.createCell(0).setCellValue(textContent);
+                dataRowMessage.createCell(0).setCellValue(message.getTextContent());
+                dataRowMessage.createCell(1).setCellValue(message.getSender().getLogin());
                 dataRowMessage.getCell(0).setCellStyle(ChatDataStyle);
+                dataRowMessage.getCell(1).setCellStyle(ChatDataStyle);
             }
 
         }
