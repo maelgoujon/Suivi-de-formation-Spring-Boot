@@ -79,9 +79,20 @@ function configure_postgresql {
     # check if the database already exists
     sudo -u postgres psql -lqt | cut -d \| -f 1 | grep -qw apeajdb
     if [ $? -eq 0 ]; then
-        echo "### La base de données existe déjà, réinitialisation en cours..."
-        sudo -u postgres psql -c "DROP DATABASE apeajdb;"
-        create_database
+        echo "### La base de données existe déjà, vous voulez la supprimer et la recréer? (y/n)"
+        read response
+        if [ "$response" = "y" ]; then
+            echo "### Suppression de la base de données en cours..."
+            sudo -u postgres psql -c "DROP DATABASE apeajdb;"
+            if [ $? -eq 0 ]; then
+                echo "### Base de données supprimée avec succès!"
+                create_database
+            else
+                echo "### Echec de la suppression de la base de données!"
+            fi
+        else
+            echo "### La base de données n'a pas été supprimée!"
+        fi
     else
         echo "### La base de données n'existe pas, création en cours..."
         create_database
@@ -140,6 +151,7 @@ function wifi_hotspot_install {
     fi
 }
 
+wifi_interface=""
 function wifi_hotspot_configure {
     # delete all the connections
     nmcli --fields UUID,TIMESTAMP-REAL con show | grep never |  awk '{print $1}' | while read line; do nmcli con delete uuid  $line;    done # delete all the connections
@@ -206,18 +218,14 @@ function iptables_install {
             echo "### Echec installation iptables!"
         fi
     fi
-    if [ -x /usr/sbin/iptables-save ]; then
-        echo "### iptables-persistent est déjà installé!"
+    # install iptables-persistent
+    apt install iptables-persistent -y
+    if [ $? -eq 0 ]; then
+        echo "### iptables-persistent installé avec succès"
     else
-        echo "### iptables-persistent n'est pas installé, installation en cours..."
+        echo "### Echec installation iptables-persistent!"
         
-        apt-get install iptables-persistent -y
-        # check if iptables-persistent is installed
-        if [ $? -eq 0 ]; then
-            echo "### iptables-persistent installé avec succès"
-        else
-            echo "### Echec installation iptables-persistent!"
-        fi
+        
     fi
     #netfilter-persistent
     if [ -x /usr/sbin/netfilter-persistent ]; then
@@ -256,6 +264,13 @@ function configure_iptables {
     fi
     function set_rules {
         echo "### Configuration des règles iptables..."
+        
+        # Get the IP address of the wifi interface and store it in a variable
+        wifi_ip=$(ip -4 addr show $wifi_interface | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+        
+        # Add redirection from apeaj.local to the IP address of the wifi interface
+        echo "$wifi_ip apeaj.local" | sudo tee -a /etc/hosts
+        
         # Allow all outbound traffic
         iptables -P OUTPUT ACCEPT
         
@@ -270,19 +285,23 @@ function configure_iptables {
         iptables -A INPUT_ALLOWED -p tcp --dport 8081 -j ACCEPT   # Allow port 8081
         iptables -A INPUT_ALLOWED -p tcp --dport 22 -j ACCEPT   # Allow port 22 (SSH)
         
+        # redirect HTTP and HTTPS traffic to port 8081
+        iptables -t nat -A PREROUTING -i $wifi_interface -p tcp --dport 80 -j REDIRECT --to-port 8081   # Redirect HTTP (port 80) to 8081
+        iptables -t nat -A PREROUTING -i $wifi_interface -p tcp --dport 443 -j REDIRECT --to-port 8081   # Redirect HTTPS (port 443) to 8081
+        
         # Set the default policy for incoming connections
         iptables -P INPUT DROP
         
-        # redirect HTTP and HTTPS traffic to port 8081
-        iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination :8081   # Redirect HTTP (port 80)
-        iptables -t nat -A PREROUTING -p tcp --dport 443 -j DNAT --to-destination :8081   # Redirect HTTPS (port 443) to 8081
-        
         # Redirect all traffic to our new chain and allow specific ports
         iptables -A INPUT -j INPUT_ALLOWED
+        
+        # Save the rules
         iptables-save > /etc/iptables/rules.v4
-        service netfilter-persistent save
-        service netfilter-persistent reload
+        
+        # Load the saved rules on boot
+        systemctl enable netfilter-persistent
     }
+    
     set_rules
     if [ $? -eq 0 ]; then
         echo "### Configuration des règles iptables réussie!"
@@ -428,3 +447,12 @@ echo "#################################################################"
 echo ""
 
 configure_service
+
+
+echo ""
+echo "#################################################################"
+echo "##################### Installation terminée #####################"
+echo "#################################################################"
+echo ""
+echo "### Redémarrage du système en cours..."
+reboot
