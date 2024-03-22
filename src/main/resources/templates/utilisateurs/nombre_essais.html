@@ -12,19 +12,42 @@
     <script src="/js/popper.min.js"></script>
     <script src="/js/bootstrap.bundle.min.js"></script>
     <title>Paramètres de sécurité</title>
+    <style>
+        .custom-container {
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px; 
+            margin-bottom: 20px; 
+            text-align: center; 
+        }
+        
+        .custom-input {
+            width: 150px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>Configuration du nombre d'essais de mot de passe</h1>
-    
-    <form action="#" th:action="@{/utilisateur/nombre_essais}" th:object="${nombreEssaisActuel}" method="post">
-        <label for="passwordAttempts">Nombre d'essais de mot de passe :</label>
-        <input type="number" id="passwordAttempts" name="passwordAttempts" th:value="${nombreEssaisActuel}" required>
-        <button type="submit">Enregistrer</button>
-    </form>
-    
-    <!-- Afficher un message de succès si la sauvegarde est réussie -->
-    <div th:if="${success}">
-        <p>Nombre d'essais de mot de passe enregistré avec succès.</p>
+    <div th:replace="fragments/header :: header"></div>
+
+    <div class="container-sm custom-container">
+        <h1>Configuration du nombre d'essais de mot de passe</h1>
+        
+        <form action="#" th:action="@{/utilisateur/nombre_essais}" th:object="${nombreEssaisActuel}" method="post">
+            <div class="form-group">
+                <label for="passwordAttempts">Nombre d'essais de mot de passe :</label>
+                <!-- Ajout de la classe custom-input pour définir la largeur spécifique -->
+                <input type="number" id="passwordAttempts" name="passwordAttempts" th:value="${nombreEssaisActuel}" class="form-control form-control-sm custom-input" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Enregistrer</button>
+        </form>
+        
+        <!-- Afficher un message de succès si la sauvegarde est réussie -->
+        <div th:if="${success}">
+            <p>Nombre d'essais de mot de passe enregistré avec succès.</p>
+        </div>
     </div>
 </body>
 </html>
