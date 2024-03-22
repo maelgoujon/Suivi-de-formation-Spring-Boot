@@ -282,9 +282,11 @@ function configure_iptables {
         iptables -A INPUT_ALLOWED -i lo -j ACCEPT  # Allow loopback traffic
         iptables -A INPUT_ALLOWED -p tcp --dport 80 -j ACCEPT   # Allow port 80 (HTTP)
         iptables -A INPUT_ALLOWED -p tcp --dport 443 -j ACCEPT   # Allow port 443 (HTTPS)
+        # TODO : Retirer le port 8081
         iptables -A INPUT_ALLOWED -p tcp --dport 8081 -j ACCEPT   # Allow port 8081
         iptables -A INPUT_ALLOWED -p tcp --dport 22 -j ACCEPT   # Allow port 22 (SSH)
         
+        # TODO : Corriger pour passer au port 443 plutot que 8081
         # redirect HTTP and HTTPS traffic to port 8081
         iptables -t nat -A PREROUTING -i $wifi_interface -p tcp --dport 80 -j REDIRECT --to-port 8081   # Redirect HTTP (port 80) to 8081
         iptables -t nat -A PREROUTING -i $wifi_interface -p tcp --dport 443 -j REDIRECT --to-port 8081   # Redirect HTTPS (port 443) to 8081

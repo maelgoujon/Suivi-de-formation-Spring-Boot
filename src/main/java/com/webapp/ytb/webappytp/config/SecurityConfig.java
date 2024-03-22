@@ -74,6 +74,7 @@ public class SecurityConfig {
                                                 .requestMatchers("/redirectByRole").permitAll()
                                                 .requestMatchers("/select_fiche").hasRole("USER")
                                                 .anyRequest().authenticated())
+                                .requiresChannel(channel -> channel.anyRequest().requiresSecure())
                                 .formLogin(formLogin -> formLogin
                                                 .loginPage("/accueil")
                                                 .loginProcessingUrl("/login")
